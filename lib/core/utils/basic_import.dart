@@ -8,6 +8,7 @@ export 'package:flutter_svg/svg.dart';
 export 'package:flutter/services.dart';
 export 'package:flutter_screenutil/flutter_screenutil.dart';
 export 'package:get_storage/get_storage.dart';
+export '../../../gen/assets.gen.dart';
 
 
 // add those widgets

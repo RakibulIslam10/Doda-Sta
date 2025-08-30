@@ -33,23 +33,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
       scrolledUnderElevation: 0,
       centerTitle: true,
       leading: isBack
-          ? GestureDetector(
-        onTap: () => Get.back(),
-        child: Container(
-          margin: const EdgeInsets.all(14),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(Dimensions.radius * 0.5),
-            border: Border.all(
-              color: borderColor ?? CustomColors.whiteColor,
-            ),
-          ),
-          child: Icon(
-            Icons.arrow_back,
-            color: iconColor ?? CustomColors.whiteColor,
-            size: Dimensions.iconSizeDefault,
-          ),
-        ),
-      )
+          ? Icon(Icons.arrow_back_ios, color: CustomColors.primary)
           : null,
       title: TextWidget(
         title,
@@ -57,6 +41,17 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
         fontSize: Dimensions.titleMedium * 1.2,
         fontWeight: FontWeight.bold,
       ),
+
+      actions: [
+        TextWidget(
+          padding: EdgeInsetsGeometry.symmetric(
+            horizontal: Dimensions.defaultHorizontalSize,
+          ),
+          'Skip',
+          fontSize: Dimensions.titleSmall * 1.1,
+          color: CustomColors.primary,
+        ),
+      ],
     );
   }
 }

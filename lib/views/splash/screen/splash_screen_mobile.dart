@@ -10,7 +10,7 @@ class SplashScreenMobile extends GetView<SplashController> {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [CustomColors.secondary, CustomColors.orange],
+            colors: [CustomColors.secondary, CustomColors.primary],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),

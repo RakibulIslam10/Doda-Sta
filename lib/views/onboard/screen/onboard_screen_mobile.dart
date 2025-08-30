@@ -6,20 +6,29 @@ class OnboardScreenMobile extends GetView<OnboardController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CommonAppBar(title: ''),
       body: SafeArea(
-        child: ListView(
+        child: Padding(
           padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
-          children: [
-            Text('data'),
-            Text('data'),
-            Text('data'),
-            Text('data'),
-            Text('data'),
-            Text('data'),
-            Text('data'),
-            Text('data'),
-            Text('data'),
-          ],
+          child: Column(
+            mainAxisAlignment: mainCenter,
+            children: [
+              Container(
+                color: Colors.cyan,
+                height: 400,
+                child: PageView.builder(
+                  itemCount: controller.onboardItemList.length,
+                  physics: ClampingScrollPhysics(),
+
+
+                  itemBuilder: (context, index) {
+                  return Column(children: [
+                  ],);
+                },),
+              )
+
+            ],
+          ),
         ),
       ),
     );

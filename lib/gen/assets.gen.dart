@@ -1,0 +1,122 @@
+// dart format width=80
+
+/// GENERATED CODE - DO NOT MODIFY BY HAND
+/// *****************************************************
+///  FlutterGen
+/// *****************************************************
+
+// coverage:ignore-file
+// ignore_for_file: type=lint
+// ignore_for_file: deprecated_member_use,directives_ordering,implicit_dynamic_list_literal,unnecessary_import
+
+class $AssetsDummyGen {
+  const $AssetsDummyGen();
+
+  /// File path: assets/dummy/Car wash-rafiki 1.svg
+  String get carWashRafiki1 => 'assets/dummy/Car wash-rafiki 1.svg';
+
+  /// File path: assets/dummy/Frame.svg
+  String get frame => 'assets/dummy/Frame.svg';
+
+  /// File path: assets/dummy/Group 14928.svg
+  String get group14928 => 'assets/dummy/Group 14928.svg';
+
+  /// File path: assets/dummy/Inbox cleanup-amico 1.svg
+  String get inboxCleanupAmico1 => 'assets/dummy/Inbox cleanup-amico 1.svg';
+
+  /// File path: assets/dummy/Mobile login-rafiki 1.svg
+  String get mobileLoginRafiki1 => 'assets/dummy/Mobile login-rafiki 1.svg';
+
+  /// File path: assets/dummy/Tablet login-amico 1.svg
+  String get tabletLoginAmico1 => 'assets/dummy/Tablet login-amico 1.svg';
+
+  /// File path: assets/dummy/servicesAuth1.svg
+  String get servicesAuth1 => 'assets/dummy/servicesAuth1.svg';
+
+  /// List of all assets
+  List<String> get values => [
+    carWashRafiki1,
+    frame,
+    group14928,
+    inboxCleanupAmico1,
+    mobileLoginRafiki1,
+    tabletLoginAmico1,
+    servicesAuth1,
+  ];
+}
+
+class $AssetsIconsGen {
+  const $AssetsIconsGen();
+
+  /// File path: assets/icons/Frame (1).svg
+  String get frame1 => 'assets/icons/Frame (1).svg';
+
+  /// File path: assets/icons/Green.svg
+  String get green => 'assets/icons/Green.svg';
+
+  /// File path: assets/icons/Group.svg
+  String get group => 'assets/icons/Group.svg';
+
+  /// File path: assets/icons/Vector.svg
+  String get vector => 'assets/icons/Vector.svg';
+
+  /// File path: assets/icons/activity.svg
+  String get activity => 'assets/icons/activity.svg';
+
+  /// File path: assets/icons/empty.svg
+  String get empty => 'assets/icons/empty.svg';
+
+  /// File path: assets/icons/reject.svg
+  String get reject => 'assets/icons/reject.svg';
+
+  /// File path: assets/icons/request 1.svg
+  String get request1 => 'assets/icons/request 1.svg';
+
+  /// File path: assets/icons/success.svg
+  String get success => 'assets/icons/success.svg';
+
+  /// File path: assets/icons/verified.svg
+  String get verified => 'assets/icons/verified.svg';
+
+  /// File path: assets/icons/vuesax.svg
+  String get vuesax => 'assets/icons/vuesax.svg';
+
+  /// List of all assets
+  List<String> get values => [
+    frame1,
+    green,
+    group,
+    vector,
+    activity,
+    empty,
+    reject,
+    request1,
+    success,
+    verified,
+    vuesax,
+  ];
+}
+
+class $AssetsLogoGen {
+  const $AssetsLogoGen();
+
+  /// File path: assets/logo/Page-1.svg
+  String get page1 => 'assets/logo/Page-1.svg';
+
+  /// File path: assets/logo/appLogo.svg
+  String get appLogo => 'assets/logo/appLogo.svg';
+
+  /// File path: assets/logo/google.svg
+  String get google => 'assets/logo/google.svg';
+
+  /// List of all assets
+  List<String> get values => [page1, appLogo, google];
+}
+
+class Assets {
+  const Assets._();
+
+  static const $AssetsDummyGen dummy = $AssetsDummyGen();
+  static const $AssetsIconsGen icons = $AssetsIconsGen();
+  static const $AssetsLogoGen logo = $AssetsLogoGen();
+}

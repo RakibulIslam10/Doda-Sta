@@ -5,4 +5,11 @@ class NavigationController extends GetxController {
   final List<NavigationModel> navigationList = [
     NavigationModel(iconPath: Assets.icons.vector, name: "Home"),
   ];
+
+
+  var selectedIndex = 0.obs;
+
+  void changeIndex(int index) {
+    selectedIndex.value = index;
+  }
 }

@@ -2,6 +2,8 @@ import 'package:doda_work/core/utils/basic_import.dart';
 
 class LoginController extends GetxController {
 
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   // email
   final emailController = TextEditingController();
   final emailFocus = FocusNode();

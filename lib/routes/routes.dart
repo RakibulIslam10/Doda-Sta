@@ -17,9 +17,9 @@ part 'pages.dart';
 
 class Routes {
   static var list = RoutePageList.list;
-static const registerScreen = '/registerScreen';
-static const welcomeScreen = '/welcomeScreen';
   static const navigationScreen = '/navigationScreen';
+  static const registerScreen = '/registerScreen';
+  static const welcomeScreen = '/welcomeScreen';
   static const loginScreen = '/loginScreen';
   static const onboardScreen = '/onboardScreen';
   static const splashScreen = '/splashScreen';

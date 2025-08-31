@@ -58,7 +58,7 @@ class OnboardScreenMobile extends GetView<OnboardController> {
           ),
         ),
       ),
-      appBar: CommonAppBar(title: ''),
+      appBar: CommonAppBar(title: '', isSkip: true),
       body: SafeArea(
         child: Padding(
           padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
@@ -82,6 +82,7 @@ class OnboardScreenMobile extends GetView<OnboardController> {
                   TextWidget(
                     maxLines: 2,
                     item.subtitle,
+                    color: CustomColors.secondary,
                     textAlign: TextAlign.center,
                     padding: EdgeInsetsGeometry.only(
                       top: Dimensions.heightSize * 0.5,

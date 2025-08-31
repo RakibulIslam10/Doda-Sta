@@ -18,7 +18,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
     super.key,
     required this.title,
     this.isBack = true,
-    this.isSkip = true,
+    this.isSkip = false,
     this.backgroundColor,
     this.titleColor,
     this.iconColor,
@@ -46,7 +46,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
 
       actions: [
-        isSkip
+        isSkip == true
             ? TextWidget(
                 onTap: () => Get.offAllNamed(Routes.loginScreen),
                 padding: EdgeInsetsGeometry.symmetric(

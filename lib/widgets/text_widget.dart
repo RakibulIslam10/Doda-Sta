@@ -48,7 +48,7 @@ class TextWidget extends StatelessWidget {
             maxLines: maxLines,
             textScaler: TextScaler.linear(ScreenUtil().textScaleFactor),
             style: TextStyle(
-              color: color ?? CustomColors.secondaryDarkText,
+              color: color ?? CustomColors.blackColor,
               fontSize: fontSize ?? Dimensions.titleSmall,
               fontWeight: fontWeight,
             ),

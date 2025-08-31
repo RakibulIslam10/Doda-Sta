@@ -19,6 +19,9 @@ class PrimaryInputFieldWidget extends StatefulWidget {
   final FocusNode? nextFocusNode;
   final int maxLines;
 
+  /// Pass the password controller to confirm against (live validation)
+  final TextEditingController? confirmWith;
+
   const PrimaryInputFieldWidget({
     super.key,
     this.label,
@@ -34,6 +37,7 @@ class PrimaryInputFieldWidget extends StatefulWidget {
     this.optionalText,
     this.fillColor,
     required this.hintText,
+    this.confirmWith,
   });
 
   @override
@@ -43,27 +47,26 @@ class PrimaryInputFieldWidget extends StatefulWidget {
 
 class _PrimaryInputFieldWidgetState extends State<PrimaryInputFieldWidget> {
   bool _obscureText = true;
-
   late FocusNode _focusNode;
 
   @override
   void initState() {
     super.initState();
-    // Use existing focusNode if provided, otherwise create a new one
     _focusNode = widget.focusNode ?? FocusNode();
 
-    // Listen to focus changes
     _focusNode.addListener(() {
-      setState(() {}); // triggers rebuild to update icon color
+      setState(() {});
+    });
+
+    // Live confirm password check
+    widget.confirmWith?.addListener(() {
+      if (widget.controller.text.isNotEmpty) setState(() {});
     });
   }
 
   @override
   void dispose() {
-    // Only dispose if we created it ourselves
-    if (widget.focusNode == null) {
-      _focusNode.dispose();
-    }
+    if (widget.focusNode == null) _focusNode.dispose();
     super.dispose();
   }
 
@@ -73,15 +76,19 @@ class _PrimaryInputFieldWidgetState extends State<PrimaryInputFieldWidget> {
     }
     if (widget.isEmail) {
       final emailRegex = RegExp(r'^[\w\-\.]+@([\w\-]+\.)+[\w\-]{2,4}$');
-      if (!emailRegex.hasMatch(value.trim())) {
-        return "Enter a valid email";
-      }
+      if (!emailRegex.hasMatch(value.trim())) return "Enter a valid email";
     }
-    if (widget.isPassword) {
-      if (value.length < 6) {
-        return "Password must be at least 6 characters";
-      }
+
+    // Only enforce min length on password field, not confirm
+    if (widget.isPassword && widget.confirmWith == null) {
+      if (value.length < 6) return "Password must be at least 6 characters";
     }
+
+    // ✅ Live confirm password validation
+    if (widget.confirmWith != null && value != widget.confirmWith!.text) {
+      return "Passwords do not match";
+    }
+
     return null;
   }
 
@@ -89,7 +96,6 @@ class _PrimaryInputFieldWidgetState extends State<PrimaryInputFieldWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        /// Label above input
         if (widget.label != null)
           Padding(
             padding: EdgeInsets.only(
@@ -118,7 +124,6 @@ class _PrimaryInputFieldWidgetState extends State<PrimaryInputFieldWidget> {
               ],
             ),
           ),
-
         TextFormField(
           controller: widget.controller,
           focusNode: widget.focusNode,
@@ -126,7 +131,7 @@ class _PrimaryInputFieldWidgetState extends State<PrimaryInputFieldWidget> {
           maxLines: widget.maxLines,
           cursorColor: CustomColors.primary,
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          validator: _validate,
+          validator: widget.validatorLogic ?? _validate,
           textInputAction: widget.nextFocusNode != null
               ? TextInputAction.next
               : TextInputAction.done,
@@ -138,7 +143,6 @@ class _PrimaryInputFieldWidgetState extends State<PrimaryInputFieldWidget> {
             }
           },
           readOnly: widget.readOnly,
-
           decoration: InputDecoration(
             hintText: widget.hintText,
             hintStyle: CustomStyle.bodyMedium.copyWith(
@@ -146,8 +150,6 @@ class _PrimaryInputFieldWidgetState extends State<PrimaryInputFieldWidget> {
               fontWeight: FontWeight.w400,
               fontSize: Dimensions.titleMedium,
             ),
-
-            /// Only show toggle when password
             suffixIcon: widget.isPassword
                 ? IconButton(
                     icon: Icon(
@@ -163,7 +165,6 @@ class _PrimaryInputFieldWidgetState extends State<PrimaryInputFieldWidget> {
                     },
                   )
                 : null,
-
             filled: widget.fillColor != null,
             fillColor:
                 widget.fillColor ?? Theme.of(context).colorScheme.surface,

@@ -54,9 +54,33 @@ class RegisterScreenMobile extends GetView<RegisterController> {
               controller: controller.passConfirmController,
               focusNode: controller.confirmPasswordFocus,
               nextFocusNode: null,
-              confirmWith: controller.passwordController, // only checks matching
+              confirmWith:
+                  controller.passwordController, // only checks matching
             ),
-
+            Space.height.v20,
+            Row(
+              crossAxisAlignment: crossStart,
+              children: [
+                SizedBox(
+                  height: 24,
+                  width: 24,
+                  child: Checkbox(value: true, onChanged: (value) {}),
+                ),
+                Expanded(
+                  child: TextWidget(
+                    padding: EdgeInsetsGeometry.only(
+                      left: Dimensions.widthSize,
+                    ),
+                    "I have read and agree to dodawork's Terms and Conditions and Policy.",
+                    maxLines: 2,
+                    fontSize: Dimensions.titleSmall * 0.9,
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+            Space.height.v20,
+            PrimaryButtonWidget(title: "Next", onPressed: () {}),
           ],
         ),
       ),

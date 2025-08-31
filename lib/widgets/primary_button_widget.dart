@@ -53,7 +53,7 @@ class PrimaryButtonWidget extends StatelessWidget {
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 300),
             padding: EdgeInsets.symmetric(horizontal: isPadded ? 5 : 0),
-            height: height ?? Dimensions.buttonHeight * 0.7,
+            height: height ?? Dimensions.buttonHeight * 0.72,
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () {

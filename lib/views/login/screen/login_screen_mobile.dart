@@ -22,7 +22,6 @@ class LoginScreenMobile extends GetView<LoginController> {
               height: MediaQuery.of(context).size.height * 0.3,
             ),
 
-            /// ✅ Email Field
             PrimaryInputFieldWidget(
               label: "Email",
               isEmail: true,
@@ -32,9 +31,7 @@ class LoginScreenMobile extends GetView<LoginController> {
               hintText: "Enter your email",
             ),
 
-            const SizedBox(height: 16),
-
-            /// ✅ Password Field
+            Space.height.betweenInputBox,
             PrimaryInputFieldWidget(
               hintText: "Enter your password",
               label: "Password",

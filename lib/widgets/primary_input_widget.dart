@@ -1,15 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import '../core/languages/strings.dart';
-import '../core/themes/token.dart';
-import '../core/utils/basic_import.dart';
-import '../widgets/text_widget.dart';
-
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import '../core/languages/strings.dart';
 import '../core/themes/token.dart';
 import '../core/utils/basic_import.dart';
@@ -55,6 +43,29 @@ class PrimaryInputFieldWidget extends StatefulWidget {
 
 class _PrimaryInputFieldWidgetState extends State<PrimaryInputFieldWidget> {
   bool _obscureText = true;
+
+  late FocusNode _focusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    // Use existing focusNode if provided, otherwise create a new one
+    _focusNode = widget.focusNode ?? FocusNode();
+
+    // Listen to focus changes
+    _focusNode.addListener(() {
+      setState(() {}); // triggers rebuild to update icon color
+    });
+  }
+
+  @override
+  void dispose() {
+    // Only dispose if we created it ourselves
+    if (widget.focusNode == null) {
+      _focusNode.dispose();
+    }
+    super.dispose();
+  }
 
   String? _validate(String? value) {
     if (value == null || value.trim().isEmpty) {
@@ -139,17 +150,20 @@ class _PrimaryInputFieldWidgetState extends State<PrimaryInputFieldWidget> {
             /// Only show toggle when password
             suffixIcon: widget.isPassword
                 ? IconButton(
-                    icon: Icon(
-                      _obscureText ? Icons.visibility_off : Icons.visibility,
-                      color: CustomColors.disableColor,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _obscureText = !_obscureText;
-                      });
-                    },
-                  )
+              icon: Icon(
+                _obscureText ? Icons.visibility_off : Icons.visibility,
+                color: _focusNode.hasFocus
+                    ? CustomColors.primary
+                    : CustomColors.disableColor,
+              ),
+              onPressed: () {
+                setState(() {
+                  _obscureText = !_obscureText;
+                });
+              },
+            )
                 : null,
+
 
             filled: widget.fillColor != null,
             fillColor:

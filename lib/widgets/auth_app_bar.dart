@@ -1,3 +1,4 @@
+import 'package:doda_work/routes/routes.dart';
 import 'package:doda_work/widgets/text_widget.dart';
 import '../core/themes/token.dart';
 import '../core/utils/basic_import.dart';
@@ -11,11 +12,13 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color? titleColor;
   final Color? iconColor;
   final Color? borderColor;
+  final bool isSkip;
 
   const CommonAppBar({
     super.key,
     required this.title,
     this.isBack = true,
+    this.isSkip = true,
     this.backgroundColor,
     this.titleColor,
     this.iconColor,
@@ -43,14 +46,16 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
 
       actions: [
-        TextWidget(
-          padding: EdgeInsetsGeometry.symmetric(
-            horizontal: Dimensions.defaultHorizontalSize,
-          ),
-          'Skip',
-          fontSize: Dimensions.titleSmall * 1.1,
-          color: CustomColors.primary,
-        ),
+        isSkip
+            ? TextWidget(
+                onTap: () => Get.offAllNamed(Routes.loginScreen),
+                padding: EdgeInsetsGeometry.symmetric(
+                  horizontal: Dimensions.defaultHorizontalSize,
+                ),
+                'Skip',
+                color: CustomColors.primary,
+              )
+            : Container(),
       ],
     );
   }

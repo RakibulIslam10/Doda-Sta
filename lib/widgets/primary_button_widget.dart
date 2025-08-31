@@ -49,11 +49,11 @@ class PrimaryButtonWidget extends StatelessWidget {
       valueListenable: isPadding,
       builder: (context, isPadded, _) {
         return Padding(
-          padding: padding ?? EdgeInsets.zero,
+          padding: padding ?? EdgeInsetsGeometry.zero,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 300),
             padding: EdgeInsets.symmetric(horizontal: isPadded ? 5 : 0),
-            height: height ?? Dimensions.buttonHeight * 0.8,
+            height: height ?? Dimensions.buttonHeight * 0.7,
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () {
@@ -72,7 +72,7 @@ class PrimaryButtonWidget extends StatelessWidget {
                     shape ??
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(
-                        Dimensions.radius * 1.2,
+                        Dimensions.radius * 3,
                       ),
                     ),
                 side: BorderSide(
@@ -92,7 +92,7 @@ class PrimaryButtonWidget extends StatelessWidget {
                   fontWeight: fontWeight ?? FontWeight.w900,
                   color: primary
                       ? CustomColors.primary
-                      : buttonTextColor ?? Colors.black,
+                      : buttonTextColor ?? Colors.white,
                   maxLines: 1,
                   textOverflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,

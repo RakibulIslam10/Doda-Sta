@@ -109,7 +109,6 @@ class CustomSnackbarContent extends StatelessWidget {
                 color: CustomColors.whiteColor,
                 fontSize: Dimensions.labelSmall * 0.9,
                 fontWeight: FontWeight.w400,
-                colorShade: ColorShade.highSeventy,
               ),
             ],
           ),

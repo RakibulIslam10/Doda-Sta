@@ -3,6 +3,11 @@ part of 'routes.dart';
 class RoutePageList {
   static var list = [
     //Page Route List
+GetPage(
+    name: Routes.slkgdhbScreen,
+    page: () => const SlkgdhbScreen(),
+    binding: SlkgdhbBinding(),
+  ),
     GetPage(
       name: Routes.navigationScreen,
       page: () => const NavigationScreen(),

@@ -12,7 +12,26 @@ class LoginController extends GetxController {
   final passwordFocus = FocusNode();
   final isPasswordValid = false.obs;
   final isPasswordVisible = false.obs;
+  final rememberMe = false.obs;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /// Dispose
   @override
   void onClose() {
     emailController.dispose();

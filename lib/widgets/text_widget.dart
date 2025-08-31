@@ -49,7 +49,7 @@ class TextWidget extends StatelessWidget {
             textScaler: TextScaler.linear(ScreenUtil().textScaleFactor),
             style: TextStyle(
               color: color ?? CustomColors.blackColor,
-              fontSize: fontSize ?? Dimensions.titleSmall,
+              fontSize: fontSize ?? Dimensions.titleMedium,
               fontWeight: fontWeight,
             ),
           ),

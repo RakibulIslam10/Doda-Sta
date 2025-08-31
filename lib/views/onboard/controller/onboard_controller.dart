@@ -33,7 +33,7 @@ class OnboardController extends GetxController {
         curve: Curves.easeInOut,
       );
     } else {
-      Get.offAllNamed(Routes.loginScreen);
+      Get.offAllNamed(Routes.welcomeScreen);
     }
   }
 

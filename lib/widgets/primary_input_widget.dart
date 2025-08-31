@@ -1,73 +1,102 @@
-import 'package:doda_work/core/utils/extensions.dart';
-import 'package:doda_work/widgets/text_widget.dart';
-
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../core/languages/strings.dart';
 import '../core/themes/token.dart';
 import '../core/utils/basic_import.dart';
-import 'custom_image_widget.dart';
+import '../widgets/text_widget.dart';
 
-class PrimaryInputField extends StatelessWidget {
-  final double? radius;
-  final Color? borderColor;
-  final TextEditingController controller;
-  final int? maxLines;
-  final FocusNode? focusNode;
-  final FocusNode? nextFocusNode;
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../core/languages/strings.dart';
+import '../core/themes/token.dart';
+import '../core/utils/basic_import.dart';
+import '../widgets/text_widget.dart';
+
+class PrimaryInputFieldWidget extends StatefulWidget {
+  final String hintText;
+  final String? label;
+  final bool isPassword;
+  final bool isEmail;
+  final String? optionalText;
   final TextInputType? keyBoardType;
   final String? Function(String?)? validatorLogic;
-  final bool autofocus;
-  final bool isPasswordField;
-  final bool isEmailValidator;
-  final String hintTex;
-  final String? optionalText;
-  final String? label;
   final bool readOnly;
   final Color? fillColor;
 
-  const PrimaryInputField({
+  final TextEditingController controller;
+  final FocusNode? focusNode;
+  final FocusNode? nextFocusNode;
+  final int maxLines;
+
+  const PrimaryInputFieldWidget({
     super.key,
-    this.radius,
-    this.borderColor,
+    this.label,
+    this.isPassword = false,
+    this.isEmail = false,
     required this.controller,
-    this.maxLines,
-    this.keyBoardType,
-    this.validatorLogic,
     this.focusNode,
     this.nextFocusNode,
-    this.autofocus = false,
-    this.isPasswordField = false,
-    required this.hintTex,
-    this.isEmailValidator = false,
+    this.maxLines = 1,
+    this.keyBoardType,
+    this.validatorLogic,
     this.readOnly = false,
     this.optionalText,
-    this.label,
     this.fillColor,
+    required this.hintText,
   });
+
+  @override
+  State<PrimaryInputFieldWidget> createState() =>
+      _PrimaryInputFieldWidgetState();
+}
+
+class _PrimaryInputFieldWidgetState extends State<PrimaryInputFieldWidget> {
+  bool _obscureText = true;
+
+  String? _validate(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return Strings.pleaseFillOutTheField;
+    }
+    if (widget.isEmail) {
+      final emailRegex = RegExp(r'^[\w\-\.]+@([\w\-]+\.)+[\w\-]{2,4}$');
+      if (!emailRegex.hasMatch(value.trim())) {
+        return "Enter a valid email";
+      }
+    }
+    if (widget.isPassword) {
+      if (value.length < 6) {
+        return "Password must be at least 6 characters";
+      }
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        if (label != null)
+        /// Label above input
+        if (widget.label != null)
           Padding(
             padding: EdgeInsets.only(
-              bottom: Dimensions.spaceBetweenInputTitleAndBox * 0.8,
+              bottom: Dimensions.spaceBetweenInputTitleAndBox * 0.6,
             ),
             child: Row(
               children: [
                 TextWidget(
-                  label!,
+                  widget.label!,
                   fontSize: Dimensions.titleMedium,
-                  style: CustomStyle.labelSmall.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
-                  color: CustomColors.whiteColor,
+                  fontWeight: FontWeight.w500,
+                  color: CustomColors.blackColor,
                 ),
-                if (optionalText?.isNotEmpty ?? false)
+                if (widget.optionalText?.isNotEmpty ?? false)
                   Padding(
-                    padding: Dimensions.horizontalSize.edgeHorizontal * 0.25,
+                    padding: EdgeInsets.only(left: Dimensions.widthSize * 0.5),
                     child: TextWidget(
-                      optionalText!,
+                      widget.optionalText!,
                       fontSize: Dimensions.titleMedium * 0.9,
                       style: CustomStyle.labelSmall.copyWith(
                         fontWeight: FontWeight.w400,
@@ -78,92 +107,74 @@ class PrimaryInputField extends StatelessWidget {
               ],
             ),
           ),
-        TextFormField(
-          readOnly: readOnly,
-          cursorColor: CustomColors.primary,
-          controller: controller,
-          maxLines: maxLines ?? 1,
-          focusNode: focusNode,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          keyboardType: keyBoardType,
 
-          textInputAction: nextFocusNode != null
+        TextFormField(
+          controller: widget.controller,
+          focusNode: widget.focusNode,
+          obscureText: widget.isPassword ? _obscureText : false,
+          maxLines: widget.maxLines,
+          cursorColor: CustomColors.primary,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          validator: _validate,
+          textInputAction: widget.nextFocusNode != null
               ? TextInputAction.next
               : TextInputAction.done,
-
-          validator:
-          validatorLogic ??
-                  (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return Strings.pleaseFillOutTheField;
-                }
-                // Optional email validation
-                if (isEmailValidator == true) {
-                  final emailRegex = RegExp(
-                    r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-                  );
-                  if (!emailRegex.hasMatch(value.trim())) {
-                    return "Invalid email address";
-                  }
-                }
-
-                return null; // valid
-              },
           onFieldSubmitted: (_) {
-            nextFocusNode?.requestFocus();
+            if (widget.nextFocusNode != null) {
+              FocusScope.of(context).requestFocus(widget.nextFocusNode);
+            } else {
+              FocusScope.of(context).unfocus();
+            }
           },
+          readOnly: widget.readOnly,
 
-          autofocus: autofocus,
-          obscureText: isPasswordField == true ? true : false,
-
-          // autofocus: false,
           decoration: InputDecoration(
-            isDense: true,
-            hintText: hintTex,
-            filled: fillColor != null ? true : false,
-            fillColor: fillColor ?? Theme.of(context).colorScheme.tertiary,
+            hintText: widget.hintText,
             hintStyle: CustomStyle.bodyMedium.copyWith(
-              color: Colors.grey,
+              color: Colors.grey.shade500,
               fontWeight: FontWeight.w400,
+              fontSize: Dimensions.titleMedium,
             ),
 
-            disabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: borderColor ?? CustomColors.secondary,
-              ),
-              borderRadius: BorderRadius.circular(
-                radius ?? Dimensions.radius * 0.8,
-              ),
-            ),
+            /// Only show toggle when password
+            suffixIcon: widget.isPassword
+                ? IconButton(
+                    icon: Icon(
+                      _obscureText ? Icons.visibility_off : Icons.visibility,
+                      color: CustomColors.disableColor,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscureText = !_obscureText;
+                      });
+                    },
+                  )
+                : null,
 
+            filled: widget.fillColor != null,
+            fillColor:
+                widget.fillColor ?? Theme.of(context).colorScheme.surface,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: CustomColors.primary, width: 1.4),
+              borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),
+            ),
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: borderColor ?? CustomColors.secondary,
+                color: CustomColors.disableColor,
+                width: 1.4,
               ),
-              borderRadius: BorderRadius.circular(
-                radius ?? Dimensions.radius * 0.8,
-              ),
+              borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),
             ),
-
             errorBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: CustomColors.rejected, width: 1.1),
-              borderRadius: BorderRadius.circular(
-                radius ?? Dimensions.radius * 0.8,
-              ),
+              borderSide: BorderSide(color: CustomColors.rejected, width: 1.4),
+              borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),
             ),
-
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: CustomColors.primary, width: 1.1),
-              borderRadius: BorderRadius.circular(
-                radius ?? Dimensions.radius * 0.8,
-              ),
-            ),
-
             focusedErrorBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: CustomColors.rejected, width: 1.1),
-              borderRadius: BorderRadius.circular(
-                radius ?? Dimensions.radius * 0.8,
-              ),
+              borderSide: BorderSide(color: CustomColors.rejected, width: 1.4),
+              borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),
             ),
           ),
         ),

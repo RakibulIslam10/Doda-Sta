@@ -19,6 +19,5 @@ class CustomColors {
   static Color backgroundDark = HexColor('#171717');
 
   // Status Color
-  static Color selected = HexColor('#27B059');
-  static Color rejected = HexColor('#DC3A3A');
+  static Color rejected = Color(0xffDC3A3A);
 }

@@ -78,7 +78,6 @@ class OnboardScreenMobile extends GetView<OnboardController> {
                     fontWeight: FontWeight.bold,
                     color: CustomColors.primary,
                   ),
-                  Space.height.v40,
                   TextWidget(
                     maxLines: 2,
                     item.subtitle,

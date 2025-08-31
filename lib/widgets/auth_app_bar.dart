@@ -48,7 +48,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         isSkip == true
             ? TextWidget(
-                onTap: () => Get.offAllNamed(Routes.loginScreen),
+                onTap: () => Get.offAllNamed(Routes.welcomeScreen),
                 padding: EdgeInsetsGeometry.symmetric(
                   horizontal: Dimensions.defaultHorizontalSize,
                 ),

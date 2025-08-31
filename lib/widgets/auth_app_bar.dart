@@ -36,7 +36,10 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
       scrolledUnderElevation: 0,
       centerTitle: true,
       leading: isBack
-          ? Icon(Icons.arrow_back_ios, color: CustomColors.primary)
+          ? InkWell(
+              onTap: () => Get.back(),
+              child: Icon(Icons.arrow_back_ios, color: CustomColors.primary),
+            )
           : null,
       title: TextWidget(
         title,

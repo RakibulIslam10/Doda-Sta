@@ -6,10 +6,12 @@ class RegisterScreenMobile extends GetView<RegisterController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CommonAppBar(title: ''),
       body: SafeArea(
         child: ListView(
           padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
           children: [
+            Space.height.v10,
             TextWidget(
               'Sign Up',
               fontSize: Dimensions.titleLarge,
@@ -20,67 +22,30 @@ class RegisterScreenMobile extends GetView<RegisterController> {
               color: CustomColors.primary,
               fontWeight: FontWeight.w500,
             ),
-            Space.height.v20,
-            PrimaryInputFieldWidget(
-              controller: controller.nameController,
-              hintText: 'Enter your preferred name',
-              label: 'Preferred Name',
-              nextFocusNode: controller.emailFocus,
-            ),
-            Space.height.betweenInputBox,
-            PrimaryInputFieldWidget(
-              label: "Email",
-              isEmail: true,
-              controller: controller.emailController,
-              focusNode: controller.emailFocus,
-              nextFocusNode: controller.passwordFocus,
-              hintText: "Enter your email",
-            ),
-            Space.height.betweenInputBox,
-            PrimaryInputFieldWidget(
-              hintText: "Enter your password",
-              label: "Password",
-              isPassword: true,
-              controller: controller.passwordController,
-              focusNode: controller.passwordFocus,
-              nextFocusNode: controller.confirmPasswordFocus,
-            ),
-
-            Space.height.betweenInputBox,
-            PrimaryInputFieldWidget(
-              hintText: "Confirm your password",
-              label: "Confirm Password",
-              isPassword: true,
-              controller: controller.passConfirmController,
-              focusNode: controller.confirmPasswordFocus,
-              nextFocusNode: null,
-              confirmWith:
-                  controller.passwordController, // only checks matching
-            ),
-            Space.height.v20,
-            Row(
-              crossAxisAlignment: crossStart,
+            FieldsSectionView(),
+            ButtonAndTextSectionView(),
+            Space.height.v10,
+            Wrap(
+              alignment: WrapAlignment.center,
+              crossAxisAlignment: WrapCrossAlignment.center,
               children: [
-                SizedBox(
-                  height: 24,
-                  width: 24,
-                  child: Checkbox(value: true, onChanged: (value) {}),
+                TextWidget(
+                  padding: Dimensions.widthSize.edgeLeft,
+                  'Don’t have an account?',
+                  color: CustomColors.secondaryDarkText,
+                  fontWeight: FontWeight.w400,
+                  fontSize: Dimensions.titleMedium * 0.96,
                 ),
-                Expanded(
-                  child: TextWidget(
-                    padding: EdgeInsetsGeometry.only(
-                      left: Dimensions.widthSize,
-                    ),
-                    "I have read and agree to dodawork's Terms and Conditions and Policy.",
-                    maxLines: 2,
-                    fontSize: Dimensions.titleSmall * 0.9,
-                    color: Colors.grey,
-                  ),
+                TextWidget(
+                  padding: Dimensions.widthSize.edgeLeft,
+                  'Sign In',
+                  onTap: () => Get.offAllNamed(Routes.loginScreen),
+                  color: CustomColors.primary,
+                  fontWeight: FontWeight.w500,
+                  fontSize: Dimensions.titleMedium * 0.96,
                 ),
               ],
             ),
-            Space.height.v20,
-            PrimaryButtonWidget(title: "Next", onPressed: () {}),
           ],
         ),
       ),

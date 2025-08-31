@@ -18,4 +18,9 @@ class RegisterController extends GetxController {
   final isPasswordValid = false.obs;
   final isPasswordVisible = false.obs;
   final rememberMe = false.obs;
+
+
+
+  final isCheck = false.obs;
+
 }

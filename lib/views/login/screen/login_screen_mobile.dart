@@ -23,6 +23,7 @@ class LoginScreenMobile extends GetView<LoginController> {
 
             FieldSectionWidget(),
             ButtonSectionWidget(),
+
           ],
         ),
       ),

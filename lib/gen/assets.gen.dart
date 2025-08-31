@@ -57,6 +57,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/Group.svg
   String get group => 'assets/icons/Group.svg';
 
+  /// File path: assets/icons/Popup.svg
+  String get popup => 'assets/icons/Popup.svg';
+
   /// File path: assets/icons/Vector.svg
   String get vector => 'assets/icons/Vector.svg';
 
@@ -86,6 +89,7 @@ class $AssetsIconsGen {
     frame1,
     green,
     group,
+    popup,
     vector,
     activity,
     empty,

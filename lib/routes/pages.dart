@@ -3,6 +3,7 @@ part of 'routes.dart';
 class RoutePageList {
   static var list = [
     //Page Route List
+
     GetPage(
       name: Routes.homeScreen,
       page: () => const HomeScreen(),

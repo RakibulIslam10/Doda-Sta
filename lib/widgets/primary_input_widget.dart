@@ -22,6 +22,9 @@ class PrimaryInputFieldWidget extends StatefulWidget {
   /// Pass the password controller to confirm against (live validation)
   final TextEditingController? confirmWith;
 
+  /// ✅ New: Make field required or not
+  final bool requiredField;
+
   const PrimaryInputFieldWidget({
     super.key,
     this.label,
@@ -38,6 +41,7 @@ class PrimaryInputFieldWidget extends StatefulWidget {
     this.fillColor,
     required this.hintText,
     this.confirmWith,
+    this.requiredField = true, // default true
   });
 
   @override
@@ -71,6 +75,9 @@ class _PrimaryInputFieldWidgetState extends State<PrimaryInputFieldWidget> {
   }
 
   String? _validate(String? value) {
+    // ✅ Skip validation if requiredField is false
+    if (!widget.requiredField) return null;
+
     if (value == null || value.trim().isEmpty) {
       return Strings.pleaseFillOutTheField;
     }
@@ -152,22 +159,22 @@ class _PrimaryInputFieldWidgetState extends State<PrimaryInputFieldWidget> {
             ),
             suffixIcon: widget.isPassword
                 ? IconButton(
-                    icon: Icon(
-                      _obscureText ? Icons.visibility_off : Icons.visibility,
-                      color: _focusNode.hasFocus
-                          ? CustomColors.primary
-                          : CustomColors.disableColor,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _obscureText = !_obscureText;
-                      });
-                    },
-                  )
+              icon: Icon(
+                _obscureText ? Icons.visibility_off : Icons.visibility,
+                color: _focusNode.hasFocus
+                    ? CustomColors.primary
+                    : CustomColors.disableColor,
+              ),
+              onPressed: () {
+                setState(() {
+                  _obscureText = !_obscureText;
+                });
+              },
+            )
                 : null,
             filled: widget.fillColor != null,
             fillColor:
-                widget.fillColor ?? Theme.of(context).colorScheme.surface,
+            widget.fillColor ?? Theme.of(context).colorScheme.surface,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),
             ),
@@ -196,3 +203,4 @@ class _PrimaryInputFieldWidgetState extends State<PrimaryInputFieldWidget> {
     );
   }
 }
+

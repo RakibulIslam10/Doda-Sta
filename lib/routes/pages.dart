@@ -3,6 +3,26 @@ part of 'routes.dart';
 class RoutePageList {
   static var list = [
     //Page Route List
+    GetPage(
+      name: Routes.verifyScreen,
+      page: () => const VerifyScreen(),
+      binding: VerifyBinding(),
+    ),
+    GetPage(
+      name: Routes.resetScreen,
+      page: () => const ResetScreen(),
+      binding: ResetBinding(),
+    ),
+    GetPage(
+      name: Routes.verificationScreen,
+      page: () => const VerificationScreen(),
+      binding: VerificationBinding(),
+    ),
+    GetPage(
+      name: Routes.forgotScreen,
+      page: () => const ForgotScreen(),
+      binding: ForgotBinding(),
+    ),
 
     GetPage(
       name: Routes.homeScreen,

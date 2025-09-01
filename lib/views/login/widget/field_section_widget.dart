@@ -1,5 +1,6 @@
 import 'package:doda_work/core/utils/basic_import.dart';
 import 'package:doda_work/core/utils/extensions.dart';
+import 'package:doda_work/routes/routes.dart';
 import 'package:doda_work/views/login/controller/login_controller.dart';
 import '../../../core/themes/token.dart';
 import '../../../core/utils/space.dart';
@@ -70,6 +71,7 @@ class FieldSectionWidget extends GetView<LoginController> {
                 ],
               ),
               TextWidget(
+                onTap: () => Get.toNamed(Routes.forgotScreen),
                 textAlign: TextAlign.end,
                 "Forget Password",
                 color: CustomColors.primary,

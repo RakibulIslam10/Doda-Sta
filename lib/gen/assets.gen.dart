@@ -30,6 +30,9 @@ class $AssetsDummyGen {
   /// File path: assets/dummy/Tablet login-amico 1.svg
   String get tabletLoginAmico1 => 'assets/dummy/Tablet login-amico 1.svg';
 
+  /// File path: assets/dummy/otp.svg
+  String get otp => 'assets/dummy/otp.svg';
+
   /// File path: assets/dummy/servicesAuth1.svg
   String get servicesAuth1 => 'assets/dummy/servicesAuth1.svg';
 
@@ -41,6 +44,7 @@ class $AssetsDummyGen {
     inboxCleanupAmico1,
     mobileLoginRafiki1,
     tabletLoginAmico1,
+    otp,
     servicesAuth1,
   ];
 }

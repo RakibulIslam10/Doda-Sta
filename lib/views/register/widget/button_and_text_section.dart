@@ -1,4 +1,5 @@
 import 'package:doda_work/core/themes/token.dart';
+import 'package:doda_work/routes/routes.dart';
 import 'package:doda_work/views/register/controller/register_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -54,7 +55,7 @@ class ButtonAndTextSectionView extends GetView<RegisterController> {
           title: "Next",
           onPressed: () {
             if (controller.fromKey.currentState!.validate()) {
-              print('Work');
+Get.toNamed(Routes.verifyScreen);
             }
           },
         ),

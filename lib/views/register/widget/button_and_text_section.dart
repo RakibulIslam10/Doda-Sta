@@ -47,7 +47,11 @@ class ButtonAndTextSectionView extends GetView<RegisterController> {
           ],
         ),
         Space.height.v20,
-        PrimaryButtonWidget(title: "Next", onPressed: () {}),
+        PrimaryButtonWidget(title: "Next", onPressed: () {
+          if(controller.fromKey.currentState!.validate()){
+            print('Work');
+          }
+        }),
       ],
     );
   }

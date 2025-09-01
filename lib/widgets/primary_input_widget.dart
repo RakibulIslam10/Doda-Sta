@@ -159,22 +159,22 @@ class _PrimaryInputFieldWidgetState extends State<PrimaryInputFieldWidget> {
             ),
             suffixIcon: widget.isPassword
                 ? IconButton(
-              icon: Icon(
-                _obscureText ? Icons.visibility_off : Icons.visibility,
-                color: _focusNode.hasFocus
-                    ? CustomColors.primary
-                    : CustomColors.disableColor,
-              ),
-              onPressed: () {
-                setState(() {
-                  _obscureText = !_obscureText;
-                });
-              },
-            )
+                    icon: Icon(
+                      _obscureText ? Icons.visibility_off : Icons.visibility,
+                      color: _focusNode.hasFocus
+                          ? CustomColors.primary
+                          : CustomColors.disableColor,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscureText = !_obscureText;
+                      });
+                    },
+                  )
                 : null,
             filled: widget.fillColor != null,
             fillColor:
-            widget.fillColor ?? Theme.of(context).colorScheme.surface,
+                widget.fillColor ?? Theme.of(context).colorScheme.surface,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),
             ),
@@ -203,4 +203,3 @@ class _PrimaryInputFieldWidgetState extends State<PrimaryInputFieldWidget> {
     );
   }
 }
-

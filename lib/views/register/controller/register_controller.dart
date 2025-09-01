@@ -1,11 +1,12 @@
 import 'package:doda_work/core/utils/basic_import.dart';
 
 class RegisterController extends GetxController {
+  final GlobalKey<FormState> fromKey = GlobalKey<FormState>();
+
   final nameController = TextEditingController();
   final passController = TextEditingController();
   final passConfirmController = TextEditingController();
   final confirmPasswordFocus = FocusNode();
-
 
   // email
   final emailController = TextEditingController();
@@ -19,8 +20,5 @@ class RegisterController extends GetxController {
   final isPasswordVisible = false.obs;
   final rememberMe = false.obs;
 
-
-
   final isCheck = false.obs;
-
 }

@@ -10,45 +10,49 @@ class FieldsSectionView extends GetView<RegisterController> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Space.height.v20,
-        PrimaryInputFieldWidget(
-          controller: controller.nameController,
-          hintText: 'Enter your preferred name',
-          label: 'Preferred Name',
-          nextFocusNode: controller.emailFocus,
-        ),
-        Space.height.betweenInputBox,
-        PrimaryInputFieldWidget(
-          label: "Email",
-          isEmail: true,
-          controller: controller.emailController,
-          focusNode: controller.emailFocus,
-          nextFocusNode: controller.passwordFocus,
-          hintText: "Enter your email",
-        ),
-        Space.height.betweenInputBox,
-        PrimaryInputFieldWidget(
-          hintText: "Enter your password",
-          label: "Password",
-          isPassword: true,
-          controller: controller.passwordController,
-          focusNode: controller.passwordFocus,
-          nextFocusNode: controller.confirmPasswordFocus,
-        ),
+    return Form(
+      key: controller.fromKey,
+      child: Column(
+        children: [
+          Space.height.v20,
+          PrimaryInputFieldWidget(
+            controller: controller.nameController,
+            hintText: 'Enter your preferred name',
+            label: 'Preferred Name',
+            nextFocusNode: controller.emailFocus,
+            requiredField: false,
+          ),
+          Space.height.betweenInputBox,
+          PrimaryInputFieldWidget(
+            label: "Email",
+            isEmail: true,
+            controller: controller.emailController,
+            focusNode: controller.emailFocus,
+            nextFocusNode: controller.passwordFocus,
+            hintText: "Enter your email",
+          ),
+          Space.height.betweenInputBox,
+          PrimaryInputFieldWidget(
+            hintText: "Enter your password",
+            label: "Password",
+            isPassword: true,
+            controller: controller.passwordController,
+            focusNode: controller.passwordFocus,
+            nextFocusNode: controller.confirmPasswordFocus,
+          ),
 
-        Space.height.betweenInputBox,
-        PrimaryInputFieldWidget(
-          hintText: "Confirm your password",
-          label: "Confirm Password",
-          isPassword: true,
-          controller: controller.passConfirmController,
-          focusNode: controller.confirmPasswordFocus,
-          nextFocusNode: null,
-          confirmWith: controller.passwordController, // only checks matching
-        ),
-      ],
+          Space.height.betweenInputBox,
+          PrimaryInputFieldWidget(
+            hintText: "Confirm your password",
+            label: "Confirm Password",
+            isPassword: true,
+            controller: controller.passConfirmController,
+            focusNode: controller.confirmPasswordFocus,
+            nextFocusNode: null,
+            confirmWith: controller.passwordController, // only checks matching
+          ),
+        ],
+      ),
     );
   }
 }

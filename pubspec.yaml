@@ -25,11 +25,11 @@ dependencies:
   connectivity_plus:
   flutter_svg:
   intl:
-  cached_network_image:
   country_picker: ^2.0.27
   in_app_purchase: any
 
   http:
+  cached_network_image: ^3.4.1
 
 dev_dependencies:
   flutter_test:

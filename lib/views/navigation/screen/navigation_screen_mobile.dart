@@ -34,11 +34,11 @@ class NavigationScreenMobile extends GetView<NavigationController> {
             ],
           ),
           child: Obx(
-                () => Row(
+            () => Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: List.generate(
                 controller.navigationList.length,
-                    (index) => _buildNavItem(index),
+                (index) => _buildNavItem(index),
               ),
             ),
           ),
@@ -66,7 +66,7 @@ class NavigationScreenMobile extends GetView<NavigationController> {
             ),
             child: SizedBox(
               height: isSelected ? 20.h : 22.h,
-              width: isSelected ? 20.w : 22 .w,
+              width: isSelected ? 20.w : 22.w,
               child: SvgPicture.asset(
                 controller.navigationList[index].iconPath,
                 color: isSelected ? Colors.white : Colors.grey,
@@ -74,9 +74,9 @@ class NavigationScreenMobile extends GetView<NavigationController> {
               ),
             ),
           ),
-          const SizedBox(height: 4),
+          Space.height.v5,
           AnimatedDefaultTextStyle(
-            duration: const Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 200),
             style: TextStyle(
               fontSize: Dimensions.titleSmall,
               fontWeight: FontWeight.w500,

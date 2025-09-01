@@ -62,6 +62,8 @@ class FieldSectionWidget extends GetView<LoginController> {
                   TextWidget(
                     padding: Dimensions.widthSize.edgeLeft,
                     'Remember Me',
+                    onTap: () => controller.rememberMe.value =
+                        !controller.rememberMe.value,
                     fontWeight: FontWeight.w400,
                     fontSize: Dimensions.titleMedium,
                   ),

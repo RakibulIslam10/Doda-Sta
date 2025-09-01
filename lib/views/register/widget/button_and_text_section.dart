@@ -37,6 +37,9 @@ class ButtonAndTextSectionView extends GetView<RegisterController> {
             ),
             Expanded(
               child: TextWidget(
+                onTap: () {
+                  controller.isCheck.value = !controller.isCheck.value;
+                },
                 padding: EdgeInsetsGeometry.only(left: Dimensions.widthSize),
                 "I have read and agree to dodawork's Terms and Conditions and Policy.",
                 maxLines: 2,
@@ -47,11 +50,14 @@ class ButtonAndTextSectionView extends GetView<RegisterController> {
           ],
         ),
         Space.height.v20,
-        PrimaryButtonWidget(title: "Next", onPressed: () {
-          if(controller.fromKey.currentState!.validate()){
-            print('Work');
-          }
-        }),
+        PrimaryButtonWidget(
+          title: "Next",
+          onPressed: () {
+            if (controller.fromKey.currentState!.validate()) {
+              print('Work');
+            }
+          },
+        ),
       ],
     );
   }

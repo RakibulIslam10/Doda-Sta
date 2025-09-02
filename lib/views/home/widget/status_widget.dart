@@ -5,7 +5,7 @@ class StatusWidgetView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> statusText = ['Pending', 'Ongoing', 'Complete'];
+    final List<String> statusText = ['Pending', 'Ongoing', 'Completed'];
 
     return DefaultTabController(
       length: statusText.length,

@@ -5,14 +5,14 @@ class ProfileScreenMobile extends GetView<ProfileController> {
 
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
       appBar: CommonAppBar(title: 'Profile'),
       body: SafeArea(
         child: ListView(
           padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
           children: [
+            Space.height.betweenInputBox,
+
             ProfileTopHeaderWidgetView(),
             Space.height.v20,
             ProfileCardSectionWidgetView(),

@@ -11,6 +11,8 @@ class UpdateScreenMobile extends GetView<UpdateController> {
         child: ListView(
           padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
           children: [
+            Space.height.betweenInputBox,
+
             Center(
               child: Stack(
                 children: [

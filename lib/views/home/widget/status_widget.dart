@@ -80,44 +80,66 @@ class StatusWidgetView extends GetView<HomeController> {
                   ),
                   child: TabBarView(
                     controller: tabController,
+                    physics: const ClampingScrollPhysics(),
                     children: [
                       /// Pending
-                      ListView.builder(
-                        itemCount: 10,
-                        itemBuilder: (context, index) => CustomStatusCardWidget(
-                          index: index,
-                          requestId: 'Pending-${index + 1}',
-                          category: 'Category $index',
-                          subCategory: 'SubCategory $index',
-                          address: 'Pending Address $index',
-                          status: 'Pending',
-                        ),
+                      CustomScrollView(
+                        physics: const ClampingScrollPhysics(),
+                        slivers: [
+                          SliverList(
+                            delegate: SliverChildBuilderDelegate(
+                              (context, index) => CustomStatusCardWidget(
+                                index: index,
+                                requestId: 'Pending-${index + 1}',
+                                category: 'Category $index',
+                                subCategory: 'SubCategory $index',
+                                address: 'Pending Address $index',
+                                status: 'Pending',
+                              ),
+                              childCount: 10,
+                            ),
+                          ),
+                        ],
                       ),
 
                       /// Ongoing
-                      ListView.builder(
-                        itemCount: 2,
-                        itemBuilder: (context, index) => CustomStatusCardWidget(
-                          index: index,
-                          requestId: 'Ongoing-${index + 1}',
-                          category: 'Category $index',
-                          subCategory: 'SubCategory $index',
-                          address: 'Ongoing Address $index',
-                          status: 'Ongoing',
-                        ),
+                      CustomScrollView(
+                        physics: const ClampingScrollPhysics(),
+                        slivers: [
+                          SliverList(
+                            delegate: SliverChildBuilderDelegate(
+                              (context, index) => CustomStatusCardWidget(
+                                index: index,
+                                requestId: 'Ongoing-${index + 1}',
+                                category: 'Category $index',
+                                subCategory: 'SubCategory $index',
+                                address: 'Ongoing Address $index',
+                                status: 'Ongoing',
+                              ),
+                              childCount: 2,
+                            ),
+                          ),
+                        ],
                       ),
 
                       /// Complete
-                      ListView.builder(
-                        itemCount: 1,
-                        itemBuilder: (context, index) => CustomStatusCardWidget(
-                          index: index,
-                          requestId: 'Complete-${index + 1}',
-                          category: 'Category $index',
-                          subCategory: 'SubCategory $index',
-                          address: 'Complete Address $index',
-                          status: 'Complete',
-                        ),
+                      CustomScrollView(
+                        physics: const ClampingScrollPhysics(),
+                        slivers: [
+                          SliverList(
+                            delegate: SliverChildBuilderDelegate(
+                              (context, index) => CustomStatusCardWidget(
+                                index: index,
+                                requestId: 'Complete-${index + 1}',
+                                category: 'Category $index',
+                                subCategory: 'SubCategory $index',
+                                address: 'Complete Address $index',
+                                status: 'Complete',
+                              ),
+                              childCount: 1,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),

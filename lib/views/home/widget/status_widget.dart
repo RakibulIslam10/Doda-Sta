@@ -70,35 +70,57 @@ class StatusWidgetView extends GetView<HomeController> {
                   }),
                 ),
               ),
-              Space.height.v10,
+              Space.height.v15,
 
-              /// TabBarView content
               SizedBox(
-                height: MediaQuery.of(context).size.height,
-                child: TabBarView(
-                  controller: tabController,
-                  children: List.generate(statusText.length, (index) {
-                    return ListView.builder(
-                      physics: ClampingScrollPhysics(),
-                      cacheExtent: 500,
-                      shrinkWrap: true,
-                      itemCount: 10,
-                      itemBuilder: (context, itemIndex) {
-                        return Container(
-                          margin: EdgeInsets.only(
-                            bottom: Dimensions.verticalSize * 0.5,
-                          ),
-                          height: MediaQuery.of(context).size.height * 0.15,
-                          decoration: BoxDecoration(
-                            color: CustomColors.primary,
-                            borderRadius: BorderRadius.circular(
-                              Dimensions.radius,
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  }),
+                height: MediaQuery.of(context).size.height * 0.38,
+                child: Padding(
+                  padding: EdgeInsetsGeometry.only(
+                    bottom: Dimensions.verticalSize * 0.5,
+                  ),
+                  child: TabBarView(
+                    controller: tabController,
+                    children: [
+                      /// Pending
+                      ListView.builder(
+                        itemCount: 10,
+                        itemBuilder: (context, index) => CustomStatusCardWidget(
+                          index: index,
+                          requestId: 'Pending-${index + 1}',
+                          category: 'Category $index',
+                          subCategory: 'SubCategory $index',
+                          address: 'Pending Address $index',
+                          status: 'Pending',
+                        ),
+                      ),
+
+                      /// Ongoing
+                      ListView.builder(
+                        itemCount: 2,
+                        itemBuilder: (context, index) => CustomStatusCardWidget(
+                          index: index,
+                          requestId: 'Ongoing-${index + 1}',
+                          category: 'Category $index',
+                          subCategory: 'SubCategory $index',
+                          address: 'Ongoing Address $index',
+                          status: 'Ongoing',
+                        ),
+                      ),
+
+                      /// Complete
+                      ListView.builder(
+                        itemCount: 1,
+                        itemBuilder: (context, index) => CustomStatusCardWidget(
+                          index: index,
+                          requestId: 'Complete-${index + 1}',
+                          category: 'Category $index',
+                          subCategory: 'SubCategory $index',
+                          address: 'Complete Address $index',
+                          status: 'Complete',
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],

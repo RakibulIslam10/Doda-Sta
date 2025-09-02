@@ -33,6 +33,8 @@ class HomeScreenMobile extends GetView<HomeController> {
             const SearchBarWidgetView(),
             const CategoryWidgetView(),
             const StatusWidgetView(),
+            Space.height.v40,
+
           ],
         ),
       ),

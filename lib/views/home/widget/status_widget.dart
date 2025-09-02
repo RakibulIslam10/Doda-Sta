@@ -1,6 +1,6 @@
 part of '../screen/home_screen.dart';
 
-class StatusWidgetView extends StatelessWidget {
+class StatusWidgetView extends GetView<HomeController> {
   const StatusWidgetView({super.key});
 
   @override
@@ -9,30 +9,101 @@ class StatusWidgetView extends StatelessWidget {
 
     return DefaultTabController(
       length: statusText.length,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+      child: Builder(
+        builder: (context) {
+          final TabController tabController = DefaultTabController.of(context);
 
+          /// Swipe listener (instant color update)
+          tabController.animation!.addListener(() {
+            final int currentIndex = tabController.animation!.value.round();
+            if (controller.selectedStatus.value != currentIndex) {
+              controller.selectedStatus.value = currentIndex;
+            }
+          });
 
-          // Space.height.v10,
-          // SizedBox(
-          //   height: MediaQuery.of(context).size.height,
-          //   child: ListView.builder(
-          //     itemBuilder: (context, index) {
-          //       return Container(
-          //         margin: EdgeInsetsGeometry.only(
-          //           bottom: Dimensions.verticalSize * 0.5,
-          //         ),
-          //         height: MediaQuery.of(context).size.height * 0.15,
-          //         decoration: BoxDecoration(
-          //           color: CustomColors.primary,
-          //           borderRadius: BorderRadius.circular(Dimensions.radius),
-          //         ),
-          //       );
-          //     },
-          //   ),
-          // ),
-        ],
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              /// Custom Status TabBar
+              Obx(
+                () => TabBar(
+                  controller: tabController,
+                  tabAlignment: TabAlignment.start,
+                  isScrollable: true,
+                  indicatorColor: Colors.transparent,
+                  dividerColor: Colors.transparent,
+                  labelPadding: EdgeInsets.zero,
+                  enableFeedback: false,
+                  overlayColor: MaterialStateProperty.all(Colors.transparent),
+                  onTap: (value) => controller.selectedStatus.value = value,
+                  splashFactory: NoSplash.splashFactory,
+                  tabs: List.generate(statusText.length, (index) {
+                    final bool isSelected =
+                        controller.selectedStatus.value == index;
+                    return Container(
+                      margin: EdgeInsets.only(
+                        right: Dimensions.widthSize * 1.5,
+                      ),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Dimensions.widthSize * 1.2,
+                        vertical: Dimensions.verticalSize * 0.32,
+                      ),
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? CustomColors.primary
+                            : CustomColors.primary.withAlpha(858),
+                        borderRadius: BorderRadius.circular(
+                          Dimensions.radius * 0.8,
+                        ),
+                      ),
+                      child: Center(
+                        child: TextWidget(
+                          statusText[index],
+                          fontWeight: FontWeight.w500,
+                          fontSize: Dimensions.titleSmall,
+                          color: isSelected
+                              ? CustomColors.whiteColor
+                              : CustomColors.blackColor,
+                        ),
+                      ),
+                    );
+                  }),
+                ),
+              ),
+              Space.height.v10,
+
+              /// TabBarView content
+              SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: TabBarView(
+                  controller: tabController,
+                  children: List.generate(statusText.length, (index) {
+                    return ListView.builder(
+                      physics: ClampingScrollPhysics(),
+                      cacheExtent: 500,
+                      shrinkWrap: true,
+                      itemCount: 10,
+                      itemBuilder: (context, itemIndex) {
+                        return Container(
+                          margin: EdgeInsets.only(
+                            bottom: Dimensions.verticalSize * 0.5,
+                          ),
+                          height: MediaQuery.of(context).size.height * 0.15,
+                          decoration: BoxDecoration(
+                            color: CustomColors.primary,
+                            borderRadius: BorderRadius.circular(
+                              Dimensions.radius,
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  }),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

@@ -5,8 +5,8 @@ class ProfileTopHeaderWidgetView extends GetView<ProfileController> {
 
   @override
   Widget build(BuildContext context) {
-      final double imageWidth = MediaQuery.of(context).size.width * 0.28;
-      final double cardHeight = MediaQuery.of(context).size.height * 0.12;
+    final double imageWidth = MediaQuery.of(context).size.width * 0.28;
+    final double cardHeight = MediaQuery.of(context).size.height * 0.12;
     return Container(
       height: cardHeight,
       decoration: BoxDecoration(
@@ -116,35 +116,38 @@ class ProfileTopHeaderWidgetView extends GetView<ProfileController> {
                 ),
 
                 // Status badge
-                Container(
-                  margin: EdgeInsets.all(Dimensions.paddingSize * 0.2),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: Dimensions.defaultHorizontalSize * 0.2,
-                    vertical: Dimensions.verticalSize * 0.1,
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: CustomColors.primary),
-                    borderRadius: BorderRadius.circular(
-                      Dimensions.radius * 0.4,
+                InkWell(
+                  onTap: () => Get.toNamed(Routes.updateScreen),
+                  child: Container(
+                    margin: EdgeInsets.all(Dimensions.paddingSize * 0.2),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Dimensions.defaultHorizontalSize * 0.2,
+                      vertical: Dimensions.verticalSize * 0.1,
                     ),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.edit,
-                        color: CustomColors.primary,
-                        size: Dimensions.iconSizeSmall * 1.4,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: CustomColors.primary),
+                      borderRadius: BorderRadius.circular(
+                        Dimensions.radius * 0.4,
                       ),
-                      TextWidget(
-                        padding: EdgeInsetsGeometry.only(
-                          left: Dimensions.defaultHorizontalSize * 0.1,
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.edit,
+                          color: CustomColors.primary,
+                          size: Dimensions.iconSizeSmall * 1.4,
                         ),
-                        'Edit Profile',
-                        fontSize: Dimensions.titleSmall * 0.6,
-                        color: CustomColors.primary,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ],
+                        TextWidget(
+                          padding: EdgeInsetsGeometry.only(
+                            left: Dimensions.defaultHorizontalSize * 0.1,
+                          ),
+                          'Edit Profile',
+                          fontSize: Dimensions.titleSmall * 0.6,
+                          color: CustomColors.primary,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],

@@ -28,7 +28,7 @@ class StatusWidgetView extends GetView<HomeController> {
               Obx(
                 () => TabBar(
                   controller: tabController,
-                  tabAlignment: TabAlignment.start,
+                  tabAlignment: TabAlignment.center,
                   isScrollable: true,
                   indicatorColor: Colors.transparent,
                   dividerColor: Colors.transparent,

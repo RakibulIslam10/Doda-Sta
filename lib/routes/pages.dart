@@ -3,26 +3,31 @@ part of 'routes.dart';
 class RoutePageList {
   static var list = [
     //Page Route List
-GetPage(
-    name: Routes.notificationScreen,
-    page: () => const NotificationScreen(),
-    binding: NotificationBinding(),
-  ),
-GetPage(
-    name: Routes.profileScreen,
-    page: () => const ProfileScreen(),
-    binding: ProfileBinding(),
-  ),
-GetPage(
-    name: Routes.chatScreen,
-    page: () => const ChatScreen(),
-    binding: ChatBinding(),
-  ),
-GetPage(
-    name: Routes.requestScreen,
-    page: () => const RequestScreen(),
-    binding: RequestBinding(),
-  ),
+    GetPage(
+      name: Routes.updateScreen,
+      page: () => const UpdateScreen(),
+      binding: UpdateBinding(),
+    ),
+    GetPage(
+      name: Routes.notificationScreen,
+      page: () => const NotificationScreen(),
+      binding: NotificationBinding(),
+    ),
+    GetPage(
+      name: Routes.profileScreen,
+      page: () => const ProfileScreen(),
+      binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: Routes.chatScreen,
+      page: () => const ChatScreen(),
+      binding: ChatBinding(),
+    ),
+    GetPage(
+      name: Routes.requestScreen,
+      page: () => const RequestScreen(),
+      binding: RequestBinding(),
+    ),
     GetPage(
       name: Routes.verifyScreen,
       page: () => const VerifyScreen(),

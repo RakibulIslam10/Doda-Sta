@@ -5,6 +5,7 @@ import '../bind/forgot_binding.dart';
 import '../bind/home_binding.dart';
 import '../bind/login_binding.dart';
 import '../bind/navigation_binding.dart';
+import '../bind/notification_binding.dart';
 import '../bind/onboard_binding.dart';
 import '../bind/profile_binding.dart';
 import '../bind/register_binding.dart';
@@ -23,6 +24,7 @@ import '../views/auth/verify/screen/verify_screen.dart';
 import '../views/chat/screen/chat_screen.dart';
 import '../views/home/screen/home_screen.dart';
 import '../views/navigation/screen/navigation_screen.dart';
+import '../views/notification/screen/notification_screen.dart';
 import '../views/onboard/screen/onboard_screen.dart';
 import '../views/profile/screen/profile_screen.dart';
 import '../views/request/screen/request_screen.dart';
@@ -33,6 +35,7 @@ part 'pages.dart';
 
 class Routes {
   static var list = RoutePageList.list;
+static const notificationScreen = '/notificationScreen';
 static const profileScreen = '/profileScreen';
 static const chatScreen = '/chatScreen';
 static const requestScreen = '/requestScreen';

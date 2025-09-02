@@ -4,6 +4,11 @@ class RoutePageList {
   static var list = [
     //Page Route List
 GetPage(
+    name: Routes.notificationScreen,
+    page: () => const NotificationScreen(),
+    binding: NotificationBinding(),
+  ),
+GetPage(
     name: Routes.profileScreen,
     page: () => const ProfileScreen(),
     binding: ProfileBinding(),

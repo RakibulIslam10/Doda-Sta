@@ -28,11 +28,21 @@ class CustomStatusCardWidget extends StatelessWidget {
       margin: EdgeInsets.only(bottom: Dimensions.verticalSize * 0.5),
       height: cardHeight,
       decoration: BoxDecoration(
+        color: Colors.white, // optional background for better shadow visibility
         border: Border.all(
-          color: CustomColors.grayShade.withAlpha(150), // fixed alpha
+          color:Colors.grey.withAlpha(555),
         ),
         borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05), // shadow color
+            spreadRadius: 1, // how wide the shadow spreads
+            blurRadius: 6, // softness of the shadow
+            offset: const Offset(0, 3), // position of shadow (x, y)
+          ),
+        ],
       ),
+
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import '../views/reset/controller/reset_controller.dart';
+import '../views/auth/reset/controller/reset_controller.dart';
 
 class ResetBinding extends Bindings {
   @override

@@ -13,12 +13,14 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color? iconColor;
   final Color? borderColor;
   final bool isSkip;
+  final bool isPrimary;
 
   const CommonAppBar({
     super.key,
     required this.title,
     this.isBack = true,
     this.isSkip = false,
+    this.isPrimary = false,
     this.backgroundColor,
     this.titleColor,
     this.iconColor,
@@ -38,12 +40,12 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: isBack
           ? InkWell(
               onTap: () => Get.back(),
-              child: Icon(Icons.arrow_back_ios, color: CustomColors.primary),
+              child: Icon(Icons.arrow_back_ios, color: isPrimary ? CustomColors.primary : CustomColors.blackColor),
             )
           : null,
       title: TextWidget(
         title,
-        color: titleColor ?? CustomColors.primary,
+        color: isPrimary ? titleColor ?? CustomColors.primary : CustomColors.blackColor,
         fontSize: Dimensions.titleMedium * 1.2,
         fontWeight: FontWeight.w600,
       ),

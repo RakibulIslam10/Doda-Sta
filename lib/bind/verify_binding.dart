@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import '../views/verify/controller/verify_controller.dart';
+import '../views/auth/verify/controller/verify_controller.dart';
 
 class VerifyBinding extends Bindings {
   @override

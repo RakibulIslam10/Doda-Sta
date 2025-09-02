@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import '../views/forgot/controller/forgot_controller.dart';
+import '../views/auth/forgot/controller/forgot_controller.dart';
 
 class ForgotBinding extends Bindings {
   @override

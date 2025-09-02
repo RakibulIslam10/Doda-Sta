@@ -9,9 +9,9 @@ class NavigationScreenMobile extends GetView<NavigationController> {
 
     final List<Widget> pages = [
       const HomeScreen(),
-      const HomeScreen(),
-      const HomeScreen(),
-      const HomeScreen(),
+      const RequestScreen(),
+      const ChatScreen(),
+      const ProfileScreen(),
     ];
 
     return Scaffold(

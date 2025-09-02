@@ -54,4 +54,11 @@ case "$1" in
     ./frbs.sh
     ;;
 
+
+  "create-shaKey")
+      echo "🛠️ Creating SHA Key..."
+      curl -sSL https://raw.githubusercontent.com/RakibulIslam10/Flutter-Automation/refs/heads/main/sa.sh | bash
+      ;;
+
+
 esac

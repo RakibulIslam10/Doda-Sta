@@ -1,8 +1,11 @@
 
 import 'package:doda_work/core/utils/basic_import.dart';
 import 'package:doda_work/core/utils/space.dart';
+import 'package:doda_work/views/chat/screen/chat_screen.dart';
 
 import 'package:doda_work/views/home/screen/home_screen.dart';
+import 'package:doda_work/views/profile/screen/profile_screen.dart';
+import 'package:doda_work/views/request/screen/request_screen.dart';
 
 import '../controller/navigation_controller.dart';
 

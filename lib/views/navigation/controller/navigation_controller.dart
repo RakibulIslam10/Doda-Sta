@@ -14,4 +14,10 @@ class NavigationController extends GetxController {
   void changeIndex(int index) {
     selectedIndex.value = index;
   }
+
+  void goToProfile() {
+    selectedIndex.value = 3;
+  }
+
+
 }

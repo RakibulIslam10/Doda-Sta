@@ -9,7 +9,7 @@ class TypeMessageWidget extends GetView<InboxController> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:Dimensions.defaultHorizontalSize.edgeHorizontal,
+      padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
       child: Row(
         children: [
           // 📸 Image picker

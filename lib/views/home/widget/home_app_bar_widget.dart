@@ -10,7 +10,10 @@ class HomeAppBarWidgetView extends GetView<HomeController> {
         padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
         child: Row(
           children: [
-            SvgPicture.asset(Assets.logo.appLogo, height: 50.h),
+            GestureDetector(
+              onTap: () => Get.find<NavigationController>().goToProfile(),
+              child: SvgPicture.asset(Assets.logo.appLogo, height: 50.h),
+            ),
             Space.width.v10,
             Column(
               crossAxisAlignment: crossStart,

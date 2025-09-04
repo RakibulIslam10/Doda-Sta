@@ -19,7 +19,7 @@ class CategoryWidgetView extends GetView<HomeController> {
             ),
             TextWidget(
               'View All',
-              onTap: () {},
+              onTap: () => Get.toNamed(Routes.allCategoryScreen),
               color: CustomColors.primary,
               fontSize: Dimensions.titleSmall * 0.95,
               fontWeight: FontWeight.w500,

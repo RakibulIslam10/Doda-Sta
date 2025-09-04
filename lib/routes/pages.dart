@@ -4,10 +4,25 @@ class RoutePageList {
   static var list = [
     //Page Route List
 GetPage(
-    name: Routes.summaryScreen,
-    page: () => const SummaryScreen(),
-    binding: SummaryBinding(),
+    name: Routes.inboxScreen,
+    page: () => const InboxScreen(),
+    binding: InboxBinding(),
   ),
+    GetPage(
+      name: Routes.categoryPreviewScreen,
+      page: () => const CategoryPreviewScreen(),
+      binding: CategoryPreviewBinding(),
+    ),
+    GetPage(
+      name: Routes.allCategoryScreen,
+      page: () => const AllCategoryScreen(),
+      binding: AllCategoryBinding(),
+    ),
+    GetPage(
+      name: Routes.summaryScreen,
+      page: () => const SummaryScreen(),
+      binding: SummaryBinding(),
+    ),
     GetPage(
       name: Routes.updateScreen,
       page: () => const UpdateScreen(),

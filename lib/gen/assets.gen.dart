@@ -73,6 +73,12 @@ class $AssetsIconsGen {
   /// File path: assets/icons/empty.svg
   String get empty => 'assets/icons/empty.svg';
 
+  /// File path: assets/icons/paper-plane-top 1.svg
+  String get paperPlaneTop1 => 'assets/icons/paper-plane-top 1.svg';
+
+  /// File path: assets/icons/picture 1.svg
+  String get picture1 => 'assets/icons/picture 1.svg';
+
   /// File path: assets/icons/reject.svg
   String get reject => 'assets/icons/reject.svg';
 
@@ -97,6 +103,8 @@ class $AssetsIconsGen {
     vector,
     activity,
     empty,
+    paperPlaneTop1,
+    picture1,
     reject,
     request1,
     success,

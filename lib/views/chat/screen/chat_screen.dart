@@ -4,6 +4,7 @@ import 'package:doda_work/core/utils/basic_import.dart';
 import 'package:doda_work/core/utils/extensions.dart';
 import 'package:doda_work/widgets/auth_app_bar.dart';
 import 'package:doda_work/widgets/text_widget.dart';
+import '../../../routes/routes.dart';
 import '../controller/chat_controller.dart';
 
 part 'chat_screen_mobile.dart';

@@ -17,7 +17,7 @@ class ChatScreenMobile extends GetView<ChatController> {
                 delegate: SliverChildBuilderDelegate(
                   childCount: 10,
                   (context, index) => ListTile(
-                    // onTap: () => Get.toNamed(Routes.chatScreen),
+                    onTap: () => Get.toNamed(Routes.inboxScreen),
                     contentPadding: EdgeInsets.symmetric(
                       vertical: Dimensions.verticalSize * 0.2,
                     ),

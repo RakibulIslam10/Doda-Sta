@@ -8,36 +8,50 @@ class ProfileCardSectionWidgetView extends GetView<ProfileController> {
     final double cardHeight = MediaQuery.of(context).size.height * 0.065;
     return Column(
       children: [
-        _buildSectionCard(cardHeight, Icons.settings, 'Account Setting'),
+        _buildSectionCard(cardHeight, Icons.settings, 'Account Setting', () {}),
         _buildSectionCard(
           cardHeight,
           Icons.reviews_outlined,
           'Reviews & Ratings',
+          () {},
         ),
-        _buildSectionCard(cardHeight, Icons.dataset_outlined, 'ADocuments'),
+        _buildSectionCard(
+          cardHeight,
+          Icons.dataset_outlined,
+          'ADocuments',
+          () {},
+        ),
         _buildSectionCard(
           cardHeight,
           Icons.notification_add_outlined,
           'Notification',
+          () {},
         ),
         _buildSectionCard(
           cardHeight,
           Icons.menu_book_outlined,
           'Terms & Condition',
+          () {},
         ),
         _buildSectionCard(
           cardHeight,
           Icons.my_library_books_outlined,
           'Privacy policy',
+          () {},
         ),
-        _buildSectionCard(cardHeight, Icons.logout, 'Log Out'),
+        _buildSectionCard(cardHeight, Icons.logout, 'Log Out', () {}),
       ],
     );
   }
 
-  _buildSectionCard(double cardHeight, IconData icon, String title) {
+  _buildSectionCard(
+    double cardHeight,
+    IconData icon,
+    String title,
+    void Function()? onTap,
+  ) {
     return GestureDetector(
-      // onTap: () => Get.toNamed(Routes.chatScreen),
+      onTap: onTap,
       child: Container(
         margin: EdgeInsetsGeometry.only(top: Dimensions.heightSize),
         height: cardHeight,
@@ -47,10 +61,10 @@ class ProfileCardSectionWidgetView extends GetView<ProfileController> {
           border: Border.all(color: Colors.grey.withAlpha(555)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.02), // shadow color
-              spreadRadius: 1, // how wide the shadow spreads
-              blurRadius: 6, // softness of the shadow
-              offset: const Offset(0, 3), // position of shadow (x, y)
+              color: Colors.black.withOpacity(0.02),
+              spreadRadius: 1,
+              blurRadius: 6,
+              offset: const Offset(0, 3),
             ),
           ],
         ),

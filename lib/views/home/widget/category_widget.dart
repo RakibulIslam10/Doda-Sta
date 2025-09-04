@@ -44,35 +44,38 @@ class CategoryWidgetView extends GetView<HomeController> {
               itemCount: 3,
               itemBuilder: (context, index) {
                 return RepaintBoundary(
-                  child: Column(
-                    crossAxisAlignment: crossCenter,
-                    children: [
-                      ClipOval(
-                        child: CachedNetworkImage(
-                          imageUrl:
-                              "https://picsum.photos/200/300?random=${index + 1}",
-                          width: screenWidth * 0.16,
-                          height: screenWidth * 0.16,
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) =>
-                              Container(color: Colors.grey.shade300),
-                          errorWidget: (context, url, error) => Container(
-                            color: Colors.grey.shade300,
-                            child: const Icon(Icons.error, color: Colors.red),
+                  child: GestureDetector(
+                    onTap: () => Get.toNamed(Routes.allCategoryScreen),
+                    child: Column(
+                      crossAxisAlignment: crossCenter,
+                      children: [
+                        ClipOval(
+                          child: CachedNetworkImage(
+                            imageUrl:
+                                "https://picsum.photos/200/300?random=${index + 1}",
+                            width: screenWidth * 0.16,
+                            height: screenWidth * 0.16,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) =>
+                                Container(color: Colors.grey.shade300),
+                            errorWidget: (context, url, error) => Container(
+                              color: Colors.grey.shade300,
+                              child: const Icon(Icons.error, color: Colors.red),
+                            ),
                           ),
                         ),
-                      ),
-                      Space.height.v5,
-                      TextWidget(
-                        textAlign: TextAlign.center,
-                        "Landscaping & "
-                        "Hardscaping Service",
-                        maxLines: 2,
-                        fontSize: Dimensions.titleSmall * 0.8,
-                        textOverflow: TextOverflow.ellipsis,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ],
+                        Space.height.v5,
+                        TextWidget(
+                          textAlign: TextAlign.center,
+                          "Landscaping & "
+                          "Hardscaping Service",
+                          maxLines: 2,
+                          fontSize: Dimensions.titleSmall * 0.8,
+                          textOverflow: TextOverflow.ellipsis,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },

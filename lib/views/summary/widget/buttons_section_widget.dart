@@ -13,15 +13,13 @@ class ButtonsSectionWidget extends GetView<SummaryController> {
           borderWidth: 1.4,
           outlineButton: true,
           title: 'Edit',
-          onPressed: () {
-            Get.showSnackbar(GetSnackBar(title: 'Hell'));
-          },
+          onPressed: () => Get.back(),
         ),
         Space.height.betweenInputBox,
         PrimaryButtonWidget(
           title: 'Get Matched',
           onPressed: () {
-            Get.showSnackbar(GetSnackBar(title: 'Hell'));
+            Get.back();
           },
         ),
       ],

@@ -6,16 +6,16 @@ class ChatScreenMobile extends GetView<ChatController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CommonAppBar(title: 'Chat',isBack: false,),
+      appBar: CommonAppBar(title: 'Chat', isBack: false),
       body: SafeArea(
         child: CustomScrollView(
           physics: const ClampingScrollPhysics(),
-
           slivers: [
             SliverPadding(
               padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
               sliver: SliverList(
                 delegate: SliverChildBuilderDelegate(
+                  childCount: 10,
                   (context, index) => ListTile(
                     // onTap: () => Get.toNamed(Routes.chatScreen),
                     contentPadding: EdgeInsets.symmetric(

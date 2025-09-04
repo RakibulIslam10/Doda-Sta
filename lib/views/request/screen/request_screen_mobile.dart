@@ -6,10 +6,13 @@ class RequestScreenMobile extends GetView<RequestController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CommonAppBar(title: 'Add Request', isBack: false),
+
       body: SafeArea(
         child: ListView(
           padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
-          children: [
+          children: [TimeAndDateSectionWidget(),
+
 
           ],
         ),

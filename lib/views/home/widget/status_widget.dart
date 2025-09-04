@@ -41,8 +41,8 @@ class StatusWidgetView extends GetView<HomeController> {
                     final bool isSelected =
                         controller.selectedStatus.value == index;
                     return Container(
-                      margin: EdgeInsets.only(
-                        right: Dimensions.widthSize * 1.5,
+                      margin: EdgeInsets.symmetric(
+                        horizontal: Dimensions.defaultHorizontalSize * 0.4,
                       ),
                       padding: EdgeInsets.symmetric(
                         horizontal: Dimensions.widthSize * 1.2,

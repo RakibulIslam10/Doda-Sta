@@ -81,6 +81,7 @@ class StatusWidgetView extends GetView<HomeController> {
                   child: TabBarView(
                     controller: tabController,
                     physics: const ClampingScrollPhysics(),
+
                     children: [
                       /// Pending
                       CustomScrollView(

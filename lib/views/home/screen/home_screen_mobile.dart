@@ -30,7 +30,6 @@ class HomeScreenMobile extends GetView<HomeController> {
       ),
       body: SafeArea(
         child: ListView(
-          padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
           physics: NeverScrollableScrollPhysics(),
           children: [
             const SearchBarWidgetView(),

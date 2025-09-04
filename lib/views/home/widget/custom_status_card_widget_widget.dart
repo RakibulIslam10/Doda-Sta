@@ -29,7 +29,11 @@ class CustomStatusCardWidget extends StatelessWidget {
     return InkWell(
       onTap: onTap ?? () => Get.toNamed(Routes.summaryScreen),
       child: Container(
-        margin: EdgeInsets.only(bottom: Dimensions.verticalSize * 0.5),
+        margin: EdgeInsets.only(
+          bottom: Dimensions.verticalSize * 0.5,
+          right: Dimensions.defaultHorizontalSize,
+          left: Dimensions.defaultHorizontalSize,
+        ),
         height: cardHeight,
         decoration: BoxDecoration(
           color: Colors.white,

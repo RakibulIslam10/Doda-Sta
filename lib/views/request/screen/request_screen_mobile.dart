@@ -11,9 +11,23 @@ class RequestScreenMobile extends GetView<RequestController> {
       body: SafeArea(
         child: ListView(
           padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
-          children: [TimeAndDateSectionWidget(),
+          children: [
+            TimeAndDateSectionWidget(),
+            Space.height.betweenInputBox,
+            OthersFieldWidget(),
+            Space.height.betweenInputBox,
 
+            AddPhotoGrid(),
+            Space.height.betweenInputBox,
 
+            PrimaryButtonWidget(
+              title: "Submit",
+              onPressed: () {
+                Get.toNamed(Routes.summaryScreen);
+              },
+            ),
+
+            Space.height.betweenInputBox,
           ],
         ),
       ),

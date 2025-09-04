@@ -71,8 +71,6 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-
     return Column(
       crossAxisAlignment: crossStart,
       children: [
@@ -92,7 +90,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
             padding: Dimensions.defaultHorizontalSize.edgeHorizontal * 0.5,
             height: Dimensions.inputBoxHeight * 0.7,
             decoration: BoxDecoration(
-              border: Border.all(color: CustomColors.primary, width: 1.4),
+              border: Border.all(color: _selectedDate == null ?CustomColors.disableColor : CustomColors.primary, width: 1.4),
               borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),
             ),
             child: Row(
@@ -111,7 +109,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                Icon(Icons.calendar_today, color: CustomColors.primary),
+                Icon(Icons.calendar_today, color:_selectedDate == null ?CustomColors.disableColor : CustomColors.primary),
               ],
             ),
           ),

@@ -12,6 +12,7 @@ import '../bind/register_binding.dart';
 import '../bind/request_binding.dart';
 import '../bind/reset_binding.dart';
 import '../bind/splash_binding.dart';
+import '../bind/summary_binding.dart';
 import '../bind/update_binding.dart';
 import '../bind/verification_binding.dart';
 import '../bind/verify_binding.dart';
@@ -30,6 +31,7 @@ import '../views/onboard/screen/onboard_screen.dart';
 import '../views/profile/screen/profile_screen.dart';
 import '../views/request/screen/request_screen.dart';
 import '../views/splash/screen/splash_screen.dart';
+import '../views/summary/screen/summary_screen.dart';
 import '../views/update/screen/update_screen.dart';
 import '../views/welcome/screen/welcome_screen.dart';
 
@@ -37,6 +39,7 @@ part 'pages.dart';
 
 class Routes {
   static var list = RoutePageList.list;
+static const summaryScreen = '/summaryScreen';
 static const updateScreen = '/updateScreen';
 static const notificationScreen = '/notificationScreen';
 static const profileScreen = '/profileScreen';

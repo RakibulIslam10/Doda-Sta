@@ -3,6 +3,11 @@ part of 'routes.dart';
 class RoutePageList {
   static var list = [
     //Page Route List
+GetPage(
+    name: Routes.summaryScreen,
+    page: () => const SummaryScreen(),
+    binding: SummaryBinding(),
+  ),
     GetPage(
       name: Routes.updateScreen,
       page: () => const UpdateScreen(),

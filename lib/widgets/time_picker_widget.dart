@@ -97,8 +97,6 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-
     return Column(
       crossAxisAlignment: crossStart,
       children: [
@@ -118,7 +116,7 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
             padding: Dimensions.defaultHorizontalSize.edgeHorizontal * 0.5,
             height: Dimensions.inputBoxHeight * 0.7,
             decoration: BoxDecoration(
-              border: Border.all(color: CustomColors.primary, width: 1.4),
+              border: Border.all(color: _selectedTime == null ?CustomColors.disableColor : CustomColors.primary, width: 1.4),
               borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),
             ),
             child: Row(
@@ -134,7 +132,7 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
                       ? CustomColors.disableColor
                       : Colors.black,
                 ),
-                Icon(Icons.access_time, color: CustomColors.primary),
+                Icon(Icons.access_time, color: _selectedTime == null ?CustomColors.disableColor : CustomColors.primary),
               ],
             ),
           ),

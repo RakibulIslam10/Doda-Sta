@@ -110,11 +110,15 @@ class _PrimaryInputFieldWidgetState extends State<PrimaryInputFieldWidget> {
             ),
             child: Row(
               children: [
-                TextWidget(
-                  widget.label!,
-                  fontSize: Dimensions.titleMedium,
-                  fontWeight: FontWeight.w500,
-                  color: CustomColors.blackColor,
+                Expanded(
+                  child: TextWidget(
+                    widget.label!,
+                    maxLines: 2,
+                    textOverflow: TextOverflow.ellipsis,
+                    fontSize: Dimensions.titleMedium,
+                    fontWeight: FontWeight.w500,
+                    color: CustomColors.blackColor,
+                  ),
                 ),
                 if (widget.optionalText?.isNotEmpty ?? false)
                   Padding(

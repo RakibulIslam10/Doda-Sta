@@ -19,6 +19,7 @@ class PrimaryButtonWidget extends StatelessWidget {
   final bool isLoading;
   final bool primary;
   final bool disable;
+  final bool outlineButton; // new flag for outline button
   final EdgeInsets? padding;
 
   PrimaryButtonWidget({
@@ -37,6 +38,7 @@ class PrimaryButtonWidget extends StatelessWidget {
     this.isLoading = false,
     this.primary = false,
     this.disable = false,
+    this.outlineButton = false, // default false
     this.padding,
   });
 
@@ -45,18 +47,57 @@ class PrimaryButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isLoading) return const LoadingWidget();
+
     return ValueListenableBuilder<bool>(
       valueListenable: isPadding,
       builder: (context, isPadded, _) {
         return Padding(
-          padding: padding ?? EdgeInsetsGeometry.zero,
+          padding: padding ?? EdgeInsets.zero,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 300),
             padding: EdgeInsets.symmetric(horizontal: isPadded ? 5 : 0),
             height: height ?? Dimensions.buttonHeight * 0.72,
             width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {
+            child: outlineButton
+                ? OutlinedButton(
+              onPressed: disable ? null : () {
+                isPadding.value = true;
+                Future.delayed(const Duration(milliseconds: 220), () {
+                  isPadding.value = false;
+                });
+                onPressed();
+              },
+              style: OutlinedButton.styleFrom(
+                side: BorderSide(
+                  width: borderWidth,
+                  color: disable
+                      ? CustomColors.disableColor
+                      : borderColor ?? CustomColors.primary,
+                ),
+                shape: shape ??
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        Dimensions.radius * 3,
+                      ),
+                    ),
+                backgroundColor: Colors.transparent,
+              ),
+              child: TextWidget(
+                title,
+                fontSize: isPadded
+                    ? (fontSize ?? Dimensions.titleMedium)
+                    : fontSize ?? Dimensions.titleMedium * 1.1,
+                fontWeight: fontWeight ?? FontWeight.w900,
+                color: primary
+                    ? CustomColors.primary
+                    : buttonTextColor ?? CustomColors.primary,
+                maxLines: 1,
+                textOverflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+              ),
+            )
+                : ElevatedButton(
+              onPressed: disable ? null : () {
                 isPadding.value = true;
                 Future.delayed(const Duration(milliseconds: 220), () {
                   isPadding.value = false;
@@ -66,10 +107,9 @@ class PrimaryButtonWidget extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 elevation: 0,
                 backgroundColor:
-                    (disable ? CustomColors.disableColor : buttonColor) ??
+                (disable ? CustomColors.disableColor : buttonColor) ??
                     CustomColors.primary,
-                shape:
-                    shape ??
+                shape: shape ??
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(
                         Dimensions.radius * 3,

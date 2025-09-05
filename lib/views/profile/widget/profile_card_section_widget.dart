@@ -5,56 +5,97 @@ class ProfileCardSectionWidgetView extends GetView<ProfileController> {
 
   @override
   Widget build(BuildContext context) {
-    final double cardHeight = MediaQuery.of(context).size.height * 0.065;
     return Column(
       children: [
-        _buildSectionCard(cardHeight, Icons.settings, 'Account Setting', () {}),
         _buildSectionCard(
-          cardHeight,
+          Icons.settings,
+          'Account Setting',
+          () => Get.toNamed(Routes.settingScreen),
+        ),
+        _buildSectionCard(
           Icons.reviews_outlined,
           'Reviews & Ratings',
-          () {},
+          () => Get.toNamed(Routes.reviewRatingScreen),
         ),
         _buildSectionCard(
-          cardHeight,
           Icons.dataset_outlined,
           'ADocuments',
-          () {},
+          () => Get.toNamed(Routes.documentScreen),
         ),
         _buildSectionCard(
-          cardHeight,
           Icons.notification_add_outlined,
           'Notification',
-          () {},
+          () => Get.toNamed(Routes.notificationScreen),
         ),
         _buildSectionCard(
-          cardHeight,
           Icons.menu_book_outlined,
           'Terms & Condition',
-          () {},
+          () => Get.toNamed(Routes.termsScreen),
         ),
         _buildSectionCard(
-          cardHeight,
           Icons.my_library_books_outlined,
           'Privacy policy',
-          () {},
+          () => Get.toNamed(Routes.privacyScreen),
         ),
-        _buildSectionCard(cardHeight, Icons.logout, 'Log Out', () {}),
+        _buildSectionCard(Icons.logout, 'Log Out', () {
+          Get.dialog(
+            AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),
+              ),
+              title: TextWidget(
+                ' Logout',
+                fontSize: Dimensions.titleLarge,
+                fontWeight: FontWeight.w500,
+              ),
+              content: const TextWidget('Are you sure you want to log out?'),
+              actions: [
+                ElevatedButton(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: CustomColors.primary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadiusGeometry.circular(
+                        Dimensions.radius * 0.8,
+                      ),
+                    ),
+                  ),
+                  child: TextWidget('No', color: CustomColors.whiteColor),
+                ),
+
+                ElevatedButton(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: CustomColors.whiteColor,
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(color: CustomColors.rejected),
+                      borderRadius: BorderRadiusGeometry.circular(
+                        Dimensions.radius * 0.8,
+                      ),
+                    ),
+                  ),
+                  child: TextWidget('Yes', color: CustomColors.rejected),
+                ),
+              ],
+            ),
+            barrierDismissible: true,
+          );
+        }),
       ],
     );
   }
 
-  _buildSectionCard(
-    double cardHeight,
-    IconData icon,
-    String title,
-    void Function()? onTap,
-  ) {
+  _buildSectionCard(IconData icon, String title, void Function()? onTap) {
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         margin: EdgeInsetsGeometry.only(top: Dimensions.heightSize),
-        height: cardHeight,
+        height: Dimensions.heightSize * 4.4,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),

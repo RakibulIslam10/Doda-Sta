@@ -3,11 +3,36 @@ part of 'routes.dart';
 class RoutePageList {
   static var list = [
     //Page Route List
-GetPage(
-    name: Routes.inboxScreen,
-    page: () => const InboxScreen(),
-    binding: InboxBinding(),
-  ),
+    GetPage(
+      name: Routes.privacyScreen,
+      page: () => const PrivacyScreen(),
+      binding: PrivacyBinding(),
+    ),
+    GetPage(
+      name: Routes.termsScreen,
+      page: () => const TermsScreen(),
+      binding: TermsBinding(),
+    ),
+    GetPage(
+      name: Routes.documentScreen,
+      page: () => const DocumentScreen(),
+      binding: DocumentBinding(),
+    ),
+    GetPage(
+      name: Routes.reviewRatingScreen,
+      page: () => const ReviewRatingScreen(),
+      binding: ReviewRatingBinding(),
+    ),
+    GetPage(
+      name: Routes.settingScreen,
+      page: () => const SettingScreen(),
+      binding: SettingBinding(),
+    ),
+    GetPage(
+      name: Routes.inboxScreen,
+      page: () => const InboxScreen(),
+      binding: InboxBinding(),
+    ),
     GetPage(
       name: Routes.categoryPreviewScreen,
       page: () => const CategoryPreviewScreen(),

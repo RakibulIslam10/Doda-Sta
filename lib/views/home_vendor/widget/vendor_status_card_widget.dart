@@ -23,7 +23,7 @@ class VendorStatusCardWidget extends StatelessWidget {
     final double imageWidth = MediaQuery.of(context).size.width * 0.28;
 
     return InkWell(
-      onTap: onTap ?? () => Get.toNamed(Routes.summaryScreen),
+      // onTap: onTap ?? () => Get.toNamed(Routes.summaryScreen),
       child: Container(
         margin: EdgeInsets.only(
           bottom: Dimensions.verticalSize * 0.5,
@@ -109,43 +109,210 @@ class VendorStatusCardWidget extends StatelessWidget {
                         Space.height.v5,
                         Row(
                           children: [
-                            Container(
-                              padding: EdgeInsetsGeometry.symmetric(
-                                horizontal:
-                                    Dimensions.defaultHorizontalSize * 0.5,
-                                vertical: Dimensions.verticalSize * 0.06,
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadiusGeometry.circular(
-                                  Dimensions.radius * 0.4,
-                                ),
-                                color: CustomColors.primary,
-                              ),
+                            InkWell(
+                              onTap: () {
+                                Get.dialog(
+                                  AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                        Dimensions.radius * 0.8,
+                                      ),
+                                    ),
+                                    content: Column(
+                                      mainAxisSize: mainMin,
+                                      children: [
+                                        SvgPicture.asset(
+                                          Assets
+                                              .dummy
+                                              .streamlineUltimateColorSelfPaymentTouch,
+                                        ),
+                                        Space.height.v5,
 
-                              child: TextWidget(
-                                'Accept',
-                                color: CustomColors.whiteColor,
-                                fontSize: Dimensions.titleSmall,
+                                        TextWidget(
+                                          'Pay Now',
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: Dimensions.titleLarge,
+                                        ),
+                                        Space.height.v5,
+                                        TextWidget(
+                                          'please complete your payment method',
+                                          fontSize: Dimensions.titleSmall,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    ),
+                                    actions: [
+                                      Padding(
+                                        padding: EdgeInsetsGeometry.symmetric(
+                                          horizontal:
+                                              Dimensions.defaultHorizontalSize,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment: mainSpaceBet,
+                                          children: [
+                                            ElevatedButton(
+                                              onPressed: () {},
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor:
+                                                    CustomColors.whiteColor,
+                                                shape: RoundedRectangleBorder(
+                                                  side: BorderSide(
+                                                    color: CustomColors.primary,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadiusGeometry.circular(
+                                                        Dimensions.radius * 0.8,
+                                                      ),
+                                                ),
+                                              ),
+                                              child: TextWidget(
+                                                padding:
+                                                    EdgeInsetsGeometry.symmetric(
+                                                      horizontal: Dimensions
+                                                          .defaultHorizontalSize,
+                                                    ),
+
+                                                'Yes',
+                                                color: CustomColors.primary,
+                                              ),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                Get.back();
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor:
+                                                    CustomColors.secondary,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadiusGeometry.circular(
+                                                        Dimensions.radius * 0.8,
+                                                      ),
+                                                ),
+                                              ),
+                                              child: TextWidget(
+                                                padding:
+                                                    EdgeInsetsGeometry.symmetric(
+                                                      horizontal: Dimensions
+                                                          .defaultHorizontalSize,
+                                                    ),
+                                                'No',
+                                                color: CustomColors.whiteColor,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  barrierDismissible: true,
+                                );
+                              },
+                              child: Container(
+                                padding: EdgeInsetsGeometry.symmetric(
+                                  horizontal:
+                                      Dimensions.defaultHorizontalSize * 0.5,
+                                  vertical: Dimensions.verticalSize * 0.06,
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadiusGeometry.circular(
+                                    Dimensions.radius * 0.4,
+                                  ),
+                                  color: CustomColors.primary,
+                                ),
+
+                                child: TextWidget(
+                                  'Accept',
+                                  color: CustomColors.whiteColor,
+                                  fontSize: Dimensions.titleSmall,
+                                ),
                               ),
                             ),
                             Space.width.v10,
-                            Container(
-                              padding: EdgeInsetsGeometry.symmetric(
-                                horizontal:
-                                    Dimensions.defaultHorizontalSize * 0.5,
-                                vertical: Dimensions.verticalSize * 0.06,
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadiusGeometry.circular(
-                                  Dimensions.radius * 0.4,
+                            InkWell(
+                              onTap: () {
+                                Get.dialog(
+                                  AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                        Dimensions.radius * 0.8,
+                                      ),
+                                    ),
+                                    content: Column(
+                                      mainAxisSize: mainMin,
+                                      children: [
+                                        TextWidget(
+                                          'Decline',
+                                          color: CustomColors.primary,
+                                          fontSize: Dimensions.titleSmall,
+                                        ),
+                                        Space.height.v10,
+                                        PrimaryInputFieldWidget(
+                                          controller: TextEditingController(),
+                                          hintText: 'Type Something',
+                                        ),
+                                      ],
+                                    ),
+                                    actions: [
+                                      Row(
+                                        mainAxisAlignment: mainCenter,
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsGeometry.symmetric(
+                                                  horizontal: Dimensions
+                                                      .defaultHorizontalSize,
+                                                ),
+                                            child: ElevatedButton(
+                                              onPressed: () {
+                                                Get.back();
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor:
+                                                    CustomColors.primary,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadiusGeometry.circular(
+                                                        Dimensions.radius * 0.8,
+                                                      ),
+                                                ),
+                                              ),
+                                              child: TextWidget(
+                                                padding:
+                                                    EdgeInsetsGeometry.symmetric(
+                                                      horizontal: Dimensions
+                                                          .defaultHorizontalSize,
+                                                    ),
+                                                'Submit',
+                                                color: CustomColors.whiteColor,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  barrierDismissible: true,
+                                );
+                              },
+                              child: Container(
+                                padding: EdgeInsetsGeometry.symmetric(
+                                  horizontal:
+                                      Dimensions.defaultHorizontalSize * 0.5,
+                                  vertical: Dimensions.verticalSize * 0.06,
                                 ),
-                                color: CustomColors.secondary,
-                              ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadiusGeometry.circular(
+                                    Dimensions.radius * 0.4,
+                                  ),
+                                  color: CustomColors.secondary,
+                                ),
 
-                              child: TextWidget(
-                                'Decline',
-                                color: CustomColors.whiteColor,
-                                fontSize: Dimensions.titleSmall,
+                                child: TextWidget(
+                                  'Decline',
+                                  color: CustomColors.whiteColor,
+                                  fontSize: Dimensions.titleSmall,
+                                ),
                               ),
                             ),
                           ],

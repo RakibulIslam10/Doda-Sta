@@ -24,6 +24,9 @@ class $AssetsDummyGen {
   /// File path: assets/dummy/Inbox cleanup-amico 1.svg
   String get inboxCleanupAmico1 => 'assets/dummy/Inbox cleanup-amico 1.svg';
 
+  /// File path: assets/dummy/Message.svg
+  String get message => 'assets/dummy/Message.svg';
+
   /// File path: assets/dummy/Mobile login-rafiki 1.svg
   String get mobileLoginRafiki1 => 'assets/dummy/Mobile login-rafiki 1.svg';
 
@@ -36,16 +39,22 @@ class $AssetsDummyGen {
   /// File path: assets/dummy/servicesAuth1.svg
   String get servicesAuth1 => 'assets/dummy/servicesAuth1.svg';
 
+  /// File path: assets/dummy/streamline-ultimate-color_self-payment-touch.svg
+  String get streamlineUltimateColorSelfPaymentTouch =>
+      'assets/dummy/streamline-ultimate-color_self-payment-touch.svg';
+
   /// List of all assets
   List<String> get values => [
     carWashRafiki1,
     frame,
     group14928,
     inboxCleanupAmico1,
+    message,
     mobileLoginRafiki1,
     tabletLoginAmico1,
     otp,
     servicesAuth1,
+    streamlineUltimateColorSelfPaymentTouch,
   ];
 }
 

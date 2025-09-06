@@ -4,10 +4,5 @@ class MessageModel {
   final bool isMe;
   final String? time;
 
-  MessageModel({
-    this.text,
-    this.imageUrl,
-    required this.isMe,
-    this.time,
-  });
+  MessageModel({this.text, this.imageUrl, required this.isMe, this.time});
 }

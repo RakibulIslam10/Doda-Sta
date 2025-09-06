@@ -11,9 +11,7 @@ class TermsScreenMobile extends GetView<TermsController> {
       body: SafeArea(
         child: ListView(
           padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
-          children: [
-            
-          ],
+          children: [],
         ),
       ),
     );

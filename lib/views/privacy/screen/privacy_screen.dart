@@ -1,4 +1,5 @@
 import 'package:doda_work/core/utils/extensions.dart';
+import 'package:doda_work/widgets/auth_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/utils/dimensions.dart';

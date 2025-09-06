@@ -6,6 +6,8 @@ class TermsScreenMobile extends GetView<TermsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CommonAppBar(title: 'Terms & Condition'),
+
       body: SafeArea(
         child: ListView(
           padding: Dimensions.defaultHorizontalSize.edgeHorizontal,

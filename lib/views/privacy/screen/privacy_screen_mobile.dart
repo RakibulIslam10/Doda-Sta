@@ -6,6 +6,7 @@ class PrivacyScreenMobile extends GetView<PrivacyController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CommonAppBar(title: 'Privacy Policy'),
       body: SafeArea(
         child: ListView(
           padding: Dimensions.defaultHorizontalSize.edgeHorizontal,

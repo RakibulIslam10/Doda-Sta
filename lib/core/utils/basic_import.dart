@@ -13,6 +13,8 @@ export '../../../core/utils/space.dart';
 export '../../../widgets/primary_input_widget.dart';
 export '../themes/token.dart';
 export '../languages/strings.dart';
+export '../../../widgets/text_widget.dart';
+
 
 
 

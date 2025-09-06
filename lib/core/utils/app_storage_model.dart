@@ -3,7 +3,6 @@ class AppStorageModel {
   final String temporaryToken;
   final String mobileCode;
   final bool onboardSave;
-  final String waitTime;
   final bool isLoggedIn;
   final bool isEmailVerified;
   final bool isKycVerified;
@@ -13,7 +12,6 @@ class AppStorageModel {
   AppStorageModel(
     this.token,
     this.onboardSave,
-    this.waitTime,
     this.isLoggedIn,
     this.isEmailVerified,
     this.isKycVerified,

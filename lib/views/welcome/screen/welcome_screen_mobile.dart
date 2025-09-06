@@ -131,7 +131,10 @@ class WelcomeScreenMobile extends GetView<WelcomeController> {
               ),
 
               GestureDetector(
-                onTap: () => Get.offAllNamed(Routes.loginScreen),
+                onTap: () {
+                  Get.offAllNamed(Routes.loginScreen,);
+                  AppStorage.save(isVendor: true);
+                },
                 child: AnimatedContainer(
                   margin: EdgeInsetsGeometry.symmetric(
                     horizontal: Dimensions.defaultHorizontalSize,
@@ -145,7 +148,6 @@ class WelcomeScreenMobile extends GetView<WelcomeController> {
                   width: double.infinity,
 
                   duration: const Duration(milliseconds: 300),
-
                   child: Row(
                     mainAxisAlignment: mainCenter,
                     children: [

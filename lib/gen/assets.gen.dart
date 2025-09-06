@@ -70,6 +70,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/activity.svg
   String get activity => 'assets/icons/activity.svg';
 
+  /// File path: assets/icons/category.svg
+  String get category => 'assets/icons/category.svg';
+
   /// File path: assets/icons/empty.svg
   String get empty => 'assets/icons/empty.svg';
 
@@ -102,6 +105,7 @@ class $AssetsIconsGen {
     popup,
     vector,
     activity,
+    category,
     empty,
     paperPlaneTop1,
     picture1,

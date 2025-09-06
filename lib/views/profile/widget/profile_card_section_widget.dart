@@ -6,27 +6,52 @@ class ProfileCardSectionWidgetView extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: crossStart,
       children: [
         _buildSectionCard(
           Icons.settings,
           'Account Setting',
           () => Get.toNamed(Routes.settingScreen),
         ),
+
         _buildSectionCard(
           Icons.reviews_outlined,
           'Reviews & Ratings',
+          isVisible: AppStorage.isVendor,
           () => Get.toNamed(Routes.reviewRatingScreen),
         ),
         _buildSectionCard(
           Icons.dataset_outlined,
           'ADocuments',
+          isVisible: AppStorage.isVendor,
+
           () => Get.toNamed(Routes.documentScreen),
+        ),
+        _buildSectionCard(
+          Icons.favorite_border,
+          'Favorite',
+          isVisible: AppStorage.isVendor == false,
+          () => Get.toNamed(Routes.favoriteScreen),
+        ),
+        _buildSectionCard(
+          Icons.favorite_border,
+          'Contact Us',
+          isVisible: AppStorage.isVendor == false,
+
+          () => Get.toNamed(Routes.faqScreen),
         ),
         _buildSectionCard(
           Icons.notification_add_outlined,
           'Notification',
           () => Get.toNamed(Routes.notificationScreen),
         ),
+
+        TextWidget(
+          'More',
+          fontWeight: FontWeight.w500,
+          padding: Dimensions.heightSize.edgeTop,
+        ),
+
         _buildSectionCard(
           Icons.menu_book_outlined,
           'Terms & Condition',
@@ -67,7 +92,8 @@ class ProfileCardSectionWidgetView extends GetView<ProfileController> {
 
                 ElevatedButton(
                   onPressed: () {
-                    Get.back();
+                    AppStorage.clear();
+                    Get.offAllNamed(Routes.loginScreen);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: CustomColors.whiteColor,
@@ -89,13 +115,19 @@ class ProfileCardSectionWidgetView extends GetView<ProfileController> {
     );
   }
 
-  _buildSectionCard(IconData icon, String title, void Function()? onTap) {
+  _buildSectionCard(
+    IconData icon,
+    String title,
+    void Function()? onTap, {
+    bool isVisible = true, // default true
+  }) {
+    if (!isVisible) return const SizedBox.shrink(); // hide when false
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: EdgeInsetsGeometry.only(top: Dimensions.heightSize),
-        height: Dimensions.heightSize * 4.4,
+        margin: EdgeInsets.only(top: Dimensions.heightSize),
+        height: Dimensions.heightSize * 4.3,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),
@@ -109,7 +141,6 @@ class ProfileCardSectionWidgetView extends GetView<ProfileController> {
             ),
           ],
         ),
-
         child: Row(
           mainAxisAlignment: mainSpaceBet,
           children: [
@@ -121,11 +152,9 @@ class ProfileCardSectionWidgetView extends GetView<ProfileController> {
                   onPressed: null,
                   icon: Icon(icon, color: CustomColors.primary),
                 ),
-
                 TextWidget(title, fontSize: Dimensions.titleSmall * 1.1),
               ],
             ),
-
             IconButton(
               onPressed: null,
               icon: Icon(Icons.arrow_forward_ios, color: CustomColors.primary),

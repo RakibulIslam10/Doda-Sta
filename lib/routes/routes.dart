@@ -6,6 +6,8 @@ import '../bind/certificate_binding.dart';
 import '../bind/change_password_binding.dart';
 import '../bind/chat_binding.dart';
 import '../bind/document_binding.dart';
+import '../bind/faq_binding.dart';
+import '../bind/favorite_binding.dart';
 import '../bind/forgot_binding.dart';
 import '../bind/home_binding.dart';
 import '../bind/inbox_binding.dart';
@@ -41,6 +43,8 @@ import '../views/certificate/screen/certificate_screen.dart';
 import '../views/change_password/screen/change_password_screen.dart';
 import '../views/chat/screen/chat_screen.dart';
 import '../views/document/screen/document_screen.dart';
+import '../views/faq/screen/faq_screen.dart';
+import '../views/favorite/screen/favorite_screen.dart';
 import '../views/home/screen/home_screen.dart';
 import '../views/inbox/screen/inbox_screen.dart';
 import '../views/licence/screen/licence_screen.dart';
@@ -62,6 +66,8 @@ part 'pages.dart';
 
 class Routes {
   static var list = RoutePageList.list;
+static const faqScreen = '/faqScreen';
+static const favoriteScreen = '/favoriteScreen';
 static const certificateScreen = '/certificateScreen';
 static const licenceScreen = '/licenceScreen';
   static const categoryScreen = '/categoryScreen';

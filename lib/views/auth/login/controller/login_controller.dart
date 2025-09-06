@@ -1,7 +1,6 @@
 import 'package:doda_work/core/utils/basic_import.dart';
 
 class LoginController extends GetxController {
-
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   // email
@@ -16,22 +15,13 @@ class LoginController extends GetxController {
   final isPasswordVisible = false.obs;
   final rememberMe = false.obs;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    emailController.text = 'rakib10.devs@gmail.com';
+    passwordController.text = '1232456';
+  }
 
   /// Dispose
   @override

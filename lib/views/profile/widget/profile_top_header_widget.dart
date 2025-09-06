@@ -117,7 +117,9 @@ class ProfileTopHeaderWidgetView extends GetView<ProfileController> {
 
                 // Status badge
                 InkWell(
-                  onTap: () => Get.toNamed(Routes.updateScreen),
+                  onTap: () => AppStorage.isVendor == true
+                      ? Get.toNamed(Routes.vendor_profileScreen)
+                      : Get.toNamed(Routes.updateScreen),
                   child: Container(
                     margin: EdgeInsets.all(Dimensions.paddingSize * 0.2),
                     padding: EdgeInsets.symmetric(

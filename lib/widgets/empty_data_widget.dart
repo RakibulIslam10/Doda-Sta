@@ -26,7 +26,7 @@ class EmptyDataWidget extends StatelessWidget {
               maxLines: 2,
               textOverflow: TextOverflow.ellipsis,
               massage ?? Strings.noDataFound,
-              color: CustomColors.secondary,
+              color: CustomColors.grayShade,
               textAlign: TextAlign.center,
             ),
           ],

@@ -1,12 +1,12 @@
-part of 'category_preview_screen.dart';
+part of 'favorite_screen.dart';
 
-class CategoryPreviewScreenMobile extends GetView<CategoryPreviewController> {
-  const CategoryPreviewScreenMobile({super.key});
+class FavoriteScreenMobile extends GetView<FavoriteController> {
+  const FavoriteScreenMobile({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CommonAppBar(title: 'Handyman Interior Home '),
+      appBar: CommonAppBar(title: 'Favorite'),
       body: SafeArea(
         child: ListView(
           padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
@@ -22,7 +22,7 @@ class CategoryPreviewScreenMobile extends GetView<CategoryPreviewController> {
 
               subtitle: TextWidget(
                 'Dlkfajsdlkdjsfladsfds',
-                fontSize: Dimensions.titleSmall * 0.9,
+                fontSize: Dimensions.titleSmall,
               ),
             ),
             DividerWidget(),
@@ -37,7 +37,7 @@ class CategoryPreviewScreenMobile extends GetView<CategoryPreviewController> {
 
               subtitle: TextWidget(
                 'Dlkfajsdlkdjsfladsfds',
-                fontSize: Dimensions.titleSmall * 0.9,
+                fontSize: Dimensions.titleSmall,
               ),
             ),
             DividerWidget(),

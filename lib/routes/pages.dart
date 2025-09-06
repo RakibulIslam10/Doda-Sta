@@ -4,6 +4,11 @@ class RoutePageList {
   static var list = [
     //Page Route List
     GetPage(
+      name: Routes.vendor_profileScreen,
+      page: () => const VendorProfileScreen(),
+      binding: VendorProfileBinding(),
+    ),
+    GetPage(
       name: Routes.faqScreen,
       page: () => const FaqScreen(),
       binding: FaqBinding(),

@@ -1,7 +1,8 @@
 import 'package:get/get_navigation/src/routes/get_route.dart';
-
 import '../bind/all_category_binding.dart';
+import '../bind/category_binding.dart';
 import '../bind/category_preview_binding.dart';
+import '../bind/change_password_binding.dart';
 import '../bind/chat_binding.dart';
 import '../bind/document_binding.dart';
 import '../bind/forgot_binding.dart';
@@ -32,7 +33,9 @@ import '../views/auth/register/screen/register_screen.dart';
 import '../views/auth/reset/screen/reset_screen.dart';
 import '../views/auth/verification/screen/verification_screen.dart';
 import '../views/auth/verify/screen/verify_screen.dart';
+import '../views/category/screen/category_screen.dart';
 import '../views/category_preview/screen/category_preview_screen.dart';
+import '../views/change_password/screen/change_password_screen.dart';
 import '../views/chat/screen/chat_screen.dart';
 import '../views/document/screen/document_screen.dart';
 import '../views/home/screen/home_screen.dart';
@@ -55,6 +58,8 @@ part 'pages.dart';
 
 class Routes {
   static var list = RoutePageList.list;
+  static const categoryScreen = '/categoryScreen';
+  static const changePasswordScreen = '/changePasswordScreen';
   static const privacyScreen = '/privacyScreen';
   static const termsScreen = '/termsScreen';
   static const documentScreen = '/documentScreen';

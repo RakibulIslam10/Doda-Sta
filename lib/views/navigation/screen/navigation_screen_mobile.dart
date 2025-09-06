@@ -10,6 +10,7 @@ class NavigationScreenMobile extends GetView<NavigationController> {
     final List<Widget> pages = [
       const HomeScreen(),
       const RequestScreen(),
+      // CategoryScreen()
       const ChatScreen(),
       const ProfileScreen(),
     ];
@@ -47,7 +48,7 @@ class NavigationScreenMobile extends GetView<NavigationController> {
     );
   }
 
-  Widget _buildNavItem(int index) {
+  _buildNavItem(int index) {
     bool isSelected = controller.selectedIndex.value == index;
 
     return GestureDetector(

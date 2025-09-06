@@ -15,7 +15,7 @@ class SettingScreenMobile extends GetView<SettingController> {
             _buildSectionCard(
               Icons.lock,
               'Change Password',
-              () => Get.toNamed(Routes.chatScreen),
+              () => Get.toNamed(Routes.changePasswordScreen),
               false,
             ),
             _buildSectionCard(Icons.person, 'Delete Account', () {

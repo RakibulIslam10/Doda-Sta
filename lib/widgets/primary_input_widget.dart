@@ -115,7 +115,7 @@ class _PrimaryInputFieldWidgetState extends State<PrimaryInputFieldWidget> {
                     widget.label!,
                     maxLines: 2,
                     textOverflow: TextOverflow.ellipsis,
-                    fontSize: Dimensions.titleMedium,
+                    fontSize: Dimensions.titleMedium * 0.8,
                     fontWeight: FontWeight.w500,
                     color: CustomColors.blackColor,
                   ),
@@ -159,7 +159,7 @@ class _PrimaryInputFieldWidgetState extends State<PrimaryInputFieldWidget> {
             hintStyle: CustomStyle.bodyMedium.copyWith(
               color: Colors.grey.shade500,
               fontWeight: FontWeight.w400,
-              fontSize: Dimensions.titleMedium,
+              fontSize: Dimensions.titleMedium * 0.95
             ),
             suffixIcon: widget.isPassword
                 ? IconButton(

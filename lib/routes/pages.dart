@@ -4,6 +4,17 @@ class RoutePageList {
   static var list = [
     //Page Route List
     GetPage(
+      name: Routes.categoryScreen,
+      page: () => const CategoryScreen(),
+      binding: CategoryBinding(),
+    ),
+
+    GetPage(
+      name: Routes.changePasswordScreen,
+      page: () => const ChangePasswordScreen(),
+      binding: ChangePasswordBinding(),
+    ),
+    GetPage(
       name: Routes.privacyScreen,
       page: () => const PrivacyScreen(),
       binding: PrivacyBinding(),

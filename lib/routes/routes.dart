@@ -10,6 +10,7 @@ import '../bind/faq_binding.dart';
 import '../bind/favorite_binding.dart';
 import '../bind/forgot_binding.dart';
 import '../bind/home_binding.dart';
+import '../bind/home_vendor_binding.dart';
 import '../bind/inbox_binding.dart';
 import '../bind/licence_binding.dart';
 import '../bind/login_binding.dart';
@@ -47,6 +48,7 @@ import '../views/document/screen/document_screen.dart';
 import '../views/faq/screen/faq_screen.dart';
 import '../views/favorite/screen/favorite_screen.dart';
 import '../views/home/screen/home_screen.dart';
+import '../views/home_vendor/screen/home_vendor_screen.dart';
 import '../views/inbox/screen/inbox_screen.dart';
 import '../views/licence/screen/licence_screen.dart';
 import '../views/navigation/screen/navigation_screen.dart';
@@ -68,6 +70,7 @@ part 'pages.dart';
 
 class Routes {
   static var list = RoutePageList.list;
+static const home_vendorScreen = '/home_vendorScreen';
 static const vendor_profileScreen = '/vendor_profileScreen';
 static const faqScreen = '/faqScreen';
 static const favoriteScreen = '/favoriteScreen';

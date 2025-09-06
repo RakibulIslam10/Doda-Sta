@@ -8,8 +8,8 @@ class NavigationScreenMobile extends GetView<NavigationController> {
     double width = MediaQuery.of(context).size.width;
 
     final List<Widget> pages = [
-      const HomeScreen(),
-      AppStorage.isVendor  == true ?CategoryScreen() : const RequestScreen(),
+      AppStorage.isVendor == true ? HomeVendorScreen() : const HomeScreen(),
+      AppStorage.isVendor == true ? CategoryScreen() : const RequestScreen(),
       const ChatScreen(),
       const ProfileScreen(),
     ];

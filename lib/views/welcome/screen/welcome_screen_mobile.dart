@@ -81,7 +81,7 @@ class WelcomeScreenMobile extends GetView<WelcomeController> {
               ),
               TextWidget(
                 "Join Us",
-                onTap: () => Get.toNamed(Routes.registerScreen),
+                // onTap: () => Get.toNamed(Routes.registerScreen),
                 color: CustomColors.primary,
                 fontSize: Dimensions.titleLarge * 0.9,
               ),
@@ -132,7 +132,7 @@ class WelcomeScreenMobile extends GetView<WelcomeController> {
 
               GestureDetector(
                 onTap: () {
-                  Get.offAllNamed(Routes.loginScreen,);
+                  Get.offAllNamed(Routes.vendor_phoneScreen,);
                   AppStorage.save(isVendor: true);
                 },
                 child: AnimatedContainer(
@@ -176,7 +176,7 @@ class WelcomeScreenMobile extends GetView<WelcomeController> {
           ),
         ),
       ),
-      appBar: CommonAppBar(title: ''),
+      appBar: CommonAppBar(title: '',isBack: false,),
       body: SafeArea(
         child: ListView(
           padding: Dimensions.defaultHorizontalSize.edgeHorizontal,

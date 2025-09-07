@@ -39,7 +39,7 @@ class ResetScreenMobile extends GetView<ResetController> {
             PrimaryButtonWidget(
               title: "Reset Password",
               onPressed: () {
-                Get.offAllNamed(Routes.homeScreen);
+                Get.offAllNamed(Routes.loginScreen);
               },
             ),
           ],

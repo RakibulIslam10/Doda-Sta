@@ -40,19 +40,32 @@ class OnboardScreenMobile extends GetView<OnboardController> {
                 ),
               ),
               Space.height.v20,
-              Obx(
-                () => PrimaryButtonWidget(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: Dimensions.defaultHorizontalSize,
-                    vertical: Dimensions.verticalSize * 2,
+              Column(
+                children: [
+                  Obx(
+                    () => PrimaryButtonWidget(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Dimensions.defaultHorizontalSize,
+                      ),
+                      title:
+                          controller.currentIndex.value ==
+                              controller.onboardItemList.length - 1
+                          ? "Continue"
+                          : "Next",
+                      onPressed: () => controller.next(),
+                    ),
                   ),
-                  title:
-                      controller.currentIndex.value ==
-                          controller.onboardItemList.length - 1
-                      ? "Continue"
-                      : "Next",
-                  onPressed: () => controller.next(),
-                ),
+                  PrimaryButtonWidget(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Dimensions.defaultHorizontalSize,
+                      vertical: Dimensions.verticalSize * 0.5,
+                    ),
+                    title: 'Join US',
+                    outlineButton: true,
+                    borderWidth: 1.5,
+                    onPressed: () => Get.offAllNamed(Routes.welcomeScreen),
+                  ),
+                ],
               ),
             ],
           ),
@@ -81,7 +94,7 @@ class OnboardScreenMobile extends GetView<OnboardController> {
                   TextWidget(
                     maxLines: 2,
                     item.subtitle,
-                    color: CustomColors.secondary,
+                    color: CustomColors.grayShade,
                     textAlign: TextAlign.center,
                     padding: EdgeInsetsGeometry.only(
                       top: Dimensions.heightSize * 0.5,

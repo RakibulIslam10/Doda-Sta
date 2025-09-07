@@ -1,4 +1,5 @@
 import 'package:get/get_navigation/src/routes/get_route.dart';
+import '../bind/aditional_binding.dart';
 import '../bind/all_category_binding.dart';
 import '../bind/category_binding.dart';
 import '../bind/category_preview_binding.dart';
@@ -28,10 +29,12 @@ import '../bind/splash_binding.dart';
 import '../bind/summary_binding.dart';
 import '../bind/terms_binding.dart';
 import '../bind/update_binding.dart';
+import '../bind/vendor_phone_binding.dart';
 import '../bind/vendor_profile_binding.dart';
 import '../bind/verification_binding.dart';
 import '../bind/verify_binding.dart';
 import '../bind/welcome_binding.dart';
+import '../views/aditional/screen/aditional_screen.dart';
 import '../views/all_category/screen/all_category_screen.dart';
 import '../views/auth/forgot/screen/forgot_screen.dart';
 import '../views/auth/login/screen/login_screen.dart';
@@ -63,6 +66,7 @@ import '../views/splash/screen/splash_screen.dart';
 import '../views/summary/screen/summary_screen.dart';
 import '../views/terms/screen/terms_screen.dart';
 import '../views/update/screen/update_screen.dart';
+import '../views/vendor_phone/screen/vendor_phone_screen.dart';
 import '../views/vendor_profile/screen/vendor_profile_screen.dart';
 import '../views/welcome/screen/welcome_screen.dart';
 
@@ -70,12 +74,15 @@ part 'pages.dart';
 
 class Routes {
   static var list = RoutePageList.list;
-static const home_vendorScreen = '/home_vendorScreen';
-static const vendor_profileScreen = '/vendor_profileScreen';
-static const faqScreen = '/faqScreen';
-static const favoriteScreen = '/favoriteScreen';
-static const certificateScreen = '/certificateScreen';
-static const licenceScreen = '/licenceScreen';
+  static const aditionalScreen = '/aditionalScreen';
+  static const vendor_verificationScreen = '/vendor_verificationScreen';
+  static const vendor_phoneScreen = '/vendor_phoneScreen';
+  static const home_vendorScreen = '/home_vendorScreen';
+  static const vendor_profileScreen = '/vendor_profileScreen';
+  static const faqScreen = '/faqScreen';
+  static const favoriteScreen = '/favoriteScreen';
+  static const certificateScreen = '/certificateScreen';
+  static const licenceScreen = '/licenceScreen';
   static const categoryScreen = '/categoryScreen';
   static const changePasswordScreen = '/changePasswordScreen';
   static const privacyScreen = '/privacyScreen';

@@ -74,7 +74,9 @@ class VerificationScreenMobile extends GetView<VerificationController> {
             Space.height.betweenInputBox,
             PrimaryButtonWidget(
               title: "Verify Code",
-              onPressed: () => Get.toNamed(Routes.resetScreen),
+              onPressed: () => AppStorage.isVendor == true
+                  ? Get.toNamed(Routes.aditionalScreen)
+                  : Get.toNamed(Routes.resetScreen),
             ),
           ],
         ),

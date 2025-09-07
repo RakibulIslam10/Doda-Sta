@@ -73,42 +73,51 @@ class AditionalScreenMobile extends GetView<AditionalController> {
             ),
             TextWidget(
               'Select your availability',
-
               padding: EdgeInsetsGeometry.symmetric(
                 vertical: Dimensions.verticalSize * 0.5,
               ),
             ),
 
-            Wrap(
-              spacing: Dimensions.widthSize,
-              runSpacing: Dimensions.heightSize * 0.5,
-              children: List.generate(
-                controller.dayList.length,
-                (index) => InkWell(
-                  onTap: () {
-                    controller.selectTap(index);
-                    print(controller.selectedDay);
-                  },
-                  child: Container(
-                    padding: EdgeInsetsGeometry.symmetric(
-                      horizontal: Dimensions.defaultHorizontalSize,
-                      vertical: Dimensions.verticalSize * 0.2,
-                    ),
-                    decoration: BoxDecoration(
-                      color: controller.dayList[index] == index? CustomColors.primary : CustomColors.primary.withAlpha(852),
-                      borderRadius: BorderRadiusGeometry.circular(
-                        Dimensions.radius * 0.6,
+            Obx(
+              () => Wrap(
+                spacing: Dimensions.widthSize,
+                runSpacing: Dimensions.heightSize * 0.5,
+                children: List.generate(controller.dayList.length, (index) {
+                  final day = controller.dayList[index];
+                  final isSelected = controller.selectedDay.contains(day);
+
+                  return InkWell(
+                    onTap: () {
+                      controller.selectTap(index);
+                      print(controller.selectedDay);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Dimensions.defaultHorizontalSize,
+                        vertical: Dimensions.verticalSize * 0.2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? CustomColors
+                                  .primary // ✅ selected হলে
+                            : CustomColors.primary.withOpacity(0.2),
+                        // ❌ not selected হলে
+                        borderRadius: BorderRadius.circular(
+                          Dimensions.radius * 0.6,
+                        ),
+                      ),
+                      child: TextWidget(
+                        day,
+                        color: isSelected
+                            ? CustomColors
+                                  .whiteColor // selected হলে সাদা
+                            : CustomColors.primary, // না হলে primary রঙ
                       ),
                     ),
-                    child: TextWidget(
-                      controller.dayList[index],
-                      color: CustomColors.whiteColor,
-                    ),
-                  ),
-                ),
+                  );
+                }),
               ),
             ),
-
             Space.height.betweenInputBox,
             PrimaryInputFieldWidget(
               controller: controller.serviceLocationController,

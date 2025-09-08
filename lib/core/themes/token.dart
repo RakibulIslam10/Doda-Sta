@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'model.dart';
-
 part 'custom_colors.dart';
 
 part 'themes.dart';

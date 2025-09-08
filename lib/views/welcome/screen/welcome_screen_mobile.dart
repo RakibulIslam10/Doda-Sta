@@ -132,7 +132,7 @@ class WelcomeScreenMobile extends GetView<WelcomeController> {
 
               GestureDetector(
                 onTap: () {
-                  Get.offAllNamed(Routes.vendor_phoneScreen,);
+                  Get.offAllNamed(Routes.vendor_phoneScreen);
                   AppStorage.save(isVendor: true);
                 },
                 child: AnimatedContainer(
@@ -176,7 +176,7 @@ class WelcomeScreenMobile extends GetView<WelcomeController> {
           ),
         ),
       ),
-      appBar: CommonAppBar(title: '',isBack: false,),
+      appBar: CommonAppBar(title: '', isBack: false),
       body: SafeArea(
         child: ListView(
           padding: Dimensions.defaultHorizontalSize.edgeHorizontal,

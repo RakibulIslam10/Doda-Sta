@@ -8,7 +8,7 @@ class WelcomeScreenMobile extends GetView<WelcomeController> {
     return Scaffold(
       bottomNavigationBar: SafeArea(
         child: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.4,
+          height: MediaQuery.of(context).size.height * 0.35,
           child: Column(
             children: [
               GestureDetector(
@@ -79,12 +79,12 @@ class WelcomeScreenMobile extends GetView<WelcomeController> {
                   ),
                 ),
               ),
-              TextWidget(
-                "Join Us",
-                // onTap: () => Get.toNamed(Routes.registerScreen),
-                color: CustomColors.primary,
-                fontSize: Dimensions.titleLarge * 0.9,
-              ),
+              // TextWidget(
+              //   "Join Us",
+              //   // onTap: () => Get.toNamed(Routes.registerScreen),
+              //   color: CustomColors.primary,
+              //   fontSize: Dimensions.titleLarge * 0.9,
+              // ),
 
               GestureDetector(
                 onTap: () => Get.offAllNamed(Routes.loginScreen),

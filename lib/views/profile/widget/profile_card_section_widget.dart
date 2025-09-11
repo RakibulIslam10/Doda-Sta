@@ -93,7 +93,7 @@ class ProfileCardSectionWidgetView extends GetView<ProfileController> {
                 ElevatedButton(
                   onPressed: () {
                     AppStorage.clear();
-                    Get.offAllNamed(Routes.loginScreen);
+                    Get.offAllNamed(Routes.welcomeScreen);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: CustomColors.whiteColor,
@@ -119,7 +119,7 @@ class ProfileCardSectionWidgetView extends GetView<ProfileController> {
     IconData icon,
     String title,
     void Function()? onTap, {
-    bool isVisible = true, // default true
+    bool isVisible = true,
   }) {
     if (!isVisible) return const SizedBox.shrink(); // hide when false
 

@@ -20,10 +20,8 @@ class LoginScreenMobile extends GetView<LoginController> {
               width: double.infinity,
               height: MediaQuery.of(context).size.height * 0.26,
             ),
-
             FieldSectionWidget(),
             ButtonSectionWidget(),
-
           ],
         ),
       ),

@@ -83,7 +83,7 @@ class ButtonSectionWidget extends GetView<LoginController> {
             children: [
               SvgPicture.asset(Assets.logo.page1),
               TextWidget(
-                'Sign in with Google',
+                'Sign in with Apple',
                 padding: Dimensions.widthSize.edgeLeft,
               ),
             ],

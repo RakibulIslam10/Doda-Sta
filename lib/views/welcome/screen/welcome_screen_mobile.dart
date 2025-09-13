@@ -30,6 +30,7 @@ class WelcomeScreenMobile extends GetView<WelcomeController> {
                       controller.selectedCountry.value = country.name;
                       controller.selectedCountryFlag.value = country.flagEmoji;
                       log(controller.selectedCountry.value);
+                      log(controller.selectedCountryFlag.value);
                     },
                   );
                 },
@@ -79,6 +80,7 @@ class WelcomeScreenMobile extends GetView<WelcomeController> {
                   ),
                 ),
               ),
+
               // TextWidget(
               //   "Join Us",
               //   // onTap: () => Get.toNamed(Routes.registerScreen),

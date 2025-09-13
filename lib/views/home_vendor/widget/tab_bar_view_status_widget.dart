@@ -11,9 +11,8 @@ class TabBarViewStatusWidget extends GetView<HomeVendorController> {
       length: tabList.length,
       child: Builder(
         builder: (context) {
-          final TabController tabController = DefaultTabController.of(
-            context,
-          );
+          final TabController tabController = DefaultTabController.of(context);
+
           /// Swipe listener (instant color update)
           tabController.animation!.addListener(() {
             final int currentIndex = tabController.animation!.value.round();
@@ -29,7 +28,7 @@ class TabBarViewStatusWidget extends GetView<HomeVendorController> {
               Space.height.v20,
 
               Obx(
-                    () => TabBar(
+                () => TabBar(
                   controller: tabController,
                   tabAlignment: TabAlignment.center,
                   isScrollable: true,
@@ -37,11 +36,8 @@ class TabBarViewStatusWidget extends GetView<HomeVendorController> {
                   dividerColor: Colors.transparent,
                   labelPadding: EdgeInsets.zero,
                   enableFeedback: false,
-                  overlayColor: MaterialStateProperty.all(
-                    Colors.transparent,
-                  ),
-                  onTap: (value) =>
-                  controller.selectedTabIndex.value = value,
+                  overlayColor: MaterialStateProperty.all(Colors.transparent),
+                  onTap: (value) => controller.selectedTabIndex.value = value,
                   splashFactory: NoSplash.splashFactory,
                   tabs: List.generate(tabList.length, (index) {
                     final bool isSelected =
@@ -94,11 +90,11 @@ class TabBarViewStatusWidget extends GetView<HomeVendorController> {
                         slivers: [
                           SliverList(
                             delegate: SliverChildBuilderDelegate(
-                                  (context, index) => VendorStatusCardWidget(
+                              (context, index) => VendorStatusCardWidget(
                                 index: index,
                                 category: 'Category $index',
                                 subCategory: 'SubCategory $index',
-                                    dateTime: 'PFri 28 Sep25/ at 11:30 am -12:00pm',
+                                dateTime: 'PFri 28 Sep25/ at 11:30 am -12:00pm',
                               ),
                               childCount: 10,
                             ),
@@ -112,11 +108,11 @@ class TabBarViewStatusWidget extends GetView<HomeVendorController> {
                         slivers: [
                           SliverList(
                             delegate: SliverChildBuilderDelegate(
-                                  (context, index) => VendorStatusCardWidget(
+                              (context, index) => VendorStatusCardWidget(
                                 index: index,
                                 category: 'Category $index',
                                 subCategory: 'SubCategory $index',
-                                    dateTime: 'PFri 28 Sep25/ at 11:30 am -12:00pm',
+                                dateTime: 'PFri 28 Sep25/ at 11:30 am -12:00pm',
                               ),
                               childCount: 10,
                             ),
@@ -130,11 +126,11 @@ class TabBarViewStatusWidget extends GetView<HomeVendorController> {
                         slivers: [
                           SliverList(
                             delegate: SliverChildBuilderDelegate(
-                                  (context, index) => VendorStatusCardWidget(
+                              (context, index) => VendorStatusCardWidget(
                                 index: index,
                                 category: 'Category $index',
                                 subCategory: 'SubCategory $index',
-                                    dateTime: 'PFri 28 Sep25/ at 11:30 am -12:00pm',
+                                dateTime: 'PFri 28 Sep25/ at 11:30 am -12:00pm',
                               ),
                               childCount: 10,
                             ),
@@ -147,11 +143,11 @@ class TabBarViewStatusWidget extends GetView<HomeVendorController> {
                         slivers: [
                           SliverList(
                             delegate: SliverChildBuilderDelegate(
-                                  (context, index) => VendorStatusCardWidget(
+                              (context, index) => VendorStatusCardWidget(
                                 index: index,
                                 category: 'Category $index',
                                 subCategory: 'SubCategory $index',
-                                    dateTime: 'PFri 28 Sep25/ at 11:30 am -12:00pm',
+                                dateTime: 'PFri 28 Sep25/ at 11:30 am -12:00pm',
                               ),
                               childCount: 10,
                             ),

@@ -23,7 +23,7 @@ class VendorStatusCardWidget extends StatelessWidget {
     final double imageWidth = MediaQuery.of(context).size.width * 0.28;
 
     return InkWell(
-      // onTap: onTap ?? () => Get.toNamed(Routes.summaryScreen),
+      onTap: onTap ?? () => Get.toNamed(Routes.summaryScreen),
       child: Container(
         margin: EdgeInsets.only(
           bottom: Dimensions.verticalSize * 0.5,

@@ -132,6 +132,14 @@ class AditionalScreenMobile extends GetView<AditionalController> {
             ),
             Space.height.betweenInputBox,
 
+            TextWidget(
+              'Add Photo or video',
+              fontWeight: FontWeight.w500,
+              fontSize: Dimensions.titleMedium,
+
+              padding: Dimensions.heightSize.edgeBottom,
+            ),
+
             Obx(() {
               final items = [...controller.photos];
               return Wrap(
@@ -184,8 +192,6 @@ class AditionalScreenMobile extends GetView<AditionalController> {
               );
             }),
 
-
-
             Space.height.betweenInputBox,
             Space.height.betweenInputBox,
 
@@ -193,12 +199,9 @@ class AditionalScreenMobile extends GetView<AditionalController> {
               title: 'Sign Up',
               onPressed: () => Get.offAllNamed(Routes.navigationScreen),
             ),
-
-
           ],
         ),
       ),
     );
   }
-
 }

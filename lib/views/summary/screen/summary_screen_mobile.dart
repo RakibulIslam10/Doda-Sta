@@ -37,7 +37,9 @@ class SummaryScreenMobile extends GetView<SummaryController> {
 
             AddPhotoGrid(title: 'Attachments'),
 
-            ButtonsSectionWidget()
+           if(AppStorage.isVendor == false)...[
+             ButtonsSectionWidget()
+           ]
           ],
         ),
       ),

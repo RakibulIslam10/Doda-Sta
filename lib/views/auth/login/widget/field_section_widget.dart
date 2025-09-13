@@ -80,7 +80,6 @@ class FieldSectionWidget extends GetView<LoginController> {
               ),
             ],
           ),
-
           Space.height.v20,
         ],
       ),

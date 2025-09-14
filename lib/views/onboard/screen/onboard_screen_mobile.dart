@@ -60,7 +60,7 @@ class OnboardScreenMobile extends GetView<OnboardController> {
                       horizontal: Dimensions.defaultHorizontalSize,
                       vertical: Dimensions.verticalSize * 0.5,
                     ),
-                    title: 'Join US',
+                    title: 'Join us',
                     outlineButton: true,
                     borderWidth: 1.5,
                     onPressed: () => Get.offAllNamed(Routes.welcomeScreen),

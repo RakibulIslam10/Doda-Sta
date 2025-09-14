@@ -22,7 +22,7 @@ class ProfileCardSectionWidgetView extends GetView<ProfileController> {
         ),
         _buildSectionCard(
           Icons.dataset_outlined,
-          'ADocuments',
+          'Documents',
           isVisible: AppStorage.isVendor,
 
           () => Get.toNamed(Routes.documentScreen),

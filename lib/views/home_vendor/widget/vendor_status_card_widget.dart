@@ -135,7 +135,7 @@ class VendorStatusCardWidget extends StatelessWidget {
                                         ),
                                         Space.height.v5,
                                         TextWidget(
-                                          'please complete your payment method',
+                                          'Please complete payment to accept task',
                                           fontSize: Dimensions.titleSmall,
                                           textAlign: TextAlign.center,
                                         ),

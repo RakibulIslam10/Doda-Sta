@@ -110,8 +110,8 @@ class AditionalScreenMobile extends GetView<AditionalController> {
                         day,
                         color: isSelected
                             ? CustomColors
-                                  .whiteColor // selected হলে সাদা
-                            : CustomColors.primary, // না হলে primary রঙ
+                                  .whiteColor
+                            : CustomColors.primary,
                       ),
                     ),
                   );
@@ -121,8 +121,8 @@ class AditionalScreenMobile extends GetView<AditionalController> {
             Space.height.betweenInputBox,
             PrimaryInputFieldWidget(
               controller: controller.serviceLocationController,
-              hintText: 'Enter Service Location',
-              label: 'Service Location',
+              hintText: 'Enter Register Address',
+              label: 'Register Address',
             ),
             Space.height.betweenInputBox,
             PrimaryInputFieldWidget(

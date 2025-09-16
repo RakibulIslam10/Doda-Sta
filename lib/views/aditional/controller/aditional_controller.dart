@@ -50,7 +50,19 @@ class AditionalController extends GetxController {
   final linkController = TextEditingController();
 
 
+  var selectedValues = <String>[].obs;
 
+  void toggleValue(String value) {
+    if (selectedValues.contains(value)) {
+      selectedValues.remove(value);
+    } else {
+      selectedValues.add(value);
+    }
+  }
+
+  void clearAll() {
+    selectedValues.clear();
+  }
 
 
 }

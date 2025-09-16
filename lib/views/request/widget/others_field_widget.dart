@@ -8,14 +8,18 @@ class OthersFieldWidget extends GetView<RequestController> {
     return Column(
       crossAxisAlignment: crossStart,
       children: [
-        CustomDropDownWidget(
-          hint: 'Select Category',
-          label: "Service Category",
-          items: ["Pending", "Ongoing", "Completed"],
-          onChanged: (value) {
-            controller.selectedCategory.value = value;
-          },
+        MultiSelectDropDownWidget(
+          items: ["Apple", "Banana", "Mango", "Orange", "Grapes"],
+          label: "Service Category", onChanged: (List<String> p1) { },
         ),
+        // CustomDropDownWidget(
+        //   hint: 'Select Category',
+        //   label: "Service Category",
+        //   items: ["Pending", "Ongoing", "Completed"],
+        //   onChanged: (value) {
+        //     controller.selectedCategory.value = value;
+        //   },
+        // ),
         // Space.height.betweenInputBox,
         // CustomDropDownWidget(
         //   hint: 'Select Sub Category',

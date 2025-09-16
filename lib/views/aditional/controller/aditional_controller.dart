@@ -48,4 +48,9 @@ class AditionalController extends GetxController {
   final contactPersonController = TextEditingController();
   final companyNameController = TextEditingController();
   final linkController = TextEditingController();
+
+
+
+
+
 }

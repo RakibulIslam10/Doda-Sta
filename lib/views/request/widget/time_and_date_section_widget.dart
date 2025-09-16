@@ -11,7 +11,7 @@ class TimeAndDateSectionWidget extends GetView<RequestController> {
         TextWidget(
           fontSize: Dimensions.titleSmall,
 
-          'Service Date Range',
+          'Preferred date and time for service',
           padding: Dimensions.heightSize.edgeBottom * 0.4,
         ),
         Row(
@@ -42,11 +42,11 @@ class TimeAndDateSectionWidget extends GetView<RequestController> {
           ],
         ),
         Space.height.betweenInputBox,
-        TextWidget(
-          'Service Date Range',
-          fontSize: Dimensions.titleSmall,
-          padding: Dimensions.heightSize.edgeBottom * 0.4,
-        ),
+        // TextWidget(
+        //   'Service Date Range',
+        //   fontSize: Dimensions.titleSmall,
+        //   padding: Dimensions.heightSize.edgeBottom * 0.4,
+        // ),
         Row(
           children: [
             Expanded(

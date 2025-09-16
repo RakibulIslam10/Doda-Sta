@@ -10,33 +10,33 @@ class OthersFieldWidget extends GetView<RequestController> {
       children: [
         CustomDropDownWidget(
           hint: 'Select Category',
-          label: "Category",
+          label: "Service Category",
           items: ["Pending", "Ongoing", "Completed"],
           onChanged: (value) {
             controller.selectedCategory.value = value;
           },
         ),
-        Space.height.betweenInputBox,
-        CustomDropDownWidget(
-          hint: 'Select Sub Category',
-          label: "Sub Category",
-          items: ["Pending", "Ongoing", "Completed"],
-          onChanged: (value) {
-            controller.selectedSubCategory.value = value;
-          },
-        ),
+        // Space.height.betweenInputBox,
+        // CustomDropDownWidget(
+        //   hint: 'Select Sub Category',
+        //   label: "Sub Category",
+        //   items: ["Pending", "Ongoing", "Completed"],
+        //   onChanged: (value) {
+        //     controller.selectedSubCategory.value = value;
+        //   },
+        // ),
         Space.height.betweenInputBox,
         PrimaryInputFieldWidget(
           controller: controller.serviceAddressController,
-          hintText: 'Enter Services Address',
-          label: 'Services Address',
+          hintText: 'Enter Location of service.',
+          label: 'Location of service.',
           maxLines: 3,
         ),
         Space.height.betweenInputBox,
         PrimaryInputFieldWidget(
           controller: controller.requestController,
           hintText: 'Enter your request',
-          label: 'Would you like to tell us more about your request?',
+          label: 'Please describe the issue in detail.',
           maxLines: 4,
         ),
 

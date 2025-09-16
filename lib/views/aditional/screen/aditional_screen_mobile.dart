@@ -12,12 +12,12 @@ class AditionalScreenMobile extends GetView<AditionalController> {
           padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
           children: [
             // Add your widgets here
-            Space.height.betweenInputBox,
-            PrimaryInputFieldWidget(
-              controller: controller.companyNameController,
-              hintText: 'Enter your company name',
-              label: 'Company Name',
-            ),
+            // Space.height.betweenInputBox,
+            // PrimaryInputFieldWidget(
+            //   controller: controller.companyNameController,
+            //   hintText: 'Enter your company name',
+            //   label: 'Company Name',
+            // ),
             Space.height.betweenInputBox,
             PrimaryInputFieldWidget(
               controller: controller.linkController,
@@ -28,21 +28,21 @@ class AditionalScreenMobile extends GetView<AditionalController> {
 
             CustomDropDownWidget(
               hint: 'Select Category',
-              label: "Category",
+              label: "Service Category",
               items: ["Pending", "Ongoing", "Completed"],
               onChanged: (value) {
                 controller.selectedCategory.value = value;
               },
             ),
-            Space.height.betweenInputBox,
-            CustomDropDownWidget(
-              hint: 'Select Sub Category',
-              label: "Sub Category",
-              items: ["Pending", "Ongoing", "Completed"],
-              onChanged: (value) {
-                controller.selectedSubCategory.value = value;
-              },
-            ),
+            // Space.height.betweenInputBox,
+            // CustomDropDownWidget(
+            //   hint: 'Select Sub Category',
+            //   label: "Sub Category",
+            //   items: ["Pending", "Ongoing", "Completed"],
+            //   onChanged: (value) {
+            //     controller.selectedSubCategory.value = value;
+            //   },
+            // ),
 
             Space.height.betweenInputBox,
             TextWidget(
@@ -133,7 +133,7 @@ class AditionalScreenMobile extends GetView<AditionalController> {
             Space.height.betweenInputBox,
 
             TextWidget(
-              'Add Photo or video',
+              'license & certificate',
               fontWeight: FontWeight.w500,
               fontSize: Dimensions.titleMedium,
 
@@ -196,7 +196,7 @@ class AditionalScreenMobile extends GetView<AditionalController> {
             Space.height.betweenInputBox,
 
             PrimaryButtonWidget(
-              title: 'Sign Up',
+              title: 'Registration',
               onPressed: () => Get.offAllNamed(Routes.navigationScreen),
             ),
           ],

@@ -5,7 +5,7 @@ class TabBarViewStatusWidget extends GetView<HomeVendorController> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> tabList = ['Pending', 'Ongoing', 'Complete', 'Declined'];
+    List<String> tabList = ['Pending', 'Ongoing', 'Completed', 'Declined'];
 
     return DefaultTabController(
       length: tabList.length,

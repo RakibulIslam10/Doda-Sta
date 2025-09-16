@@ -17,7 +17,7 @@ class FieldsSectionView extends GetView<RegisterController> {
           PrimaryInputFieldWidget(
             controller: controller.nameController,
             hintText: 'Enter your preferred name',
-            label: 'Preferred Name',
+            label: 'Name/Company Name',
             nextFocusNode: controller.emailFocus,
             requiredField: false,
           ),

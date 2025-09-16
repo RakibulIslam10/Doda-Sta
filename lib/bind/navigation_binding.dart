@@ -8,10 +8,10 @@ import '../views/request/controller/request_controller.dart';
 class NavigationBinding extends Bindings {
   @override
   void dependencies() {
+    Get.put(RequestController());
     Get.lazyPut<NavigationController>(() => NavigationController());
     Get.lazyPut<HomeController>(() => HomeController());
     Get.lazyPut<HomeVendorController>(() => HomeVendorController());
-    Get.lazyPut<RequestController>(() => RequestController());
     Get.lazyPut<CategoryController>(() => CategoryController());
   }
 }

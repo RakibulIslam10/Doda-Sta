@@ -5,70 +5,125 @@ class CategoryScreenMobile extends GetView<CategoryController> {
 
   @override
   Widget build(BuildContext context) {
-    final double screenHeight = MediaQuery.of(context).size.height;
-    final double screenWidth = MediaQuery.of(context).size.width;
+    // final double screenHeight = MediaQuery.of(context).size.height;
+    // final double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: CommonAppBar(title: 'My Verified Service', isBack: false),
-      body: SafeArea(
-        child: ListView(
-          padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
-          children: [
-            Column(
-              crossAxisAlignment: crossCenter,
+      appBar: AppBar(
+        scrolledUnderElevation: 0,
+        toolbarHeight: Dimensions.appBarHeight * 1.6,
+        flexibleSpace: SafeArea(
+          child: Padding(
+            padding: EdgeInsetsGeometry.symmetric(horizontal: Dimensions.defaultHorizontalSize),
+            child: Row(
+              mainAxisAlignment: mainSpaceBet,
               children: [
-                Space.height.v10,
-                ClipOval(
-                  child: CachedNetworkImage(
-                    imageUrl: "https://picsum.photos/200/300?random=",
-                    width: screenWidth * 0.16,
-                    height: screenWidth * 0.16,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) =>
-                        Container(color: Colors.grey.shade300),
-                    errorWidget: (context, url, error) => Container(
-                      color: Colors.grey.shade300,
-                      child: const Icon(Icons.error, color: Colors.red),
-                    ),
-                  ),
+                GestureDetector(
+                  onTap: () => Get.find<NavigationController>().goToProfile(),
+                  child: SvgPicture.asset(Assets.logo.appLogo, height: 45.h),
                 ),
-                Space.height.v5,
                 TextWidget(
-                  textAlign: TextAlign.center,
-                  "Landscaping & \n"
-                  "Hardscaping Service",
-                  maxLines: 2,
-                  fontSize: Dimensions.titleSmall * 0.8,
-                  textOverflow: TextOverflow.ellipsis,
-                  fontWeight: FontWeight.w500,
+                  'My Verified Service',
+                  color:
+                  CustomColors.blackColor,
+                  fontSize: Dimensions.titleMedium * 1.2,
+                  fontWeight: FontWeight.w600,
                 ),
-              ],
-            ),
-            Space.height.v20,
-            TextWidget(
-              'Subcategories',
-              fontWeight: FontWeight.bold,
-              fontSize: Dimensions.titleLarge * 0.8,
-              padding: Dimensions.heightSize.edgeBottom,
-            ),
-            ListView.builder(
-              cacheExtent: 500,
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: 20,
-              itemBuilder: (context, index) => Column(
-                crossAxisAlignment: crossStart,
-                children: [
-                  TextWidget(
-                    '$index Appliance installationAppliance installation',
-                    fontSize: Dimensions.titleSmall,
+                GestureDetector(
+                  onTap: () => Get.toNamed(Routes.notificationScreen),
+                  child: Container(
+                    margin: Dimensions.defaultHorizontalSize.edgeRight,
+                    padding: EdgeInsets.all(Dimensions.paddingSize * 0.35),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: CustomColors.primary),
+                    ),
+                    child: SvgPicture.asset(Assets.icons.group),
                   ),
-                  DividerWidget(),
-                ],
-              ),
-            ),
-          ],
+                ),
+              ],),
+          ),
         ),
       ),
+
+      body: SafeArea(
+        child:  ExpandableCardList()
+      ),
+    );
+  }
+}
+
+
+
+
+class ExpandableCardList extends GetView<CategoryController> {
+  const ExpandableCardList({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      cacheExtent: 500,
+      shrinkWrap: true,
+      itemCount: 20,
+      itemBuilder: (context, index) {
+        return Obx(() {
+          final isExpanded = controller.expandedIndex.value == index;
+
+          return GestureDetector(
+            onTap: () => controller.toggleExpand(index),
+            child: Card(
+              margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(Dimensions.radius),
+              ),
+              elevation: 2,
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    /// Title Row
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: TextWidget(
+                            "$index Appliance installation",
+                            fontSize: Dimensions.titleSmall,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Icon(
+                          isExpanded
+                              ? Icons.keyboard_arrow_up
+                              : Icons.keyboard_arrow_down,
+                          color: CustomColors.primary,
+                        ),
+                      ],
+                    ),
+
+                    /// Expanded Content: inner list
+                    if (isExpanded) ...[
+                      const SizedBox(height: 10),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: 5, // এখানে চাইলে ডাইনামিক করতে পারো
+                        itemBuilder: (context, i) => Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          child: TextWidget(
+                            "   ➤ Item ${i + 1} for card $index",
+                            color: CustomColors.blackColor.withAlpha(200),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+      },
     );
   }
 }

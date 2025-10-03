@@ -23,5 +23,18 @@ class RegisterController extends GetxController {
   final isPasswordVisible = false.obs;
   final rememberMe = false.obs;
 
-  final isCheck = false.obs;
+  // final isCheck = false.obs;
+
+
+  var isCheck = false.obs;
+  var isError = false.obs;
+
+  void validateAndProceed() {
+    if (isCheck.value) {
+      isError.value = false;
+      Get.toNamed('/verify');
+    } else {
+      isError.value = true;
+    }
+  }
 }

@@ -18,7 +18,7 @@ class ButtonAndTextSectionView extends GetView<RegisterController> {
       children: [
         Space.height.v20,
         Row(
-          crossAxisAlignment: crossStart,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
               height: 24,
@@ -33,21 +33,31 @@ class ButtonAndTextSectionView extends GetView<RegisterController> {
                   value: controller.isCheck.value,
                   onChanged: (value) {
                     controller.isCheck.value = !controller.isCheck.value;
+                    controller.isError.value = false; // reset error
                   },
                 ),
               ),
             ),
             Expanded(
-              child: TextWidget(
-                onTap: () {
-                  controller.isCheck.value = !controller.isCheck.value;
-                },
-                padding: EdgeInsetsGeometry.only(left: Dimensions.widthSize),
-                "I have read and agree to dodawork's Terms and Conditions and Policy.",
-                maxLines: 2,
-                fontSize: Dimensions.titleSmall * 0.9,
-                color: Colors.grey,
-              ),
+              child: Obx(() {
+                return Transform.translate(
+                  key: ValueKey(controller.isError.value),
+                  offset: controller.isError.value
+                      ? const Offset(10, 0)
+                      : Offset.zero,
+                  child: TextWidget(
+                    onTap: () {
+                      controller.isCheck.value = !controller.isCheck.value;
+                      controller.isError.value = false;
+                    },
+                    padding: EdgeInsets.only(left: Dimensions.widthSize),
+                    "I have read and agree to dodawork's Terms and Conditions and Policy.",
+                    maxLines: 2,
+                    fontSize: Dimensions.titleSmall * 0.9,
+                    color: controller.isError.value ? Colors.red : Colors.grey,
+                  ),
+                );
+              }),
             ),
           ],
         ),
@@ -56,13 +66,11 @@ class ButtonAndTextSectionView extends GetView<RegisterController> {
           title: "Next",
           onPressed: () {
             if (controller.fromKey.currentState!.validate()) {
-              if (controller.isCheck.value == true) {
+              if (controller.isCheck.value) {
                 Get.toNamed(Routes.verifyScreen);
               } else {
-                return CustomSnackBar.error(
-
-                  'Please check the terms and conditions',
-                );
+                controller.isError.value = true;
+                CustomSnackBar.error('Check the term and conditions');
               }
             }
           },

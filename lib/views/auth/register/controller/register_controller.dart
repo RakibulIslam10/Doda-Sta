@@ -12,6 +12,9 @@ class RegisterController extends GetxController {
   final emailController = TextEditingController();
   final emailFocus = FocusNode();
   final isEmailValid = false.obs;
+  // phoneNumber
+  final phoneController = TextEditingController();
+  final phoneFocus = FocusNode();
 
   // password
   final passwordController = TextEditingController();

@@ -1,4 +1,5 @@
 import 'package:doda_work/core/themes/token.dart';
+import 'package:doda_work/core/utils/basic_import.dart';
 import 'package:doda_work/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -55,7 +56,14 @@ class ButtonAndTextSectionView extends GetView<RegisterController> {
           title: "Next",
           onPressed: () {
             if (controller.fromKey.currentState!.validate()) {
-              Get.toNamed(Routes.verifyScreen);
+              if (controller.isCheck.value == true) {
+                Get.toNamed(Routes.verifyScreen);
+              } else {
+                return CustomSnackBar.error(
+
+                  'Please check the terms and conditions',
+                );
+              }
             }
           },
         ),

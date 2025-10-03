@@ -44,7 +44,7 @@ class CustomSnackBar {
   static void error(String message) {
     Get.showSnackbar(
       GetSnackBar(
-        backgroundColor: CustomColors.secondary.withAlpha(65),
+        backgroundColor: CustomColors.secondary,
         duration: const Duration(seconds: 3),
         margin: EdgeInsets.symmetric(
           horizontal: Dimensions.defaultHorizontalSize * 0.7,

@@ -11,7 +11,9 @@ class RequestScreenMobile extends GetView<RequestController> {
         toolbarHeight: Dimensions.appBarHeight * 1.6,
         flexibleSpace: SafeArea(
           child: Padding(
-            padding: EdgeInsetsGeometry.symmetric(horizontal: Dimensions.defaultHorizontalSize),
+            padding: EdgeInsetsGeometry.symmetric(
+              horizontal: Dimensions.defaultHorizontalSize,
+            ),
             child: Row(
               mainAxisAlignment: mainSpaceBet,
               children: [
@@ -21,8 +23,7 @@ class RequestScreenMobile extends GetView<RequestController> {
                 ),
                 TextWidget(
                   'Book a Service Appointment',
-                  color:
-                  CustomColors.blackColor,
+                  color: CustomColors.blackColor,
                   fontSize: Dimensions.titleMedium,
                   fontWeight: FontWeight.w600,
                 ),
@@ -38,11 +39,11 @@ class RequestScreenMobile extends GetView<RequestController> {
                     child: SvgPicture.asset(Assets.icons.group),
                   ),
                 ),
-              ],),
+              ],
+            ),
           ),
         ),
       ),
-
 
       body: SafeArea(
         child: ListView(

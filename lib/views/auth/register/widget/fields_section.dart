@@ -19,7 +19,7 @@ class FieldsSectionView extends GetView<RegisterController> {
             hintText: 'Enter your preferred name',
             label: 'Name/Company Name',
             nextFocusNode: controller.emailFocus,
-            requiredField: false,
+            // requiredField: false,
           ),
           Space.height.betweenInputBox,
           PrimaryInputFieldWidget(
@@ -27,8 +27,17 @@ class FieldsSectionView extends GetView<RegisterController> {
             isEmail: true,
             controller: controller.emailController,
             focusNode: controller.emailFocus,
-            nextFocusNode: controller.passwordFocus,
+            nextFocusNode: controller.phoneFocus,
             hintText: "Enter your email",
+          ),
+          Space.height.betweenInputBox,
+          PrimaryInputFieldWidget(
+            label: "Phone Number",
+            // isEmail: true,
+            controller: controller.phoneController,
+            focusNode: controller.phoneFocus,
+            nextFocusNode: controller.passwordFocus,
+            hintText: "Enter your phone number",
           ),
           Space.height.betweenInputBox,
           PrimaryInputFieldWidget(

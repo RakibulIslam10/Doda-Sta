@@ -81,7 +81,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
           widget.label ?? "Select Date",
           fontSize: Dimensions.titleSmall,
           fontWeight: FontWeight.w500,
-          color: CustomColors.blackColor.withAlpha(888),
+          color: CustomColors.blackColor,
         ),
         InkWell(
           onTap: () => _pickDate(context),

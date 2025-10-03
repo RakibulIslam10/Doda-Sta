@@ -8,10 +8,6 @@ class OthersFieldWidget extends GetView<RequestController> {
     return Column(
       crossAxisAlignment: crossStart,
       children: [
-        MultiSelectDropDownWidget(
-          items: ["Apple", "Banana", "Mango", "Orange", "Grapes"],
-          label: "Service Category", onChanged: (List<String> p1) { },
-        ),
         // CustomDropDownWidget(
         //   hint: 'Select Category',
         //   label: "Service Category",
@@ -32,20 +28,17 @@ class OthersFieldWidget extends GetView<RequestController> {
         Space.height.betweenInputBox,
         PrimaryInputFieldWidget(
           controller: controller.serviceAddressController,
-          hintText: 'Enter Location of service.',
-          label: 'Location of service.',
+          hintText: 'What is the service address',
+          label: 'What is the service address',
           maxLines: 3,
         ),
         Space.height.betweenInputBox,
         PrimaryInputFieldWidget(
           controller: controller.requestController,
-          hintText: 'Enter your request',
+          hintText: 'Please describe the issue in detail',
           label: 'Please describe the issue in detail.',
           maxLines: 4,
         ),
-
-
-
       ],
     );
   }

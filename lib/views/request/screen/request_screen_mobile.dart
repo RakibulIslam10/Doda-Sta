@@ -20,10 +20,10 @@ class RequestScreenMobile extends GetView<RequestController> {
                   child: SvgPicture.asset(Assets.logo.appLogo, height: 45.h),
                 ),
                 TextWidget(
-                  'Add Request',
+                  'Book a Service Appointment',
                   color:
                   CustomColors.blackColor,
-                  fontSize: Dimensions.titleMedium * 1.2,
+                  fontSize: Dimensions.titleMedium,
                   fontWeight: FontWeight.w600,
                 ),
                 GestureDetector(

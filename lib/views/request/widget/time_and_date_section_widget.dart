@@ -8,10 +8,19 @@ class TimeAndDateSectionWidget extends GetView<RequestController> {
     return Column(
       crossAxisAlignment: crossStart,
       children: [
+        MultiSelectDropDownWidget(
+          items: ["Apple", "Banana", "Mango", "Orange", "Grapes"],
+          label: "Tell us the type of service",
+          onChanged: (List<String> p1) {},
+        ),
+        Space.height.betweenInputBox,
+
         TextWidget(
           fontSize: Dimensions.titleSmall,
 
-          'Preferred date and time for service',
+          'Preferred Date and Time',
+          color: CustomColors.blackColor,
+          // fontWeight: FontWeight.bold,
           padding: Dimensions.heightSize.edgeBottom * 0.4,
         ),
         Row(

@@ -107,7 +107,7 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
           widget.label ?? "Select Time",
           fontSize: Dimensions.titleSmall,
           fontWeight: FontWeight.w500,
-          color: CustomColors.blackColor.withAlpha(888),
+          color: CustomColors.blackColor,
         ),
         InkWell(
           onTap: () => _pickTime(context),

@@ -57,7 +57,7 @@ class _MultiSelectDropDownWidgetState extends State<MultiSelectDropDownWidget> {
           widget.label ?? "Select Category",
           fontSize: Dimensions.titleSmall,
           fontWeight: FontWeight.w500,
-          color: CustomColors.blackColor.withAlpha(888),
+          color: CustomColors.blackColor,
         ),
 
         /// Selected chips

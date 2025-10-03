@@ -10,7 +10,7 @@ class ProfileCardSectionWidgetView extends GetView<ProfileController> {
       children: [
         _buildSectionCard(
           Icons.settings,
-          'Account Setting',
+          'Account Settings ',
           () => Get.toNamed(Routes.settingScreen),
         ),
 
@@ -54,7 +54,7 @@ class ProfileCardSectionWidgetView extends GetView<ProfileController> {
 
         _buildSectionCard(
           Icons.menu_book_outlined,
-          'Terms & Condition',
+          'Terms and Conditions',
           () => Get.toNamed(Routes.termsScreen),
         ),
         _buildSectionCard(

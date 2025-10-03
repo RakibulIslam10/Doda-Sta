@@ -31,7 +31,7 @@ class RegisterScreenMobile extends GetView<RegisterController> {
               children: [
                 TextWidget(
                   padding: Dimensions.widthSize.edgeLeft,
-                  'Don’t have an account?',
+                  'Already have an account?',
                   color: CustomColors.secondaryDarkText,
                   fontWeight: FontWeight.w400,
                   fontSize: Dimensions.titleMedium * 0.96,
@@ -49,8 +49,6 @@ class RegisterScreenMobile extends GetView<RegisterController> {
               ],
             ),
 
-
-
             Space.height.v40,
           ],
         ),
@@ -58,8 +56,10 @@ class RegisterScreenMobile extends GetView<RegisterController> {
     );
   }
 }
+
 class ShakeWidget extends StatefulWidget {
   final Widget child;
+
   const ShakeWidget({super.key, required this.child});
 
   @override
@@ -78,9 +78,10 @@ class _ShakeWidgetState extends State<ShakeWidget>
       duration: const Duration(milliseconds: 400),
       vsync: this,
     );
-    _offsetAnimation = Tween(begin: 0.0, end: 8.0)
-        .chain(CurveTween(curve: Curves.elasticIn))
-        .animate(_controller);
+    _offsetAnimation = Tween(
+      begin: 0.0,
+      end: 8.0,
+    ).chain(CurveTween(curve: Curves.elasticIn)).animate(_controller);
     _controller.forward();
   }
 

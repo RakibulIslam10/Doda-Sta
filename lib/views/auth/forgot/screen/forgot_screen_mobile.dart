@@ -28,19 +28,34 @@ class ForgotScreenMobile extends GetView<ForgotController> {
               fontSize: Dimensions.titleLarge * 0.95,
             ),
 
-            PrimaryInputFieldWidget(
-              label: "Email",
-              isEmail: true,
-              controller: controller.emailController,
-              focusNode: controller.emailFocus,
-              hintText: "Enter your email",
-            ),
-            Space.height.betweenInputBox,
-            Space.height.betweenInputBox,
+            Form(
+              key: controller.formKey,
+              child: Column(
+                children: [
+                  PrimaryInputFieldWidget(
+                    label: "Email",
+                    isEmail: true,
+                    controller: controller.emailController,
+                    focusNode: controller.emailFocus,
+                    hintText: "Enter your email",
+                  ),
+                  Space.height.betweenInputBox,
+                  Space.height.betweenInputBox,
 
-            PrimaryButtonWidget(title: "Send Code", onPressed: () {
-              Get.toNamed(Routes.verificationScreen);
-            }),
+                  Obx(
+                    () => PrimaryButtonWidget(
+                      title: "Send Code",
+                      isLoading: controller.isLoading.value,
+                      onPressed: () {
+                        if (controller.formKey.currentState!.validate()) {
+                          controller.forgotPasswordProcess();
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),

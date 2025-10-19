@@ -1,3 +1,4 @@
+import 'package:doda_work/core/api/services/auth_service.dart';
 import 'package:doda_work/core/utils/basic_import.dart';
 
 class LoginController extends GetxController {
@@ -15,21 +16,23 @@ class LoginController extends GetxController {
   final isPasswordVisible = false.obs;
   final rememberMe = false.obs;
 
-  // @override
-  // void onInit() {
-  //   // TODO: implement onInit
-  //   super.onInit();
-  //   emailController.text = 'rakib10.devs@gmail.com';
-  //   passwordController.text = '1232456';
-  // }
-
-  /// Dispose
   @override
-  void onClose() {
-    emailController.dispose();
-    emailFocus.dispose();
-    passwordController.dispose();
-    passwordFocus.dispose();
-    super.onClose();
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    emailController.text = 'barenoj205@fanwn.com';
+    passwordController.text = '123456';
   }
+
+  // login APi
+  RxBool isLoading = false.obs;
+  loginProcess() async {
+    return await AuthService.loginService(
+      isLoading: isLoading,
+      email: emailController.text,
+      password: passwordController.text,
+    );
+  }
+
+
 }

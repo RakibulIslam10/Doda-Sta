@@ -53,7 +53,7 @@ class NavigationScreenMobile extends GetView<NavigationController> {
       '******************************************************************************************',
     );
 
-    print(AppStorage.isVendor);
+    print('Is Vendor---- ${AppStorage.isVendor}');
     return GestureDetector(
       onTap: () => controller.changeIndex(index),
       child: Column(

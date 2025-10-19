@@ -10,13 +10,16 @@ class ButtonSectionWidget extends GetView<LoginController> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        PrimaryButtonWidget(
-          title: 'Sign in',
-          onPressed: () {
-            if (controller.formKey.currentState!.validate()) {
-              Get.offAllNamed(Routes.navigationScreen);
-            }
-          },
+        Obx(
+          () => PrimaryButtonWidget(
+            title: 'Sign in',
+            isLoading: controller.isLoading.value,
+            onPressed: () {
+              if (controller.formKey.currentState!.validate()) {
+                controller.loginProcess();
+              }
+            },
+          ),
         ),
         Space.height.v10,
 

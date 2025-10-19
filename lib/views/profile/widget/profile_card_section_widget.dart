@@ -69,7 +69,7 @@ class ProfileCardSectionWidgetView extends GetView<ProfileController> {
                 borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),
               ),
               title: TextWidget(
-                ' Logout',
+                'Logout',
                 fontSize: Dimensions.titleLarge,
                 fontWeight: FontWeight.w500,
               ),
@@ -121,8 +121,7 @@ class ProfileCardSectionWidgetView extends GetView<ProfileController> {
     void Function()? onTap, {
     bool isVisible = true,
   }) {
-    if (!isVisible) return const SizedBox.shrink(); // hide when false
-
+    if (!isVisible) return const SizedBox.shrink();
     return GestureDetector(
       onTap: onTap,
       child: Container(

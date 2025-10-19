@@ -48,7 +48,6 @@ class RegisterScreenMobile extends GetView<RegisterController> {
                 ),
               ],
             ),
-
             Space.height.v40,
           ],
         ),

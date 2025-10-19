@@ -1,5 +1,4 @@
 import 'package:pin_code_fields/pin_code_fields.dart';
-import '../core/themes/token.dart';
 import '../core/utils/basic_import.dart';
 
 class OtpInputField extends StatelessWidget {

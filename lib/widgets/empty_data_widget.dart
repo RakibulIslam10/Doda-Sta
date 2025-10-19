@@ -1,9 +1,4 @@
-import 'package:doda_work/widgets/text_widget.dart';
-import '../core/languages/strings.dart';
-import '../core/themes/token.dart';
 import '../core/utils/basic_import.dart';
-import '../core/utils/space.dart';
-import '../gen/assets.gen.dart';
 
 class EmptyDataWidget extends StatelessWidget {
   final String? massage;

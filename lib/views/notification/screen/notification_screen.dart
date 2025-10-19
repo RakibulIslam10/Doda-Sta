@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/utils/dimensions.dart';
 import '../../../core/utils/layout.dart';
-import '../../../core/utils/space.dart';
 import '../../../widgets/text_widget.dart';
 import '../controller/notification_controller.dart';
 

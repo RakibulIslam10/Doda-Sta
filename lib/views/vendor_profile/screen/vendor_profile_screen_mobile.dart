@@ -116,7 +116,7 @@ class VendorProfileScreenMobile extends GetView<VendorProfileController> {
             Space.height.betweenInputBox,
             Space.height.betweenInputBox,
 
-            PrimaryButtonWidget(title: 'Update', onPressed: () => null),
+            PrimaryButtonWidget(title: 'Update', onPressed: () {}),
           ],
         ),
       ),

@@ -1,10 +1,5 @@
 import 'dart:io';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import '../../../core/themes/token.dart';
 import '../../../core/utils/basic_import.dart';
-import '../../../widgets/text_widget.dart';
 import '../controller/inbox_controller.dart';
 
 class ChatBodyWidget extends GetView<InboxController> {

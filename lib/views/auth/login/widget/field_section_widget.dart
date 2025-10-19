@@ -1,10 +1,6 @@
 import 'package:doda_work/core/utils/basic_import.dart';
 import 'package:doda_work/core/utils/extensions.dart';
 import 'package:doda_work/routes/routes.dart';
-import '../../../../core/themes/token.dart';
-import '../../../../core/utils/space.dart';
-import '../../../../widgets/primary_input_widget.dart';
-import '../../../../widgets/text_widget.dart';
 import '../controller/login_controller.dart';
 
 class FieldSectionWidget extends GetView<LoginController> {

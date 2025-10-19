@@ -1,6 +1,4 @@
-import 'package:doda_work/widgets/text_widget.dart';
 
-import '../core/themes/token.dart';
 import '../core/utils/basic_import.dart';
 import 'loading_widget.dart';
 

@@ -36,7 +36,7 @@ class TabBarViewStatusWidget extends GetView<HomeVendorController> {
                   dividerColor: Colors.transparent,
                   labelPadding: EdgeInsets.zero,
                   enableFeedback: false,
-                  overlayColor: MaterialStateProperty.all(Colors.transparent),
+                  overlayColor: WidgetStateProperty.all(Colors.transparent),
                   onTap: (value) => controller.selectedTabIndex.value = value,
                   splashFactory: NoSplash.splashFactory,
                   tabs: List.generate(tabList.length, (index) {

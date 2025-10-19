@@ -1,5 +1,4 @@
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import '../core/themes/token.dart';
 import '../core/utils/basic_import.dart';
 
 class LoadingWidget extends StatelessWidget {

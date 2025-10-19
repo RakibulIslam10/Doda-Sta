@@ -1,12 +1,5 @@
-import 'package:doda_work/core/themes/token.dart';
 import 'package:doda_work/core/utils/basic_import.dart';
 import 'package:doda_work/routes/routes.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import '../../../../core/utils/dimensions.dart';
-import '../../../../core/utils/space.dart';
-import '../../../../widgets/primary_button_widget.dart';
-import '../../../../widgets/text_widget.dart';
 import '../controller/register_controller.dart';
 
 class ButtonAndTextSectionView extends GetView<RegisterController> {

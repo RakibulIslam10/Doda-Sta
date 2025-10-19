@@ -1,6 +1,5 @@
 import 'package:doda_work/core/utils/extensions.dart';
 import 'package:doda_work/views/inbox/controller/inbox_controller.dart';
-import '../../../core/themes/token.dart';
 import '../../../core/utils/basic_import.dart';
 
 class TypeMessageWidget extends GetView<InboxController> {

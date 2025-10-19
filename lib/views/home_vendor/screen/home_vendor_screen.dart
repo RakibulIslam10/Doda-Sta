@@ -1,15 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
 import 'package:doda_work/core/utils/extensions.dart';
-import '../../../core/themes/token.dart';
 import '../../../core/utils/basic_import.dart';
-import '../../../core/utils/dimensions.dart';
-import '../../../core/utils/layout.dart';
-import '../../../core/utils/space.dart';
-import '../../../gen/assets.gen.dart';
 import '../../../routes/routes.dart';
-import '../../../widgets/text_widget.dart';
 import '../../home/screen/home_screen.dart';
 import '../controller/home_vendor_controller.dart';
 

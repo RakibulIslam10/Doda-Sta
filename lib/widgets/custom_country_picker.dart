@@ -1,9 +1,6 @@
 import 'dart:developer';
 import 'package:country_picker/country_picker.dart';
-import 'package:doda_work/core/utils/space.dart';
-import '../core/themes/token.dart';
 import '../core/utils/basic_import.dart';
-import 'text_widget.dart';
 
 class CustomCountryPicker extends StatelessWidget {
   final RxString selectedCountry;

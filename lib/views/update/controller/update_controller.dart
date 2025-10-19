@@ -1,7 +1,5 @@
 import 'dart:io';
-import 'package:get/get.dart';
 import '../../../core/utils/basic_import.dart';
-import '../../../widgets/custom_snackbar.dart';
 import 'package:image_picker/image_picker.dart';
 
 

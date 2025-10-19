@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:doda_work/core/utils/basic_import.dart';
-import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 

@@ -3,12 +3,7 @@ import 'package:doda_work/core/utils/extensions.dart';
 import 'package:doda_work/routes/routes.dart';
 import 'package:doda_work/views/navigation/controller/navigation_controller.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:shimmer/shimmer.dart';
-import '../../../core/themes/token.dart';
-import '../../../core/utils/space.dart';
-import '../../../widgets/text_widget.dart';
 import '../controller/home_controller.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 part 'home_screen_mobile.dart';
 part '../widget/category_widget.dart';

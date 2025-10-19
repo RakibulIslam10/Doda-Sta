@@ -1,4 +1,3 @@
-import '../core/themes/token.dart';
 import '../core/utils/basic_import.dart';
 
 class DividerWidget extends StatelessWidget {

@@ -6,7 +6,6 @@ import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
 import '../../utils/app_storage.dart';
 import '../../utils/basic_import.dart';
-import '../end_point/api_end_points.dart';
 
 class ApiRequest {
   /// =========================================================== ✅ POST Request =========================================================== ///
@@ -81,7 +80,6 @@ class ApiRequest {
     try {
       isLoading.value = true;
       log('|📥|---------[ 🌐 GET REQUEST STARTED ]---------|📥|');
-
       String fullUrl = '${ApiEndPoints.baseUrl}$endPoint';
       if (id != null && id.isNotEmpty) {
         fullUrl += '/$id';

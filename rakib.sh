@@ -5,7 +5,7 @@ case "$1" in
 "generate-views")
     # shellcheck disable=SC2162
     read -p "📥 Enter View Names (space-separated): " viewNames
-    curl -sSL https://raw.githubusercontent.com/RakibulIslam10/Flutter-Automation/refs/heads/main/vv.sh | bash -s $viewNames
+    curl -sSL https://raw.githubusercontent.com/RakibulIslam10/Flutter-Automation/refs/heads/main/vv.sh | bash -s "$viewNames"
     ;;
 
 "generate-widget")
@@ -21,7 +21,7 @@ case "$1" in
     echo "🛠️ Creating Flutter project folder structure..."
     curl -sSL https://raw.githubusercontent.com/RakibulIslam10/Flutter-Automation/refs/heads/main/cs.sh | bash
     curl -sSL https://raw.githubusercontent.com/RakibulIslam10/Flutter-Automation/refs/heads/main/cu.sh | bash
-#    curl -sSL https://raw.githubusercontent.com/RakibulIslam10/Flutter-Automation/refs/heads/main/py.sh | bash
+  # curl -sSL https://raw.githubusercontent.com/RakibulIslam10/Flutter-Automation/refs/heads/main/py.sh | bash
     ;;
 
 "generate-api-method")

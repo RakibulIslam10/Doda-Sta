@@ -1,5 +1,4 @@
 import 'package:doda_work/core/utils/basic_import.dart';
-import 'package:doda_work/routes/routes.dart';
 import '../controller/register_controller.dart';
 
 class ButtonAndTextSectionView extends GetView<RegisterController> {
@@ -55,18 +54,21 @@ class ButtonAndTextSectionView extends GetView<RegisterController> {
           ],
         ),
         Space.height.v20,
-        PrimaryButtonWidget(
-          title: "Next",
-          onPressed: () {
-            if (controller.fromKey.currentState!.validate()) {
-              if (controller.isCheck.value) {
-                Get.toNamed(Routes.verifyScreen);
-              } else {
-                controller.isError.value = true;
-                CustomSnackBar.error('Check the term and conditions');
+        Obx(
+          () => PrimaryButtonWidget(
+            isLoading: controller.isLoading.value,
+            title: "Next",
+            onPressed: () {
+              if (controller.fromKey.currentState!.validate()) {
+                if (controller.isCheck.value) {
+                  controller.registerProcess();
+                } else {
+                  controller.isError.value = true;
+                  CustomSnackBar.error('Check the term and conditions');
+                }
               }
-            }
-          },
+            },
+          ),
         ),
       ],
     );

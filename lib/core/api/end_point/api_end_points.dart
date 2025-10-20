@@ -6,7 +6,7 @@ class ApiEndPoints {
   // Auth
   static const login = 'auth/login';
   static const register = 'auth/register';
-  static const verifyEmail = 'auth/verify-email';
+  static const verifyEmail = 'auth/activate-account';
   static const resendVerification = 'auth/resend-verification';
   static const resetPassword = 'auth/reset-password';
   static const forgotPassword = 'auth/forgot-password';

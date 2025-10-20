@@ -25,7 +25,7 @@ class VerificationScreenMobile extends GetView<VerificationController> {
                 top: Dimensions.heightSize,
                 bottom: Dimensions.verticalSize,
               ),
-              "We've sent a verification code to your email/phone. Please check and enter it below.",
+              "We've sent a verification code to your ${Get.find<RegisterController>().emailController.text} email/phone. Please check and enter it below.",
               color: CustomColors.secondaryDarkText,
             ),
 
@@ -72,11 +72,12 @@ class VerificationScreenMobile extends GetView<VerificationController> {
             ),
 
             Space.height.betweenInputBox,
-            PrimaryButtonWidget(
-              title: "Verify Code",
-              onPressed: () => AppStorage.isVendor == true
-                  ? Get.toNamed(Routes.aditionalScreen)
-                  : Get.toNamed(Routes.resetScreen),
+            Obx(
+              () => PrimaryButtonWidget(
+                isLoading: controller.isLoading.value,
+                title: "Verify Code",
+                onPressed: () => controller.emailVerifyProcess(),
+              ),
             ),
           ],
         ),

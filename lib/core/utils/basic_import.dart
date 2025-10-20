@@ -1,5 +1,3 @@
-
-
 export 'package:flutter/material.dart';
 export 'custom_style.dart';
 export 'dimensions.dart';

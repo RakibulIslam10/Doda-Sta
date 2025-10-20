@@ -18,6 +18,8 @@ import '../bind/login_binding.dart';
 import '../bind/navigation_binding.dart';
 import '../bind/notification_binding.dart';
 import '../bind/onboard_binding.dart';
+import '../bind/otp_binding.dart';
+import '../bind/otp_binding.dart';
 import '../bind/privacy_binding.dart';
 import '../bind/profile_binding.dart';
 import '../bind/register_binding.dart';
@@ -57,6 +59,7 @@ import '../views/licence/screen/licence_screen.dart';
 import '../views/navigation/screen/navigation_screen.dart';
 import '../views/notification/screen/notification_screen.dart';
 import '../views/onboard/screen/onboard_screen.dart';
+import '../views/otp/screen/otp_screen.dart';
 import '../views/privacy/screen/privacy_screen.dart';
 import '../views/profile/screen/profile_screen.dart';
 import '../views/request/screen/request_screen.dart';
@@ -74,6 +77,7 @@ part 'pages.dart';
 
 class Routes {
   static var list = RoutePageList.list;
+static const otpScreen = '/otpScreen';
   static const aditionalScreen = '/aditionalScreen';
   static const vendor_verificationScreen = '/vendor_verificationScreen';
   static const vendor_phoneScreen = '/vendor_phoneScreen';

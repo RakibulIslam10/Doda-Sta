@@ -1,4 +1,5 @@
 import 'package:doda_work/core/api/services/auth_service.dart';
+import 'package:doda_work/core/api/services/auths.dart';
 import 'package:doda_work/core/utils/app_storage.dart';
 import 'package:doda_work/core/utils/basic_import.dart';
 
@@ -41,5 +42,15 @@ class RegisterController extends GetxController {
 
   RxBool isLoading = false.obs;
 
-
+  registerProcess() async {
+    return await AuthService.registerService(
+      isLoading: isLoading,
+      name: nameController.text,
+      email: emailController.text,
+      phone: phoneController.text,
+      password: passwordController.text,
+      role: AppStorage.isVendor == true ? "ADMIN" : "USER",
+      confirmPassword: passConfirmController.text,
+    );
+  }
 }

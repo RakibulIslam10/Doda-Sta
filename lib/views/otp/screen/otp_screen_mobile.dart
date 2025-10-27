@@ -28,7 +28,6 @@ class OtpScreenMobile extends GetView<OtpController> {
               "We've sent a verification code to your ${Get.find<LoginController>().emailController.text} email/phone. Please check and enter it below.",
               color: CustomColors.secondaryDarkText,
             ),
-
             PinCodeTextField(
               length: 6,
               appContext: context,
@@ -76,7 +75,8 @@ class OtpScreenMobile extends GetView<OtpController> {
               () => PrimaryButtonWidget(
                 isLoading: controller.isLoading.value,
                 title: "Verify Code",
-                onPressed: () => controller.emailVerifyProcess(),
+                onPressed: () {},
+                // onPressed: () => controller.emailVerifyProcess(),
               ),
             ),
           ],

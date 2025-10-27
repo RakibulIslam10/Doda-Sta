@@ -61,7 +61,7 @@ class ButtonAndTextSectionView extends GetView<RegisterController> {
             onPressed: () {
               if (controller.fromKey.currentState!.validate()) {
                 if (controller.isCheck.value) {
-                  // controller.registerProcess();
+                  controller.registerProcess();
                 } else {
                   controller.isError.value = true;
                   CustomSnackBar.error('Check the term and conditions');

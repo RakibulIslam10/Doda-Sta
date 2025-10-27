@@ -1,5 +1,6 @@
 import 'package:doda_work/core/api/services/auth_service.dart';
 
+import '../../../../core/api/services/auths.dart';
 import '../../../../core/utils/basic_import.dart';
 
 class ForgotController extends GetxController {
@@ -12,10 +13,10 @@ class ForgotController extends GetxController {
 
   RxBool isLoading = false.obs;
 
-  // forgotPasswordProcess() async {
-  //   await AuthService.forgotPasswordService(
-  //     isLoading: isLoading,
-  //     email: emailController.text,
-  //   );
-  // }
+  forgotPasswordProcess() async {
+    await AuthService.forgotPasswordService(
+      isLoading: isLoading,
+      email: emailController.text,
+    );
+  }
 }

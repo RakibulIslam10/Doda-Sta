@@ -1,4 +1,3 @@
-
 import '../core/utils/basic_import.dart';
 import 'loading_widget.dart';
 
@@ -17,7 +16,7 @@ class PrimaryButtonWidget extends StatelessWidget {
   final bool isLoading;
   final bool primary;
   final bool disable;
-  final bool outlineButton; // new flag for outline button
+  final bool outlineButton;
   final EdgeInsets? padding;
 
   PrimaryButtonWidget({

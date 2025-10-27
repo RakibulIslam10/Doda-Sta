@@ -12,10 +12,10 @@ class ForgotController extends GetxController {
 
   RxBool isLoading = false.obs;
 
-  forgotPasswordProcess() async {
-    await AuthService.forgotPasswordService(
-      isLoading: isLoading,
-      email: emailController.text,
-    );
-  }
+  // forgotPasswordProcess() async {
+  //   await AuthService.forgotPasswordService(
+  //     isLoading: isLoading,
+  //     email: emailController.text,
+  //   );
+  // }
 }

@@ -1,5 +1,6 @@
 import 'package:doda_work/core/utils/basic_import.dart';
 import 'package:doda_work/core/utils/extensions.dart';
+import 'package:shadify/shadify.dart';
 import '../../../../routes/routes.dart';
 import '../controller/login_controller.dart';
 
@@ -10,16 +11,13 @@ class ButtonSectionWidget extends GetView<LoginController> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Obx(
-          () => PrimaryButtonWidget(
-            title: 'Sign in',
-            isLoading: controller.isLoading.value,
-            onPressed: () {
-              if (controller.formKey.currentState!.validate()) {
-                controller.loginProcess();
-              }
-            },
-          ),
+        PrimaryButtonWidget(
+          title: 'Sign in',
+          onPressed: () {
+            if (controller.formKey.currentState!.validate()) {
+              // controller.loginProcess();
+            }
+          },
         ),
         Space.height.v10,
 
@@ -76,7 +74,6 @@ class ButtonSectionWidget extends GetView<LoginController> {
             borderRadius: BorderRadius.circular(Dimensions.radius * 3),
             border: Border.all(color: CustomColors.primary, width: 1.4),
           ),
-
           child: Row(
             mainAxisAlignment: mainCenter,
             children: [

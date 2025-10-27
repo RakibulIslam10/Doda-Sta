@@ -48,7 +48,7 @@ class ForgotScreenMobile extends GetView<ForgotController> {
                       isLoading: controller.isLoading.value,
                       onPressed: () {
                         if (controller.formKey.currentState!.validate()) {
-                          controller.forgotPasswordProcess();
+                          // controller.forgotPasswordProcess();
                         }
                       },
                     ),

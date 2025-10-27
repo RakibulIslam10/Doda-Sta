@@ -5,4 +5,6 @@ class WelcomeController extends GetxController {
   RxString selectedCountry = "Canada".obs;
   RxString selectedCountryFlag = "🇨🇦".obs;
 
+
+
 }

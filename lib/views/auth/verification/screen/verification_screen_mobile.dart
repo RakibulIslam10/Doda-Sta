@@ -72,12 +72,10 @@ class VerificationScreenMobile extends GetView<VerificationController> {
             ),
 
             Space.height.betweenInputBox,
-            Obx(
-              () => PrimaryButtonWidget(
-                isLoading: controller.isLoading.value,
-                title: "Verify Code",
-                onPressed: () => controller.emailVerifyProcess(),
-              ),
+            PrimaryButtonWidget(
+              isLoading: controller.isLoading.value,
+              title: "Verify Code",
+              onPressed: () {},
             ),
           ],
         ),

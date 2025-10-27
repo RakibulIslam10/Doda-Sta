@@ -18,21 +18,12 @@ class LoginController extends GetxController {
 
   @override
   void onInit() {
-    // TODO: implement onInit
     super.onInit();
     emailController.text = 'barenoj205@fanwn.com';
     passwordController.text = '123456';
   }
 
   // login APi
-  RxBool isLoading = false.obs;
-  loginProcess() async {
-    return await AuthService.loginService(
-      isLoading: isLoading,
-      email: emailController.text,
-      password: passwordController.text,
-    );
-  }
 
 
 }

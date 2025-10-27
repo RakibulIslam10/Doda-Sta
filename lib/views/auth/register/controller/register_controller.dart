@@ -41,15 +41,5 @@ class RegisterController extends GetxController {
 
   RxBool isLoading = false.obs;
 
-  registerProcess() async {
-    return await AuthService.registerService(
-      isLoading: isLoading,
-      name: nameController.text,
-      email: emailController.text,
-      password: passwordController.text,
-      confirmPassword: passConfirmController.text,
-      phoneNumber: phoneController.text,
-      role: AppStorage.isVendor == true ? "PROVIDER" : "USER",
-    );
-  }
+
 }

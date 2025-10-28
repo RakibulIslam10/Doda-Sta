@@ -95,4 +95,25 @@ class AuthService {
   }
 
   /// =============================================== ✅ Resend Verification ================================================== ///
+
+  static Future<BasicSuccessModel> resendOtpService({
+    required RxBool isLoading,
+    required String email,
+  }) async {
+    Map<String, dynamic> inputBody = {
+      'email': email,
+    };
+    return await ApiRequest.post(
+      fromJson: BasicSuccessModel.fromJson,
+      endPoint: ApiEndPoints.resendOtpCode,
+      isLoading: isLoading,
+      body: inputBody,
+      showSuccessSnackBar: true,
+      onSuccess: (result) {
+
+      },
+    );
+  }
+
+
 }

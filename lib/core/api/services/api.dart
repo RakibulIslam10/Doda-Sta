@@ -8,7 +8,29 @@ import '../../utils/app_storage.dart';
 import '../../utils/basic_import.dart';
 
 class ApiRequest {
-  /// =========================================================== ✅ POST Request =========================================================== ///
+
+  /// ✅ Header Generator
+  static Future<Map<String, String>> _bearerHeaderInfo() async {
+    final token = AppStorage.token;
+    return {
+      HttpHeaders.acceptHeader: "application/json",
+      HttpHeaders.contentTypeHeader: "application/json",
+      if (token.isNotEmpty) HttpHeaders.authorizationHeader: "Bearer $token",
+    };
+  }
+
+  static void printBodyLineByLine(Map<String, dynamic> body) {
+    body.forEach((key, value) {
+      log("🔹 '$key': '$value'");
+    });
+  }
+
+  // ✅ FIXED HERE
+  static void printEndPointLog(String url) {
+    log("📍 'End Point': '$url'");
+  }
+
+  /// =========================================================== ✅ POST REQUEST =========================================================== ///
   static Future<R> post<R>({
     required R Function(Map<String, dynamic>) fromJson,
     required String endPoint,
@@ -66,7 +88,7 @@ class ApiRequest {
     }
   }
 
-  /// =========================================================== ✅ GET Request =========================================================== ///
+  /// =========================================================== ✅ GET REQUEST =========================================================== ///
   static Future<R> get<R>({
     required R Function(Map<String, dynamic>) fromJson,
     required String endPoint,
@@ -87,7 +109,7 @@ class ApiRequest {
       }
       final uri = Uri.parse(fullUrl).replace(
         queryParameters: queryParams?.map(
-              (key, value) => MapEntry(key, value.toString()),
+          (key, value) => MapEntry(key, value.toString()),
         ),
       );
 
@@ -142,6 +164,192 @@ class ApiRequest {
     }
   }
 
+  /// =========================================================== ✅ PATCH REQUEST =========================================================== ///
+  static Future<R> patch<R>({
+    required R Function(Map<String, dynamic>) fromJson,
+    required String endPoint,
+    required RxBool isLoading,
+    required Map<String, dynamic> body,
+    Map<String, dynamic>? queryParams,
+    bool showSuccessSnackBar = false,
+    Function(R result)? onSuccess,
+  }) async {
+    try {
+      isLoading.value = true;
+      log('|📤|---------[ 📦 PATCH REQUEST STARTED ]---------|📤|');
+
+      // ✅ Build URL with queryParams
+      final uri = Uri.parse(
+        '${ApiEndPoints.baseUrl}$endPoint',
+      ).replace(queryParameters: queryParams);
+
+      printEndPointLog(uri.toString());
+      printBodyLineByLine(body);
+
+      final response = await http
+          .patch(
+            uri,
+            headers: await _bearerHeaderInfo(),
+            body: jsonEncode(body),
+          )
+          .timeout(const Duration(seconds: 120));
+
+      log('|✅|---------[ ✅ PATCH REQUEST COMPLETED ]---------|✅|');
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final Map<String, dynamic> json = jsonDecode(response.body);
+        final result = fromJson(json);
+
+        final successMessage =
+            json['message'] ?? Strings.requestCompletedSuccessfully;
+        if (showSuccessSnackBar) {
+          CustomSnackBar.success(
+            title: Strings.success,
+            message: successMessage,
+          );
+        }
+        if (onSuccess != null) onSuccess(result);
+
+        return result;
+      } else {
+        final error = jsonDecode(response.body);
+        final errorMessage = error['message'] ?? 'Something went wrong!';
+        log('❌ Error: $errorMessage');
+        CustomSnackBar.error(errorMessage);
+        throw Exception(errorMessage);
+      }
+    } catch (e) {
+      log('🐞🐞🐞 UNHANDLED ERROR: ${e.toString()}');
+      throw Exception(e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  /// =========================================================== ✅ PUT REQUEST =========================================================== ///
+  static Future<R> put<R>({
+    required R Function(Map<String, dynamic>) fromJson,
+    required String endPoint,
+    required RxBool isLoading,
+    required Map<String, dynamic> body,
+    Map<String, dynamic>? queryParams,
+    bool showSuccessSnackBar = false,
+    Function(R result)? onSuccess,
+  }) async {
+    try {
+      isLoading.value = true;
+      log('|📤|---------[ 📦 PUT REQUEST STARTED ]---------|📤|');
+
+      // ✅ Build URL with queryParams
+      final uri = Uri.parse(
+        '${ApiEndPoints.baseUrl}$endPoint',
+      ).replace(queryParameters: queryParams);
+
+      printEndPointLog(uri.toString());
+      printBodyLineByLine(body);
+
+      final response = await http
+          .put(uri, headers: await _bearerHeaderInfo(), body: jsonEncode(body))
+          .timeout(const Duration(seconds: 120));
+
+      log('|✅|---------[ ✅ PUT REQUEST COMPLETED ]---------|✅|');
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final Map<String, dynamic> json = jsonDecode(response.body);
+        final result = fromJson(json);
+
+        final successMessage =
+            json['message'] ?? Strings.requestCompletedSuccessfully;
+        if (showSuccessSnackBar) {
+          CustomSnackBar.success(
+            title: Strings.success,
+            message: successMessage,
+          );
+        }
+        if (onSuccess != null) onSuccess(result);
+
+        return result;
+      } else {
+        final error = jsonDecode(response.body);
+        final errorMessage = error['message'] ?? 'Something went wrong!';
+        log('❌ Error: $errorMessage');
+        CustomSnackBar.error(errorMessage);
+        throw Exception(errorMessage);
+      }
+    } catch (e) {
+      log('🐞🐞🐞 UNHANDLED ERROR: ${e.toString()}');
+      throw Exception(e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  /// =========================================================== ✅ DELETE REQUEST =========================================================== ///
+  static Future<R> delete<R>({
+    required R Function(Map<String, dynamic>) fromJson,
+    required String endPoint,
+    required RxBool isLoading,
+    Map<String, dynamic>? body,
+    Map<String, dynamic>? queryParams,
+    bool showSuccessSnackBar = false,
+    Function(R result)? onSuccess,
+  }) async {
+    try {
+      isLoading.value = true;
+      log('|📤|---------[ 📦 DELETE REQUEST STARTED ]---------|📤|');
+
+      // ✅ Build URL with queryParams
+      final uri = Uri.parse(
+        '${ApiEndPoints.baseUrl}$endPoint',
+      ).replace(queryParameters: queryParams);
+
+      printEndPointLog(uri.toString());
+      if (body != null) printBodyLineByLine(body);
+
+      final response = await http
+          .delete(
+            uri,
+            headers: await _bearerHeaderInfo(),
+            body: body != null ? jsonEncode(body) : null,
+          )
+          .timeout(const Duration(seconds: 120));
+
+      log('|✅|---------[ ✅ DELETE REQUEST COMPLETED ]---------|✅|');
+
+      if (response.statusCode == 200 ||
+          response.statusCode == 201 ||
+          response.statusCode == 204) {
+        final Map<String, dynamic> json = response.body.isNotEmpty
+            ? jsonDecode(response.body)
+            : {};
+        final result = fromJson(json);
+
+        final successMessage =
+            json['message'] ?? Strings.requestCompletedSuccessfully;
+        if (showSuccessSnackBar) {
+          CustomSnackBar.success(
+            title: Strings.success,
+            message: successMessage,
+          );
+        }
+        if (onSuccess != null) onSuccess(result);
+
+        return result;
+      } else {
+        final error = jsonDecode(response.body);
+        final errorMessage = error['message'] ?? 'Something went wrong!';
+        log('❌ Error: $errorMessage');
+        CustomSnackBar.error(errorMessage);
+        throw Exception(errorMessage);
+      }
+    } catch (e) {
+      log('🐞🐞🐞 UNHANDLED ERROR: ${e.toString()}');
+      throw Exception(e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   /// ======================================================== ✅ Multipart POST Method ========================================================= ///
   static Future<R> multiMultipartRequest<R>({
     required String endPoint,
@@ -166,7 +374,6 @@ class ApiRequest {
       }
 
       final uri = Uri.parse(fullUrl);
-
       log('📤 MULTIPART REQUEST STARTED');
       log('🔗 Method  : $reqType');
       log('🔗 URL     : $uri');
@@ -264,18 +471,6 @@ class ApiRequest {
   //   );
   // }
 
-  /// ✅=======================================================================================================================
-
-  /// ✅ Header Generator
-  static Future<Map<String, String>> _bearerHeaderInfo() async {
-    final token = AppStorage.token;
-    return {
-      HttpHeaders.acceptHeader: "application/json",
-      HttpHeaders.contentTypeHeader: "application/json",
-      if (token.isNotEmpty) HttpHeaders.authorizationHeader: "Bearer $token",
-    };
-  }
-
   /// ✅ Check Internet Connection
   // static Future<bool> checkInternetConnection() async {
   //   final networkController = Get.find<NetworkController>();
@@ -292,15 +487,4 @@ class ApiRequest {
   //   }
   //   return true;
   // }
-
-  static void printBodyLineByLine(Map<String, dynamic> body) {
-    body.forEach((key, value) {
-      log("🔹 '$key': '$value'");
-    });
-  }
-
-  // ✅ FIXED HERE
-  static void printEndPointLog(String url) {
-    log("📍 'End Point': '$url'");
-  }
 }

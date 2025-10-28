@@ -100,20 +100,37 @@ class AuthService {
     required RxBool isLoading,
     required String email,
   }) async {
-    Map<String, dynamic> inputBody = {
-      'email': email,
-    };
+    Map<String, dynamic> inputBody = {'email': email};
     return await ApiRequest.post(
       fromJson: BasicSuccessModel.fromJson,
       endPoint: ApiEndPoints.resendOtpCode,
       isLoading: isLoading,
       body: inputBody,
       showSuccessSnackBar: true,
-      onSuccess: (result) {
-
-      },
+      onSuccess: (result) {},
     );
   }
 
+  /// =============================================== ✅ Change Password ================================================== ///
 
+  static Future<BasicSuccessModel> changePasswordService({
+    required RxBool isLoading,
+    required String oldPassword,
+    required String newPassword,
+    required String confirmPassword,
+  }) async {
+    Map<String, dynamic> inputBody = {
+      'oldPassword': oldPassword,
+      'newPassword': newPassword,
+      'confirmPassword': confirmPassword,
+    };
+    return await ApiRequest.post(
+      fromJson: BasicSuccessModel.fromJson,
+      endPoint: ApiEndPoints.changePassword,
+      isLoading: isLoading,
+      body: inputBody,
+      showSuccessSnackBar: true,
+      onSuccess: (result) => Get.back(),
+    );
+  }
 }

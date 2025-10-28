@@ -26,7 +26,7 @@ class ApiEndPoints {
   static const faqGet = 'manage/get-faq';
 
   //profile
-  static const changePassword = 'user/profile/change-password';
+  static const changePassword = 'auth/change-password';
   static const profile = 'user/profile/get';
   static const updateProfile = 'user/profile/update';
 

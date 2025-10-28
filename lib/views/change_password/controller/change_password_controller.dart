@@ -1,7 +1,9 @@
+import 'package:doda_work/core/api/services/auths.dart';
+
 import '../../../core/utils/basic_import.dart';
 
 class ChangePasswordController extends GetxController {
-  // TODO: Logic
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   //new password
   final oldPasswordController = TextEditingController();
@@ -14,4 +16,16 @@ class ChangePasswordController extends GetxController {
   final passwordFocus = FocusNode();
   final isPasswordValid = false.obs;
   final isPasswordVisible = false.obs;
+
+  // Change Password APi
+  RxBool isLoading = false.obs;
+
+  changePasswordProcess() async {
+    return await AuthService.changePasswordService(
+      isLoading: isLoading,
+      oldPassword: oldPasswordController.text,
+      newPassword: passwordController.text,
+      confirmPassword: passConfirmController.text,
+    );
+  }
 }

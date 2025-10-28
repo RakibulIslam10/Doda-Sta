@@ -53,4 +53,5 @@ class RegisterController extends GetxController {
       confirmPassword: passConfirmController.text,
     );
   }
+
 }

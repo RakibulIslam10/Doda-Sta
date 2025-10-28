@@ -71,7 +71,7 @@ class VerifyScreenMobile extends GetView<VerifyController> {
 
             Row(
               mainAxisAlignment: mainCenter,
-              children: [TimerWidget(onResendCode: () {})],
+              children: [TimerWidget(onResendCode: () => controller.resendOtpProcess())],
             ),
 
             Space.height.betweenInputBox,

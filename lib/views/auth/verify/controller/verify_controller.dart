@@ -7,12 +7,20 @@ class VerifyController extends GetxController {
   final otpController = TextEditingController();
 
   RxBool isLoading = false.obs;
+  RxBool isLoadingResend = false.obs;
 
   emailVerifyProcess() async {
     return await AuthService.emailVerifyService(
       isLoading: isLoading,
       email: Get.find<RegisterController>().emailController.text,
       activationCode: otpController.text,
+    );
+  }
+
+  resendOtpProcess() async {
+    return await AuthService.resendOtpService(
+      isLoading: isLoadingResend,
+      email: Get.find<RegisterController>().emailController.text,
     );
   }
 }

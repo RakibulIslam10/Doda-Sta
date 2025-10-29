@@ -32,6 +32,8 @@ dependencies:
   http:
   cached_network_image: ^3.4.1
   shadify: ^1.0.1
+  google_maps_flutter: ^2.13.1
+  map_location_picker: ^3.1.0
 
 dev_dependencies:
   change_app_package_name: ^1.4.0

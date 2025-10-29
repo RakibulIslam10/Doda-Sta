@@ -196,11 +196,49 @@ class AditionalScreenMobile extends GetView<AditionalController> {
                       );
                     }),
 
-                    PrimaryInputFieldWidget(
-                      controller: controller.serviceLocationController,
-                      hintText: 'Enter Register Address',
-                      label: 'Register Address',
-                    ),
+                    // PrimaryInputFieldWidget(
+                    //   controller: controller.serviceLocationController,
+                    //   hintText: 'Enter Register Address',
+                    //   label: 'Register Address',
+                    // ),
+                    Obx(() {
+                      final isPick = controller.selectedAddress.isNotEmpty;
+                      return GestureDetector(
+                        onTap: () {
+                          _openPicker(context);
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 12,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.surface,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: isPick
+                                  ? CustomColors.primary
+                                  : CustomColors.disableColor,
+                              width: 1.4,
+                            ),
+                          ),
+                          child: Text(
+                            isPick
+                                ? controller.selectedAddress.value
+                                : "Pick Service Address",
+                            style: TextStyle(
+                              fontSize: Dimensions.titleSmall,
+                              fontWeight: FontWeight.w500,
+                              color: isPick
+                                  ? CustomColors.blackColor
+                                  : CustomColors.blackColor.withAlpha(888),
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
+
                     Space.height.betweenInputBox,
                     PrimaryInputFieldWidget(
                       controller: controller.contactPersonController,
@@ -280,6 +318,41 @@ class AditionalScreenMobile extends GetView<AditionalController> {
                   ],
                 ),
               ),
+      ),
+    );
+  }
+
+  void _openPicker(BuildContext context) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MapLocationPicker(
+          config: MapLocationPickerConfig(
+            apiKey: "AIzaSyC_qKHmzl-HHB9hr8-fWGmhETSVR2H0894",
+            onNext: (result) {
+              if (result != null &&
+                  result.geometry?.location.lat != null &&
+                  result.geometry?.location.lat != null) {
+                controller.selectedLatLng.value = LatLng(
+                  result.geometry!.location.lat,
+                  result.geometry!.location.lng,
+                );
+
+                controller.selectedAddress.value =
+                    result.formattedAddress ?? "";
+              }
+              if (Navigator.canPop(context)) {
+                Navigator.pop(context);
+              }
+            },
+          ),
+          geoCodingConfig: GeoCodingConfig(
+            apiKey: "AIzaSyC_qKHmzl-HHB9hr8-fWGmhETSVR2H0894",
+          ),
+          searchConfig: SearchConfig(
+            apiKey: "AIzaSyC_qKHmzl-HHB9hr8-fWGmhETSVR2H0894",
+          ),
+        ),
       ),
     );
   }

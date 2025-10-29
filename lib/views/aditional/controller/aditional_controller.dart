@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:doda_work/core/api/services/api.dart';
 import 'package:doda_work/core/utils/basic_import.dart';
 import 'package:doda_work/views/aditional/model/service_category_model.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AditionalController extends GetxController {
@@ -106,7 +107,8 @@ class AditionalController extends GetxController {
   }
 
   // ✅ Store time for each day separately
-  RxMap<String, Map<String, String>> availabilityMap = <String, Map<String, String>>{}.obs;
+  RxMap<String, Map<String, String>> availabilityMap =
+      <String, Map<String, String>>{}.obs;
 
   // ✅ Save time for current editing day
   void saveTimeForCurrentDay() {
@@ -119,7 +121,9 @@ class AditionalController extends GetxController {
     };
     availabilityMap.refresh();
 
-    print('Saved for ${currentEditingDay.value}: ${startedTime.value} - ${endTime.value}');
+    print(
+      'Saved for ${currentEditingDay.value}: ${startedTime.value} - ${endTime.value}',
+    );
   }
 
   // ✅ Remove day availability
@@ -145,17 +149,6 @@ class AditionalController extends GetxController {
     }).toList();
   }
 
-  // // ✅ Get final availability data in required JSON format
-  // Map<String, dynamic> getAvailabilityData() {
-  //   return {
-  //     "availability": availabilityMap.entries.map((entry) {
-  //       return {
-  //         "day": entry.key,
-  //         "startTime": entry.value["startTime"],
-  //         "endTime": entry.value["endTime"],
-  //       };
-  //     }).toList()
-  //   };
-  // }
-
+  final Rxn<LatLng> selectedLatLng = Rxn<LatLng>();
+  final RxString selectedAddress = "".obs;
 }

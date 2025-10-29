@@ -356,6 +356,7 @@ class ApiRequest {
     required String reqType,
     required Map<String, dynamic> body,
     required Map<String, File?> files,
+    Map<String, List<File>>? filesList, // ✅ Added new parameter
     String? singleQueryParam,
     required R Function(Map<String, dynamic>) fromJson,
     bool showSuccessSnackBar = false,
@@ -391,7 +392,7 @@ class ApiRequest {
         }
       });
 
-      // Add files safely
+      // Add single files safely
       for (var entry in files.entries) {
         final file = entry.value;
         if (file == null) continue;
@@ -407,6 +408,26 @@ class ApiRequest {
             contentType: MediaType.parse(mimeType),
           ),
         );
+      }
+
+      // ✅ Add multiple file lists (like attachments)
+      if (filesList != null && filesList.isNotEmpty) {
+        for (var entry in filesList.entries) {
+          final key = entry.key;
+          final fileList = entry.value;
+          for (var file in fileList) {
+            final mimeType =
+                lookupMimeType(file.path) ?? 'application/octet-stream';
+            log('🧩 MULTI-FILE [$key] MIME: $mimeType');
+            request.files.add(
+              await http.MultipartFile.fromPath(
+                '$key[]',
+                file.path,
+                contentType: MediaType.parse(mimeType),
+              ),
+            );
+          }
+        }
       }
 
       // Send request
@@ -447,6 +468,7 @@ class ApiRequest {
       isLoading.value = false;
     }
   }
+
 
   /// Handle update profile process
   // Future<UserProfileModel?> updateProfile() async {

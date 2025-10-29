@@ -10,6 +10,7 @@ class ApiEndPoints {
   static const resendOtpCode = 'auth/activation-code-resend';
   static const resetPassword = 'auth/reset-password';
   static const forgotPassword = 'auth/forgot-password';
+  static const providerRegister = 'provider/provider-register';
 
   //home
   static const banner = 'banner/get';

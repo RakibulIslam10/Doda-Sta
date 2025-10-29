@@ -2,9 +2,12 @@ import 'dart:io';
 
 import 'package:doda_work/core/api/services/api.dart';
 import 'package:doda_work/core/utils/basic_import.dart';
+import 'package:doda_work/views/aditional/model/provider_register_model.dart';
 import 'package:doda_work/views/aditional/model/service_category_model.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../../../routes/routes.dart';
 
 class AditionalController extends GetxController {
   List<String> dayList = [
@@ -149,6 +152,33 @@ class AditionalController extends GetxController {
     }).toList();
   }
 
+  // provider register process api
+
   final Rxn<LatLng> selectedLatLng = Rxn<LatLng>();
   final RxString selectedAddress = "".obs;
+  RxBool providerRegIsLoading = false.obs;
+
+  providerRegisterProcess() async {
+    return await ApiRequest.multiMultipartRequest(
+      fromJson: ProviderRegisterModel.fromJson,
+      endPoint: ApiEndPoints.providerRegister,
+      isLoading: providerRegIsLoading,
+      files: {},
+      body: {
+        "companyName": companyNameController.text,
+        "website": linkController.text,
+        "serviceCategories": selectedServiceList ?? [],
+        "serviceLocation": selectedAddress.value,
+        "contactPerson": contactPersonController.text,
+        "coveredRadius": 90,
+        "workingHours": getAvailabilityData(),
+        "latitude": selectedLatLng.value?.latitude.toString() ?? "",
+        "longitude": selectedLatLng.value?.longitude.toString() ?? "",
+      },
+      reqType: 'POST',
+      filesList: {'attachments': photos ?? []},
+      // ✅ works now
+      onSuccess: (result) => Get.offAllNamed(Routes.navigationScreen),
+    );
+  }
 }

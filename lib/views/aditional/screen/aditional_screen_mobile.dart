@@ -15,6 +15,11 @@ class AditionalScreenMobile extends GetView<AditionalController> {
                 child: ListView(
                   padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
                   children: [
+                    PrimaryInputFieldWidget(
+                      controller: controller.companyNameController,
+                      hintText: 'Company Name',
+                      label: 'Company Name',
+                    ),
                     Space.height.betweenInputBox,
                     PrimaryInputFieldWidget(
                       controller: controller.linkController,
@@ -308,12 +313,14 @@ class AditionalScreenMobile extends GetView<AditionalController> {
 
                     Space.height.betweenInputBox,
                     Space.height.betweenInputBox,
-
-                    PrimaryButtonWidget(
-                      title: 'Registration',
-                      onPressed: () {
-                        Get.offAllNamed(Routes.navigationScreen);
-                      },
+                    Obx(
+                      () => PrimaryButtonWidget(
+                        title: 'Registration',
+                        isLoading: controller.providerRegIsLoading.value,
+                        onPressed: () {
+                          controller.providerRegisterProcess();
+                        },
+                      ),
                     ),
                   ],
                 ),

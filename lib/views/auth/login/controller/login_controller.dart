@@ -26,7 +26,7 @@ class LoginController extends GetxController {
     passwordController.text = '123456';
   }
 
-  RxBool isLoading = true.obs;
+  RxBool isLoading = false.obs;
 
   // login APi
   loginProcess() async {

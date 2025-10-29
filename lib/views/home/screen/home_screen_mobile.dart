@@ -20,6 +20,7 @@ class HomeScreenMobile extends GetView<HomeController> {
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(Dimensions.appBarHeight * 1.25),
           child: AppBar(
+            scrolledUnderElevation: 0,
             automaticallyImplyLeading: false,
             flexibleSpace: const HomeAppBarWidgetView(),
             actions: [

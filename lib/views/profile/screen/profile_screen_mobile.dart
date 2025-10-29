@@ -10,7 +10,9 @@ class ProfileScreenMobile extends GetView<ProfileController> {
         scrolledUnderElevation: 0,
         flexibleSpace: SafeArea(
           child: Padding(
-            padding: EdgeInsetsGeometry.symmetric(horizontal: Dimensions.defaultHorizontalSize),
+            padding: EdgeInsetsGeometry.symmetric(
+              horizontal: Dimensions.defaultHorizontalSize,
+            ),
             child: Row(
               mainAxisAlignment: mainSpaceBet,
               children: [
@@ -20,8 +22,7 @@ class ProfileScreenMobile extends GetView<ProfileController> {
                 ),
                 TextWidget(
                   'Profile',
-                  color:
-                  CustomColors.blackColor,
+                  color: CustomColors.blackColor,
                   fontSize: Dimensions.titleMedium * 1.2,
                   fontWeight: FontWeight.w600,
                 ),
@@ -37,20 +38,24 @@ class ProfileScreenMobile extends GetView<ProfileController> {
                     child: SvgPicture.asset(Assets.icons.group),
                   ),
                 ),
-              ],),
+              ],
+            ),
           ),
         ),
       ),
       body: SafeArea(
-        child: ListView(
-          padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
-          children: [
-            Space.height.betweenInputBox,
-
-            ProfileTopHeaderWidgetView(),
-            Space.height.v20,
-            ProfileCardSectionWidgetView(),
-          ],
+        child: Obx(
+          () => controller.isLoading.value
+              ? LoadingWidget()
+              : ListView(
+                  padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
+                  children: [
+                    Space.height.betweenInputBox,
+                    ProfileTopHeaderWidgetView(),
+                    Space.height.v20,
+                    ProfileCardSectionWidgetView(),
+                  ],
+                ),
         ),
       ),
     );

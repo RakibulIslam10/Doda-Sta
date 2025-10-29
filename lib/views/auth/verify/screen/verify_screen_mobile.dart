@@ -71,15 +71,16 @@ class VerifyScreenMobile extends GetView<VerifyController> {
 
             Row(
               mainAxisAlignment: mainCenter,
-              children: [TimerWidget(onResendCode: () {})],
+              children: [TimerWidget(onResendCode: () => controller.resendOtpProcess())],
             ),
 
             Space.height.betweenInputBox,
-            PrimaryButtonWidget(
-              title: "Verify Code",
-              onPressed: () => AppStorage.isVendor == true
-                  ? Get.toNamed(Routes.aditionalScreen)
-                  : Get.offAllNamed(Routes.navigationScreen),
+            Obx(
+              () => PrimaryButtonWidget(
+                title: "Verify Code",
+                isLoading: controller.isLoading.value,
+                onPressed: () => controller.emailVerifyProcess(),
+              ),
             ),
           ],
         ),

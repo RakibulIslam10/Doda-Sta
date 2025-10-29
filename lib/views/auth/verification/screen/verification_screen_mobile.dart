@@ -5,6 +5,7 @@ class VerificationScreenMobile extends GetView<VerificationController> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(RegisterController());
     return Scaffold(
       appBar: CommonAppBar(title: 'Verification'),
       body: SafeArea(
@@ -68,14 +69,20 @@ class VerificationScreenMobile extends GetView<VerificationController> {
 
             Row(
               mainAxisAlignment: mainCenter,
-              children: [TimerWidget(onResendCode: () {})],
+              children: [
+                TimerWidget(onResendCode: () => controller.resendOtpProcess()),
+              ],
             ),
 
             Space.height.betweenInputBox,
-            PrimaryButtonWidget(
-              isLoading: controller.isLoading.value,
-              title: "Verify Code",
-              onPressed: () {},
+            Obx(
+              () => PrimaryButtonWidget(
+                isLoading: controller.isLoading.value,
+                title: "Verify Code",
+                onPressed: () {
+                  controller.emailVerifyProcess();
+                },
+              ),
             ),
           ],
         ),

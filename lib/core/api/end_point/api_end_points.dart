@@ -7,7 +7,7 @@ class ApiEndPoints {
   static const login = 'auth/login';
   static const register = 'auth/register';
   static const verifyEmail = 'auth/activate-account';
-  static const resendVerification = 'auth/resend-verification';
+  static const resendOtpCode = 'auth/activation-code-resend';
   static const resetPassword = 'auth/reset-password';
   static const forgotPassword = 'auth/forgot-password';
 
@@ -26,8 +26,8 @@ class ApiEndPoints {
   static const faqGet = 'manage/get-faq';
 
   //profile
-  static const changePassword = 'user/profile/change-password';
-  static const profile = 'user/profile/get';
+  static const changePassword = 'auth/change-password';
+  static const userProfile = 'user/profile';
   static const updateProfile = 'user/profile/update';
 
   //bookmark

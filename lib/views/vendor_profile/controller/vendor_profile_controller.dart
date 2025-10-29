@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:image_picker/image_picker.dart';
+import '../../../core/api/services/api.dart';
 import '../../../core/utils/basic_import.dart';
+import '../model/provider_profile_model.dart';
 
 class VendorProfileController extends GetxController {
   // TODO: Logic
@@ -9,7 +11,7 @@ class VendorProfileController extends GetxController {
   final nameController = TextEditingController();
   final nameFocus = FocusNode();
 
-final locationController = TextEditingController();
+  final locationController = TextEditingController();
   final locationFocus = FocusNode();
 
 
@@ -24,7 +26,6 @@ final locationController = TextEditingController();
 
 
   final _imagePicker = ImagePicker();
-  RxBool isLoading = false.obs;
   final Rx<File?> selectedImg = Rx(null);
 
   Future<void> pickImg() async {
@@ -35,4 +36,9 @@ final locationController = TextEditingController();
       CustomSnackBar.error('Image not selected');
     }
   }
+
+
+
+
+
 }

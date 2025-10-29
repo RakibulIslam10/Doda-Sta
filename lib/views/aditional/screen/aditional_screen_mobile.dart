@@ -274,9 +274,6 @@ class AditionalScreenMobile extends GetView<AditionalController> {
                     PrimaryButtonWidget(
                       title: 'Registration',
                       onPressed: () {
-                        final availabilityData = controller
-                            .getAvailabilityData();
-                        print('Availability Data: $availabilityData');
                         Get.offAllNamed(Routes.navigationScreen);
                       },
                     ),

@@ -28,4 +28,5 @@ class ChangePasswordController extends GetxController {
       confirmPassword: passConfirmController.text,
     );
   }
+
 }

@@ -22,11 +22,11 @@ class LoginController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    emailController.text = 'barenoj205@fanwn.com';
+    emailController.text = 'rakib10.devs@gmail.com';
     passwordController.text = '123456';
   }
 
-  RxBool isLoading = false.obs;
+  RxBool isLoading = true.obs;
 
   // login APi
   loginProcess() async {

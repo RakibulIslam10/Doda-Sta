@@ -72,11 +72,8 @@ class _DropdownWidgetState extends State<CustomDropDownWidget> {
                 fontSize: width * 0.04,
               ),
               items: widget.items
-                  .map(
-                    (item) => DropdownMenuItem(
-                      value: item,
-                      child: TextWidget(item, fontSize: Dimensions.titleSmall),
-                    ),
+                  .map((item) => DropdownMenuItem(value: item, child: TextWidget(item, fontSize: Dimensions.titleSmall),
+              ),
                   )
                   .toList(),
               onChanged: (value) {

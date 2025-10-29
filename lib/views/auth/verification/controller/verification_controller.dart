@@ -15,6 +15,7 @@ class VerificationController extends GetxController {
       email: Get.find<ForgotController>().emailController.text,
     );
   }
+
   resendOtpProcess() async {
     return await AuthService.resendOtpService(
       isLoading: isLoadingResend,

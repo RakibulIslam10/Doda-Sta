@@ -87,7 +87,6 @@ class WelcomeScreenMobile extends GetView<WelcomeController> {
               //   color: CustomColors.primary,
               //   fontSize: Dimensions.titleLarge * 0.9,
               // ),
-
               GestureDetector(
                 onTap: () => Get.offAllNamed(Routes.loginScreen),
 
@@ -134,7 +133,7 @@ class WelcomeScreenMobile extends GetView<WelcomeController> {
 
               GestureDetector(
                 onTap: () {
-                  Get.offAllNamed(Routes.vendor_phoneScreen);
+                  Get.offAllNamed(Routes.registerScreen);
                   AppStorage.save(isVendor: true);
                 },
                 child: AnimatedContainer(

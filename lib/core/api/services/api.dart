@@ -8,7 +8,6 @@ import '../../utils/app_storage.dart';
 import '../../utils/basic_import.dart';
 
 class ApiRequest {
-
   /// ✅ Header Generator
   static Future<Map<String, String>> _bearerHeaderInfo() async {
     final token = AppStorage.token;

@@ -124,7 +124,7 @@ class AuthService {
       'newPassword': newPassword,
       'confirmPassword': confirmPassword,
     };
-    return await ApiRequest.post(
+    return await ApiRequest.patch(
       fromJson: BasicSuccessModel.fromJson,
       endPoint: ApiEndPoints.changePassword,
       isLoading: isLoading,

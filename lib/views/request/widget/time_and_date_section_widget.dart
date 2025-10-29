@@ -8,74 +8,77 @@ class TimeAndDateSectionWidget extends GetView<RequestController> {
     return Column(
       crossAxisAlignment: crossStart,
       children: [
-        MultiSelectDropDownWidget(
-          items: ["Apple", "Banana", "Mango", "Orange", "Grapes"],
-          label: "Tell us the type of service",
-          onChanged: (List<String> p1) {},
-        ),
-        Space.height.betweenInputBox,
-
         TextWidget(
-          fontSize: Dimensions.titleSmall,
-
           'Preferred Date and Time',
-          color: CustomColors.blackColor,
-          // fontWeight: FontWeight.bold,
-          padding: Dimensions.heightSize.edgeBottom * 0.4,
+          fontSize: Dimensions.titleSmall,
+          fontWeight: FontWeight.w500,
+          color: CustomColors.blackColor.withAlpha(888),
         ),
-        Row(
-          children: [
-            Expanded(
-              child: DatePickerWidget(
-                hint: "Select date",
-                label: "Start Date",
-                onDateSelected: (selected) {
-                  controller.startDate.value = DateFormat(
-                    'dd-MM-yyy',
-                  ).format(selected);
-                },
+        SizedBox(height: Dimensions.spaceBetweenInputTitleAndBox * 0.6),
+
+        // ---------------- DATE SECTION ----------------
+        Obx(() => Row(
+            children: [
+              Expanded(
+                child: DatePickerWidget(
+                  hint: "Select date",
+                  label: "Start Date",
+                  minDate: DateTime.now(),
+                  initialDate: controller.startDateTime.value,
+                  onDateSelected: (selected) {
+                    controller.startDateTime.value = selected;
+                    if (controller.endDateTime.value != null && controller.endDateTime.value!.isBefore(selected)) {
+                      controller.endDateTime.value = null;
+                    }
+                  },
+                ),
               ),
-            ),
-            Space.width.v10,
-            Expanded(
-              child: DatePickerWidget(
-                hint: "Select date",
-                label: "End Date",
-                onDateSelected: (selected) {
-                  controller.endDate.value = DateFormat(
-                    'dd-MM-yyy',
-                  ).format(selected);
-                },
+              Space.width.v10,
+              Expanded(
+                child: DatePickerWidget(
+                  hint: "Select date",
+                  label: "End Date",
+                  minDate: controller.startDateTime.value,
+                  initialDate: controller.endDateTime.value,
+                  onDateSelected: (selected) {
+                    controller.endDateTime.value = selected;
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
+
         Space.height.betweenInputBox,
-        // TextWidget(
-        //   'Service Date Range',
-        //   fontSize: Dimensions.titleSmall,
-        //   padding: Dimensions.heightSize.edgeBottom * 0.4,
-        // ),
-        Row(
-          children: [
-            Expanded(
-              child: TimePickerWidget(
-                label: 'Start Time',
-                onTimeSelected: (time) {
-                  controller.startedTime.value = time;
-                },
+        Obx((){
+          final time = controller.startDateTime.value;
+          final formattedTime = time != null ? DateFormat('hh:mm a').format(
+            DateTime(2025, 1, 1, time.hour, time.minute),
+          ) : null;
+
+          final time1 = controller.endDateTime.value;
+          final formattedTime1 = time1 != null ? DateFormat('hh:mm a').format(
+            DateTime(2025, 1, 1, time1.hour, time1.minute),
+          ) : null;
+
+          return Row(
+            children: [
+              Expanded(
+                child: TimePickerWidget(
+                  label: 'Start Time',
+                  text: formattedTime,
+                ),
               ),
-            ),
-            Space.width.v10,
-            Expanded(
-              child: TimePickerWidget(
-                label: 'End Time',
-                onTimeSelected: (time) {
-                  controller.endTime.value = time;
-                },
+              Space.width.v10,
+              Expanded(
+                child: TimePickerWidget(
+                  label: 'End Time',
+                  text: formattedTime1,
+                ),
               ),
-            ),
-          ],
+            ],
+          );
+        },
         ),
       ],
     );

@@ -4,6 +4,7 @@ import 'package:doda_work/core/utils/extensions.dart';
 import 'package:doda_work/widgets/auth_app_bar.dart';
 import '../../request/screen/request_screen.dart';
 import '../controller/summary_controller.dart';
+import '../model/summary_model.dart';
 
 part 'summary_screen_mobile.dart';
 part '../widget/buttons_section_widget.dart';

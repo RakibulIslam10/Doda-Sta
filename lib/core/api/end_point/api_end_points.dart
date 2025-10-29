@@ -34,4 +34,8 @@ class ApiEndPoints {
   static const bookMark = 'home/save';
   static const bookMarkData = 'home/saved';
   static const userProgress = 'user-progress/continue';
+
+  static final categoryAll = '${baseUrl}category/active-categories';
+  static serviceCreate() => '${baseUrl}service-requests/create';
+  static myService({required String status,required int page}) => '${baseUrl}service-requests/my-requests?status=$status&page=$page&limit=20';
 }

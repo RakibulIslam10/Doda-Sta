@@ -8,13 +8,6 @@ void main() async {
   await Initial.init();
   // Get.put(Networkcon());
 
-  SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle(
-      statusBarColor: Colors.white,
-      statusBarIconBrightness: Brightness.dark,
-      statusBarBrightness: Brightness.light,
-    ),
-  );
   runApp(const MyApp());
 }
 
@@ -30,7 +23,7 @@ class MyApp extends StatelessWidget {
       designSize: const Size(375, 812),
       builder: (_, child) => GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: Routes.splashScreen,
+        initialRoute: Routes.navigationScreen,
         title: Strings.appName,
         theme: Themes.light,
         darkTheme: Themes.dark,

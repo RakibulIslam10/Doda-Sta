@@ -1,33 +1,41 @@
 import 'package:doda_work/core/utils/basic_import.dart';
 import 'package:doda_work/core/utils/extensions.dart';
 
-class CustomDropDownWidget extends StatefulWidget {
+class CustomDropDownWidget<T> extends StatefulWidget {
   final String hint;
   final String? label;
-  final List<String> items;
-  final String? initialValue;
-  final Function(String) onChanged;
+  final List<DropdownMenuItem<T>> items;
+  final T? value;
+  final ValueChanged<T?> onChanged;
 
   const CustomDropDownWidget({
     super.key,
     this.hint = "Select Option",
     required this.items,
-    this.initialValue,
+    this.value,
     required this.onChanged,
     this.label,
   });
 
   @override
-  State<CustomDropDownWidget> createState() => _DropdownWidgetState();
+  State<CustomDropDownWidget<T>> createState() => _CustomDropDownWidgetState<T>();
 }
 
-class _DropdownWidgetState extends State<CustomDropDownWidget> {
-  String? _selectedValue;
+class _CustomDropDownWidgetState<T> extends State<CustomDropDownWidget<T>> {
+  T? _selectedValue;
 
   @override
   void initState() {
     super.initState();
-    _selectedValue = widget.initialValue;
+    _selectedValue = widget.value;
+  }
+
+  @override
+  void didUpdateWidget(covariant CustomDropDownWidget<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.value != widget.value) {
+      _selectedValue = widget.value;
+    }
   }
 
   @override
@@ -37,15 +45,16 @@ class _DropdownWidgetState extends State<CustomDropDownWidget> {
     return Column(
       crossAxisAlignment: crossStart,
       children: [
-        TextWidget(
-          padding: EdgeInsetsGeometry.only(
-            bottom: Dimensions.spaceBetweenInputTitleAndBox * 0.6,
+        if (widget.label != null)
+          TextWidget(
+            padding: EdgeInsetsGeometry.only(
+              bottom: Dimensions.spaceBetweenInputTitleAndBox * 0.6,
+            ),
+            widget.label!,
+            fontSize: Dimensions.titleSmall,
+            fontWeight: FontWeight.w500,
+            color: CustomColors.blackColor.withAlpha(888),
           ),
-          widget.label ?? "Select option",
-          fontSize: Dimensions.titleSmall,
-          fontWeight: FontWeight.w500,
-          color: CustomColors.blackColor.withAlpha(888),
-        ),
         Container(
           padding: Dimensions.defaultHorizontalSize.edgeHorizontal * 0.5,
           height: Dimensions.inputBoxHeight * 0.7,
@@ -59,7 +68,7 @@ class _DropdownWidgetState extends State<CustomDropDownWidget> {
             borderRadius: BorderRadius.circular(Dimensions.radius),
           ),
           child: DropdownButtonHideUnderline(
-            child: DropdownButton<String>(
+            child: DropdownButton<T>(
               dropdownColor: CustomColors.whiteColor,
               iconEnabledColor: _selectedValue == null
                   ? CustomColors.disableColor
@@ -71,17 +80,10 @@ class _DropdownWidgetState extends State<CustomDropDownWidget> {
                 color: Colors.grey,
                 fontSize: width * 0.04,
               ),
-              items: widget.items
-                  .map(
-                    (item) => DropdownMenuItem(
-                      value: item,
-                      child: TextWidget(item, fontSize: Dimensions.titleSmall),
-                    ),
-                  )
-                  .toList(),
+              items: widget.items,
               onChanged: (value) {
                 setState(() => _selectedValue = value);
-                widget.onChanged(value!);
+                widget.onChanged(value);
               },
             ),
           ),

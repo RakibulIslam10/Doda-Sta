@@ -6,6 +6,7 @@ class CustomStatusCardWidget extends StatelessWidget {
   final String category;
   final String subCategory;
   final String address;
+  final String? image;
   final String status;
   final void Function()? onTap;
 
@@ -15,6 +16,7 @@ class CustomStatusCardWidget extends StatelessWidget {
     required this.requestId,
     required this.category,
     required this.subCategory,
+    this.image,
     required this.address,
     required this.status,
     this.onTap,
@@ -22,48 +24,38 @@ class CustomStatusCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Responsive sizing
     final double cardHeight = MediaQuery.of(context).size.height * 0.12;
     final double imageWidth = MediaQuery.of(context).size.width * 0.28;
+    final url = "${ApiEndPoints.baseUrl}$image";
+    final fixedUrl = url.replaceAll(r'\', '/');
 
-    return InkWell(
-      onTap: onTap ?? () => Get.toNamed(Routes.summaryScreen),
+    return GestureDetector(
+      onTap: onTap,
       child: Container(
         margin: EdgeInsets.only(
-          bottom: Dimensions.verticalSize * 0.5,
-          right: Dimensions.defaultHorizontalSize,
-          left: Dimensions.defaultHorizontalSize,
+          bottom: 8,
+          right: 8,
+          left: 8,
+          top: 6,
         ),
-        height: cardHeight,
         decoration: BoxDecoration(
           color: Colors.white,
           border: Border.all(color: Colors.grey.withAlpha(555)),
           borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05), // shadow color
-              spreadRadius: 1, // how wide the shadow spreads
-              blurRadius: 6, // softness of the shadow
-              offset: const Offset(0, 3), // position of shadow (x, y)
-            ),
-          ],
         ),
-
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image
             ClipRRect(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(Dimensions.radius * 0.8),
                 bottomLeft: Radius.circular(Dimensions.radius * 0.8),
               ),
               child: CachedNetworkImage(
-                imageUrl: 'https://picsum.photos/200/300?random=${index + 1}',
+                imageUrl: image != null? fixedUrl : 'https://picsum.photos/200/300?random=${index + 1}',
                 width: imageWidth,
                 height: cardHeight,
-                placeholder: (context, url) =>
-                    Container(color: Colors.grey.shade300),
+                placeholder: (context, url) => Container(color: Colors.grey.shade300),
                 errorWidget: (context, url, error) => Container(
                   color: Colors.grey.shade400,
                   child: const Icon(
@@ -75,89 +67,82 @@ class CustomStatusCardWidget extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-
             Space.width.v10,
-
-            // Text + status
             Expanded(
-              child: Row(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Text part
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Space.height.v10,
-                        Wrap(
-                          children: [
-                            TextWidget(
-                              'Request ID: ',
-                              color: CustomColors.primary,
-                              fontSize: Dimensions.titleSmall * 0.85,
-                            ),
-                            TextWidget(
-                              requestId,
-                              fontSize: Dimensions.titleSmall * 0.9,
-                            ),
-                          ],
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: Dimensions.defaultHorizontalSize * 0.3,
+                          vertical: Dimensions.verticalSize * 0.1,
                         ),
-                        TextWidget(
-                          'Category: $category',
-                          maxLines: 1,
-                          textOverflow: TextOverflow.ellipsis,
-                          fontSize: Dimensions.titleSmall * 0.9,
+                        decoration: BoxDecoration(
+                          color: CustomColors.primary,
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(Dimensions.radius * 0.4),
+                            bottomRight: Radius.circular(Dimensions.radius * 0.4),
+                            bottomLeft: Radius.circular(Dimensions.radius * 0.4),
+                          ),
                         ),
-                        TextWidget(
-                          'Sub Category: $subCategory',
-                          maxLines: 1,
-                          textOverflow: TextOverflow.ellipsis,
-                          fontSize: Dimensions.titleSmall * 0.9,
+                        child: TextWidget(
+                          status,
+                          fontSize: Dimensions.titleSmall * 0.8,
+                          color: CustomColors.whiteColor,
+                          fontWeight: FontWeight.w500,
                         ),
-                        Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.location_pin,
-                              color: CustomColors.primary,
-                              size: Dimensions.iconSizeSmall * 1.6,
-                            ),
-                            SizedBox(width: Dimensions.horizontalSize * 0.3),
-                            TextWidget(
-                              address,
-                              color: CustomColors.primary,
-                              maxLines: 1,
-                              textOverflow: TextOverflow.ellipsis,
-                              fontSize: Dimensions.titleSmall * 0.9,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Status badge
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: Dimensions.defaultHorizontalSize * 0.3,
-                      vertical: Dimensions.verticalSize * 0.1,
-                    ),
-                    decoration: BoxDecoration(
-                      color: CustomColors.primary,
-                      borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(Dimensions.radius * 0.4),
-                        bottomRight: Radius.circular(Dimensions.radius * 0.4),
-                        bottomLeft: Radius.circular(Dimensions.radius * 0.4),
                       ),
-                    ),
-                    child: TextWidget(
-                      status,
-                      fontSize: Dimensions.titleSmall * 0.8,
-                      color: CustomColors.whiteColor,
-                      fontWeight: FontWeight.w500,
-                    ),
+                    ],
                   ),
+                  Row(
+                    children: [
+                      TextWidget(
+                        'Request ID: ',
+                        color: CustomColors.primary,
+                        fontSize: Dimensions.titleSmall * 0.85,
+                      ),
+                      Flexible(
+                        child: TextWidget(
+                          requestId,
+                          maxLines: 1,
+                          fontSize: Dimensions.titleSmall * 0.9,
+                        ),
+                      ),
+                    ],
+                  ),
+                  TextWidget(
+                    'Category: $category',
+                    maxLines: 1,
+                    textOverflow: TextOverflow.ellipsis,
+                    fontSize: Dimensions.titleSmall * 0.9,
+                  ),
+                  TextWidget(
+                    'Sub Category: $subCategory',
+                    maxLines: 1,
+                    textOverflow: TextOverflow.ellipsis,
+                    fontSize: Dimensions.titleSmall * 0.9,
+                  ),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.location_pin,
+                        color: CustomColors.primary,
+                        size: Dimensions.iconSizeSmall * 1.6,
+                      ),
+                      Flexible(
+                        child: TextWidget(
+                          address,
+                          color: CustomColors.primary,
+                          maxLines: 1,
+                          textOverflow: TextOverflow.ellipsis,
+                          fontSize: Dimensions.titleSmall * 0.9,
+                        ),
+                      ),
+                    ],
+                  )
                 ],
               ),
             ),

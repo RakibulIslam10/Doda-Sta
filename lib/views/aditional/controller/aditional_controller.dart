@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:doda_work/core/api/services/api.dart';
 import 'package:doda_work/core/utils/basic_import.dart';
+import 'package:doda_work/views/aditional/model/service_category_model.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AditionalController extends GetxController {
@@ -13,24 +15,40 @@ class AditionalController extends GetxController {
     'Thursday',
     'Friday',
   ];
-  RxList<File> photos = <File>[].obs;  // all picked photos
+
+  RxList<File> photos = <File>[].obs;
 
   final ImagePicker _picker = ImagePicker();
 
-// pick new photo
+  // pick new photo
   Future<void> pickImage() async {
-    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    final XFile? pickedFile = await _picker.pickImage(
+      source: ImageSource.gallery,
+    );
     if (pickedFile != null) {
       photos.add(File(pickedFile.path));
     }
   }
-  RxList<String> selectedDay = <String>[].obs;
+
+  // ✅ Currently editing day
+  RxString currentEditingDay = ''.obs;
+
+  // ✅ Check if day is selected
+  bool isDaySelected(String day) {
+    return availabilityMap.containsKey(day);
+  }
 
   void selectTap(int index) {
-    if (selectedDay.contains(dayList[index])) {
-      selectedDay.remove(dayList[index]);
+    final day = dayList[index];
+    currentEditingDay.value = day;
+
+    // ✅ Load existing time if available
+    if (availabilityMap.containsKey(day)) {
+      startedTime.value = availabilityMap[day]!["startTime"]!;
+      endTime.value = availabilityMap[day]!["endTime"]!;
     } else {
-      selectedDay.add(dayList[index]);
+      startedTime.value = '';
+      endTime.value = '';
     }
   }
 
@@ -48,7 +66,6 @@ class AditionalController extends GetxController {
   final companyNameController = TextEditingController();
   final linkController = TextEditingController();
 
-
   var selectedValues = <String>[].obs;
 
   void toggleValue(String value) {
@@ -63,5 +80,82 @@ class AditionalController extends GetxController {
     selectedValues.clear();
   }
 
+  @override
+  void onInit() {
+    super.onInit();
+    getServiceCategory();
+  }
+
+  RxList selectedServiceList = [].obs;
+
+  // get service category api
+  RxBool isLoading = false.obs;
+
+  List<ServiceCategory> serviceCategoryList = [];
+
+  Future<ServiceCategoryModel> getServiceCategory() async {
+    return ApiRequest.get(
+      fromJson: ServiceCategoryModel.fromJson,
+      endPoint: ApiEndPoints.serviceCategory,
+      isLoading: isLoading,
+      onSuccess: (result) {
+        serviceCategoryList.addAll(result.category);
+        print(serviceCategoryList.length);
+      },
+    );
+  }
+
+  // ✅ Store time for each day separately
+  RxMap<String, Map<String, String>> availabilityMap = <String, Map<String, String>>{}.obs;
+
+  // ✅ Save time for current editing day
+  void saveTimeForCurrentDay() {
+    if (currentEditingDay.isEmpty) return;
+    if (startedTime.value.isEmpty || endTime.value.isEmpty) return;
+
+    availabilityMap[currentEditingDay.value] = {
+      "startTime": startedTime.value,
+      "endTime": endTime.value,
+    };
+    availabilityMap.refresh();
+
+    print('Saved for ${currentEditingDay.value}: ${startedTime.value} - ${endTime.value}');
+  }
+
+  // ✅ Remove day availability
+  void removeDayAvailability(String day) {
+    availabilityMap.remove(day);
+    availabilityMap.refresh();
+
+    if (currentEditingDay.value == day) {
+      currentEditingDay.value = '';
+      startedTime.value = '';
+      endTime.value = '';
+    }
+  }
+
+  // ✅ Get final availability data (without isAvailable)
+  List<Map<String, dynamic>> getAvailabilityData() {
+    return availabilityMap.entries.map((entry) {
+      return {
+        "day": entry.key,
+        "startTime": entry.value["startTime"],
+        "endTime": entry.value["endTime"],
+      };
+    }).toList();
+  }
+
+  // // ✅ Get final availability data in required JSON format
+  // Map<String, dynamic> getAvailabilityData() {
+  //   return {
+  //     "availability": availabilityMap.entries.map((entry) {
+  //       return {
+  //         "day": entry.key,
+  //         "startTime": entry.value["startTime"],
+  //         "endTime": entry.value["endTime"],
+  //       };
+  //     }).toList()
+  //   };
+  // }
 
 }

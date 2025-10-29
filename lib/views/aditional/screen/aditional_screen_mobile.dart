@@ -5,19 +5,13 @@ class AditionalScreenMobile extends GetView<AditionalController> {
 
   @override
   Widget build(BuildContext context) {
+    print(jsonEncode(controller.getAvailabilityData()));
     return Scaffold(
       appBar: CommonAppBar(title: 'Service Provider registration'),
       body: SafeArea(
         child: ListView(
           padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
           children: [
-            // Add your widgets here
-            // Space.height.betweenInputBox,
-            // PrimaryInputFieldWidget(
-            //   controller: controller.companyNameController,
-            //   hintText: 'Enter your company name',
-            //   label: 'Company Name',
-            // ),
             Space.height.betweenInputBox,
             PrimaryInputFieldWidget(
               controller: controller.linkController,
@@ -27,61 +21,18 @@ class AditionalScreenMobile extends GetView<AditionalController> {
             Space.height.betweenInputBox,
 
             MultiSelectDropDownWidget(
-              items: ["Apple", "Banana", "Mango", "Orange", "Grapes"],
-              label: "Service Category", onChanged: (List<String> p1) { },
+              items: controller.serviceCategoryList.map((e) => e.name).toList(),
+              label: "Service Category",
+              onChanged: (List<String> p1) {
+                controller.selectedServiceList.add(p1);
+              },
             ),
-
-            //
-            // CustomDropDownWidget(
-            //   hint: 'Select Category',
-            //   label: "Service Category",
-            //   items: ["Pending", "Ongoing", "Completed"],
-            //   onChanged: (value) {
-            //     controller.selectedCategory.value = value;
-            //   },
-            // ),
-            // Space.height.betweenInputBox,
-            // CustomDropDownWidget(
-            //   hint: 'Select Sub Category',
-            //   label: "Sub Category",
-            //   items: ["Pending", "Ongoing", "Completed"],
-            //   onChanged: (value) {
-            //     controller.selectedSubCategory.value = value;
-            //   },
-            // ),
 
             Space.height.betweenInputBox,
             TextWidget(
-              'Service Date Range',
+              'Select day and set time',
               fontSize: Dimensions.titleSmall,
               padding: Dimensions.heightSize.edgeBottom * 0.4,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: TimePickerWidget(
-                    label: 'Start Time',
-                    onTimeSelected: (time) {
-                      controller.startedTime.value = time;
-                    },
-                  ),
-                ),
-                Space.width.v10,
-                Expanded(
-                  child: TimePickerWidget(
-                    label: 'End Time',
-                    onTimeSelected: (time) {
-                      controller.endTime.value = time;
-                    },
-                  ),
-                ),
-              ],
-            ),
-            TextWidget(
-              'Select your availability',
-              padding: EdgeInsetsGeometry.symmetric(
-                vertical: Dimensions.verticalSize * 0.5,
-              ),
             ),
 
             Obx(
@@ -90,12 +41,12 @@ class AditionalScreenMobile extends GetView<AditionalController> {
                 runSpacing: Dimensions.heightSize * 0.5,
                 children: List.generate(controller.dayList.length, (index) {
                   final day = controller.dayList[index];
-                  final isSelected = controller.selectedDay.contains(day);
+                  final isEditing = controller.currentEditingDay.value == day;
+                  final hasTime = controller.isDaySelected(day);
 
                   return InkWell(
                     onTap: () {
                       controller.selectTap(index);
-                      print(controller.selectedDay);
                     },
                     child: Container(
                       padding: EdgeInsets.symmetric(
@@ -103,28 +54,136 @@ class AditionalScreenMobile extends GetView<AditionalController> {
                         vertical: Dimensions.verticalSize * 0.2,
                       ),
                       decoration: BoxDecoration(
-                        color: isSelected
+                        color: isEditing
                             ? CustomColors
-                                  .primary // ✅ selected হলে
+                                  .primary // Currently editing
+                            : hasTime
+                            ? CustomColors.primary.withOpacity(0.5) // Has time
                             : CustomColors.primary.withOpacity(0.2),
-                        // ❌ not selected হলে
+                        // No time
                         borderRadius: BorderRadius.circular(
                           Dimensions.radius * 0.6,
                         ),
                       ),
-                      child: TextWidget(
-                        day,
-                        color: isSelected
-                            ? CustomColors
-                                  .whiteColor
-                            : CustomColors.primary,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextWidget(
+                            day,
+                            color: isEditing || hasTime
+                                ? CustomColors.whiteColor
+                                : CustomColors.primary,
+                          ),
+                          // ✅ Show remove icon if has time
+                          if (hasTime && !isEditing) ...[
+                            SizedBox(width: 4),
+                            GestureDetector(
+                              onTap: () =>
+                                  controller.removeDayAvailability(day),
+                              child: Icon(
+                                Icons.close,
+                                size: 16,
+                                color: CustomColors.whiteColor,
+                              ),
+                            ),
+                          ],
+                        ],
                       ),
                     ),
                   );
                 }),
               ),
             ),
+
             Space.height.betweenInputBox,
+
+            // ✅ Show time pickers only when a day is selected
+            Obx(() {
+              if (controller.currentEditingDay.isEmpty) {
+                return SizedBox.shrink();
+              }
+
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextWidget(
+                    'Set time for ${controller.currentEditingDay.value}',
+                    fontSize: Dimensions.titleSmall,
+                    padding: Dimensions.heightSize.edgeBottom * 0.4,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TimePickerWidget(
+                          label: 'Start Time',
+                          onTimeSelected: (time) {
+                            controller.startedTime.value = time;
+                            controller.saveTimeForCurrentDay(); // ✅ Auto save
+                          },
+                        ),
+                      ),
+                      Space.width.v10,
+                      Expanded(
+                        child: TimePickerWidget(
+                          label: 'End Time',
+                          onTimeSelected: (time) {
+                            controller.endTime.value = time;
+                            controller.saveTimeForCurrentDay(); // ✅ Auto save
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  Space.height.betweenInputBox,
+                ],
+              );
+            }),
+
+            // ✅ Show saved availability
+            Obx(() {
+              final availableDays = controller.getAvailabilityData();
+              if (availableDays.isEmpty) return SizedBox.shrink();
+
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextWidget(
+                    'Your Availability:',
+                    fontWeight: FontWeight.w600,
+                    fontSize: Dimensions.titleSmall,
+                  ),
+                  SizedBox(height: 8),
+                  ...availableDays.map(
+                    (item) => Padding(
+                      padding: EdgeInsets.symmetric(vertical: 4),
+                      child: Row(
+                        children: [
+                          TextWidget(
+                            '${item['day']}: ',
+                            fontWeight: FontWeight.w500,
+                          ),
+                          TextWidget(
+                            '${item['startTime']} - ${item['endTime']}',
+                          ),
+                          Spacer(),
+                          IconButton(
+                            icon: Icon(
+                              Icons.delete_outline,
+                              size: 20,
+                              color: Colors.red,
+                            ),
+                            onPressed: () =>
+                                controller.removeDayAvailability(item['day']),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Space.height.betweenInputBox,
+                ],
+              );
+            }),
+
             PrimaryInputFieldWidget(
               controller: controller.serviceLocationController,
               hintText: 'Enter Register Address',
@@ -142,7 +201,6 @@ class AditionalScreenMobile extends GetView<AditionalController> {
               'license & certificate',
               fontWeight: FontWeight.w500,
               fontSize: Dimensions.titleMedium,
-
               padding: Dimensions.heightSize.edgeBottom,
             ),
 
@@ -203,7 +261,11 @@ class AditionalScreenMobile extends GetView<AditionalController> {
 
             PrimaryButtonWidget(
               title: 'Registration',
-              onPressed: () => Get.offAllNamed(Routes.navigationScreen),
+              onPressed: () {
+                final availabilityData = controller.getAvailabilityData();
+                print('Availability Data: $availabilityData');
+                Get.offAllNamed(Routes.navigationScreen);
+              },
             ),
           ],
         ),

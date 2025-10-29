@@ -22,6 +22,7 @@ class ApiEndPoints {
   //category
 
   static const categoryPreview = 'categories/books';
+  static const serviceCategory = 'category/active-categories';
   static const getAllAudioBook = 'audio-books/get';
   static const faqGet = 'manage/get-faq';
 

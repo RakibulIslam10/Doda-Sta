@@ -146,22 +146,22 @@ class AditionalScreenMobile extends GetView<AditionalController> {
                               Expanded(
                                 child: TimePickerWidget(
                                   label: 'Start Time',
-                                  onTimeSelected: (time) {
+                                  /*onTimeSelected: (time) {
                                     controller.startedTime.value = time;
                                     controller
                                         .saveTimeForCurrentDay(); // ✅ Auto save
-                                  },
+                                  },*/
                                 ),
                               ),
                               Space.width.v10,
                               Expanded(
                                 child: TimePickerWidget(
                                   label: 'End Time',
-                                  onTimeSelected: (time) {
+                                  /*onTimeSelected: (time) {
                                     controller.endTime.value = time;
                                     controller
                                         .saveTimeForCurrentDay(); // ✅ Auto save
-                                  },
+                                  },*/
                                 ),
                               ),
                             ],

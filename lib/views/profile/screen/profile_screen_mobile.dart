@@ -57,6 +57,21 @@ class ProfileScreenMobile extends GetView<ProfileController> {
                       ProfileTopHeaderWidgetView(),
                       Space.height.v20,
                       ProfileCardSectionWidgetView(),
+                    ] else ...[
+                      Space.height.v40,
+                      Space.height.v40,
+                      Space.height.v40,
+                      Space.height.v40,
+                      EmptyDataWidget(),
+                      Space.height.v5,
+
+                      Center(
+                        child: TextWidget(
+                          "Please wait for approval",
+                          color: CustomColors.grayShade,
+                          fontSize: Dimensions.titleSmall,
+                        ),
+                      ),
                     ],
                   ],
                 ),

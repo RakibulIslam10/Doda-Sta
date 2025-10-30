@@ -11,7 +11,7 @@ class ProfileController extends GetxController {
 
   // Profile get api
   RxBool isLoading = false.obs;
-  late UserProfileModel userProfileModel;
+  UserProfileModel? userProfileModel;
 
   Future<UserProfileModel> getUserProfile() async {
     return await ApiRequest.get(

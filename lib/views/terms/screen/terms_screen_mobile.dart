@@ -1,4 +1,11 @@
-part of 'terms_screen.dart';
+import 'package:doda_work/core/utils/extensions.dart';
+import 'package:doda_work/widgets/auth_app_bar.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:get/get.dart';
+import 'package:doda_work/core/utils/dimensions.dart'; // Ensure this import is correct
+import 'package:doda_work/views/terms/controller/terms_controller.dart'; // Ensure the correct path is used
+
 
 class TermsScreenMobile extends GetView<TermsController> {
   const TermsScreenMobile({super.key});
@@ -9,11 +16,50 @@ class TermsScreenMobile extends GetView<TermsController> {
       appBar: CommonAppBar(title: 'Terms & Condition'),
 
       body: SafeArea(
-        child: ListView(
-          padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
-          children: [],
-        ),
+        child: Obx(() {
+          if (controller.isLoading.value) {
+            return Center(child: CircularProgressIndicator());
+          }
+
+          if (controller.termsData.value.data?.description != null) {
+            return ListView(
+              padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    'Terms & Conditions',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Html(
+                    data: controller.termsData.value.data?.description ?? "",  // Use the HTML content from the API response
+                    style: {
+                      "h1": Style(
+                        fontSize: FontSize(24),  // Adjust the font size of h1
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                      "u": Style(
+                        textDecoration: TextDecoration.underline,
+                      ),
+                    },
+                  ),
+                ),
+              ],
+            );
+          }
+
+          return Center(child: Text('No terms available.'));
+        }),
       ),
     );
   }
 }
+ 

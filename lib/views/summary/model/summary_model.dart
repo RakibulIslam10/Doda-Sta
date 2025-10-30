@@ -1,4 +1,5 @@
 class SummaryModel {
+  final bool isUser;
   final String? id;
   final String? customerName;
   final String? customerPhone;
@@ -14,7 +15,7 @@ class SummaryModel {
   final num? latitude;
   final num? longitude;
   final String? description;
-  final List<dynamic>? attachments;
+  final List<String?>? attachments;
   final String? status;
   final num? leadFee;
   final String? paymentStatus;
@@ -25,6 +26,7 @@ class SummaryModel {
   final String? requestId;
 
   SummaryModel({
+    required this.isUser,
     this.id,
     this.customerName,
     this.customerPhone,

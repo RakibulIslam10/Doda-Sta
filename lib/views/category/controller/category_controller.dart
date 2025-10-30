@@ -5,13 +5,17 @@ import 'package:get/get.dart';
 import '../model/all_category_model.dart';
 
 class CategoryController extends GetxController {
-  var expandedIndex = (-1).obs;
+  final RxString expandedCategoryId = ''.obs;
 
-  void toggleExpand(int index) {
-    if (expandedIndex.value == index) {
-      expandedIndex.value = -1;
+  void toggleExpand(String categoryId) {
+    print(categoryId);
+    if (expandedCategoryId.value == categoryId) {
+      expandedCategoryId.value = '';
+      print("Empty");
     } else {
-      expandedIndex.value = index;
+      print("Assign"
+      );
+      expandedCategoryId.value = categoryId;
     }
   }
 

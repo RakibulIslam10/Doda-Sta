@@ -54,7 +54,6 @@ class HomeController extends GetxController {
       });
     });
 
-    // Optionally, fetch first tab immediately
     fetch("PENDING", 1);
 
     super.onInit();

@@ -7,7 +7,7 @@ class ProfileTopHeaderWidgetView extends GetView<ProfileController> {
   Widget build(BuildContext context) {
     final double imageWidth = MediaQuery.of(context).size.width * 0.28;
     final double cardHeight = MediaQuery.of(context).size.height * 0.12;
-    final profileInfo = controller.userProfileModel.data;
+    final profileInfo = controller.userProfileModel?.data;
     return Obx(
       () => Container(
         height: cardHeight,
@@ -66,7 +66,7 @@ class ProfileTopHeaderWidgetView extends GetView<ProfileController> {
                           padding: EdgeInsetsGeometry.only(
                             bottom: Dimensions.verticalSize * 0.2,
                           ),
-                          profileInfo.name,
+                          profileInfo?.name ?? "",
                           fontSize: Dimensions.titleSmall,
                           fontWeight: FontWeight.w500,
                         ),
@@ -81,7 +81,7 @@ class ProfileTopHeaderWidgetView extends GetView<ProfileController> {
                               ),
                             ),
                             TextWidget(
-                              controller.userProfileModel.data.email,
+                              controller.userProfileModel?.data.email ?? "",
                               fontSize: Dimensions.titleSmall * 0.8,
                               fontWeight: FontWeight.w500,
                               padding: EdgeInsetsGeometry.only(
@@ -103,7 +103,7 @@ class ProfileTopHeaderWidgetView extends GetView<ProfileController> {
                               ),
                               fontWeight: FontWeight.w500,
 
-                              controller.userProfileModel.data.phoneNumber,
+                              controller.userProfileModel?.data.phoneNumber ?? "",
                               fontSize: Dimensions.titleSmall * 0.8,
                             ),
                           ],

@@ -6,8 +6,8 @@ import '../../vendor_profile/model/provider_profile_model.dart';
 
 class ProfileController extends GetxController {
   RxBool isLoading = false.obs;
-  late UserProfileModel userProfileModel;
-  late ProviderProfileModel providerProfileModel;
+  UserProfileModel? userProfileModel;
+  ProviderProfileModel? providerProfileModel;
 
   @override
   void onInit() {
@@ -19,11 +19,11 @@ class ProfileController extends GetxController {
   Future<void> loadProfile() async {
     if (AppStorage.isVendor == true) {
       await getProviderProfile();
-      final providerInfo = providerProfileModel.data;
+      final providerInfo = providerProfileModel?.data;
 
     } else {
       await getUserProfile();
-      final profileInfo = userProfileModel.data;
+      final profileInfo = userProfileModel?.data;
     }
   }
 
@@ -43,7 +43,7 @@ class ProfileController extends GetxController {
   Future<void> getProviderProfile() async {
     await ApiRequest.get(
       fromJson: ProviderProfileModel.fromJson,
-      endPoint: ApiEndPoints.userProfile,
+      endPoint: ApiEndPoints.providerProfile,
       isLoading: isLoading,
       onSuccess: (result) {
         providerProfileModel = result;

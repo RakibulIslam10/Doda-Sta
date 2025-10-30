@@ -51,7 +51,6 @@ class ProfileScreenMobile extends GetView<ProfileController> {
                   padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
                   children: [
                     Space.height.betweenInputBox,
-                  // if(controller.providerProfileModel.data.isActive == true)
                     ProfileTopHeaderWidgetView(),
                     Space.height.v20,
                     ProfileCardSectionWidgetView(),

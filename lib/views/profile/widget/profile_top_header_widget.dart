@@ -35,9 +35,9 @@ class ProfileTopHeaderWidgetView extends GetView<ProfileController> {
                 bottomLeft: Radius.circular(Dimensions.radius * 0.8),
               ),
               child: CachedNetworkImage(
-                imageUrl: controller.userProfileModel.data.profileImage.isEmpty
+                imageUrl: (controller.userProfileModel?.data.profileImage.isEmpty ?? true)
                     ? 'https://picsum.photos/200/300?random='
-                    : "${ApiEndPoints.baseUrl}${controller.userProfileModel.data.profileImage}",
+                    : "${ApiEndPoints.baseUrl}${controller.userProfileModel?.data.profileImage}",
                 width: imageWidth * 0.85,
                 height: cardHeight,
                 fit: BoxFit.cover,
@@ -57,7 +57,7 @@ class ProfileTopHeaderWidgetView extends GetView<ProfileController> {
                   Space.height.v10,
                   TextWidget(
                     padding: EdgeInsets.only(bottom: Dimensions.verticalSize * 0.2),
-                    vendor ? controller.providerProfileModel.data.companyName : controller.userProfileModel.data.name,
+                    vendor ? controller.providerProfileModel?.data.companyName  ?? "": controller.userProfileModel?.data.name ?? "",
                     fontSize: Dimensions.titleSmall,
                     fontWeight: FontWeight.w500,
                   ),
@@ -65,7 +65,7 @@ class ProfileTopHeaderWidgetView extends GetView<ProfileController> {
                     children: [
                       TextWidget("@", color: CustomColors.primary, fontSize: Dimensions.titleSmall * 0.8),
                       TextWidget(
-                        vendor ? controller.providerProfileModel.data.authId.email : controller.userProfileModel.data.email,
+                        vendor ? controller.providerProfileModel?.data.authId.email ?? "" : controller.userProfileModel?.data.email ?? "",
 
                         fontSize: Dimensions.titleSmall * 0.8,
                         fontWeight: FontWeight.w500,
@@ -77,7 +77,7 @@ class ProfileTopHeaderWidgetView extends GetView<ProfileController> {
                       Icon(Icons.call, size: Dimensions.iconSizeSmall * 1.2, color: CustomColors.primary),
                       TextWidget(
                         padding: EdgeInsets.only(left: Dimensions.defaultHorizontalSize * 0.1),
-                        vendor ? '' : controller.userProfileModel.data.phoneNumber,
+                        vendor ? '' : controller.userProfileModel?.data.phoneNumber ?? "",
 
                         fontSize: Dimensions.titleSmall * 0.8,
                         fontWeight: FontWeight.w500,

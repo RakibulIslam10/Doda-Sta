@@ -78,8 +78,8 @@ class Data {
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     id: json["_id"],
     authId: AuthId.fromJson(json["authId"]),
-    companyName: json["companyName"],
-    website: json["website"],
+    companyName: json["companyName"] ?? "",
+    website: json["website"] ?? '',
     serviceCategories: List<ServiceCategory>.from(
       json["serviceCategories"].map((x) => ServiceCategory.fromJson(x)),
     ),

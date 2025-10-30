@@ -57,7 +57,7 @@ class FieldsSectionView extends GetView<RegisterController> {
             controller: controller.passConfirmController,
             focusNode: controller.confirmPasswordFocus,
             nextFocusNode: null,
-            confirmWith: controller.passwordController, // only checks matching
+            confirmWith: controller.passwordController,
           ),
         ],
       ),

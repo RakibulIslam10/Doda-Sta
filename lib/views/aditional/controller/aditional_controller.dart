@@ -4,6 +4,7 @@ import 'package:doda_work/core/api/services/api.dart';
 import 'package:doda_work/core/utils/basic_import.dart';
 import 'package:doda_work/views/aditional/model/provider_register_model.dart';
 import 'package:doda_work/views/aditional/model/service_category_model.dart';
+import 'package:doda_work/views/auth/register/controller/register_controller.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -165,7 +166,7 @@ class AditionalController extends GetxController {
       isLoading: providerRegIsLoading,
       files: {},
       body: {
-        "companyName": companyNameController.text,
+        "companyName": Get.put(RegisterController().nameController.text),
         "website": linkController.text,
         "serviceCategories": selectedServiceList ?? [],
         "serviceLocation": selectedAddress.value,

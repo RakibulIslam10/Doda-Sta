@@ -469,7 +469,6 @@ class ApiRequest {
     }
   }
 
-
   /// Handle update profile process
   // Future<UserProfileModel?> updateProfile() async {
   //   final Map<String, File?> fileMap = {};

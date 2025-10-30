@@ -50,20 +50,24 @@ class SettingScreenMobile extends GetView<SettingController> {
                       child: TextWidget('No', color: CustomColors.whiteColor),
                     ),
 
-                    ElevatedButton(
-                      onPressed: () {
-                        Get.back();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: CustomColors.whiteColor,
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(color: CustomColors.rejected),
-                          borderRadius: BorderRadiusGeometry.circular(
-                            Dimensions.radius * 0.8,
+                    Obx(
+                      () => ElevatedButton(
+                        onPressed: () => controller.deleteUserAccount(),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: CustomColors.whiteColor,
+                          shape: RoundedRectangleBorder(
+                            side: BorderSide(color: CustomColors.rejected),
+                            borderRadius: BorderRadiusGeometry.circular(
+                              Dimensions.radius * 0.8,
+                            ),
                           ),
                         ),
+                        child: controller.isLoading.value
+                            ? CircularProgressIndicator(
+                                color: CustomColors.primary,
+                              )
+                            : TextWidget('Yes', color: CustomColors.rejected),
                       ),
-                      child: TextWidget('Yes', color: CustomColors.rejected),
                     ),
                   ],
                 ),

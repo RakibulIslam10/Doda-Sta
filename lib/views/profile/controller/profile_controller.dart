@@ -9,7 +9,8 @@ class ProfileController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    AppStorage.isVendor == true ? getProviderProfile() : getUserProfile();
+
+    getUserProfile();
   }
 
   // Profile get api

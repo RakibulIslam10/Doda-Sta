@@ -33,7 +33,7 @@ class Data {
   final String contactPerson;
   final bool isActive;
   final bool isVerified;
-  final List<String> attachments;
+  final List<dynamic> attachments;
   final int rating;
   final int totalReviews;
   final dynamic pendingUpdates;
@@ -88,7 +88,7 @@ class Data {
     contactPerson: json["contactPerson"],
     isActive: json["isActive"],
     isVerified: json["isVerified"],
-    attachments: List<String>.from(json["attachments"].map((x) => x)),
+    attachments: List<dynamic>.from(json["attachments"].map((x) => x)),
     rating: json["rating"],
     totalReviews: json["totalReviews"],
     pendingUpdates: json["pendingUpdates"],

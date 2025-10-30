@@ -6,6 +6,7 @@ class AditionalScreenMobile extends GetView<AditionalController> {
   @override
   Widget build(BuildContext context) {
     print(jsonEncode(controller.getAvailabilityData()));
+    print(Get.find<RegisterController>().nameController.text);
     return Scaffold(
       appBar: CommonAppBar(title: 'Service Provider registration'),
       body: Obx(
@@ -15,12 +16,12 @@ class AditionalScreenMobile extends GetView<AditionalController> {
                 child: ListView(
                   padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
                   children: [
-                    PrimaryInputFieldWidget(
-                      controller: controller.companyNameController,
-                      hintText: 'Company Name',
-                      label: 'Company Name',
-                    ),
-                    Space.height.betweenInputBox,
+                    // PrimaryInputFieldWidget(
+                    //   controller: controller.companyNameController,
+                    //   hintText: 'Company Name',
+                    //   label: 'Company Name',
+                    // ),
+                    // Space.height.betweenInputBox,
                     PrimaryInputFieldWidget(
                       controller: controller.linkController,
                       hintText: 'website link',
@@ -33,11 +34,25 @@ class AditionalScreenMobile extends GetView<AditionalController> {
                           .map((e) => e.name)
                           .toList(),
                       label: "Service Category",
-                      onChanged: (List<String> p1) {
-                        controller.selectedServiceList.add(p1);
+                      onChanged: (List<String> selectedNames) {
+                        // Clear old selections
+                        controller.selectedServiceList.clear();
+
+                        // Filter original list to match selected names
+                        final selectedItems = controller.serviceCategoryList
+                            .where((item) => selectedNames.contains(item.name))
+                            .toList();
+
+                        // Add selected IDs
+                        controller.selectedServiceList.addAll(
+                          selectedItems.map((e) => e.id),
+                        );
+
+                        print(
+                          "✅ Selected IDs: ${controller.selectedServiceList}",
+                        );
                       },
                     ),
-
                     Space.height.betweenInputBox,
                     TextWidget(
                       'Select day and set time',

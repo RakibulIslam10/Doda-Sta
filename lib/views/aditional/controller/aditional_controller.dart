@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:doda_work/core/api/services/api.dart';
+import 'package:doda_work/core/utils/app_storage.dart';
 import 'package:doda_work/core/utils/basic_import.dart';
 import 'package:doda_work/views/aditional/model/provider_register_model.dart';
 import 'package:doda_work/views/aditional/model/service_category_model.dart';
@@ -165,21 +166,22 @@ class AditionalController extends GetxController {
       endPoint: ApiEndPoints.providerRegister,
       isLoading: providerRegIsLoading,
       files: {},
+      token: AppStorage.temporaryToken,
       body: {
-        "companyName": Get.put(RegisterController().nameController.text),
+        "companyName": Get.find<RegisterController>().nameController.text,
         "website": linkController.text,
-        "serviceCategories": selectedServiceList ?? [],
+        "serviceCategories": selectedServiceList,
         "serviceLocation": selectedAddress.value,
         "contactPerson": contactPersonController.text,
-        "coveredRadius": 90,
+        "coveredRadius": 100,
         "workingHours": getAvailabilityData(),
         "latitude": selectedLatLng.value?.latitude.toString() ?? "",
         "longitude": selectedLatLng.value?.longitude.toString() ?? "",
       },
       reqType: 'POST',
-      filesList: {'attachments': photos ?? []},
-      // ✅ works now
+      filesList: {'attachments': photos},
       onSuccess: (result) => Get.offAllNamed(Routes.navigationScreen),
     );
   }
+
 }

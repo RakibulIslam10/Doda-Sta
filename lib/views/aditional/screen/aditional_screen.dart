@@ -1,5 +1,6 @@
 import 'package:doda_work/core/utils/basic_import.dart';
 import 'package:doda_work/routes/routes.dart';
+import 'package:doda_work/views/auth/register/controller/register_controller.dart';
 import 'package:doda_work/widgets/auth_app_bar.dart';
 import 'package:doda_work/core/utils/extensions.dart';
 import 'package:doda_work/widgets/loading_widget.dart';

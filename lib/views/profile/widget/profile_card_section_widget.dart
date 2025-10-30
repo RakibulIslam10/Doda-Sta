@@ -34,8 +34,8 @@ class ProfileCardSectionWidgetView extends GetView<ProfileController> {
           () => Get.toNamed(Routes.favoriteScreen),
         ),
         _buildSectionCard(
-          Icons.favorite_border,
-          'Contact Us',
+          Icons.help_outline_sharp,
+          'FAQ',
           isVisible: AppStorage.isVendor == false,
 
           () => Get.toNamed(Routes.faqScreen),

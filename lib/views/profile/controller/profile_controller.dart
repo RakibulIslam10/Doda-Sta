@@ -20,7 +20,6 @@ class ProfileController extends GetxController {
     if (AppStorage.isVendor == true) {
       await getProviderProfile();
       final providerInfo = providerProfileModel?.data;
-
     } else {
       await getUserProfile();
       final profileInfo = userProfileModel?.data;

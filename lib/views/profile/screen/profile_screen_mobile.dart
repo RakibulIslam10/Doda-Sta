@@ -50,29 +50,11 @@ class ProfileScreenMobile extends GetView<ProfileController> {
               : ListView(
                   padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
                   children: [
-                    if (AppStorage.isVendor == true &&
-                        controller.providerProfileModel?.data.isActive ==
-                            false) ...[
-                      Space.height.betweenInputBox,
+
                       ProfileTopHeaderWidgetView(),
                       Space.height.v20,
                       ProfileCardSectionWidgetView(),
-                    ] else ...[
-                      Space.height.v40,
-                      Space.height.v40,
-                      Space.height.v40,
-                      Space.height.v40,
-                      EmptyDataWidget(),
-                      Space.height.v5,
 
-                      Center(
-                        child: TextWidget(
-                          "Please wait for approval",
-                          color: CustomColors.grayShade,
-                          fontSize: Dimensions.titleSmall,
-                        ),
-                      ),
-                    ],
                   ],
                 ),
         ),

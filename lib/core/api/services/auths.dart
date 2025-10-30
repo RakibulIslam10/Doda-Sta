@@ -1,6 +1,7 @@
 import 'package:doda_work/core/api/model/basic_success_model.dart';
 import '../../../routes/routes.dart';
 import '../../../views/auth/login/model/login_model.dart';
+import '../../../views/auth/register/model/provider_otp_verify_model.dart';
 import '../../utils/app_storage.dart';
 import '../../utils/basic_import.dart';
 import 'api.dart';
@@ -74,7 +75,7 @@ class AuthService {
 
   /// =============================================== ✅ Email Verify  ================================================== ///
 
-  static Future<BasicSuccessModel> emailVerifyService({
+  static Future<ProviderOtpVerify> emailVerifyService({
     required RxBool isLoading,
     required String email,
     required String activationCode,
@@ -84,13 +85,16 @@ class AuthService {
       'email': email,
     };
     return await ApiRequest.post(
-      fromJson: BasicSuccessModel.fromJson,
+      fromJson: ProviderOtpVerify.fromJson,
       endPoint: ApiEndPoints.verifyEmail,
       isLoading: isLoading,
       body: inputBody,
-      onSuccess: (result) => AppStorage.isVendor == true
-          ? Get.toNamed(Routes.aditionalScreen)
-          : Get.offAllNamed(Routes.navigationScreen),
+      onSuccess: (result) {
+        AppStorage.isVendor == true
+            ? Get.toNamed(Routes.aditionalScreen)
+            : Get.offAllNamed(Routes.navigationScreen);
+        AppStorage.save(temporaryToken: result.data.accessToken);
+      },
     );
   }
 

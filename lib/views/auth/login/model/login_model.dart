@@ -17,41 +17,32 @@ class LoginModel {
     message: json["message"],
     data: Data.fromJson(json["data"]),
   );
-
-  Map<String, dynamic> toJson() => {
-    "statusCode": statusCode,
-    "success": success,
-    "message": message,
-    "data": data.toJson(),
-  };
 }
 
 class Data {
   final User user;
   final String accessToken;
 
-  Data({
-    required this.user,
-    required this.accessToken,
-  });
+  Data({required this.user, required this.accessToken});
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-    user: User.fromJson(json["user"]),
-    accessToken: json["accessToken"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "user": user.toJson(),
-    "accessToken": accessToken,
-  };
+  factory Data.fromJson(Map<String, dynamic> json) =>
+      Data(user: User.fromJson(json["user"]), accessToken: json["accessToken"]);
 }
 
 class User {
   final String id;
   final AuthId authId;
-  final String name;
-  final String email;
-  final String phoneNumber;
+  final List<dynamic> serviceCategories;
+  final bool isActive;
+  final bool isVerified;
+  final List<dynamic> attachments;
+  final int rating;
+  final int totalReviews;
+  final dynamic pendingUpdates;
+  final dynamic reservedProvider;
+  final dynamic paymentIntentId;
+  final List<dynamic> workingHours;
+  final List<dynamic> potentialProviders;
   final DateTime createdAt;
   final DateTime updatedAt;
   final int v;
@@ -59,9 +50,17 @@ class User {
   User({
     required this.id,
     required this.authId,
-    required this.name,
-    required this.email,
-    required this.phoneNumber,
+    required this.serviceCategories,
+    required this.isActive,
+    required this.isVerified,
+    required this.attachments,
+    required this.rating,
+    required this.totalReviews,
+    required this.pendingUpdates,
+    required this.reservedProvider,
+    required this.paymentIntentId,
+    required this.workingHours,
+    required this.potentialProviders,
     required this.createdAt,
     required this.updatedAt,
     required this.v,
@@ -70,24 +69,25 @@ class User {
   factory User.fromJson(Map<String, dynamic> json) => User(
     id: json["_id"],
     authId: AuthId.fromJson(json["authId"]),
-    name: json["name"],
-    email: json["email"],
-    phoneNumber: json["phoneNumber"],
+    serviceCategories: List<dynamic>.from(
+      json["serviceCategories"].map((x) => x),
+    ),
+    isActive: json["isActive"],
+    isVerified: json["isVerified"],
+    attachments: List<dynamic>.from(json["attachments"].map((x) => x)),
+    rating: json["rating"],
+    totalReviews: json["totalReviews"],
+    pendingUpdates: json["pendingUpdates"],
+    reservedProvider: json["reservedProvider"],
+    paymentIntentId: json["paymentIntentId"],
+    workingHours: List<dynamic>.from(json["workingHours"].map((x) => x)),
+    potentialProviders: List<dynamic>.from(
+      json["potentialProviders"].map((x) => x),
+    ),
     createdAt: DateTime.parse(json["createdAt"]),
     updatedAt: DateTime.parse(json["updatedAt"]),
     v: json["__v"],
   );
-
-  Map<String, dynamic> toJson() => {
-    "_id": id,
-    "authId": authId.toJson(),
-    "name": name,
-    "email": email,
-    "phoneNumber": phoneNumber,
-    "createdAt": createdAt.toIso8601String(),
-    "updatedAt": updatedAt.toIso8601String(),
-    "__v": v,
-  };
 }
 
 class AuthId {
@@ -127,17 +127,4 @@ class AuthId {
     updatedAt: DateTime.parse(json["updatedAt"]),
     v: json["__v"],
   );
-
-  Map<String, dynamic> toJson() => {
-    "_id": id,
-    "name": name,
-    "email": email,
-    "role": role,
-    "isBlocked": isBlocked,
-    "isActive": isActive,
-    "isPhoneVerified": isPhoneVerified,
-    "createdAt": createdAt.toIso8601String(),
-    "updatedAt": updatedAt.toIso8601String(),
-    "__v": v,
-  };
 }

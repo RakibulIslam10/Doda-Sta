@@ -10,6 +10,7 @@ class ApiEndPoints {
   static const resendOtpCode = 'auth/activation-code-resend';
   static const resetPassword = 'auth/reset-password';
   static const forgotPassword = 'auth/forgot-password';
+  static const providerRegister = 'provider/provider-register';
 
   //home
   static const banner = 'banner/get';
@@ -22,13 +23,17 @@ class ApiEndPoints {
   //category
 
   static const categoryPreview = 'categories/books';
+  static const serviceCategory = 'category/active-categories';
   static const getAllAudioBook = 'audio-books/get';
   static const faqGet = 'manage/get-faq';
 
   //profile
   static const changePassword = 'auth/change-password';
   static const userProfile = 'user/profile';
-  static const updateProfile = 'user/profile/update';
+  static const providerProfile = 'provider/profile';
+  static const userUpdateProfile = 'user/edit-profile';
+  static const providerUpdateProfile = 'provider/update-profile';
+  static const deleteProfile = 'user/delete-account';
 
   //bookmark
   static const bookMark = 'home/save';

@@ -16,24 +16,30 @@ class UpdateScreenMobile extends GetView<UpdateController> {
             Center(
               child: Stack(
                 children: [
-                  ClipOval(
-                    child: CachedNetworkImage(
-                      imageUrl: 'https://picsum.photos/200/300?random=',
-                      height: 110.h,
-                      // make height = width
-                      width: 110.h,
-                      // use same value for width
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) =>
-                          Container(color: Colors.grey.shade300),
-                      errorWidget: (context, error, stackTrace) => Icon(
-                        Icons.person,
-                        size: 110.h,
-                        color: CustomColors.secondary,
-                      ),
+                  Obx(
+                    () => ClipOval(
+                      child: controller.selectedImg.value != null
+                          ? Image.file(
+                              controller.selectedImg.value!,
+                              height: 90.h,
+                              width: 100.w,
+                              fit: BoxFit.cover,
+                            )
+                          : CachedNetworkImage(
+                              imageUrl: 'https://picsum.photos/200/300?random=',
+                              height: 120,
+                              width: 120,
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) =>
+                                  Container(color: Colors.grey.shade300),
+                              errorWidget: (context, error, stackTrace) => Icon(
+                                Icons.person,
+                                size: 110,
+                                color: Colors.grey,
+                              ),
+                            ),
                     ),
                   ),
-
                   Positioned(
                     bottom: 4,
                     right: 0,
@@ -71,29 +77,101 @@ class UpdateScreenMobile extends GetView<UpdateController> {
               hintText: "Enter your name",
             ),
             Space.height.betweenInputBox,
-
-            PrimaryInputFieldWidget(
-              label: "Email",
-              isEmail: true,
-              controller: controller.emailController,
-              focusNode: controller.emailFocus,
-              nextFocusNode: controller.numberFocus,
-              hintText: "Enter your email",
-            ),
-            Space.height.betweenInputBox,
-            PrimaryInputFieldWidget(
-              label: "Contact Number",
-              keyBoardType: TextInputType.number,
-              controller: controller.numberController,
-              focusNode: controller.numberFocus,
-              hintText: "Enter your number",
+            TextWidget(
+              padding: EdgeInsetsGeometry.only(
+                bottom: Dimensions.spaceBetweenInputTitleAndBox * 0.6,
+              ),
+              "Select Location",
+              maxLines: 2,
+              textOverflow: TextOverflow.ellipsis,
+              fontSize: Dimensions.titleMedium * 0.8,
+              fontWeight: FontWeight.w500,
+              color: CustomColors.blackColor,
             ),
 
-            Space.height.betweenInputBox,
+            Obx(() {
+              final isPick = controller.selectedAddress.isNotEmpty;
+              return GestureDetector(
+                onTap: () {
+                  _openPicker(context);
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 12.w,
+                    vertical: 12.h,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surface,
+                    borderRadius: BorderRadius.circular(Dimensions.radius),
+                    border: Border.all(
+                      color: isPick
+                          ? CustomColors.primary
+                          : CustomColors.disableColor,
+                      width: 1.4,
+                    ),
+                  ),
+                  child: Text(
+                    isPick
+                        ? controller.selectedAddress.value
+                        : "Pick Service Address",
+                    style: TextStyle(
+                      fontSize: Dimensions.titleSmall,
+                      fontWeight: FontWeight.w500,
+                      color: isPick
+                          ? CustomColors.blackColor
+                          : CustomColors.blackColor.withAlpha(888),
+                    ),
+                  ),
+                ),
+              );
+            }),
             Space.height.betweenInputBox,
 
-            PrimaryButtonWidget(title: 'Update', onPressed: () {}),
+            Space.height.betweenInputBox,
+            Obx(
+              () => PrimaryButtonWidget(
+                title: 'Update',
+                isLoading: controller.isLoading.value,
+                onPressed: () => controller.userUpdateProfile(),
+              ),
+            ),
           ],
+        ),
+      ),
+    );
+  }
+
+  void _openPicker(BuildContext context) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MapLocationPicker(
+          config: MapLocationPickerConfig(
+            apiKey: "AIzaSyC_qKHmzl-HHB9hr8-fWGmhETSVR2H0894",
+            onNext: (result) {
+              if (result != null &&
+                  result.geometry?.location.lat != null &&
+                  result.geometry?.location.lat != null) {
+                controller.selectedLatLng.value = LatLng(
+                  result.geometry!.location.lat,
+                  result.geometry!.location.lng,
+                );
+
+                controller.selectedAddress.value =
+                    result.formattedAddress ?? "";
+              }
+              if (Navigator.canPop(context)) {
+                Navigator.pop(context);
+              }
+            },
+          ),
+          geoCodingConfig: GeoCodingConfig(
+            apiKey: "AIzaSyC_qKHmzl-HHB9hr8-fWGmhETSVR2H0894",
+          ),
+          searchConfig: SearchConfig(
+            apiKey: "AIzaSyC_qKHmzl-HHB9hr8-fWGmhETSVR2H0894",
+          ),
         ),
       ),
     );

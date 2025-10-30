@@ -19,7 +19,6 @@ class ApiRequest {
     };
   }
 
-
   static void printBodyLineByLine(Map<String, dynamic> body) {
     body.forEach((key, value) {
       log("🔹 '$key': '$value'");
@@ -110,7 +109,7 @@ class ApiRequest {
       }
       final uri = Uri.parse(fullUrl).replace(
         queryParameters: queryParams?.map(
-              (key, value) => MapEntry(key, value.toString()),
+          (key, value) => MapEntry(key, value.toString()),
         ),
       );
 
@@ -189,10 +188,10 @@ class ApiRequest {
 
       final response = await http
           .patch(
-        uri,
-        headers: await _bearerHeaderInfo(),
-        body: jsonEncode(body),
-      )
+            uri,
+            headers: await _bearerHeaderInfo(),
+            body: jsonEncode(body),
+          )
           .timeout(const Duration(seconds: 120));
 
       log('|✅|---------[ ✅ PATCH REQUEST COMPLETED ]---------|✅|');
@@ -309,10 +308,10 @@ class ApiRequest {
 
       final response = await http
           .delete(
-        uri,
-        headers: await _bearerHeaderInfo(),
-        body: body != null ? jsonEncode(body) : null,
-      )
+            uri,
+            headers: await _bearerHeaderInfo(),
+            body: body != null ? jsonEncode(body) : null,
+          )
           .timeout(const Duration(seconds: 120));
 
       log('|✅|---------[ ✅ DELETE REQUEST COMPLETED ]---------|✅|');
@@ -424,7 +423,9 @@ class ApiRequest {
             fileList.map((file) => file.path).toList(),
           );
 
-          log('🧩 MULTI-FILE AS STRING [$key]: ${fileList.map((file) => file.path).toList()}');
+          log(
+            '🧩 MULTI-FILE AS STRING [$key]: ${fileList.map((file) => file.path).toList()}',
+          );
         }
       }
 
@@ -467,43 +468,42 @@ class ApiRequest {
     }
   }
 
+  /// Handle update profile process
+  // Future<UserProfileModel?> updateProfile() async {
+  //   final Map<String, File?> fileMap = {};
+  //   if (selectedImg.value != null) {
+  //     fileMap['image'] = selectedImg.value;
+  //   }
+  //   return await ApiRequest.multiMultipartRequest(
+  //     endPoint: ApiEndPoints.updateProfile,
+  //     reqType: "PUT",
+  //     isLoading: isLoading,
+  //     body: {
+  //       'firstName': firstNameController.text.trim(),
+  //       'lastName': lastNameController.text.trim(),
+  //       'phone': phoneController.text.trim(),
+  //     },
+  //     files: fileMap,
+  //     fromJson: UserProfileModel.fromJson,
+  //     showSuccessSnackBar: true,
+  //     onSuccess: (_) => Get.back(),
+  //   );
+  // }
 
-/// Handle update profile process
-// Future<UserProfileModel?> updateProfile() async {
-//   final Map<String, File?> fileMap = {};
-//   if (selectedImg.value != null) {
-//     fileMap['image'] = selectedImg.value;
-//   }
-//   return await ApiRequest.multiMultipartRequest(
-//     endPoint: ApiEndPoints.updateProfile,
-//     reqType: "PUT",
-//     isLoading: isLoading,
-//     body: {
-//       'firstName': firstNameController.text.trim(),
-//       'lastName': lastNameController.text.trim(),
-//       'phone': phoneController.text.trim(),
-//     },
-//     files: fileMap,
-//     fromJson: UserProfileModel.fromJson,
-//     showSuccessSnackBar: true,
-//     onSuccess: (_) => Get.back(),
-//   );
-// }
-
-/// ✅ Check Internet Connection
-// static Future<bool> checkInternetConnection() async {
-//   final networkController = Get.find<NetworkController>();
-//   if (!networkController.isConnected.value) {
-//     // ✅ Show popup dialog
-//     // Get.toNamed(noInterNetPageDesign)
-//     Get.defaultDialog(
-//       title: "No Internet Connection",
-//       middleText: "Check your Internet Connection",
-//       textConfirm: "Okay",
-//       onConfirm: () => Get.back(),
-//     );
-//     return false;
-//   }
-//   return true;
-// }
+  /// ✅ Check Internet Connection
+  // static Future<bool> checkInternetConnection() async {
+  //   final networkController = Get.find<NetworkController>();
+  //   if (!networkController.isConnected.value) {
+  //     // ✅ Show popup dialog
+  //     // Get.toNamed(noInterNetPageDesign)
+  //     Get.defaultDialog(
+  //       title: "No Internet Connection",
+  //       middleText: "Check your Internet Connection",
+  //       textConfirm: "Okay",
+  //       onConfirm: () => Get.back(),
+  //     );
+  //     return false;
+  //   }
+  //   return true;
+  // }
 }

@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       designSize: const Size(375, 812),
       builder: (_, child) => GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: Routes.navigationScreen,
+        initialRoute: Routes.splashScreen,
         title: Strings.appName,
         theme: Themes.light,
         darkTheme: Themes.dark,

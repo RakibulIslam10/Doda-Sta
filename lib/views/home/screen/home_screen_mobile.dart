@@ -47,7 +47,7 @@ class HomeScreenMobile extends GetView<HomeController> {
                 child: Column(
                   children: [
                     const SearchBarWidgetView(),
-                    SizedBox(height: 12,),
+                    SizedBox(height: 12),
                     const CategoryWidgetView(),
                     Obx(() => _buildTabBar(controller, statusText)),
                   ],
@@ -73,20 +73,23 @@ class HomeScreenMobile extends GetView<HomeController> {
                         image: item.attachments?.firstOrNull,
                         isUser: true,
                         status: status,
-                        onTap: (){
-                          Get.toNamed(Routes.summaryScreen, arguments: SummaryModel(
-                            isUser: true,
-                            requestId: item.requestId,
-                            categoryIcon: item.serviceCategory?.icon,
-                            categoryName: item.serviceCategory?.name,
-                            customerPhone: item.customerPhone,
-                            customerName: item.customerId?.name,
-                            priority: item.priority,
-                            address: item.address,
-                            subcategory: item.subcategory,
-                            description: item.description,
-                            attachments: item.attachments,
-                          ));
+                        onTap: () {
+                          Get.toNamed(
+                            Routes.summaryScreen,
+                            arguments: SummaryModel(
+                              isUser: true,
+                              requestId: item.requestId,
+                              categoryIcon: item.serviceCategory?.icon,
+                              categoryName: item.serviceCategory?.name,
+                              customerPhone: item.customerPhone,
+                              customerName: item.customerId?.name,
+                              priority: item.priority,
+                              address: item.address,
+                              subcategory: item.subcategory,
+                              description: item.description,
+                              attachments: item.attachments,
+                            ),
+                          );
                         },
                       );
                     },
@@ -114,14 +117,17 @@ class HomeScreenMobile extends GetView<HomeController> {
 
         final status = statusText[value].toUpperCase();
         final controllerList = controller.pagingControllers[status]!;
-        if (controllerList.itemList == null || controllerList.itemList!.isEmpty) {
+        if (controllerList.itemList == null ||
+            controllerList.itemList!.isEmpty) {
           controller.fetch(status, 1);
         }
       },
       tabs: List.generate(statusText.length, (index) {
         final isSelected = controller.selectedStatus.value == index;
         return Container(
-          margin: EdgeInsets.symmetric(horizontal: Dimensions.defaultHorizontalSize * 0.4),
+          margin: EdgeInsets.symmetric(
+            horizontal: Dimensions.defaultHorizontalSize * 0.4,
+          ),
           padding: EdgeInsets.symmetric(
             horizontal: Dimensions.widthSize * 1.2,
             vertical: Dimensions.verticalSize * 0.32,
@@ -137,7 +143,9 @@ class HomeScreenMobile extends GetView<HomeController> {
               statusText[index],
               fontWeight: FontWeight.w500,
               fontSize: Dimensions.titleSmall,
-              color: isSelected ? CustomColors.whiteColor : CustomColors.blackColor,
+              color: isSelected
+                  ? CustomColors.whiteColor
+                  : CustomColors.blackColor,
             ),
           ),
         );
@@ -148,6 +156,7 @@ class HomeScreenMobile extends GetView<HomeController> {
 
 class KeepAlivePage extends StatefulWidget {
   final Widget child;
+
   const KeepAlivePage({required this.child, super.key});
 
   @override

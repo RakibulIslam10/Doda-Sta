@@ -5,8 +5,7 @@ import '../../../core/utils/dimensions.dart';
 import '../../../core/utils/layout.dart';
 import '../../../widgets/auth_app_bar.dart';
 import '../controller/terms_controller.dart';
-
-part 'terms_screen_mobile.dart';
+import 'terms_screen_mobile.dart';
 
 class TermsScreen extends GetView<TermsController> {
   const TermsScreen({super.key});

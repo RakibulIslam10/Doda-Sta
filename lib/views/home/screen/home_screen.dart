@@ -3,7 +3,6 @@ import 'package:doda_work/core/utils/extensions.dart';
 import 'package:doda_work/routes/routes.dart';
 import 'package:doda_work/views/category/controller/category_controller.dart';
 import 'package:doda_work/views/navigation/controller/navigation_controller.dart';
-import 'package:flutter/cupertino.dart';
 import '../controller/home_controller.dart';
 import 'home_screen_mobile.dart';
 

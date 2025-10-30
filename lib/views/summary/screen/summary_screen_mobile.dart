@@ -29,23 +29,25 @@ class SummaryScreenMobile extends GetView<SummaryController> {
               address: model.address ?? "",
             ),
 
-            TextWidget(
-              padding: EdgeInsetsGeometry.symmetric(
-                vertical: Dimensions.verticalSize * 0.25,
+            if(model.isUser)
+              TextWidget(
+                padding: EdgeInsetsGeometry.symmetric(
+                  vertical: Dimensions.verticalSize * 0.25,
+                ),
+                'Would you like to tell us more about your request?',
+                fontWeight: FontWeight.bold,
+                fontSize: Dimensions.titleMedium,
               ),
-              'Would you like to tell us more about your request?',
-              fontWeight: FontWeight.bold,
-              fontSize: Dimensions.titleMedium,
-            ),
             RequestTextBoxWidget(
               description: model.description,
+              attachments: model.attachments,
             ),
 
             // AddPhotoGrid(title: 'Attachments'),
 
-           if(AppStorage.isVendor == false)...[
-             ButtonsSectionWidget()
-           ]
+           // if(AppStorage.isVendor == false)...[
+           //   ButtonsSectionWidget()
+           // ]
           ],
         ),
       ),

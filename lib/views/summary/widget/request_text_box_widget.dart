@@ -1,8 +1,9 @@
 part of '../screen/summary_screen.dart';
 
 class RequestTextBoxWidget extends GetView<SummaryController> {
-  const RequestTextBoxWidget({this.description, super.key});
+  const RequestTextBoxWidget({this.attachments, this.description, super.key});
   final String? description;
+  final List<String?>? attachments;
 
   @override
   Widget build(BuildContext context) {
@@ -13,8 +14,8 @@ class RequestTextBoxWidget extends GetView<SummaryController> {
           padding: EdgeInsetsGeometry.symmetric(
             vertical: Dimensions.verticalSize * 0.25,
           ),
-          'request?',
-          color: CustomColors.grayShade,
+          'Request',
+          color: CustomColors.blackColor,
         ),
         Container(
           padding: EdgeInsets.all(Dimensions.paddingSize * 0.25),
@@ -30,6 +31,48 @@ class RequestTextBoxWidget extends GetView<SummaryController> {
             description ?? "",
           ),
         ),
+        if(attachments != null)
+          TextWidget(
+            padding: EdgeInsetsGeometry.symmetric(
+              vertical: Dimensions.verticalSize * 0.25,
+            ),
+            'Attachment',
+            color: CustomColors.blackColor,
+          ),
+        if(attachments != null)
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: 120.h,
+            child: ListView.builder(
+              itemCount: attachments?.length ?? 0,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index){
+                final String image = (attachments?[index] != null && (attachments?[index]?.isNotEmpty ?? false))? attachments![index]! : 'https://picsum.photos/200/300';
+                final fixedUrl = image.replaceAll(r'\', '/');
+                return Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadiusGeometry.circular(12),
+                    child: CachedNetworkImage(
+                      imageUrl: (attachments?[index] != null && (attachments?[index]?.isNotEmpty ?? false)) ? ApiEndPoints.baseUrl+ fixedUrl: image,
+                      width: 120.w,
+                      height: 120.h,
+                      placeholder: (context, url) => Container(color: Colors.grey.shade300),
+                      errorWidget: (context, url, error) => Container(
+                        color: Colors.grey.shade400,
+                        child: const Icon(
+                          Icons.image_not_supported,
+                          color: Colors.grey,
+                          size: 40,
+                        ),
+                      ),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
       ],
     );
   }

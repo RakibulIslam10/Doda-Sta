@@ -10,7 +10,8 @@ import '../../utils/basic_import.dart';
 class ApiRequest {
   /// ✅ Header Generator
   static Future<Map<String, String>> _bearerHeaderInfo([String? token]) async {
-    final authToken = token ?? AppStorage.token;
+    // final authToken = token ?? AppStorage.token;
+    final token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoSWQiOiI2OGZmNDRjYTYzMmU3ZTQ2MTc5ZjA5MzQiLCJ1c2VySWQiOiI2OGZmNDRjYjYzMmU3ZTQ2MTc5ZjA5MzYiLCJlbWFpbCI6ImRhZGFAeW9wbWFpbC5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc2MTU1OTc5MSwiZXhwIjoxNzkzMDk1NzkxfQ.5sVWOscrmE--r12nHynDBSnnIAqAexrFqFXzYcLddb4";
     return {
       HttpHeaders.acceptHeader: "application/json",
       HttpHeaders.contentTypeHeader: "application/json",
@@ -358,16 +359,14 @@ class ApiRequest {
     required String reqType,
     required Map<String, dynamic> body,
     required Map<String, File?> files,
-    Map<String, List<File>>? filesList, // ✅ Added new parameter
     String? singleQueryParam,
     required R Function(Map<String, dynamic>) fromJson,
     bool showSuccessSnackBar = false,
     Function(R result)? onSuccess,
-    String? token, // ✅ Added token parameter
   }) async {
     try {
       isLoading.value = true;
-      final headers = await _bearerHeaderInfo(token); // ✅ Pass token here
+      final headers = await _bearerHeaderInfo();
 
       // Build URL
       String fullUrl = '${ApiEndPoints.baseUrl}$endPoint';
@@ -395,7 +394,7 @@ class ApiRequest {
         }
       });
 
-      // Add single files safely
+      // Add files safely
       for (var entry in files.entries) {
         final file = entry.value;
         if (file == null) continue;
@@ -411,21 +410,6 @@ class ApiRequest {
             contentType: MediaType.parse(mimeType),
           ),
         );
-      }
-
-      // ✅ Add multiple file lists as JSON strings
-      if (filesList != null && filesList.isNotEmpty) {
-        for (var entry in filesList.entries) {
-          final key = entry.key;
-          final fileList = entry.value;
-
-          // ফাইলের path কে string list হিসেবে পাঠানো
-          request.fields[key] = jsonEncode(
-            fileList.map((file) => file.path).toList(),
-          );
-
-          log('🧩 MULTI-FILE AS STRING [$key]: ${fileList.map((file) => file.path).toList()}');
-        }
       }
 
       // Send request
@@ -466,7 +450,6 @@ class ApiRequest {
       isLoading.value = false;
     }
   }
-
 
   /// Handle update profile process
   // Future<UserProfileModel?> updateProfile() async {

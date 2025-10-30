@@ -71,9 +71,11 @@ class HomeScreenMobile extends GetView<HomeController> {
                         subCategory: item.serviceCategory?.name ?? "",
                         address: item.address ?? "",
                         image: item.attachments?.firstOrNull,
+                        isUser: true,
                         status: status,
                         onTap: (){
                           Get.toNamed(Routes.summaryScreen, arguments: SummaryModel(
+                            isUser: true,
                             requestId: item.requestId,
                             categoryIcon: item.serviceCategory?.icon,
                             categoryName: item.serviceCategory?.name,

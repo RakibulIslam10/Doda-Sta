@@ -10,8 +10,7 @@ import '../../utils/basic_import.dart';
 class ApiRequest {
   /// ✅ Header Generator
   static Future<Map<String, String>> _bearerHeaderInfo([String? token]) async {
-    // final authToken = token ?? AppStorage.token;
-    final token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoSWQiOiI2OGZmNDRjYTYzMmU3ZTQ2MTc5ZjA5MzQiLCJ1c2VySWQiOiI2OGZmNDRjYjYzMmU3ZTQ2MTc5ZjA5MzYiLCJlbWFpbCI6ImRhZGFAeW9wbWFpbC5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc2MTU1OTc5MSwiZXhwIjoxNzkzMDk1NzkxfQ.5sVWOscrmE--r12nHynDBSnnIAqAexrFqFXzYcLddb4";
+    final authToken = token ?? AppStorage.token;
     return {
       HttpHeaders.acceptHeader: "application/json",
       HttpHeaders.contentTypeHeader: "application/json",
@@ -111,7 +110,7 @@ class ApiRequest {
       }
       final uri = Uri.parse(fullUrl).replace(
         queryParameters: queryParams?.map(
-          (key, value) => MapEntry(key, value.toString()),
+              (key, value) => MapEntry(key, value.toString()),
         ),
       );
 
@@ -190,10 +189,10 @@ class ApiRequest {
 
       final response = await http
           .patch(
-            uri,
-            headers: await _bearerHeaderInfo(),
-            body: jsonEncode(body),
-          )
+        uri,
+        headers: await _bearerHeaderInfo(),
+        body: jsonEncode(body),
+      )
           .timeout(const Duration(seconds: 120));
 
       log('|✅|---------[ ✅ PATCH REQUEST COMPLETED ]---------|✅|');
@@ -310,10 +309,10 @@ class ApiRequest {
 
       final response = await http
           .delete(
-            uri,
-            headers: await _bearerHeaderInfo(),
-            body: body != null ? jsonEncode(body) : null,
-          )
+        uri,
+        headers: await _bearerHeaderInfo(),
+        body: body != null ? jsonEncode(body) : null,
+      )
           .timeout(const Duration(seconds: 120));
 
       log('|✅|---------[ ✅ DELETE REQUEST COMPLETED ]---------|✅|');
@@ -359,14 +358,16 @@ class ApiRequest {
     required String reqType,
     required Map<String, dynamic> body,
     required Map<String, File?> files,
+    Map<String, List<File>>? filesList, // ✅ Added new parameter
     String? singleQueryParam,
     required R Function(Map<String, dynamic>) fromJson,
     bool showSuccessSnackBar = false,
     Function(R result)? onSuccess,
+    String? token, // ✅ Added token parameter
   }) async {
     try {
       isLoading.value = true;
-      final headers = await _bearerHeaderInfo();
+      final headers = await _bearerHeaderInfo(token); // ✅ Pass token here
 
       // Build URL
       String fullUrl = '${ApiEndPoints.baseUrl}$endPoint';
@@ -394,7 +395,7 @@ class ApiRequest {
         }
       });
 
-      // Add files safely
+      // Add single files safely
       for (var entry in files.entries) {
         final file = entry.value;
         if (file == null) continue;
@@ -410,6 +411,21 @@ class ApiRequest {
             contentType: MediaType.parse(mimeType),
           ),
         );
+      }
+
+      // ✅ Add multiple file lists as JSON strings
+      if (filesList != null && filesList.isNotEmpty) {
+        for (var entry in filesList.entries) {
+          final key = entry.key;
+          final fileList = entry.value;
+
+          // ফাইলের path কে string list হিসেবে পাঠানো
+          request.fields[key] = jsonEncode(
+            fileList.map((file) => file.path).toList(),
+          );
+
+          log('🧩 MULTI-FILE AS STRING [$key]: ${fileList.map((file) => file.path).toList()}');
+        }
       }
 
       // Send request
@@ -451,42 +467,43 @@ class ApiRequest {
     }
   }
 
-  /// Handle update profile process
-  // Future<UserProfileModel?> updateProfile() async {
-  //   final Map<String, File?> fileMap = {};
-  //   if (selectedImg.value != null) {
-  //     fileMap['image'] = selectedImg.value;
-  //   }
-  //   return await ApiRequest.multiMultipartRequest(
-  //     endPoint: ApiEndPoints.updateProfile,
-  //     reqType: "PUT",
-  //     isLoading: isLoading,
-  //     body: {
-  //       'firstName': firstNameController.text.trim(),
-  //       'lastName': lastNameController.text.trim(),
-  //       'phone': phoneController.text.trim(),
-  //     },
-  //     files: fileMap,
-  //     fromJson: UserProfileModel.fromJson,
-  //     showSuccessSnackBar: true,
-  //     onSuccess: (_) => Get.back(),
-  //   );
-  // }
 
-  /// ✅ Check Internet Connection
-  // static Future<bool> checkInternetConnection() async {
-  //   final networkController = Get.find<NetworkController>();
-  //   if (!networkController.isConnected.value) {
-  //     // ✅ Show popup dialog
-  //     // Get.toNamed(noInterNetPageDesign)
-  //     Get.defaultDialog(
-  //       title: "No Internet Connection",
-  //       middleText: "Check your Internet Connection",
-  //       textConfirm: "Okay",
-  //       onConfirm: () => Get.back(),
-  //     );
-  //     return false;
-  //   }
-  //   return true;
-  // }
+/// Handle update profile process
+// Future<UserProfileModel?> updateProfile() async {
+//   final Map<String, File?> fileMap = {};
+//   if (selectedImg.value != null) {
+//     fileMap['image'] = selectedImg.value;
+//   }
+//   return await ApiRequest.multiMultipartRequest(
+//     endPoint: ApiEndPoints.updateProfile,
+//     reqType: "PUT",
+//     isLoading: isLoading,
+//     body: {
+//       'firstName': firstNameController.text.trim(),
+//       'lastName': lastNameController.text.trim(),
+//       'phone': phoneController.text.trim(),
+//     },
+//     files: fileMap,
+//     fromJson: UserProfileModel.fromJson,
+//     showSuccessSnackBar: true,
+//     onSuccess: (_) => Get.back(),
+//   );
+// }
+
+/// ✅ Check Internet Connection
+// static Future<bool> checkInternetConnection() async {
+//   final networkController = Get.find<NetworkController>();
+//   if (!networkController.isConnected.value) {
+//     // ✅ Show popup dialog
+//     // Get.toNamed(noInterNetPageDesign)
+//     Get.defaultDialog(
+//       title: "No Internet Connection",
+//       middleText: "Check your Internet Connection",
+//       textConfirm: "Okay",
+//       onConfirm: () => Get.back(),
+//     );
+//     return false;
+//   }
+//   return true;
+// }
 }

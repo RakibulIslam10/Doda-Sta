@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:doda_work/core/utils/app_storage.dart';
 import 'package:doda_work/routes/routes.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -46,6 +47,7 @@ class UpdateController extends GetxController {
 
     return await ApiRequest.multiMultipartRequest(
       endPoint: ApiEndPoints.userUpdateProfile,
+      token: AppStorage.temporaryToken,
       reqType: "PATCH",
       isLoading: isLoading,
       body: {

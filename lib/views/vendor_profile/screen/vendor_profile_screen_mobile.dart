@@ -5,6 +5,8 @@ class VendorProfileScreenMobile extends GetView<VendorProfileController> {
 
   @override
   Widget build(BuildContext context) {
+    // final profileInfo = controller.providerUpdateProfileModel.data;
+
     return Scaffold(
       appBar: CommonAppBar(title: 'Edit Profile'),
       body: SafeArea(
@@ -63,29 +65,33 @@ class VendorProfileScreenMobile extends GetView<VendorProfileController> {
             ),
             Space.height.betweenInputBox,
             PrimaryInputFieldWidget(
-              label: "Name",
+              label: "Company Name",
               controller: controller.nameController,
               focusNode: controller.nameFocus,
-              hintText: "Enter your name",
+              hintText: "Enter your companyName",
+            ),
+
+            Space.height.betweenInputBox,
+
+            PrimaryInputFieldWidget(
+              controller: controller.contactPersonController,
+              hintText: 'Enter Name of contact person',
+              label: 'Contact Person',
             ),
             Space.height.betweenInputBox,
 
             PrimaryInputFieldWidget(
-              label: "Email",
-              isEmail: true,
-              controller: controller.emailController,
-              focusNode: controller.emailFocus,
-              nextFocusNode: controller.numberFocus,
-              hintText: "Enter your email",
+              controller: controller.coveredRadius,
+              hintText: 'Enter Covered Aria Km',
+              label: 'Covered Aria Km',
+              keyBoardType: TextInputType.number,
             ),
             Space.height.betweenInputBox,
             PrimaryInputFieldWidget(
-              label: "Contact Number",
+              controller: controller.websiteController,
+              hintText: 'Enter website Link',
+              label: 'Website Link',
               keyBoardType: TextInputType.number,
-              controller: controller.numberController,
-              focusNode: controller.numberFocus,
-              nextFocusNode: controller.locationFocus,
-              hintText: "Enter your number",
             ),
             Space.height.betweenInputBox,
 
@@ -99,24 +105,55 @@ class VendorProfileScreenMobile extends GetView<VendorProfileController> {
             Space.height.betweenInputBox,
 
             CustomDropDownWidget(
-              label: 'Category',
-              hint: 'Select Categoryu',
-              items: [],
-              onChanged: (value) {},
-            ),
-            Space.height.betweenInputBox,
-
-            CustomDropDownWidget(
-              label: 'Sub Category',
-              hint: 'Select Sub Categoryu',
-              items: [],
-              onChanged: (value) {},
+              label: 'Service Category',
+              hint: 'Select Service Category',
+              // show the name in the dropdown
+              items: controller.serviceCategoryList.map((e) => e.name).toList(),
+              onChanged: (value) {
+                var selectedItem = controller.serviceCategoryList.firstWhere(
+                  (element) => element.name == value,
+                );
+                controller.selectedServiceList.add(selectedItem.id);
+              },
             ),
 
+            //
+            // MultiSelectDropDownWidget(
+            //   items: controller.serviceCategoryList
+            //       .map((e) => e.name)
+            //       .toList(),
+            //   label: "Service Category",
+            //   onChanged: (List<String> selectedNames) {
+            //     // Clear old selections
+            //     controller.selectedServiceList.clear();
+            //
+            //     // Filter original list to match selected names
+            //     final selectedItems = controller.serviceCategoryList
+            //         .where((item) => selectedNames.contains(item.name))
+            //         .toList();
+            //
+            //     // Add selected IDs
+            //     controller.selectedServiceList.addAll(
+            //       selectedItems.map((e) => e.id),
+            //     );
+            //
+            //     print(
+            //       "✅ Selected IDs: ${controller.selectedServiceList}",
+            //     );
+            //   },
+            // ),),
             Space.height.betweenInputBox,
             Space.height.betweenInputBox,
 
-            PrimaryButtonWidget(title: 'Update', onPressed: () {}),
+            Obx(
+              () => PrimaryButtonWidget(
+                isLoading: controller.isLoading.value,
+                title: 'Update',
+                onPressed: () {
+                  controller.vendorUpdateProfile();
+                },
+              ),
+            ),
           ],
         ),
       ),

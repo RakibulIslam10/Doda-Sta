@@ -126,42 +126,47 @@ class ProfileCardSectionWidgetView extends GetView<ProfileController> {
       onTap: onTap,
       child: Padding(
         padding: Dimensions.heightSize.edgeBottom,
-        child: Obx(() => Container(
-          height: Dimensions.heightSize * 4.3,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),
-            border: Border.all(color: Colors.grey.withAlpha(555)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.02),
-                spreadRadius: 1,
-                blurRadius: 6,
-                offset: const Offset(0, 3),
-              ),
-            ],
-          ),
-          child: Row(
-            mainAxisAlignment: mainSpaceBet,
-            children: [
-              Wrap(
-                spacing: Dimensions.defaultHorizontalSize * 0.2,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: [
-                  IconButton(
-                    onPressed: null,
-                    icon: Icon(icon, color: CustomColors.primary),
+        child: Obx(
+          () => Container(
+            height: Dimensions.heightSize * 4.3,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),
+              border: Border.all(color: Colors.grey.withAlpha(555)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.02),
+                  spreadRadius: 1,
+                  blurRadius: 6,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisAlignment: mainSpaceBet,
+              children: [
+                Wrap(
+                  spacing: Dimensions.defaultHorizontalSize * 0.2,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    IconButton(
+                      onPressed: null,
+                      icon: Icon(icon, color: CustomColors.primary),
+                    ),
+                    TextWidget(title, fontSize: Dimensions.titleSmall * 1.1),
+                  ],
+                ),
+                IconButton(
+                  onPressed: null,
+                  icon: Icon(
+                    Icons.arrow_forward_ios,
+                    color: CustomColors.primary,
                   ),
-                  TextWidget(title, fontSize: Dimensions.titleSmall * 1.1),
-                ],
-              ),
-              IconButton(
-                onPressed: null,
-                icon: Icon(Icons.arrow_forward_ios, color: CustomColors.primary),
-              ),
-            ],
-          ),
-        ).withShadifyLoading(loading: controller.isLoading.value),)
+                ),
+              ],
+            ),
+          ).withShadifyLoading(loading: controller.isLoading.value),
+        ),
       ),
     );
   }

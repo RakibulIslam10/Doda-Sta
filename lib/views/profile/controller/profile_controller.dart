@@ -2,10 +2,13 @@ import 'package:doda_work/core/api/services/api.dart';
 import 'package:doda_work/core/utils/app_storage.dart';
 import 'package:doda_work/core/utils/basic_import.dart';
 import 'package:doda_work/views/profile/model/user_profile_model.dart';
+import 'package:doda_work/views/update/controller/update_controller.dart';
 
 import '../../vendor_profile/model/provider_profile_model.dart';
 
 class ProfileController extends GetxController {
+
+
   @override
   void onInit() {
     super.onInit();

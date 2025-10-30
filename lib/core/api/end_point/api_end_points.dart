@@ -30,7 +30,7 @@ class ApiEndPoints {
   //profile
   static const changePassword = 'auth/change-password';
   static const userProfile = 'user/profile';
-  static const updateProfile = 'user/profile/update';
+  static const userUpdateProfile = 'user/edit-profile';
   static const deleteProfile = 'user/delete-account';
 
   //bookmark

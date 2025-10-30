@@ -183,5 +183,4 @@ class AditionalController extends GetxController {
       onSuccess: (result) => Get.offAllNamed(Routes.navigationScreen),
     );
   }
-
 }

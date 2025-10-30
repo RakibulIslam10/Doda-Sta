@@ -1,18 +1,18 @@
-class UserProfileModel {
+class UserUpdateProfileModel {
   final int statusCode;
   final bool success;
   final String message;
   final Data data;
 
-  UserProfileModel({
+  UserUpdateProfileModel({
     required this.statusCode,
     required this.success,
     required this.message,
     required this.data,
   });
 
-  factory UserProfileModel.fromJson(Map<String, dynamic> json) =>
-      UserProfileModel(
+  factory UserUpdateProfileModel.fromJson(Map<String, dynamic> json) =>
+      UserUpdateProfileModel(
         statusCode: json["statusCode"],
         success: json["success"],
         message: json["message"],
@@ -21,43 +21,47 @@ class UserProfileModel {
 }
 
 class Data {
+  final Favorites favorites;
   final String id;
   final AuthId authId;
   final String name;
   final String email;
   final String phoneNumber;
-  final String profileImage;
   final DateTime createdAt;
   final DateTime updatedAt;
   final int v;
-  final Favorites favorites;
+  final String address;
+  final String latitude;
+  final String longitude;
 
   Data({
+    required this.favorites,
     required this.id,
     required this.authId,
     required this.name,
     required this.email,
     required this.phoneNumber,
-    required this.profileImage,
     required this.createdAt,
     required this.updatedAt,
     required this.v,
-    required this.favorites,
+    required this.address,
+    required this.latitude,
+    required this.longitude,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
+    favorites: Favorites.fromJson(json["favorites"]),
     id: json["_id"],
     authId: AuthId.fromJson(json["authId"]),
     name: json["name"],
     email: json["email"],
     phoneNumber: json["phoneNumber"],
-    profileImage: json["profile_image"],
     createdAt: DateTime.parse(json["createdAt"]),
     updatedAt: DateTime.parse(json["updatedAt"]),
     v: json["__v"],
-    favorites: json["favorites"] != null
-        ? Favorites.fromJson(json["favorites"])
-        : Favorites(categories: []),
+    address: json["address"],
+    latitude: json["latitude"],
+    longitude: json["longitude"],
   );
 }
 
@@ -101,23 +105,11 @@ class AuthId {
 }
 
 class Favorites {
-  final List<Category> categories;
+  final List<dynamic> categories;
 
   Favorites({required this.categories});
 
   factory Favorites.fromJson(Map<String, dynamic> json) => Favorites(
-    categories: List<Category>.from(
-      json["categories"].map((x) => Category.fromJson(x)),
-    ),
+    categories: List<dynamic>.from(json["categories"].map((x) => x)),
   );
-}
-
-class Category {
-  final String categoryId;
-  final String id;
-
-  Category({required this.categoryId, required this.id});
-
-  factory Category.fromJson(Map<String, dynamic> json) =>
-      Category(categoryId: json["categoryId"], id: json["_id"]);
 }

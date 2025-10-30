@@ -8,6 +8,13 @@ class ProfileTopHeaderWidgetView extends GetView<ProfileController> {
     final double imageWidth = MediaQuery.of(context).size.width * 0.28;
     final double cardHeight = MediaQuery.of(context).size.height * 0.12;
     final profileInfo = controller.userProfileModel.data;
+
+    final profileImage = controller.userProfileModel.data.profileImage ?? '';
+
+    final imageUrl = profileImage.isEmpty
+        ? 'https://picsum.photos/200/300?random='
+        : "${ApiEndPoints.baseUrl}$profileImage";
+
     return Obx(
       () => Container(
         height: cardHeight,
@@ -34,21 +41,30 @@ class ProfileTopHeaderWidgetView extends GetView<ProfileController> {
                 topLeft: Radius.circular(Dimensions.radius * 0.8),
                 bottomLeft: Radius.circular(Dimensions.radius * 0.8),
               ),
-              child: CachedNetworkImage(
-                imageUrl: 'https://picsum.photos/200/300?random=',
+              child: Container(
                 width: imageWidth * 0.85,
                 height: cardHeight,
-                placeholder: (context, url) =>
-                    Container(color: Colors.grey.shade300),
-                errorWidget: (context, url, error) => Container(
-                  color: Colors.grey.shade400,
-                  child: const Icon(
-                    Icons.image_not_supported,
-                    color: Colors.grey,
-                    size: 40,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12.r),
+                  color: Colors.grey.shade200,
+                ),
+                clipBehavior: Clip.hardEdge,
+                child: CachedNetworkImage(
+                  imageUrl: imageUrl,
+                  width: imageWidth * 0.85,
+                  height: cardHeight,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) =>
+                      Container(color: Colors.grey.shade300),
+                  errorWidget: (context, url, error) => Container(
+                    color: Colors.grey.shade400,
+                    child: const Icon(
+                      Icons.image_not_supported,
+                      color: Colors.grey,
+                      size: 40,
+                    ),
                   ),
                 ),
-                fit: BoxFit.cover,
               ),
             ),
             Space.width.v10,

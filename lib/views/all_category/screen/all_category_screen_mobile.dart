@@ -6,52 +6,76 @@ class AllCategoryScreenMobile extends GetView<AllCategoryController> {
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
+    final categoryController = Get.find<CategoryController>();
     return Scaffold(
       appBar: CommonAppBar(title: 'All Service Category'),
-      body: SafeArea(
-        child: GridView.builder(
-          padding: EdgeInsets.symmetric(
-            horizontal: Dimensions.defaultHorizontalSize,
-            vertical: Dimensions.verticalSize * 0.5,
-          ),
+      body: Obx(() {
+        if (categoryController.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (categoryController.filteredCategory.isEmpty) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  "No categories found.",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                ),
+                const SizedBox(height: 12),
+                ElevatedButton.icon(
+                  onPressed: () => categoryController.getCategory(),
+                  icon: const Icon(Icons.refresh),
+                  label: const Text("Fetch Again"),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+
+        final int itemCount = categoryController.allCategory.length > 3 ? 3 : categoryController.allCategory.length;
+
+        return GridView.builder(
+          padding: EdgeInsets.zero,
           physics: const NeverScrollableScrollPhysics(),
-          cacheExtent: 500,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
             childAspectRatio: 0.9,
             mainAxisSpacing: 10,
             crossAxisSpacing: 10,
           ),
-          itemCount: 10,
+          itemCount: itemCount,
           itemBuilder: (context, index) {
+            final category = categoryController.allCategory[index];
             return RepaintBoundary(
-              child: InkWell(
-                onTap: () => Get.toNamed(Routes.categoryPreviewScreen,arguments: {
-
-                }),
+              child: GestureDetector(
+                onTap: () => Get.toNamed(Routes.categoryPreviewScreen, arguments: category.id),
                 child: Column(
-                  crossAxisAlignment: crossCenter,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     ClipOval(
                       child: CachedNetworkImage(
-                        imageUrl:
-                            "https://picsum.photos/200/300?random=${index + 1}",
+                        imageUrl: category.icon != null ? ApiEndPoints.baseUrl+(category.icon ?? "") : "https://picsum.photos/200/300?random=${index + 1}",
                         width: screenWidth * 0.16,
                         height: screenWidth * 0.16,
                         fit: BoxFit.cover,
                         placeholder: (context, url) =>
                             Container(color: Colors.grey.shade300),
-                        errorWidget: (context, url, error) => Container(
-                          color: Colors.grey.shade300,
-                          child: const Icon(Icons.error, color: Colors.red),
-                        ),
+                        errorWidget: (context, url, error) =>
+                            Container(color: Colors.grey.shade300, child: const Icon(Icons.error, color: Colors.red)),
                       ),
                     ),
-                    Space.height.v5,
+                    const SizedBox(height: 5),
                     TextWidget(
                       textAlign: TextAlign.center,
-                      "Landscaping & "
-                      "Hardscaping Service",
+                      category.name ?? "Unnamed",
                       maxLines: 2,
                       fontSize: Dimensions.titleSmall * 0.8,
                       textOverflow: TextOverflow.ellipsis,
@@ -62,8 +86,8 @@ class AllCategoryScreenMobile extends GetView<AllCategoryController> {
               ),
             );
           },
-        ),
-      ),
+        );
+      }),
     );
   }
 }

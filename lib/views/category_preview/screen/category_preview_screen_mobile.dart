@@ -1,49 +1,49 @@
 part of 'category_preview_screen.dart';
 
-class CategoryPreviewScreenMobile extends GetView<CategoryPreviewController> {
+class CategoryPreviewScreenMobile extends StatelessWidget {
   const CategoryPreviewScreenMobile({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final categoryController = Get.find<CategoryController>();
+    final categoryId = Get.arguments as String;
+    final category = categoryController.allCategory.firstWhereOrNull((c) => c.id == categoryId);
+
+    final subcategories = category?.subcategories ?? [];
+
     return Scaffold(
-      appBar: CommonAppBar(title: 'Handyman Interior Home '),
-      body: SafeArea(
-        child: ListView(
-          padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
-          children: [
-            ListTile(
-              trailing: Icon(Icons.favorite, color: CustomColors.primary),
-              contentPadding: EdgeInsetsGeometry.zero,
-              title: TextWidget(
-                'Category ',
-                fontWeight: FontWeight.w500,
-                color: CustomColors.primary,
+      appBar: CommonAppBar(title: category?.name ?? 'Category'),
+      body: subcategories.isEmpty
+          ? Center(
+              child: Text(
+                "No subcategories available",
+                style: TextStyle(fontSize: Dimensions.titleSmall, fontWeight: FontWeight.w500),
               ),
-
-              subtitle: TextWidget(
-                'Dlkfajsdlkdjsfladsfds',
-                fontSize: Dimensions.titleSmall * 0.9,
-              ),
+            )
+          : ListView.separated(
+              padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
+              itemCount: subcategories.length,
+              separatorBuilder: (_, __) => DividerWidget(),
+              itemBuilder: (context, index) {
+                final sub = subcategories[index];
+                return ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  /*trailing: IconButton(
+                    icon: Icon(Icons.favorite_border),
+                    color: CustomColors.primary,
+                    onPressed: () {
+                      print("object");
+                    },
+                  ),*/
+                  title: TextWidget(
+                    sub.name ?? "Unnamed",
+                    fontWeight: FontWeight.w500,
+                    color: CustomColors.primary,
+                    maxLines: 2,
+                  ),
+                );
+              },
             ),
-            DividerWidget(),
-            ListTile(
-              trailing: Icon(Icons.favorite, color: CustomColors.primary),
-              contentPadding: EdgeInsetsGeometry.zero,
-              title: TextWidget(
-                'SubCatgegory ',
-                fontWeight: FontWeight.w500,
-                color: CustomColors.primary,
-              ),
-
-              subtitle: TextWidget(
-                'Dlkfajsdlkdjsfladsfds',
-                fontSize: Dimensions.titleSmall * 0.9,
-              ),
-            ),
-            DividerWidget(),
-          ],
-        ),
-      ),
     );
   }
 }

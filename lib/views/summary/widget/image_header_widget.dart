@@ -1,17 +1,20 @@
 part of '../screen/summary_screen.dart';
 
 class ImageHeaderWidget extends GetView<SummaryController> {
-  const ImageHeaderWidget({super.key});
+  const ImageHeaderWidget({this.image, super.key});
+  final String? image;
 
   @override
   Widget build(BuildContext context) {
+    final url = "${ApiEndPoints.baseUrl}$image";
+    final fixedUrl = url.replaceAll(r'\', '/');
+
     return ClipRRect(
       borderRadius: BorderRadiusGeometry.circular(
         Dimensions.radius * 0.8,
       ),
       child: CachedNetworkImage(
-        imageUrl:
-        'https://picsum.photos/200/300?random=asdfgadhfdsagds',
+        imageUrl: image != null? fixedUrl : 'https://picsum.photos/200/300',
         width: double.infinity,
         height: 120.h,
         placeholder: (context, url) =>

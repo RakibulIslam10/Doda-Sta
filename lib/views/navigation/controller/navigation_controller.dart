@@ -24,4 +24,8 @@ class NavigationController extends GetxController {
   void goToProfile() {
     selectedIndex.value = 3;
   }
+
+  void goToHome() {
+    selectedIndex.value = 0;
+  }
 }

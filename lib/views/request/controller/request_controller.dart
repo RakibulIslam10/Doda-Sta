@@ -1,46 +1,120 @@
 import 'dart:io';
-
 import 'package:doda_work/core/utils/basic_import.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
+import '../../category/controller/category_controller.dart';
+import '../../navigation/controller/navigation_controller.dart';
 
 class RequestController extends GetxController {
-  // TODO: Logic
-final serviceAddressController = TextEditingController();
-final requestController = TextEditingController();
-  final RxString startDate =  ''.obs;
-  final RxString endDate =  ''.obs;
+  final Rxn<DateTime?> startDateTime = Rxn<DateTime>(null);
+  final Rxn<DateTime?> endDateTime = Rxn<DateTime>(null);
 
-  final RxString endTime =  ''.obs;
-  final RxString startedTime =  ''.obs;
+  final RxString selectedPriority = ''.obs;
 
-  final RxString selectedCategory =  ''.obs;
-  final RxString selectedSubCategory =  ''.obs;
+  final RxString selectedCategoryId = ''.obs;
+  final RxString selectedSubCategoryId = ''.obs;
+  final CategoryController categoryController = Get.find<CategoryController>();
 
-RxList<File> photos = <File>[].obs;  // all picked photos
-
-final ImagePicker _picker = ImagePicker();
-
-// pick new photo
-Future<void> pickImage() async {
-  final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-  if (pickedFile != null) {
-    photos.add(File(pickedFile.path));
+  void onCategorySelected(String categoryId) {
+    selectedCategoryId.value = categoryId;
+    final selectedCat = categoryController.allCategory.firstWhereOrNull((c) => c.id == categoryId);
+    categoryController.availableSubcategories
+      ..clear()
+      ..addAll(selectedCat?.subcategories ?? []);
+    selectedSubCategoryId.value = '';
   }
-}
 
-  var selectedValues = <String>[].obs;
+  void onSubCategorySelected(String subCategoryId) {
+    selectedSubCategoryId.value = subCategoryId;
+  }
 
-  void toggleValue(String value) {
-    if (selectedValues.contains(value)) {
-      selectedValues.remove(value);
-    } else {
-      selectedValues.add(value);
+  final Rxn<LatLng> selectedLatLng = Rxn<LatLng>();
+  final RxString selectedAddress = "".obs;
+
+  RxList<File> photos = <File>[].obs;
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> pickImage() async {
+    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      photos.add(File(pickedFile.path));
     }
   }
 
-  void clearAll() {
-    selectedValues.clear();
+  void resetForm() {
+    startDateTime.value = null;
+    endDateTime.value = null;
+
+    selectedPriority.value = '';
+    selectedCategoryId.value = '';
+    selectedSubCategoryId.value = '';
+
+    categoryController.availableSubcategories.clear();
+
+    selectedLatLng.value = null;
+    selectedAddress.value = '';
+
+    photos.clear();
   }
 
+  final RxBool isLoading = false.obs;
+
+  Future<void> bookingService({required String customerPhone, required String description,}) async {
+    final Map<String, String> payload = {
+      "serviceCategory": selectedCategoryId.value,
+      "subcategory": selectedSubCategoryId.value,
+      "priority": selectedPriority.value,
+      "startDate": DateFormat('yyyy-MM-dd').format(startDateTime.value!),
+      "endDate": DateFormat('yyyy-MM-dd').format(endDateTime.value!),
+      "startTime": DateFormat('HH:mm').format(startDateTime.value!),
+      "endTime": DateFormat('HH:mm').format(endDateTime.value!),
+      "address": selectedAddress.value,
+      "latitude": selectedLatLng.value?.latitude.toString() ?? "",
+      "longitude": selectedLatLng.value?.longitude.toString() ?? "",
+      "customerPhone": customerPhone,
+      "description": description,
+    };
+
+    try {
+      isLoading.value = true;
+      final response = await ApiClient.multipartRequest(
+          url: ApiEndPoints.serviceCreate(), 
+          body: payload,
+        reqType: "POST",
+        multipartBody: photos
+            .map((file) => MultipartBody("attachments", file))
+            .toList(),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Get.snackbar(
+          "Success",
+          "Your booking has been submitted successfully.",
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+
+        resetForm();
+        Get.find<NavigationController>().goToHome();
+      } else {
+        Get.snackbar(
+          "Failed",
+          "Booking submission failed. Try again.",
+          backgroundColor: Colors.redAccent,
+          colorText: Colors.white,
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        "Something went wrong: $e",
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
 }

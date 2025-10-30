@@ -1,0 +1,53 @@
+class SummaryModel {
+  final String? id;
+  final String? customerName;
+  final String? customerPhone;
+  final String? categoryName;
+  final String? categoryIcon;
+  final String? subcategory;
+  final String? priority;
+  final DateTime? startDate;
+  final DateTime? endDate;
+  final String? startTime;
+  final String? endTime;
+  final String? address;
+  final num? latitude;
+  final num? longitude;
+  final String? description;
+  final List<dynamic>? attachments;
+  final String? status;
+  final num? leadFee;
+  final String? paymentStatus;
+  final List<dynamic>? completionProof;
+  final List<dynamic>? potentialProviders;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final String? requestId;
+
+  SummaryModel({
+    this.id,
+    this.customerName,
+    this.customerPhone,
+    this.categoryName,
+    this.categoryIcon,
+    this.subcategory,
+    this.priority,
+    this.startDate,
+    this.endDate,
+    this.startTime,
+    this.endTime,
+    this.address,
+    this.latitude,
+    this.longitude,
+    this.description,
+    this.attachments,
+    this.status,
+    this.leadFee,
+    this.paymentStatus,
+    this.completionProof,
+    this.potentialProviders,
+    this.createdAt,
+    this.updatedAt,
+    this.requestId,
+  });
+}

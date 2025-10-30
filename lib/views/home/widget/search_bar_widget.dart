@@ -5,31 +5,25 @@ class SearchBarWidgetView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(
-        vertical: Dimensions.verticalSize * 0.8,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 12),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: CustomColors.primary, width: 1.4),
+          borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),
+        ),
+        child: TextField(
+          onChanged: (value){
 
-        horizontal: Dimensions.defaultHorizontalSize,
-      ),
-      decoration: BoxDecoration(
-        border: Border.all(color: CustomColors.primary, width: 1.4),
-        borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),
-      ),
-      height: Dimensions.inputBoxHeight * 0.7,
-      child: Row(
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: Dimensions.defaultHorizontalSize * 0.5,
+          },
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderSide: BorderSide.none,
             ),
-            child: Icon(
-              CupertinoIcons.search,
-              color: CustomColors.primary,
-              size: Dimensions.iconSizeLarge,
-            ),
+            prefixIcon: Icon(Icons.search),
+            hintText: "Search"
           ),
-          TextWidget('Search', color: CustomColors.grayShade.withAlpha(885)),
-        ],
+        ),
       ),
     );
   }

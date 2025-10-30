@@ -1,7 +1,8 @@
 part of '../screen/summary_screen.dart';
 
 class RequestTextBoxWidget extends GetView<SummaryController> {
-  const RequestTextBoxWidget({super.key});
+  const RequestTextBoxWidget({this.description, super.key});
+  final String? description;
 
   @override
   Widget build(BuildContext context) {
@@ -25,12 +26,10 @@ class RequestTextBoxWidget extends GetView<SummaryController> {
           ),
           child: TextWidget(
             fontSize: Dimensions.titleSmall,
-
             color: CustomColors.grayShade,
-            'A text field where the user can provide detailed information about the service they are requesting. This may include: A text field where the user can provide detailed information about the service they are requesting. This may include:',
+            description ?? "",
           ),
         ),
-
       ],
     );
   }

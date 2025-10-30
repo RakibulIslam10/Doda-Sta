@@ -1,17 +1,21 @@
-import 'package:doda_work/core/utils/basic_import.dart';
 import 'package:doda_work/core/utils/extensions.dart';
 import 'package:intl/intl.dart';
+
+import '../core/utils/basic_import.dart';
+import '../core/utils/function.dart';
 
 class DatePickerWidget extends StatefulWidget {
   final String hint;
   final String? label;
   final DateTime? initialDate;
+  final DateTime? minDate;
   final Function(DateTime) onDateSelected;
 
   const DatePickerWidget({
     super.key,
-    this.hint = "Select Date",
+    this.hint = "Select Date & Time",
     this.initialDate,
+    this.minDate,
     required this.onDateSelected,
     this.label,
   });
@@ -31,37 +35,14 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
   }
 
   Future<void> _pickDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
+    if(widget.minDate == null) return;
+    final picked = await pickDateTime(
       context: context,
-      initialDate: _selectedDate ?? DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
-              primary: CustomColors.primary,
-              onPrimary: Colors.white,
-              surface: CustomColors.whiteColor,
-            ),
-            textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(
-                foregroundColor: CustomColors.primary, // Button text color
-              ),
-            ),
-            dialogTheme: DialogThemeData(
-              backgroundColor: CustomColors.whiteColor,
-            ),
-          ),
-          child: child!,
-        );
-      },
+      minTime: widget.minDate,
     );
 
     if (picked != null) {
-      setState(() {
-        _selectedDate = picked;
-      });
+      setState(() => _selectedDate = picked);
       widget.onDateSelected(picked);
     }
   }
@@ -75,20 +56,27 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
           padding: EdgeInsetsGeometry.only(
             bottom: Dimensions.spaceBetweenInputTitleAndBox * 0.6,
           ),
-          widget.label ?? "Select Date",
+          widget.label ?? "Select Date & Time",
           fontSize: Dimensions.titleSmall,
           fontWeight: FontWeight.w500,
-          color: CustomColors.blackColor,
+          color: CustomColors.blackColor.withAlpha(888),
         ),
         InkWell(
           onTap: () => _pickDate(context),
           borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),
           child: Container(
-            padding: Dimensions.defaultHorizontalSize.edgeHorizontal * 0.5,
+            padding:
+            Dimensions.defaultHorizontalSize.edgeHorizontal * 0.5,
             height: Dimensions.inputBoxHeight * 0.7,
             decoration: BoxDecoration(
-              border: Border.all(color: _selectedDate == null ?CustomColors.disableColor : CustomColors.primary, width: 1.4),
-              borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),
+              border: Border.all(
+                color: _selectedDate == null
+                    ? CustomColors.disableColor
+                    : CustomColors.primary,
+                width: 1.4,
+              ),
+              borderRadius:
+              BorderRadius.circular(Dimensions.radius * 0.8),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -98,7 +86,6 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
                     _selectedDate == null
                         ? widget.hint
                         : _formatter.format(_selectedDate!),
-
                     fontSize: Dimensions.titleSmall,
                     color: _selectedDate == null
                         ? CustomColors.disableColor
@@ -106,7 +93,12 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                Icon(Icons.calendar_today, color:_selectedDate == null ?CustomColors.disableColor : CustomColors.primary),
+                Icon(
+                  Icons.calendar_today,
+                  color: _selectedDate == null
+                      ? CustomColors.disableColor
+                      : CustomColors.primary,
+                ),
               ],
             ),
           ),

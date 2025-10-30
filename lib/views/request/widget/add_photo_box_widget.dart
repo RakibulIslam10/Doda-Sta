@@ -1,9 +1,10 @@
 part of '../screen/request_screen.dart';
 
-class AddPhotoGrid extends GetView<RequestController> {
+class AddPhotoGrid extends StatelessWidget {
   final String? title;
+  final RequestController controller;
 
-  const AddPhotoGrid({super.key, this.title});
+  const AddPhotoGrid({super.key, this.title, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -12,8 +13,12 @@ class AddPhotoGrid extends GetView<RequestController> {
       children: [
         TextWidget(
           title ?? 'Add Photo or video',
+          fontSize: Dimensions.titleSmall,
           fontWeight: FontWeight.w500,
-          padding: EdgeInsetsGeometry.symmetric(vertical: Dimensions.heightSize * 0.8),
+          color: CustomColors.blackColor.withAlpha(888),
+        ),
+        SizedBox(
+          height: Dimensions.spaceBetweenInputTitleAndBox * 0.6,
         ),
         Obx(() {
           final items = [...controller.photos];
@@ -70,3 +75,4 @@ class AddPhotoGrid extends GetView<RequestController> {
     );
   }
 }
+

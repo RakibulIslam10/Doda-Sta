@@ -6,6 +6,8 @@ class SummaryScreenMobile extends GetView<SummaryController> {
 
   @override
   Widget build(BuildContext context) {
+    final SummaryModel model = Get.arguments;
+
     return Scaffold(
       appBar: CommonAppBar(title: 'Service Summary'),
       body: SafeArea(
@@ -13,16 +15,18 @@ class SummaryScreenMobile extends GetView<SummaryController> {
           padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
           children: [
             Space.height.v10,
-            ImageHeaderWidget(),
+            ImageHeaderWidget(
+              image: model.attachments?.firstOrNull,
+            ),
             Space.height.v10,
 
             RequestInfoCard(
-              requestId: '112222',
-              category: 'Induction In Kitchen',
-              subcategory: 'Induction In Kitchen',
-              priority: 'Urgency',
-              customerName: 'Chime Alozie',
-              address: 'Oldesloer Strasse 82',
+              requestId: model.requestId ?? "",
+              category: model.categoryName ?? "",
+              subcategory: model.subcategory ?? "",
+              priority: model.priority ?? "",
+              customerName: model.customerName ?? "",
+              address: model.address ?? "",
             ),
 
             TextWidget(
@@ -33,9 +37,11 @@ class SummaryScreenMobile extends GetView<SummaryController> {
               fontWeight: FontWeight.bold,
               fontSize: Dimensions.titleMedium,
             ),
-            RequestTextBoxWidget(),
+            RequestTextBoxWidget(
+              description: model.description,
+            ),
 
-            AddPhotoGrid(title: 'Attachments'),
+            // AddPhotoGrid(title: 'Attachments'),
 
            if(AppStorage.isVendor == false)...[
              ButtonsSectionWidget()

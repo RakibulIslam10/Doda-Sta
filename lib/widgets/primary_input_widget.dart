@@ -112,9 +112,9 @@ class _PrimaryInputFieldWidgetState extends State<PrimaryInputFieldWidget> {
                     widget.label!,
                     maxLines: 2,
                     textOverflow: TextOverflow.ellipsis,
-                    fontSize: Dimensions.titleMedium * 0.8,
+                    fontSize: Dimensions.titleSmall,
                     fontWeight: FontWeight.w500,
-                    color: CustomColors.blackColor,
+                    color: CustomColors.blackColor.withAlpha(888),
                   ),
                 ),
                 if (widget.optionalText?.isNotEmpty ?? false)

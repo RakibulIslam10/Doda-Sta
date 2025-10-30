@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../core/api/services/api.dart';
+import '../../../core/utils/app_storage.dart';
 import '../../../core/utils/basic_import.dart';
 import '../../../routes/routes.dart';
 import '../../aditional/model/service_category_model.dart';
@@ -76,6 +77,8 @@ class VendorProfileController extends GetxController {
     }
 
     return await ApiRequest.multiMultipartRequest(
+      token: AppStorage.temporaryToken,
+
       endPoint: ApiEndPoints.providerUpdateProfile,
       reqType: "PATCH",
       isLoading: isLoading,
@@ -84,9 +87,10 @@ class VendorProfileController extends GetxController {
         'contactPerson': nameController.text.trim(),
         'website': websiteController.text.trim(),
         'coveredRadius': coveredRadius.text.trim(),
-        'serviceCategories': [],
         "latitude": selectedLatLng.value?.latitude.toString() ?? "",
         "longitude": selectedLatLng.value?.longitude.toString() ?? "",
+        "serviceCategories": selectedServiceList,
+        "serviceLocation": selectedAddress.value,
       },
       files: fileMap,
       fromJson: ProviderUpdateProfileModel.fromJson,

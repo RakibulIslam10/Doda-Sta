@@ -31,11 +31,10 @@ class Data {
   final int coveredRadius;
   final List<WorkingHour> workingHours;
   final String serviceLocation;
-  final ContactPerson contactPerson;
+  final String contactPerson;
   final bool isActive;
   final bool isVerified;
-  final List<String> licenses;
-  final List<dynamic> certificates;
+  final List<dynamic> attachments;
   final int rating;
   final int totalReviews;
   final dynamic pendingUpdates;
@@ -61,8 +60,7 @@ class Data {
     required this.contactPerson,
     required this.isActive,
     required this.isVerified,
-    required this.licenses,
-    required this.certificates,
+    required this.attachments,
     required this.rating,
     required this.totalReviews,
     required this.pendingUpdates,
@@ -78,8 +76,8 @@ class Data {
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     id: json["_id"],
     authId: AuthId.fromJson(json["authId"]),
-    companyName: json["companyName"] ?? "",
-    website: json["website"] ?? '',
+    companyName: json["companyName"],
+    website: json["website"],
     serviceCategories: List<ServiceCategory>.from(
       json["serviceCategories"].map((x) => ServiceCategory.fromJson(x)),
     ),
@@ -90,11 +88,10 @@ class Data {
       json["workingHours"].map((x) => WorkingHour.fromJson(x)),
     ),
     serviceLocation: json["serviceLocation"],
-    contactPerson: ContactPerson.fromJson(json["contactPerson"]),
+    contactPerson: json["contactPerson"],
     isActive: json["isActive"],
     isVerified: json["isVerified"],
-    licenses: List<String>.from(json["licenses"].map((x) => x)),
-    certificates: List<dynamic>.from(json["certificates"].map((x) => x)),
+    attachments: List<dynamic>.from(json["attachments"].map((x) => x)),
     rating: json["rating"],
     totalReviews: json["totalReviews"],
     pendingUpdates: json["pendingUpdates"],
@@ -121,20 +118,6 @@ class AuthId {
       AuthId(id: json["_id"], name: json["name"], email: json["email"]);
 }
 
-class ContactPerson {
-  final String name;
-  final String email;
-  final String phone;
-
-  ContactPerson({required this.name, required this.email, required this.phone});
-
-  factory ContactPerson.fromJson(Map<String, dynamic> json) => ContactPerson(
-    name: json["name"],
-    email: json["email"],
-    phone: json["phone"],
-  );
-}
-
 class ServiceCategory {
   final String id;
   final String name;
@@ -144,6 +127,8 @@ class ServiceCategory {
 
   factory ServiceCategory.fromJson(Map<String, dynamic> json) =>
       ServiceCategory(id: json["_id"], name: json["name"], icon: json["icon"]);
+
+  Map<String, dynamic> toJson() => {"_id": id, "name": name, "icon": icon};
 }
 
 class Stats {

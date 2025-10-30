@@ -2,26 +2,34 @@ import 'package:doda_work/core/api/services/api.dart';
 import 'package:doda_work/core/utils/app_storage.dart';
 import 'package:doda_work/core/utils/basic_import.dart';
 import 'package:doda_work/views/profile/model/user_profile_model.dart';
-import 'package:doda_work/views/update/controller/update_controller.dart';
-
 import '../../vendor_profile/model/provider_profile_model.dart';
 
 class ProfileController extends GetxController {
-
+  RxBool isLoading = false.obs;
+  late UserProfileModel userProfileModel;
+  late ProviderProfileModel providerProfileModel;
 
   @override
   void onInit() {
     super.onInit();
-
-    getUserProfile();
+    loadProfile();
   }
 
-  // Profile get api
-  RxBool isLoading = false.obs;
-  late UserProfileModel userProfileModel;
+  // Load profile based on user type
+  Future<void> loadProfile() async {
+    if (AppStorage.isVendor == true) {
+      await getProviderProfile();
+      final providerInfo = providerProfileModel.data;
 
-  Future<UserProfileModel> getUserProfile() async {
-    return await ApiRequest.get(
+    } else {
+      await getUserProfile();
+      final profileInfo = userProfileModel.data;
+    }
+  }
+
+  // Get User Profile API
+  Future<void> getUserProfile() async {
+    await ApiRequest.get(
       fromJson: UserProfileModel.fromJson,
       endPoint: ApiEndPoints.userProfile,
       isLoading: isLoading,
@@ -31,11 +39,9 @@ class ProfileController extends GetxController {
     );
   }
 
-  // Profile get api
-  late ProviderProfileModel providerProfileModel;
-
-  Future<ProviderProfileModel> getProviderProfile() async {
-    return await ApiRequest.get(
+  // Get Provider Profile API
+  Future<void> getProviderProfile() async {
+    await ApiRequest.get(
       fromJson: ProviderProfileModel.fromJson,
       endPoint: ApiEndPoints.userProfile,
       isLoading: isLoading,

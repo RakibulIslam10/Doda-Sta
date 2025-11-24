@@ -1,7 +1,9 @@
 part of '../screen/profile_screen.dart';
 
 class ProfileCardSectionWidgetView extends GetView<ProfileController> {
-  const ProfileCardSectionWidgetView({super.key});
+   ProfileCardSectionWidgetView({super.key});
+
+   LoginController logoutController = Get.put(LoginController());
 
   @override
   Widget build(BuildContext context) {
@@ -93,6 +95,7 @@ class ProfileCardSectionWidgetView extends GetView<ProfileController> {
                 ElevatedButton(
                   onPressed: () {
                     AppStorage.clear();
+                    logoutController.signOut();
                     Get.offAllNamed(Routes.welcomeScreen);
                   },
                   style: ElevatedButton.styleFrom(

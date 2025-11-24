@@ -9,14 +9,10 @@ class SplashScreenMobile extends GetView<SplashController> {
       body: Container(
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [CustomColors.secondary, CustomColors.primary],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
+         color:  Colors.white,
         ),
 
-        child: SvgPicture.asset(Assets.logo.appLogo),
+        child: Image.asset(Assets.logo.aaplogo.path),
       ),
     );
   }

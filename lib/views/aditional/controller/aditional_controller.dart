@@ -180,7 +180,10 @@ class AditionalController extends GetxController {
       },
       reqType: 'POST',
       filesList: {'attachments': photos},
-      onSuccess: (result) => Get.offAllNamed(Routes.navigationScreen),
+      onSuccess: (result) {
+        AppStorage.save(isLoggedIn: true);
+        Get.offAllNamed(Routes.navigationScreen);
+      },
     );
   }
 }

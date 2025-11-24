@@ -1,7 +1,6 @@
 import 'package:doda_work/core/utils/basic_import.dart';
 import 'package:doda_work/core/utils/extensions.dart';
 import 'package:doda_work/routes/routes.dart';
-import 'package:shadify/shadify.dart';
 import '../controller/login_controller.dart';
 
 class FieldSectionWidget extends GetView<LoginController> {
@@ -13,6 +12,7 @@ class FieldSectionWidget extends GetView<LoginController> {
       key: controller.formKey,
       child: Column(
         children: [
+
           PrimaryInputFieldWidget(
             label: "Email",
             isEmail: true,
@@ -59,7 +59,7 @@ class FieldSectionWidget extends GetView<LoginController> {
                   ),
                   TextWidget(
                     padding: Dimensions.widthSize.edgeLeft,
-                    'Remember Me',
+                    'Remember me',
                     onTap: () => controller.rememberMe.value =
                         !controller.rememberMe.value,
                     fontWeight: FontWeight.w400,
@@ -70,7 +70,7 @@ class FieldSectionWidget extends GetView<LoginController> {
               TextWidget(
                 onTap: () => Get.toNamed(Routes.forgotScreen),
                 textAlign: TextAlign.end,
-                "Forget Password",
+                "Forgot Password",
                 color: CustomColors.primary,
                 fontWeight: FontWeight.w400,
                 fontSize: Dimensions.titleMedium,

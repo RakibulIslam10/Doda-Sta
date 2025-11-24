@@ -30,14 +30,14 @@ class RegisterScreenMobile extends GetView<RegisterController> {
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 TextWidget(
-                  padding: Dimensions.widthSize.edgeLeft,
+                  // padding: Dimensions.widthSize.edgeLeft,
                   'Already have an account?',
                   color: CustomColors.secondaryDarkText,
                   fontWeight: FontWeight.w400,
                   fontSize: Dimensions.titleMedium * 0.96,
                 ),
                 TextWidget(
-                  padding: Dimensions.widthSize.edgeLeft,
+                  padding: Dimensions.widthSize.edgeLeft * 0.24,
                   'Sign In',
                   onTap: () {
                     Get.offAllNamed(Routes.loginScreen);

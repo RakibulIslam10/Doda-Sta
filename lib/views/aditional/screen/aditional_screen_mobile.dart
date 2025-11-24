@@ -5,8 +5,14 @@ class AditionalScreenMobile extends GetView<AditionalController> {
 
   @override
   Widget build(BuildContext context) {
+
+
+
     print(jsonEncode(controller.getAvailabilityData()));
     print(Get.find<RegisterController>().nameController.text);
+
+
+
     return Scaffold(
       appBar: CommonAppBar(title: 'Service Provider registration'),
       body: Obx(
@@ -132,7 +138,6 @@ class AditionalScreenMobile extends GetView<AditionalController> {
                       if (controller.currentEditingDay.isEmpty) {
                         return SizedBox.shrink();
                       }
-
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -157,11 +162,11 @@ class AditionalScreenMobile extends GetView<AditionalController> {
                               Expanded(
                                 child: TimePickerWidget(
                                   label: 'End Time',
-                                  /*onTimeSelected: (time) {
-                                    controller.endTime.value = time;
-                                    controller
-                                        .saveTimeForCurrentDay(); // ✅ Auto save
-                                  },*/
+                                  // /*onTimeSelected: (time) {
+                                  //   controller.endTime.value = time;
+                                  //   controller
+                                  //       .saveTimeForCurrentDay(); // ✅ Auto save
+                                  // },*/
                                 ),
                               ),
                             ],

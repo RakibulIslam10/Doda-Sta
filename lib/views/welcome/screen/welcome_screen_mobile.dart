@@ -88,7 +88,10 @@ class WelcomeScreenMobile extends GetView<WelcomeController> {
               //   fontSize: Dimensions.titleLarge * 0.9,
               // ),
               GestureDetector(
-                onTap: () => Get.offAllNamed(Routes.loginScreen),
+                onTap: () {
+                  Get.toNamed(Routes.loginScreen);
+                  AppStorage.save(isVendor: false);
+                },
 
                 child: AnimatedContainer(
                   margin: EdgeInsetsGeometry.symmetric(
@@ -133,7 +136,7 @@ class WelcomeScreenMobile extends GetView<WelcomeController> {
 
               GestureDetector(
                 onTap: () {
-                  Get.offAllNamed(Routes.loginScreen);
+                  Get.offAllNamed(Routes.registerScreen);
                   AppStorage.save(isVendor: true);
                 },
                 child: AnimatedContainer(

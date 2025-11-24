@@ -1,14 +1,25 @@
 import 'package:doda_work/core/utils/basic_import.dart';
 import 'package:doda_work/core/utils/extensions.dart';
 import 'package:shadify/shadify.dart';
+import '../../../../core/api/services/auths.dart';
+import '../../../../core/utils/app_storage.dart';
+import '../../../../core/utils/message_helper.dart';
 import '../../../../routes/routes.dart';
+import '../../../home/screen/home_screen.dart';
+import '../../../home/screen/home_screen_mobile.dart';
+import '../../../navigation/screen/navigation_screen.dart';
+import '../../../onboard/screen/onboard_screen.dart';
+
 import '../controller/login_controller.dart';
 
 class ButtonSectionWidget extends GetView<LoginController> {
-  const ButtonSectionWidget({super.key});
+
+   const ButtonSectionWidget({super.key});
+
 
   @override
   Widget build(BuildContext context) {
+
     return Column(
       children: [
         Obx(
@@ -36,7 +47,7 @@ class ButtonSectionWidget extends GetView<LoginController> {
               fontSize: Dimensions.titleMedium * 0.96,
             ),
             TextWidget(
-              padding: Dimensions.widthSize.edgeLeft,
+              padding: Dimensions.widthSize.edgeLeft * 0.4,
               'Sign Up',
               onTap: () => Get.toNamed(Routes.registerScreen),
               color: CustomColors.primary,
@@ -51,23 +62,44 @@ class ButtonSectionWidget extends GetView<LoginController> {
           fontWeight: FontWeight.w400,
         ),
 
-        Container(
-          margin: Dimensions.verticalSize.edgeVertical * 0.25,
-          height: Dimensions.buttonHeight * 0.7,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(Dimensions.radius * 3),
-            border: Border.all(color: CustomColors.primary, width: 1.4),
-          ),
+        GestureDetector(
+         // onTap: () => googleLoginController.signInWithGoogle(context),
+          onTap: () async {
+            try {
+              final user = await controller.signInWithGoogle(context); // now returns User?
+              String? token = await user?.getIdToken();
+              print("GetToken: $token");
 
-          child: Row(
-            mainAxisAlignment: mainCenter,
-            children: [
-              SvgPicture.asset(Assets.logo.google),
-              TextWidget(
-                'Sign in with Google',
-                padding: Dimensions.widthSize.edgeLeft,
-              ),
-            ],
+              if (user != null) {
+                AppStorage.token;
+                Get.offAllNamed(Routes.navigationScreen);
+                MessageHelper.showSuccess("Sign-In successful!");
+                // Success logic
+              } else {
+                MessageHelper.showError("Sign-In failed. Please try again.");
+              }
+            }catch (e) {
+              MessageHelper.showError("Error: $e"); // Provide a meaningful error message
+            }
+          },
+          child: Container(
+            margin: Dimensions.verticalSize.edgeVertical * 0.5,
+            height: Dimensions.buttonHeight * 0.7,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(Dimensions.radius * 3),
+              border: Border.all(color: CustomColors.primary, width: 1.4),
+            ),
+
+            child: Row(
+              mainAxisAlignment: mainCenter,
+              children: [
+                SvgPicture.asset(Assets.logo.google),
+                TextWidget(
+                  'Sign in with Google',
+                  padding: Dimensions.widthSize.edgeLeft,
+                ),
+              ],
+            ),
           ),
         ),
         Container(

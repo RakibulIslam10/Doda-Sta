@@ -85,29 +85,17 @@ class $AssetsIconsGen {
   /// File path: assets/icons/activity.svg
   String get activity => 'assets/icons/activity.svg';
 
-  /// File path: assets/icons/carbs.svg
-  String get carbs => 'assets/icons/carbs.svg';
-
   /// File path: assets/icons/category.svg
   String get category => 'assets/icons/category.svg';
 
   /// File path: assets/icons/empty.svg
   String get empty => 'assets/icons/empty.svg';
 
-  /// File path: assets/icons/fat.svg
-  String get fat => 'assets/icons/fat.svg';
-
-  /// File path: assets/icons/fire.svg
-  String get fire => 'assets/icons/fire.svg';
-
   /// File path: assets/icons/paper-plane-top 1.svg
   String get paperPlaneTop1 => 'assets/icons/paper-plane-top 1.svg';
 
   /// File path: assets/icons/picture 1.svg
   String get picture1 => 'assets/icons/picture 1.svg';
-
-  /// File path: assets/icons/protin.svg
-  String get protin => 'assets/icons/protin.svg';
 
   /// File path: assets/icons/reject.svg
   String get reject => 'assets/icons/reject.svg';
@@ -132,14 +120,10 @@ class $AssetsIconsGen {
     popup,
     vector,
     activity,
-    carbs,
     category,
     empty,
-    fat,
-    fire,
     paperPlaneTop1,
     picture1,
-    protin,
     reject,
     request1,
     success,
@@ -153,6 +137,9 @@ class $AssetsLogoGen {
 
   /// File path: assets/logo/Page-1.svg
   String get page1 => 'assets/logo/Page-1.svg';
+
+  /// File path: assets/logo/aaplogo.png
+  AssetGenImage get aaplogo => const AssetGenImage('assets/logo/aaplogo.png');
 
   /// File path: assets/logo/appLogo.svg
   String get appLogo => 'assets/logo/appLogo.svg';
@@ -168,7 +155,14 @@ class $AssetsLogoGen {
   AssetGenImage get logo => const AssetGenImage('assets/logo/logo.png');
 
   /// List of all assets
-  List<dynamic> get values => [page1, appLogo, forground, google, logo];
+  List<dynamic> get values => [
+    page1,
+    aaplogo,
+    appLogo,
+    forground,
+    google,
+    logo,
+  ];
 }
 
 class Assets {

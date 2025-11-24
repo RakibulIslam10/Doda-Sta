@@ -22,11 +22,14 @@ class ApiRequest {
   static void printBodyLineByLine(Map<String, dynamic> body) {
     body.forEach((key, value) {
       log("🔹 '$key': '$value'");
+      log('╚════════════════════════════════════════════════════════════════');
     });
   }
 
   // ✅ FIXED HERE
   static void printEndPointLog(String url) {
+    log('╔════════════════════════════════════════════════════════════════');
+
     log("📍 'End Point': '$url'");
   }
 

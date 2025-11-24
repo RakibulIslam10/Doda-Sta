@@ -22,7 +22,6 @@ class LoginModel {
 class Data {
   final User user;
   final String accessToken;
-
   Data({required this.user, required this.accessToken});
 
   factory Data.fromJson(Map<String, dynamic> json) =>

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "621538781171",
+    "project_id": "dodawork-app",
+    "storage_bucket": "dodawork-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:621538781171:android:a0c3fbc24b881c90ae1486",
+        "android_client_info": {
+          "package_name": "com.mazlmario.dodawork"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2Exan6YHCf4b7SdglY7mdOsnYzfx0wYs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

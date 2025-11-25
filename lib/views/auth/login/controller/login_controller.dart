@@ -1,64 +1,74 @@
 import 'dart:io';
-
-import 'package:doda_work/core/api/services/api.dart';
 import 'package:doda_work/core/api/services/auth_service.dart';
-import 'package:doda_work/core/api/services/auths.dart';
-import 'package:doda_work/core/utils/app_storage.dart';
 import 'package:doda_work/core/utils/basic_import.dart';
-import 'package:doda_work/views/auth/login/model/login_model.dart' hide User;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
-class LoginController extends GetxController {
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+import '../../../../core/api/services/auths.dart';
 
-  // email
+class LoginController extends GetxController {
+  /// FORM
+  final formKey = GlobalKey<FormState>();
+
+  /// EMAIL
   final emailController = TextEditingController();
   final emailFocus = FocusNode();
   final isEmailValid = false.obs;
 
-  // password
+  /// PASSWORD
   final passwordController = TextEditingController();
   final passwordFocus = FocusNode();
   final isPasswordValid = false.obs;
   final isPasswordVisible = false.obs;
   final rememberMe = false.obs;
 
+  /// LOADING
+  final isLoading = false.obs;
+
+  /// FIREBASE AUTH
+  final firebaseUser = Rxn<User>();
+
+  User? get user => firebaseUser.value;
+
   @override
   void onInit() {
     super.onInit();
+
+    /// Default credentials for testing
     emailController.text = 'qeo@yopmail.com';
     passwordController.text = '112233';
   }
 
-  RxBool isLoading = false.obs;
+  @override
+  void onClose() {
+    emailController.dispose();
+    passwordController.dispose();
+    emailFocus.dispose();
+    passwordFocus.dispose();
+    super.onClose();
+  }
 
-  // login APi
-  loginProcess() async {
+  /// ===============================
+  /// 🔥 LOGIN USING EMAIL + PASSWORD
+  /// ===============================
+  Future<dynamic> loginProcess() async {
     return await AuthService.loginService(
       isLoading: isLoading,
-      email: emailController.text,
-      password: passwordController.text,
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
     );
   }
 
-  // google logi section
-  // Observable user
-  var firebaseUser = Rxn<User>();
-
-  // Getter for convenience
-  User? get user => firebaseUser.value;
-
-  /// Sign in with Google and get user info
+  /// ===============================
+  /// 🔥 GOOGLE SIGN IN
+  /// ===============================
   Future<User?> signInWithGoogle(BuildContext context) async {
     try {
       final googleSignIn = GoogleSignIn(
-        clientId:
-            "621538781171-8f9t0fpop11e2cfg4jc5qc9iukbb1sq5.apps.googleusercontent.com",
-        serverClientId:
-            "621538781171-aq5ivgocr6otgp90d5mbhmvicnrn1re1.apps.googleusercontent.com",
+        clientId: "621538781171-8f9t0fpop11e2cfg4jc5qc9iukbb1sq5.apps.googleusercontent.com",
+        serverClientId: "621538781171-aq5ivgocr6otgp90d5mbhmvicnrn1re1.apps.googleusercontent.com",
         scopes: ['email', 'profile'],
       );
 
@@ -75,8 +85,7 @@ class LoginController extends GetxController {
         idToken: googleAuth.idToken,
       );
 
-      UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithCredential(credential);
+      final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
 
       firebaseUser.value = userCredential.user;
 
@@ -86,23 +95,28 @@ class LoginController extends GetxController {
       );
 
       return userCredential.user;
+
     } catch (e) {
-      if (kDebugMode) {
-        print("Google Sign-In Error: $e");
-      }
+      if (kDebugMode) print("Google Sign-In Error: $e");
+
       await FirebaseAuth.instance.signOut();
       firebaseUser.value = null;
+
       Get.snackbar("Error", "Google Sign-In failed");
       return null;
     }
   }
 
-  /// Sign out from Firebase and Google
+  /// ===============================
+  /// 🔥 SIGN OUT (Google + Firebase)
+  /// ===============================
   Future<void> signOut() async {
     try {
       await GoogleSignIn().signOut();
       await FirebaseAuth.instance.signOut();
+
       firebaseUser.value = null;
+
       Get.snackbar("Success", "Signed out successfully");
     } catch (e) {
       print("Sign-Out Error: $e");
@@ -110,23 +124,24 @@ class LoginController extends GetxController {
     }
   }
 
+  /// APPLE AUTH INSTANCE
   static final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  /// ✅ Sign in with Apple
+  /// ===============================
+  /// 🔥 APPLE SIGN IN
+  /// ===============================
   static Future<UserCredential?> signInWithApple() async {
     try {
-      // Check if platform supports Apple Sign-In
       if (kIsWeb) {
-        print("Apple Sign-In is not supported on Web.");
+        print("Apple Sign-In not supported on Web.");
         return null;
       }
 
       if (!Platform.isIOS && !Platform.isMacOS) {
-        print("Apple Sign-In is only supported on iOS/macOS.");
+        print("Apple Sign-In only for iOS/macOS.");
         return null;
       }
 
-      // 1. Apple Credentials
       final appleCredential = await SignInWithApple.getAppleIDCredential(
         scopes: [
           AppleIDAuthorizationScopes.email,
@@ -134,26 +149,27 @@ class LoginController extends GetxController {
         ],
       );
 
-      // 2. OAuth Credential for Firebase
       final oauthCredential = OAuthProvider("apple.com").credential(
         idToken: appleCredential.identityToken,
         accessToken: appleCredential.authorizationCode,
       );
 
-      // 3. Firebase Sign-in
       return await _auth.signInWithCredential(oauthCredential);
+
     } catch (e) {
-      print("Apple Sign In Error: $e");
+      print("Apple Sign-In Error: $e");
       return null;
     }
   }
 
-  /// 🔥 Check Current User
-  static User? currentUser() {
-    return _auth.currentUser;
-  }
+  /// ===============================
+  /// 🔥 CURRENT USER (APPLE/GMAIL)
+  /// ===============================
+  static User? currentUser() => _auth.currentUser;
 
-  /// 🔥 Sign Out
+  /// ===============================
+  /// 🔥 SIGN OUT APPLE
+  /// ===============================
   static Future<void> signOutApple() async {
     await _auth.signOut();
   }

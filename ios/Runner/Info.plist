@@ -76,5 +76,40 @@
     <true/>
     <key>UIApplicationSupportsIndirectInputEvents</key>
     <true/>
+
+      <!-- Wi-Fi / Network access -->
+        <key>NSLocalNetworkUsageDescription</key>
+        <string>This app needs access to the local network.</string>
+
+        <!-- Allow arbitrary network loads (Firebase, APIs) -->
+        <key>NSAppTransportSecurity</key>
+        <dict>
+            <key>NSAllowsArbitraryLoads</key>
+            <true/>
+        </dict>
+
+     <key>CFBundleURLTypes</key>
+               <array>
+                   <dict>
+                       <key>CFBundleTypeRole</key>
+                       <string>Editor</string>
+                       <key>CFBundleURLSchemes</key>
+                       <array>
+                           <!-- Replace this with your actual reversed client ID from GoogleService-Info.plist -->
+                           <string>com.mazlmario.dodawork</string>
+                       </array>
+                   </dict>
+               </array>
+
+  <key>NSAppleMusicUsageDescription</key>
+  <string>Sign in with Apple permission</string>
+
+
+
+
+
+
+
+
   </dict>
 </plist>

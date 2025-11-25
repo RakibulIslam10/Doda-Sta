@@ -2,106 +2,108 @@ import 'package:doda_work/core/utils/basic_import.dart';
 import 'package:doda_work/core/utils/extensions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shadify/shadify.dart';
-import '../../../../core/api/services/auths.dart';
+
 import '../../../../core/utils/app_storage.dart';
 import '../../../../core/utils/message_helper.dart';
 import '../../../../routes/routes.dart';
-import '../../../home/screen/home_screen.dart';
-import '../../../home/screen/home_screen_mobile.dart';
-import '../../../navigation/screen/navigation_screen.dart';
-import '../../../onboard/screen/onboard_screen.dart';
-
 import '../controller/login_controller.dart';
 
 class ButtonSectionWidget extends GetView<LoginController> {
+  ButtonSectionWidget({super.key});
 
-    ButtonSectionWidget({super.key});
+  /// ----------------------
+  /// 🔥 APPLE LOGIN HANDLER
+  /// ----------------------
+  Future<void> handleAppleLogin() async {
+    try {
+      final user = await LoginController.signInWithApple();
 
+      if (user != null) {
+        MessageHelper.showSuccess("Apple Sign-in Successful");
+        Get.offAllNamed(Routes.navigationScreen);
+      } else {
+        MessageHelper.showError("Apple Sign-In only for iOS/macOS.");
+      }
+    } catch (e) {
+      MessageHelper.showError("Error: $e");
+    }
+  }
 
-   bool loading = false;
+  /// ----------------------
+  /// 🔥 GOOGLE LOGIN HANDLER
+  /// ----------------------
+  Future<void> handleGoogleLogin(BuildContext context) async {
+    try {
+      final user = await controller.signInWithGoogle(context);
 
-   Future<void> handleLogin() async {
+      if (user == null) {
+        MessageHelper.showError("Google Sign-in Failed. Try again.");
+        return;
+      }
 
+      final token = await user.getIdToken();
+      await AppStorage.save(token: token);
 
-     UserCredential? user = await LoginController.signInWithApple();
+      MessageHelper.showSuccess("Sign-In Successful!");
 
+      Get.offAllNamed(Routes.navigationScreen);
 
-     if (user != null) {
-
-       MessageHelper.showSuccess("success");
-
-     } else {
-       MessageHelper.showSuccess("Not Success");
-
-     }
-   }
-
+    } catch (e) {
+      MessageHelper.showError("Google error: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
       children: [
+        /// ----------------------
+        /// 🔥 EMAIL SIGN-IN BUTTON
+        /// ----------------------
         Obx(
-          () => PrimaryButtonWidget(
+              () => PrimaryButtonWidget(
             title: 'Sign in',
             isLoading: controller.isLoading.value,
             onPressed: () {
-              if (controller.formKey.currentState!.validate()) {
+              if (controller.formKey.currentState?.validate() ?? false) {
                 controller.loginProcess();
               }
             },
           ),
         ),
+
         Space.height.v10,
 
+        /// ----------------------
+        /// 🔥 SIGN-UP NAVIGATION
+        /// ----------------------
         Wrap(
           alignment: WrapAlignment.center,
-          crossAxisAlignment: WrapCrossAlignment.center,
           children: [
             TextWidget(
-              padding: Dimensions.widthSize.edgeLeft,
               'Don’t have an account?',
-              color: CustomColors.secondaryDarkText,
-              fontWeight: FontWeight.w400,
               fontSize: Dimensions.titleMedium * 0.96,
+              color: CustomColors.secondaryDarkText,
             ),
             TextWidget(
-              padding: Dimensions.widthSize.edgeLeft * 0.4,
               'Sign Up',
               onTap: () => Get.toNamed(Routes.registerScreen),
+              padding: Dimensions.widthSize.edgeLeft * 0.5,
               color: CustomColors.primary,
               fontWeight: FontWeight.w500,
               fontSize: Dimensions.titleMedium * 0.96,
             ),
           ],
         ),
-        TextWidget(
-          'Or',
-          textAlign: TextAlign.center,
-          fontWeight: FontWeight.w400,
-        ),
 
+        Space.height.v5,
+        TextWidget('Or', textAlign: TextAlign.center),
+
+        /// ----------------------
+        /// 🔥 GOOGLE SIGN-IN
+        /// ----------------------
         GestureDetector(
-         // onTap: () => googleLoginController.signInWithGoogle(context),
-          onTap: () async {
-            try {
-              final user = await controller.signInWithGoogle(context); // now returns User?
-              String? token = await user?.getIdToken();
-              print("GetToken: $token");
-
-              if (user != null) {
-                AppStorage.token;
-                Get.offAllNamed(Routes.navigationScreen);
-                MessageHelper.showSuccess("Sign-In successful!");
-                // Success logic
-              } else {
-                MessageHelper.showError("Sign-In failed. Please try again.");
-              }
-            }catch (e) {
-              MessageHelper.showError("Error: $e"); // Provide a meaningful error message
-            }
-          },
+          onTap: () => handleGoogleLogin(context),
           child: Container(
             margin: Dimensions.verticalSize.edgeVertical * 0.5,
             height: Dimensions.buttonHeight * 0.7,
@@ -109,9 +111,8 @@ class ButtonSectionWidget extends GetView<LoginController> {
               borderRadius: BorderRadius.circular(Dimensions.radius * 3),
               border: Border.all(color: CustomColors.primary, width: 1.4),
             ),
-
             child: Row(
-              mainAxisAlignment: mainCenter,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SvgPicture.asset(Assets.logo.google),
                 TextWidget(
@@ -122,22 +123,29 @@ class ButtonSectionWidget extends GetView<LoginController> {
             ),
           ),
         ),
-        Container(
-          margin: Dimensions.heightSize.edgeTop * 0.2,
-          height: Dimensions.buttonHeight * 0.7,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(Dimensions.radius * 3),
-            border: Border.all(color: CustomColors.primary, width: 1.4),
-          ),
-          child: Row(
-            mainAxisAlignment: mainCenter,
-            children: [
-              SvgPicture.asset(Assets.logo.page1),
-              TextWidget(
-                'Sign in with Apple',
-                padding: Dimensions.widthSize.edgeLeft,
-              ),
-            ],
+
+        /// ----------------------
+        /// 🔥 APPLE SIGN-IN
+        /// ----------------------
+        GestureDetector(
+          onTap: handleAppleLogin,
+          child: Container(
+            margin: Dimensions.heightSize.edgeTop * 0.2,
+            height: Dimensions.buttonHeight * 0.7,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(Dimensions.radius * 3),
+              border: Border.all(color: CustomColors.primary, width: 1.4),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset(Assets.logo.page1),
+                TextWidget(
+                  'Sign in with Apple',
+                  padding: Dimensions.widthSize.edgeLeft,
+                ),
+              ],
+            ),
           ),
         ),
       ],

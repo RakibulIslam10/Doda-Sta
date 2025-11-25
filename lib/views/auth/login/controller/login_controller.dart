@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:doda_work/core/api/services/api.dart';
 import 'package:doda_work/core/api/services/auth_service.dart';
 import 'package:doda_work/core/api/services/auths.dart';
@@ -7,6 +9,7 @@ import 'package:doda_work/views/auth/login/model/login_model.dart' hide User;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class LoginController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -41,7 +44,6 @@ class LoginController extends GetxController {
     );
   }
 
-
   // google logi section
   // Observable user
   var firebaseUser = Rxn<User>();
@@ -53,8 +55,10 @@ class LoginController extends GetxController {
   Future<User?> signInWithGoogle(BuildContext context) async {
     try {
       final googleSignIn = GoogleSignIn(
-        clientId: "621538781171-8f9t0fpop11e2cfg4jc5qc9iukbb1sq5.apps.googleusercontent.com",
-        serverClientId: "621538781171-aq5ivgocr6otgp90d5mbhmvicnrn1re1.apps.googleusercontent.com",
+        clientId:
+            "621538781171-8f9t0fpop11e2cfg4jc5qc9iukbb1sq5.apps.googleusercontent.com",
+        serverClientId:
+            "621538781171-aq5ivgocr6otgp90d5mbhmvicnrn1re1.apps.googleusercontent.com",
         scopes: ['email', 'profile'],
       );
 
@@ -71,14 +75,15 @@ class LoginController extends GetxController {
         idToken: googleAuth.idToken,
       );
 
-      UserCredential userCredential =
-      await FirebaseAuth.instance.signInWithCredential(credential);
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithCredential(credential);
 
       firebaseUser.value = userCredential.user;
 
-
-
-      Get.snackbar("Success", "Signed in as ${userCredential.user?.displayName}");
+      Get.snackbar(
+        "Success",
+        "Signed in as ${userCredential.user?.displayName}",
+      );
 
       return userCredential.user;
     } catch (e) {
@@ -91,6 +96,7 @@ class LoginController extends GetxController {
       return null;
     }
   }
+
   /// Sign out from Firebase and Google
   Future<void> signOut() async {
     try {
@@ -104,4 +110,51 @@ class LoginController extends GetxController {
     }
   }
 
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  /// ✅ Sign in with Apple
+  static Future<UserCredential?> signInWithApple() async {
+    try {
+      // Check if platform supports Apple Sign-In
+      if (kIsWeb) {
+        print("Apple Sign-In is not supported on Web.");
+        return null;
+      }
+
+      if (!Platform.isIOS && !Platform.isMacOS) {
+        print("Apple Sign-In is only supported on iOS/macOS.");
+        return null;
+      }
+
+      // 1. Apple Credentials
+      final appleCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+
+      // 2. OAuth Credential for Firebase
+      final oauthCredential = OAuthProvider("apple.com").credential(
+        idToken: appleCredential.identityToken,
+        accessToken: appleCredential.authorizationCode,
+      );
+
+      // 3. Firebase Sign-in
+      return await _auth.signInWithCredential(oauthCredential);
+    } catch (e) {
+      print("Apple Sign In Error: $e");
+      return null;
+    }
+  }
+
+  /// 🔥 Check Current User
+  static User? currentUser() {
+    return _auth.currentUser;
+  }
+
+  /// 🔥 Sign Out
+  static Future<void> signOutApple() async {
+    await _auth.signOut();
+  }
 }

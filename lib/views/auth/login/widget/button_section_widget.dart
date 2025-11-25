@@ -1,5 +1,6 @@
 import 'package:doda_work/core/utils/basic_import.dart';
 import 'package:doda_work/core/utils/extensions.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shadify/shadify.dart';
 import '../../../../core/api/services/auths.dart';
 import '../../../../core/utils/app_storage.dart';
@@ -14,7 +15,26 @@ import '../controller/login_controller.dart';
 
 class ButtonSectionWidget extends GetView<LoginController> {
 
-   const ButtonSectionWidget({super.key});
+    ButtonSectionWidget({super.key});
+
+
+   bool loading = false;
+
+   Future<void> handleLogin() async {
+
+
+     UserCredential? user = await LoginController.signInWithApple();
+
+
+     if (user != null) {
+
+       MessageHelper.showSuccess("success");
+
+     } else {
+       MessageHelper.showSuccess("Not Success");
+
+     }
+   }
 
 
   @override

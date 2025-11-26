@@ -94,8 +94,10 @@ class ProfileCardSectionWidgetView extends GetView<ProfileController> {
 
                 ElevatedButton(
                   onPressed: () {
-                    AppStorage.clear();
+
                     logoutController.signOut();
+                    LoginController.signOutApple();
+                    AppStorage.clear();
                     Get.offAllNamed(Routes.welcomeScreen);
                   },
                   style: ElevatedButton.styleFrom(

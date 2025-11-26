@@ -1,6 +1,7 @@
 import 'package:doda_work/core/utils/basic_import.dart';
 import 'package:doda_work/core/utils/extensions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:shadify/shadify.dart';
 
 import '../../../../core/utils/app_storage.dart';
@@ -19,6 +20,7 @@ class ButtonSectionWidget extends GetView<LoginController> {
       final user = await LoginController.signInWithApple();
 
       if (user != null) {
+        await AppStorage.save(token: user.credential!.accessToken.toString(),isLoggedIn: true);
         MessageHelper.showSuccess("Apple Sign-in Successful");
         Get.offAllNamed(Routes.navigationScreen);
       } else {
@@ -42,10 +44,11 @@ class ButtonSectionWidget extends GetView<LoginController> {
       }
 
       final token = await user.getIdToken();
-      await AppStorage.save(token: token);
-
+      if (kDebugMode) {
+        print("TOKEN: $token");
+      }
+      await AppStorage.save(token: token,isLoggedIn: true);
       MessageHelper.showSuccess("Sign-In Successful!");
-
       Get.offAllNamed(Routes.navigationScreen);
 
     } catch (e) {

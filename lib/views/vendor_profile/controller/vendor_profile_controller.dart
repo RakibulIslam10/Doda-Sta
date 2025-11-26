@@ -1,3 +1,105 @@
+// import 'dart:io';
+//
+// import 'package:google_maps_flutter/google_maps_flutter.dart';
+// import 'package:image_picker/image_picker.dart';
+// import '../../../core/api/services/api.dart';
+// import '../../../core/utils/app_storage.dart';
+// import '../../../core/utils/basic_import.dart';
+// import '../../../routes/routes.dart';
+// import '../../aditional/model/service_category_model.dart';
+// import '../model/provider_update_profile_model.dart';
+//
+// class VendorProfileController extends GetxController {
+//   // TODO: Logic
+//   // name
+//   final nameController = TextEditingController();
+//   final contactPersonController = TextEditingController();
+//   final coveredRadius = TextEditingController();
+//   final websiteController = TextEditingController();
+//   final nameFocus = FocusNode();
+//
+//   final locationController = TextEditingController();
+//   final locationFocus = FocusNode();
+//
+//   // email
+//   final emailController = TextEditingController();
+//   final emailFocus = FocusNode();
+//   final isEmailValid = false.obs;
+//
+//   // number
+//   final numberController = TextEditingController();
+//   final numberFocus = FocusNode();
+//
+//   final _imagePicker = ImagePicker();
+//   final Rx<File?> selectedImg = Rx(null);
+//
+//   Future<void> pickImg() async {
+//     final pickedImg = await _imagePicker.pickImage(source: ImageSource.gallery);
+//     if (pickedImg != null) {
+//       selectedImg.value = File(pickedImg.path);
+//     } else {
+//       CustomSnackBar.error('Image not selected');
+//     }
+//   }
+//
+//   List<ServiceCategory> serviceCategoryList = [];
+//   RxList selectedServiceList = [].obs;
+//
+//   Future<ServiceCategoryModel> getServiceCategory() async {
+//     return ApiRequest.get(
+//       fromJson: ServiceCategoryModel.fromJson,
+//       endPoint: ApiEndPoints.serviceCategory,
+//       isLoading: isLoading,
+//       onSuccess: (result) {
+//         serviceCategoryList.addAll(result.category);
+//       },
+//     );
+//   }
+//
+//   @override
+//   void onInit() {
+//     super.onInit();
+//     getServiceCategory();
+//   }
+//
+//   // vendor update profile
+//   RxBool isLoading = false.obs;
+//
+//   final Rxn<LatLng> selectedLatLng = Rxn<LatLng>();
+//   final RxString selectedAddress = "".obs;
+//
+//   late ProviderUpdateProfileModel providerUpdateProfileModel;
+//
+//   Future<ProviderUpdateProfileModel> vendorUpdateProfile() async {
+//     final Map<String, File?> fileMap = {};
+//     if (selectedImg.value != null) {
+//       fileMap['profile_image'] = selectedImg.value;
+//     }
+//
+//     return await ApiRequest.multiMultipartRequest(
+//       token: AppStorage.temporaryToken,
+//
+//       endPoint: ApiEndPoints.providerUpdateProfile,
+//       reqType: "PATCH",
+//       isLoading: isLoading,
+//       body: {
+//         'companyName': nameController.text.trim(),
+//         'contactPerson': nameController.text.trim(),
+//         'website': websiteController.text.trim(),
+//         'coveredRadius': coveredRadius.text.trim(),
+//         "latitude": selectedLatLng.value?.latitude.toString() ?? "",
+//         "longitude": selectedLatLng.value?.longitude.toString() ?? "",
+//         "serviceCategories": selectedServiceList,
+//         "serviceLocation": selectedAddress.value,
+//       },
+//       files: fileMap,
+//       fromJson: ProviderUpdateProfileModel.fromJson,
+//       showSuccessSnackBar: true,
+//       onSuccess: (_) => Get.offAllNamed(Routes.navigationScreen),
+//     );
+//   }
+// }
+
 import 'dart:io';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -10,40 +112,58 @@ import '../../aditional/model/service_category_model.dart';
 import '../model/provider_update_profile_model.dart';
 
 class VendorProfileController extends GetxController {
-  // TODO: Logic
-  // name
+  // Controllers
   final nameController = TextEditingController();
   final contactPersonController = TextEditingController();
   final coveredRadius = TextEditingController();
   final websiteController = TextEditingController();
   final nameFocus = FocusNode();
-
   final locationController = TextEditingController();
   final locationFocus = FocusNode();
-
-  // email
   final emailController = TextEditingController();
   final emailFocus = FocusNode();
-  final isEmailValid = false.obs;
-
-  // number
   final numberController = TextEditingController();
   final numberFocus = FocusNode();
 
-  final _imagePicker = ImagePicker();
+  // Observables
+  final isEmailValid = false.obs;
   final Rx<File?> selectedImg = Rx(null);
+  final RxBool isLoading = false.obs;
+  final Rxn<LatLng> selectedLatLng = Rxn<LatLng>();
+  final RxString selectedAddress = "".obs;
+  final RxList selectedServiceList = [].obs;
+
+  // Other variables
+  final _imagePicker = ImagePicker();
+  bool isPickingImage = false;
+  List<ServiceCategory> serviceCategoryList = [];
+  late ProviderUpdateProfileModel providerUpdateProfileModel;
 
   Future<void> pickImg() async {
-    final pickedImg = await _imagePicker.pickImage(source: ImageSource.gallery);
-    if (pickedImg != null) {
-      selectedImg.value = File(pickedImg.path);
-    } else {
-      CustomSnackBar.error('Image not selected');
+    if (isPickingImage) return;
+
+    try {
+      isPickingImage = true;
+      final pickedImg = await _imagePicker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 70,
+        maxWidth: 512,
+        maxHeight: 512,
+      );
+
+      if (pickedImg != null) {
+        selectedImg.value = File(pickedImg.path);
+        print('✅ Image selected: ${pickedImg.path}');
+      } else {
+        print('❌ No image selected');
+      }
+    } catch (e) {
+      print('❌ Error picking image: $e');
+      _showSnackBar('Failed to pick image', isError: true);
+    } finally {
+      isPickingImage = false;
     }
   }
-
-  List<ServiceCategory> serviceCategoryList = [];
-  RxList selectedServiceList = [].obs;
 
   Future<ServiceCategoryModel> getServiceCategory() async {
     return ApiRequest.get(
@@ -52,50 +172,214 @@ class VendorProfileController extends GetxController {
       isLoading: isLoading,
       onSuccess: (result) {
         serviceCategoryList.addAll(result.category);
+        print('✅ Loaded ${serviceCategoryList.length} service categories');
       },
     );
+  }
+
+  Future<void> vendorUpdateProfile() async {
+    try {
+      // Validate required fields
+      final validationError = _validateForm();
+      if (validationError != null) {
+        _showSnackBar(validationError, isError: true);
+        return;
+      }
+
+      // Get authentication token - FIXED: Using correct AppStorage method
+      final token = _getAuthToken();
+      if (token == null) return;
+
+      // Check if user is vendor - FIXED: Using correct AppStorage method
+      if (!_isUserVendor()) {
+        _showSnackBar('Vendor access required', isError: true);
+        Get.offAllNamed(Routes.homeScreen);
+        return;
+      }
+
+      // Prepare request data
+      final Map<String, dynamic> body = _prepareRequestBody();
+      final Map<String, File?> fileMap = _prepareFileMap();
+
+      print('🚀 Starting vendor profile update...');
+      print('📦 Body: $body');
+      print('📁 Files: ${fileMap.keys.toList()}');
+      print('🔑 Token: ${token.substring(0, 20)}...');
+      print('👤 Is Vendor: ${AppStorage.isVendor}');
+
+      // Make API call - FIXED: Using temporaryToken if needed, but prefer actual token
+      final result = await ApiRequest.multiMultipartRequest(
+        token: token, // Use the actual token from AppStorage
+        endPoint: ApiEndPoints.providerUpdateProfile,
+        reqType: "PATCH",
+        isLoading: isLoading,
+        body: body,
+        files: fileMap,
+        fromJson: ProviderUpdateProfileModel.fromJson,
+        showSuccessSnackBar: true,
+        onSuccess: (response) {
+          _handleSuccessResponse(response);
+        },
+      );
+
+      print('✅ Profile update completed successfully');
+
+    } catch (e) {
+      _handleError(e);
+    }
+  }
+
+  String? _validateForm() {
+    if (nameController.text.isEmpty) {
+      return 'Please enter company name';
+    }
+
+    if (contactPersonController.text.isEmpty) {
+      return 'Please enter contact person name';
+    }
+
+    if (selectedLatLng.value == null) {
+      return 'Please select service location';
+    }
+
+    if (selectedServiceList.isEmpty) {
+      return 'Please select at least one service category';
+    }
+
+    return null;
+  }
+
+  String? _getAuthToken() {
+    final token = AppStorage.token; // FIXED: Using getter instead of method
+    if (token.isEmpty) {
+      _showSnackBar('Please login again', isError: true);
+      Get.offAllNamed(Routes.loginScreen);
+      return null;
+    }
+    return token;
+  }
+
+  bool _isUserVendor() {
+    return AppStorage.isVendor; // FIXED: Using getter instead of method
+  }
+
+  Map<String, dynamic> _prepareRequestBody() {
+    return {
+      'companyName': nameController.text.trim(),
+      'contactPerson': contactPersonController.text.trim(),
+      'website': websiteController.text.trim(),
+      'coveredRadius': coveredRadius.text.trim(),
+      "latitude": selectedLatLng.value!.latitude.toString(),
+      "longitude": selectedLatLng.value!.longitude.toString(),
+      "serviceCategories": selectedServiceList,
+      "serviceLocation": selectedAddress.value,
+    };
+  }
+
+  Map<String, File?> _prepareFileMap() {
+    final Map<String, File?> fileMap = {};
+    if (selectedImg.value != null) {
+      fileMap['profile_image'] = selectedImg.value;
+    }
+    return fileMap;
+  }
+
+  void _handleSuccessResponse(ProviderUpdateProfileModel response) {
+    print('🎉 Success Response:');
+    print('   Status Code: ${response.statusCode}');
+    print('   Success: ${response.success}');
+    print('   Message: ${response.message}');
+    print('   Data Message: ${response.data.message}');
+
+    // Show success message
+    _showSnackBar(response.message, isError: false);
+
+    // Navigate to next screen
+    Future.delayed(Duration(milliseconds: 1500), () {
+      Get.offAllNamed(Routes.navigationScreen);
+    });
+  }
+
+  void _handleError(dynamic error) {
+    print('❌ Vendor profile update error: $error');
+    print('❌ Error type: ${error.runtimeType}');
+
+    final errorString = error.toString();
+
+    if (errorString.contains('not authorized') ||
+        errorString.contains('401') ||
+        errorString.contains('500') ||
+        errorString.contains('role')) {
+      _handleAuthorizationError();
+    } else if (errorString.contains('timeout') ||
+        errorString.contains('socket')) {
+      _showSnackBar('Network error. Please check your connection.', isError: true);
+    } else {
+      _showSnackBar('Failed to update profile: $error', isError: true);
+    }
+  }
+
+  void _handleAuthorizationError() {
+    _showSnackBar('Session expired. Please login again.', isError: true);
+
+    // FIXED: Using correct clear method
+    AppStorage.clear();
+
+    Future.delayed(Duration(milliseconds: 1500), () {
+      Get.offAllNamed(Routes.loginScreen);
+    });
+  }
+
+  void _showSnackBar(String message, {bool isError = false}) {
+    if (isError) {
+      CustomSnackBar.error(message);
+    } else {
+      CustomSnackBar.success(title: message, message: message);
+    }
+  }
+
+  // Utility method to check if form is valid
+  bool get isFormValid {
+    return nameController.text.isNotEmpty &&
+        contactPersonController.text.isNotEmpty &&
+        selectedLatLng.value != null &&
+        selectedServiceList.isNotEmpty;
+  }
+
+  // Load existing vendor data if available
+  void loadExistingData() {
+    // You can implement this to load existing vendor data
+    // For example:
+    // nameController.text = existingData.companyName;
+    // contactPersonController.text = existingData.contactPerson;
+    // etc.
   }
 
   @override
   void onInit() {
     super.onInit();
     getServiceCategory();
+    loadExistingData();
+
+    // Debug: Print current storage state
+    print('🔐 Storage State:');
+    print('   Token: ${AppStorage.token.isNotEmpty ? "Present" : "Empty"}');
+    print('   Is Vendor: ${AppStorage.isVendor}');
+    print('   Is Logged In: ${AppStorage.isLoggedIn}');
   }
 
-  // vendor update profile
-  RxBool isLoading = false.obs;
-
-  final Rxn<LatLng> selectedLatLng = Rxn<LatLng>();
-  final RxString selectedAddress = "".obs;
-
-  late ProviderUpdateProfileModel providerUpdateProfileModel;
-
-  Future<ProviderUpdateProfileModel> vendorUpdateProfile() async {
-    final Map<String, File?> fileMap = {};
-    if (selectedImg.value != null) {
-      fileMap['profile_image'] = selectedImg.value;
-    }
-
-    return await ApiRequest.multiMultipartRequest(
-      token: AppStorage.temporaryToken,
-
-      endPoint: ApiEndPoints.providerUpdateProfile,
-      reqType: "PATCH",
-      isLoading: isLoading,
-      body: {
-        'companyName': nameController.text.trim(),
-        'contactPerson': nameController.text.trim(),
-        'website': websiteController.text.trim(),
-        'coveredRadius': coveredRadius.text.trim(),
-        "latitude": selectedLatLng.value?.latitude.toString() ?? "",
-        "longitude": selectedLatLng.value?.longitude.toString() ?? "",
-        "serviceCategories": selectedServiceList,
-        "serviceLocation": selectedAddress.value,
-      },
-      files: fileMap,
-      fromJson: ProviderUpdateProfileModel.fromJson,
-      showSuccessSnackBar: true,
-      onSuccess: (_) => Get.offAllNamed(Routes.navigationScreen),
-    );
+  @override
+  void onClose() {
+    nameController.dispose();
+    contactPersonController.dispose();
+    coveredRadius.dispose();
+    websiteController.dispose();
+    nameFocus.dispose();
+    locationFocus.dispose();
+    emailController.dispose();
+    emailFocus.dispose();
+    numberController.dispose();
+    numberFocus.dispose();
+    super.onClose();
   }
 }

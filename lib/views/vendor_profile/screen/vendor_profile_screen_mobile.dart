@@ -1,4 +1,11 @@
-part of 'vendor_profile_screen.dart';
+import 'package:map_location_picker/map_location_picker.dart';
+
+import '../../../core/utils/basic_import.dart';
+import '../../../core/utils/extensions.dart';
+import '../../../widgets/auth_app_bar.dart';
+import '../../../widgets/loading_widget.dart';
+import '../../request/widget/category_widget.dart';
+import '../controller/vendor_profile_controller.dart';
 
 class VendorProfileScreenMobile extends GetView<VendorProfileController> {
   const VendorProfileScreenMobile({super.key});

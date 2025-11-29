@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:doda_work/core/api/services/api.dart';
 import 'package:doda_work/core/utils/app_storage.dart';
 import 'package:doda_work/core/utils/basic_import.dart';
@@ -8,10 +7,10 @@ import 'package:doda_work/views/aditional/model/service_category_model.dart';
 import 'package:doda_work/views/auth/register/controller/register_controller.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-
 import '../../../routes/routes.dart';
 
 class AditionalController extends GetxController {
+  // ------------------------ DAY LIST ------------------------
   List<String> dayList = [
     'Saturday',
     'Sunday',
@@ -22,33 +21,32 @@ class AditionalController extends GetxController {
     'Friday',
   ];
 
+  // ------------------------ Photos ------------------------
   RxList<File> photos = <File>[].obs;
-
   final ImagePicker _picker = ImagePicker();
 
-  // pick new photo
   Future<void> pickImage() async {
-    final XFile? pickedFile = await _picker.pickImage(
-      source: ImageSource.gallery,
-    );
+    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       photos.add(File(pickedFile.path));
     }
   }
 
-  // ✅ Currently editing day
+  // ------------------------ Working Hours ------------------------
   RxString currentEditingDay = ''.obs;
+  final RxString startedTime = ''.obs;
+  final RxString endTime = ''.obs;
 
-  // ✅ Check if day is selected
-  bool isDaySelected(String day) {
-    return availabilityMap.containsKey(day);
-  }
+  // Map: { "Sunday": { "startTime": "10 AM", "endTime": "6 PM" } }
+  RxMap<String, Map<String, String>> availabilityMap =
+      <String, Map<String, String>>{}.obs;
+
+  bool isDaySelected(String day) => availabilityMap.containsKey(day);
 
   void selectTap(int index) {
     final day = dayList[index];
     currentEditingDay.value = day;
 
-    // ✅ Load existing time if available
     if (availabilityMap.containsKey(day)) {
       startedTime.value = availabilityMap[day]!["startTime"]!;
       endTime.value = availabilityMap[day]!["endTime"]!;
@@ -58,64 +56,6 @@ class AditionalController extends GetxController {
     }
   }
 
-  final RxString startDate = ''.obs;
-  final RxString endDate = ''.obs;
-
-  final RxString endTime = ''.obs;
-  final RxString startedTime = ''.obs;
-
-  final RxString selectedCategory = ''.obs;
-  final RxString selectedSubCategory = ''.obs;
-
-  final serviceLocationController = TextEditingController();
-  final contactPersonController = TextEditingController();
-  final companyNameController = TextEditingController();
-  final linkController = TextEditingController();
-
-  var selectedValues = <String>[].obs;
-
-  void toggleValue(String value) {
-    if (selectedValues.contains(value)) {
-      selectedValues.remove(value);
-    } else {
-      selectedValues.add(value);
-    }
-  }
-
-  void clearAll() {
-    selectedValues.clear();
-  }
-
-  @override
-  void onInit() {
-    super.onInit();
-    getServiceCategory();
-  }
-
-  RxList selectedServiceList = [].obs;
-
-  // get service category api
-  RxBool isLoading = false.obs;
-
-  List<ServiceCategory> serviceCategoryList = [];
-
-  Future<ServiceCategoryModel> getServiceCategory() async {
-    return ApiRequest.get(
-      fromJson: ServiceCategoryModel.fromJson,
-      endPoint: ApiEndPoints.serviceCategory,
-      isLoading: isLoading,
-      onSuccess: (result) {
-        serviceCategoryList.addAll(result.category);
-        print(serviceCategoryList.length);
-      },
-    );
-  }
-
-  // ✅ Store time for each day separately
-  RxMap<String, Map<String, String>> availabilityMap =
-      <String, Map<String, String>>{}.obs;
-
-  // ✅ Save time for current editing day
   void saveTimeForCurrentDay() {
     if (currentEditingDay.isEmpty) return;
     if (startedTime.value.isEmpty || endTime.value.isEmpty) return;
@@ -124,14 +64,10 @@ class AditionalController extends GetxController {
       "startTime": startedTime.value,
       "endTime": endTime.value,
     };
-    availabilityMap.refresh();
 
-    print(
-      'Saved for ${currentEditingDay.value}: ${startedTime.value} - ${endTime.value}',
-    );
+    availabilityMap.refresh();
   }
 
-  // ✅ Remove day availability
   void removeDayAvailability(String day) {
     availabilityMap.remove(day);
     availabilityMap.refresh();
@@ -143,7 +79,6 @@ class AditionalController extends GetxController {
     }
   }
 
-  // ✅ Get final availability data (without isAvailable)
   List<Map<String, dynamic>> getAvailabilityData() {
     return availabilityMap.entries.map((entry) {
       return {
@@ -154,10 +89,51 @@ class AditionalController extends GetxController {
     }).toList();
   }
 
-  // provider register process api
+  // ------------------------ CATEGORY ------------------------
+  RxList selectedServiceList = [].obs;
 
+  RxBool isLoading = false.obs;
+  List<ServiceCategory> serviceCategoryList = [];
+
+  @override
+  void onInit() {
+    super.onInit();
+    getServiceCategory();
+  }
+
+  Future<ServiceCategoryModel> getServiceCategory() async {
+    return ApiRequest.get(
+      fromJson: ServiceCategoryModel.fromJson,
+      endPoint: ApiEndPoints.serviceCategory,
+      isLoading: isLoading,
+      onSuccess: (result) {
+        serviceCategoryList.addAll(result.category);
+      },
+    );
+  }
+
+  // ------------------------ Form Inputs ------------------------
+  final serviceLocationController = TextEditingController();
+  final contactPersonController = TextEditingController();
+  final companyNameController = TextEditingController();
+  final linkController = TextEditingController();
+
+  // ------------------------ Multi-value selection ------------------------
+  var selectedValues = <String>[].obs;
+
+  void toggleValue(String value) {
+    selectedValues.contains(value)
+        ? selectedValues.remove(value)
+        : selectedValues.add(value);
+  }
+
+  void clearAll() => selectedValues.clear();
+
+  // ------------------------ MAP Location ------------------------
   final Rxn<LatLng> selectedLatLng = Rxn<LatLng>();
   final RxString selectedAddress = "".obs;
+
+  // ------------------------ Provider Register API ------------------------
   RxBool providerRegIsLoading = false.obs;
 
   providerRegisterProcess() async {
@@ -165,8 +141,10 @@ class AditionalController extends GetxController {
       fromJson: ProviderRegisterModel.fromJson,
       endPoint: ApiEndPoints.providerRegister,
       isLoading: providerRegIsLoading,
-      files: {},
       token: AppStorage.temporaryToken,
+
+      files: {},
+
       body: {
         "companyName": Get.find<RegisterController>().nameController.text,
         "website": linkController.text,
@@ -178,12 +156,18 @@ class AditionalController extends GetxController {
         "latitude": selectedLatLng.value?.latitude.toString() ?? "",
         "longitude": selectedLatLng.value?.longitude.toString() ?? "",
       },
+
+      filesList: {
+        "attachments": photos,
+      },
+
       reqType: 'POST',
-      filesList: {'attachments': photos},
+
       onSuccess: (result) {
         AppStorage.save(isLoggedIn: true);
-        Get.offAllNamed(Routes.navigationScreen);
+        Get.offAllNamed(Routes.loginScreen);
       },
+
     );
   }
 }

@@ -1,100 +1,110 @@
-part of 'chat_screen.dart';
+import '../../../core/utils/app_storage.dart';
+import '../../../core/utils/basic_import.dart';
+import '../../../core/utils/extensions.dart';
+import '../../../routes/routes.dart';
+import '../../navigation/controller/navigation_controller.dart';
+import '../controller/chat_controller.dart';
 
-class ChatScreenMobile extends GetView<ChatController> {
-  const ChatScreenMobile({super.key});
+class ChatScreenMobile extends StatelessWidget {
+  ChatScreenMobile({super.key});
+
+  // Inject ChatController
+  final ChatController controller = Get.put(ChatController());
 
   @override
   Widget build(BuildContext context) {
+    final myId = AppStorage.userId;
+    final myRole = AppStorage.role; // "USER" or "PROVIDER"
+
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0,
         toolbarHeight: Dimensions.appBarHeight * 1.6,
-      flexibleSpace: SafeArea(
-        child: Padding(
-          padding: EdgeInsetsGeometry.symmetric(horizontal: Dimensions.defaultHorizontalSize),
-          child: Row(
-            mainAxisAlignment: mainSpaceBet,
-            children: [
-            GestureDetector(
-              onTap: () => Get.find<NavigationController>().goToProfile(),
-              child: SvgPicture.asset(Assets.logo.appLogo, height: 45.h),
-            ),
-            TextWidget(
-              'Chat',
-              color:
-                CustomColors.blackColor,
-              fontSize: Dimensions.titleMedium * 1.2,
-              fontWeight: FontWeight.w600,
-            ),
-            GestureDetector(
-              onTap: () => Get.toNamed(Routes.notificationScreen),
-              child: Container(
-                margin: Dimensions.defaultHorizontalSize.edgeRight,
-                padding: EdgeInsets.all(Dimensions.paddingSize * 0.35),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: CustomColors.primary),
+        flexibleSpace: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: Dimensions.defaultHorizontalSize),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                  onTap: () => Get.find<NavigationController>().goToProfile(),
+                  child: SvgPicture.asset(Assets.logo.appLogo, height: 45),
                 ),
-                child: SvgPicture.asset(Assets.icons.group),
-              ),
-            ),
-          ],),
-        ),
-      ),
-      ),
-      body: SafeArea(
-        child: CustomScrollView(
-          physics: const ClampingScrollPhysics(),
-          slivers: [
-            SliverPadding(
-              padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  childCount: 10,
-                  (context, index) => ListTile(
-                    onTap: () => Get.toNamed(Routes.inboxScreen),
-                    contentPadding: EdgeInsets.symmetric(
-                      vertical: Dimensions.verticalSize * 0.2,
+                TextWidget(
+                  'Chat',
+                  color: CustomColors.blackColor,
+                  fontSize: Dimensions.titleMedium * 1.2,
+                  fontWeight: FontWeight.w600,
+                ),
+                GestureDetector(
+                  onTap: () => Get.toNamed(Routes.notificationScreen),
+                  child: Container(
+                    margin: Dimensions.defaultHorizontalSize.edgeRight,
+                    padding: EdgeInsets.all(Dimensions.paddingSize * 0.35),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: CustomColors.primary),
                     ),
-                    leading: ClipOval(
-                      child: CachedNetworkImage(
-                        imageUrl: "https://picsum.photos/200/300?rsdandom=",
-                        width: 50.w,
-                        height: 50.h,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) =>
-                            Container(color: Colors.grey.shade300),
-                        errorWidget: (context, url, error) => Container(
-                          color: Colors.grey.shade300,
-                          child: const Icon(Icons.error, color: Colors.red),
-                        ),
-                      ),
-                    ),
-                    title: TextWidget(
-                      'Maximillian Jacobson',
-                      maxLines: 1,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    subtitle: TextWidget(
-                      "Actually I wanted to check with you about your online business plan on our…",
-                      fontSize: Dimensions.titleSmall * 0.8,
-                      maxLines: 1,
-                      fontWeight: FontWeight.w400,
-                      color: CustomColors.grayShade,
-                    ),
-
-                    trailing: TextWidget(
-                      '10/05/2024',
-                      fontSize: Dimensions.titleSmall * 0.8,
-                      fontWeight: FontWeight.w400,
-                      color: CustomColors.grayShade,
-                    ),
+                    child: SvgPicture.asset(Assets.icons.group),
                   ),
                 ),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
+      ),
+      body: SafeArea(
+        child: Obx(() {
+          if (controller.isLoading.value) {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: CustomColors.primary,
+              ),
+            );
+          }
+
+          if (controller.chatList.isEmpty) {
+            return const Center(child: Text("No participants yet"));
+          }
+
+          return ListView.builder(
+            itemCount: controller.chatList.length,
+            itemBuilder: (context, index) {
+              final chat = controller.chatList[index];
+
+              // Get all participants except the logged-in user
+              final participants = controller
+                  .getAllParticipants(chat)
+                  .where((p) => p.id != myId)
+                  .toList();
+
+              // If only participant is yourself, hide this chat
+              if (participants.isEmpty) return const SizedBox.shrink();
+
+              // Show only the first participant (1-on-1 chat)
+              final participant = participants.last;
+
+              return ListTile(
+                onTap: () => controller.openConversation(chat),
+                leading: CircleAvatar(
+                  radius: 25,
+                  backgroundColor: CustomColors.primary,
+                  backgroundImage: participant.profileImage != null
+                      ? NetworkImage("http://your-base-url/${participant.profileImage}")
+                      : null,
+                  child: participant.profileImage == null
+                      ? Text(
+                    participant.name[0].toUpperCase(),
+                    style: const TextStyle(color: Colors.white),
+                  )
+                      : null,
+                ),
+                title: Text(participant.name),
+                subtitle: Text(participant.email ?? ""),
+              );
+            },
+          );
+        }),
       ),
     );
   }

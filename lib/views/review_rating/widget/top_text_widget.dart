@@ -5,51 +5,54 @@ class TopTextWidget extends GetView<ReviewRatingController> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: crossStart,
-      children: [
-        TextWidget('235 Ratings', color: CustomColors.primary),
+    return Obx(() {
+      final totalReviews = controller.totalReviews.value;
+      final avgRating = controller.rating.value;
 
-        Row(
-          mainAxisAlignment: mainSpaceBet,
-          children: [
-            RatingBarIndicator(
-              rating: controller.totalRating.value,
-              itemCount: 5,
-              itemSize: Dimensions.iconSizeLarge * 0.95,
-              direction: Axis.horizontal,
-              unratedColor: CustomColors.secondary,
-
-              itemBuilder: (context, index) {
-                if (index < controller.totalRating.value.floor()) {
-                  return Icon(Icons.star, color: CustomColors.primary);
-                } else if (index < controller.totalRating.value) {
-                  return Icon(Icons.star_half, color: CustomColors.primary);
-                } else {
-                  return Icon(
-                    Icons.star_border,
-                    color: CustomColors.secondary,
-                  );
-                }
-              },
-            ),
-            TextWidget(
-              controller.totalRating.string,
-              fontWeight: FontWeight.w800,
-              fontSize: Dimensions.titleLarge,
-              color: CustomColors.primary,
-            ),
-          ],
-        ),
-        Space.height.v10,
-        TextWidget(
-          "Reviews",
-          fontWeight: FontWeight.w800,
-          fontSize: Dimensions.titleLarge,
-        ),
-        Space.height.v10,
-
-      ],
-    );
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextWidget(
+            '$totalReviews Ratings',
+            color: CustomColors.primary,
+          ),
+          Space.height.v5,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              RatingBarIndicator(
+                rating: avgRating,
+                itemCount: 5,
+                itemSize: Dimensions.iconSizeLarge * 0.95,
+                direction: Axis.horizontal,
+                unratedColor: CustomColors.secondary,
+                itemBuilder: (context, index) {
+                  if (index < avgRating.floor()) {
+                    return Icon(Icons.star, color: CustomColors.primary);
+                  } else if (index < avgRating) {
+                    return Icon(Icons.star_half, color: CustomColors.primary);
+                  } else {
+                    return Icon(Icons.star_border, color: CustomColors.secondary);
+                  }
+                },
+              ),
+              TextWidget(
+                avgRating.toStringAsFixed(1),
+                fontWeight: FontWeight.w800,
+                fontSize: Dimensions.titleLarge,
+                color: CustomColors.primary,
+              ),
+            ],
+          ),
+          Space.height.v10,
+          TextWidget(
+            "Reviews",
+            fontWeight: FontWeight.w800,
+            fontSize: Dimensions.titleLarge,
+          ),
+          Space.height.v10,
+        ],
+      );
+    });
   }
 }

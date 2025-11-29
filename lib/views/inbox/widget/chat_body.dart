@@ -55,7 +55,7 @@ class ChatBodyWidget extends GetView<InboxController> {
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             constraints: BoxConstraints(maxWidth: mq.size.width * 0.7),
             decoration: BoxDecoration(
-              color: isMe ? CustomColors.primary : Colors.grey.shade200,
+              color: isMe ? CustomColors.whiteColor : Colors.grey.shade200,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(Dimensions.radius * (isMe ? 0.85 : 1)),
                 topRight: Radius.circular(

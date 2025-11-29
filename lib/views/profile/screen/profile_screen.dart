@@ -8,10 +8,11 @@ import 'package:shadify/shadify.dart';
 import '../../../core/utils/basic_import.dart';
 import '../../auth/login/controller/login_controller.dart';
 import '../../navigation/controller/navigation_controller.dart';
+
 import '../controller/profile_controller.dart';
+import '../widget/profile_top_header_widget.dart';
 
 part 'profile_screen_mobile.dart';
-part '../widget/profile_top_header_widget.dart';
 part '../widget/profile_card_section_widget.dart';
 
 class ProfileScreen extends GetView<ProfileController> {

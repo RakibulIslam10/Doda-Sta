@@ -1,10 +1,10 @@
 import 'package:doda_work/core/utils/basic_import.dart';
 import 'package:doda_work/core/utils/extensions.dart';
+import 'package:doda_work/views/review_rating/screen/review_rating_screen_mobile.dart';
 import 'package:doda_work/widgets/auth_app_bar.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import '../controller/review_rating_controller.dart';
 
-part 'review_rating_screen_mobile.dart';
 part '../widget/review_card_widget.dart';
 part '../widget/top_text_widget.dart';
 

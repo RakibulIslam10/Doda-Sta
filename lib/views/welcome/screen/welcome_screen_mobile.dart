@@ -136,7 +136,7 @@ class WelcomeScreenMobile extends GetView<WelcomeController> {
 
               GestureDetector(
                 onTap: () {
-                  Get.offAllNamed(Routes.registerScreen);
+                  Get.offAllNamed(Routes.loginScreen);
                   AppStorage.save(isVendor: true);
                 },
                 child: AnimatedContainer(

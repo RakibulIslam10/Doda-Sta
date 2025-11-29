@@ -1,10 +1,14 @@
-import 'package:doda_work/core/utils/extensions.dart';
-import 'package:doda_work/routes/routes.dart';
-import 'package:doda_work/views/home/controller/home_controller.dart';
-import 'package:doda_work/views/home/model/home_model.dart';
-import 'package:doda_work/views/summary/model/summary_model.dart';
+import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+
 import '../../../core/utils/basic_import.dart';
+import '../../../core/utils/extensions.dart';
+import '../../../routes/routes.dart';
+import '../../summary/model/summary_model.dart';
+import '../controller/home_controller.dart';
+import '../model/home_model.dart';
+import '../widget/category_widget.dart';
+import '../widget/home_app_bar_widget.dart';
 import 'home_screen.dart';
 
 class HomeScreenMobile extends GetView<HomeController> {
@@ -22,7 +26,7 @@ class HomeScreenMobile extends GetView<HomeController> {
           child: AppBar(
             scrolledUnderElevation: 0,
             automaticallyImplyLeading: false,
-            flexibleSpace: const HomeAppBarWidgetView(),
+            flexibleSpace:  HomeAppBarWidgetView(),
             actions: [
               GestureDetector(
                 onTap: () => Get.toNamed(Routes.notificationScreen),
@@ -40,64 +44,105 @@ class HomeScreenMobile extends GetView<HomeController> {
             ],
           ),
         ),
-        body: NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) {
-            return [
-              SliverToBoxAdapter(
-                child: Column(
-                  children: [
-                    const SearchBarWidgetView(),
-                    SizedBox(height: 12),
-                    const CategoryWidgetView(),
-                    Obx(() => _buildTabBar(controller, statusText)),
-                  ],
-                ),
-              ),
-            ];
-          },
-          body: TabBarView(
-            physics: NeverScrollableScrollPhysics(),
-            children: List.generate(statusText.length, (index) {
-              final status = statusText[index].toUpperCase();
-              return KeepAlivePage(
-                child: PagedListView<int, HomeServiceItem>(
-                  pagingController: controller.pagingControllers[status]!,
-                  builderDelegate: PagedChildBuilderDelegate<HomeServiceItem>(
-                    itemBuilder: (context, item, itemIndex) {
-                      return CustomStatusCardWidget(
-                        index: itemIndex,
-                        requestId: item.requestId ?? "",
-                        category: item.subcategory ?? "",
-                        subCategory: item.serviceCategory?.name ?? "",
-                        address: item.address ?? "",
-                        image: item.attachments?.firstOrNull,
-                        isUser: true,
-                        status: status,
-                        onTap: () {
-                          Get.toNamed(
-                            Routes.summaryScreen,
-                            arguments: SummaryModel(
-                              isUser: true,
-                              requestId: item.requestId,
-                              categoryIcon: item.serviceCategory?.icon,
-                              categoryName: item.serviceCategory?.name,
-                              customerPhone: item.customerPhone,
-                              customerName: item.customerId?.name,
-                              priority: item.priority,
-                              address: item.address,
-                              subcategory: item.subcategory,
-                              description: item.description,
-                              attachments: item.attachments,
+        body: Column(
+          children: [
+            SizedBox(height: 12),
+            CategoryWidgetView(),
+            Obx(() => _buildTabBar(controller, statusText)),
+            Expanded(
+              child: TabBarView(
+                physics: const NeverScrollableScrollPhysics(),
+                children: List.generate(statusText.length, (index) {
+                  final status = statusText[index].toUpperCase();
+                  return KeepAlivePage(
+                    child: RefreshIndicator(
+                      onRefresh: () async => controller.refreshStatusData(status),
+                      child: CustomScrollView(
+                        slivers: [
+                          PagedSliverList<int, HomeServiceItem>(
+                            pagingController: controller.pagingControllers[status]!,
+                            builderDelegate: PagedChildBuilderDelegate<HomeServiceItem>(
+                              itemBuilder: (context, item, itemIndex) {
+                                return CustomStatusCardWidget(
+                                  index: itemIndex,
+                                  requestId: item.requestId ?? "",
+                                  category: item.subcategory ?? "",
+                                  subCategory: item.serviceCategory?.name ?? "",
+                                  address: item.address ?? "",
+                                  image: item.attachments?.firstOrNull,
+                                  isUser: true,
+                                  status: status,
+                                  onTap: () {
+                                    Get.toNamed(
+                                      Routes.summaryScreen,
+                                      arguments: SummaryModel(
+                                        isUser: true,
+                                        requestId: item.requestId,
+                                        categoryIcon: item.serviceCategory?.icon,
+                                        categoryName: item.serviceCategory?.name,
+                                        customerPhone: item.customerPhone,
+                                        customerName: item.customerId?.name,
+                                        priority: item.priority,
+                                        address: item.address,
+                                        subcategory: item.subcategory,
+                                        description: item.description,
+                                        attachments: item.attachments,
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+
+                              // ✅ Fix: Remove SliverToBoxAdapter and use normal widgets
+                              noItemsFoundIndicatorBuilder: (_) => Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Text(
+                                    "No $status requests found",
+                                    style: TextStyle(
+                                      fontSize: Dimensions.titleSmall,
+                                      color: CustomColors.grayShade,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              firstPageErrorIndicatorBuilder: (_) => Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Text(
+                                    "Error loading $status requests",
+                                    style: TextStyle(
+                                      fontSize: Dimensions.titleSmall,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              newPageErrorIndicatorBuilder: (_) => Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Text(
+                                    "Error loading more $status requests",
+                                    style: TextStyle(
+                                      fontSize: Dimensions.titleSmall,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ),
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ),
-              );
-            }),
-          ),
+                          )
+
+                        ],
+                      ),
+                    ),
+                  );
+                }),
+              ),
+            ),
+
+
+          ],
         ),
       ),
     );
@@ -111,23 +156,12 @@ class HomeScreenMobile extends GetView<HomeController> {
       dividerColor: Colors.transparent,
       labelPadding: EdgeInsets.zero,
       enableFeedback: false,
-      overlayColor: WidgetStatePropertyAll(Colors.transparent),
-      onTap: (value) {
-        controller.selectedStatus.value = value;
-
-        final status = statusText[value].toUpperCase();
-        final controllerList = controller.pagingControllers[status]!;
-        if (controllerList.itemList == null ||
-            controllerList.itemList!.isEmpty) {
-          controller.fetch(status, 1);
-        }
-      },
+      overlayColor: const MaterialStatePropertyAll(Colors.transparent),
+      onTap: (index) => controller.selectedStatus.value = index,
       tabs: List.generate(statusText.length, (index) {
         final isSelected = controller.selectedStatus.value == index;
         return Container(
-          margin: EdgeInsets.symmetric(
-            horizontal: Dimensions.defaultHorizontalSize * 0.4,
-          ),
+          margin: EdgeInsets.symmetric(horizontal: Dimensions.defaultHorizontalSize * 0.4),
           padding: EdgeInsets.symmetric(
             horizontal: Dimensions.widthSize * 1.2,
             vertical: Dimensions.verticalSize * 0.32,
@@ -135,7 +169,7 @@ class HomeScreenMobile extends GetView<HomeController> {
           decoration: BoxDecoration(
             color: isSelected
                 ? CustomColors.primary
-                : CustomColors.primary.withAlpha(858),
+                : CustomColors.primary.withAlpha(85),
             borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),
           ),
           child: Center(
@@ -143,9 +177,7 @@ class HomeScreenMobile extends GetView<HomeController> {
               statusText[index],
               fontWeight: FontWeight.w500,
               fontSize: Dimensions.titleSmall,
-              color: isSelected
-                  ? CustomColors.whiteColor
-                  : CustomColors.blackColor,
+              color: isSelected ? CustomColors.whiteColor : CustomColors.blackColor,
             ),
           ),
         );
@@ -154,9 +186,9 @@ class HomeScreenMobile extends GetView<HomeController> {
   }
 }
 
+/// KeepAlive wrapper to maintain scroll position per tab
 class KeepAlivePage extends StatefulWidget {
   final Widget child;
-
   const KeepAlivePage({required this.child, super.key});
 
   @override

@@ -6,7 +6,9 @@ class RegisterScreenMobile extends GetView<RegisterController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CommonAppBar(title: ''),
+      appBar: CommonAppBar(
+        isBack: false,
+          title: ''),
       body: SafeArea(
         child: ListView(
           padding: Dimensions.defaultHorizontalSize.edgeHorizontal,

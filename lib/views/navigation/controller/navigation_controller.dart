@@ -4,16 +4,19 @@ import 'package:doda_work/views/navigation/model/navigation_model.dart';
 
 class NavigationController extends GetxController {
   final List<NavigationModel> navigationList = [
-    NavigationModel(iconPath: Assets.icons.vector, name: "Home"),
+    NavigationModel(iconPath: Assets.icons.home, name: "Home"),
     NavigationModel(
-      iconPath: AppStorage.isVendor == false
-          ? Assets.icons.request1
-          : Assets.icons.category,
-      name: AppStorage.isVendor == false ? "Service Request" : "Categories",
+      iconPath: AppStorage.isProvider
+          ? Assets.icons.category   // Vendor sees Categories
+          : Assets.icons.request1,  // User sees Service Request
+      name: AppStorage.isProvider
+          ? "Categories"
+          : "Service Request",
     ),
     NavigationModel(iconPath: Assets.icons.frame1, name: "Chat"),
     NavigationModel(iconPath: Assets.icons.vuesax, name: "Profile"),
   ];
+
 
   var selectedIndex = 0.obs;
 

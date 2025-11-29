@@ -4,6 +4,7 @@ import '../../../core/utils/basic_import.dart';
 import '../../../routes/routes.dart';
 import '../../home/model/home_model.dart';
 import '../../home/screen/home_screen.dart';
+import '../../home/widget/home_app_bar_widget.dart';
 import '../../summary/model/summary_model.dart';
 import '../controller/home_vendor_controller.dart';
 

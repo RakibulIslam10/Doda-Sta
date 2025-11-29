@@ -7,6 +7,8 @@ import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
 
+import '../../utils/app_storage.dart';
+
 Map<String, String> basicHeaderInfo() {
   return {
     HttpHeaders.acceptHeader: "application/json",
@@ -16,8 +18,8 @@ Map<String, String> basicHeaderInfo() {
 
 Future<Map<String, String>> bearerHeaderInfo() async {
   // final String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoSWQiOiI2OGZmNDRjYTYzMmU3ZTQ2MTc5ZjA5MzQiLCJ1c2VySWQiOiI2OGZmNDRjYjYzMmU3ZTQ2MTc5ZjA5MzYiLCJlbWFpbCI6ImRhZGFAeW9wbWFpbC5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc2MTU1OTc5MSwiZXhwIjoxNzkzMDk1NzkxfQ.5sVWOscrmE--r12nHynDBSnnIAqAexrFqFXzYcLddb4";
-  final String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoSWQiOiI2OTAxYjk2ZTgxYjU2Y2FkYzEyNjc5ZTEiLCJ1c2VySWQiOiI2OTAxYjk2ZTgxYjU2Y2FkYzEyNjc5ZTMiLCJlbWFpbCI6InJham9uZG9kYUB5b3BtYWlsLmNvbSIsInJvbGUiOiJQUk9WSURFUiIsImlhdCI6MTc2MTczMDk1NSwiZXhwIjoxNzkzMjY2OTU1fQ.ppS5tAhVWsoj-SwNCHwS-4PWRiBU9t9A5I9dbDq6ePQ";
-  // final String token = AppStorage.token;
+ // final String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoSWQiOiI2OTAxYjk2ZTgxYjU2Y2FkYzEyNjc5ZTEiLCJ1c2VySWQiOiI2OTAxYjk2ZTgxYjU2Y2FkYzEyNjc5ZTMiLCJlbWFpbCI6InJham9uZG9kYUB5b3BtYWlsLmNvbSIsInJvbGUiOiJQUk9WSURFUiIsImlhdCI6MTc2MTczMDk1NSwiZXhwIjoxNzkzMjY2OTU1fQ.ppS5tAhVWsoj-SwNCHwS-4PWRiBU9t9A5I9dbDq6ePQ";
+ final String token = AppStorage.token;
   print(token);
 
   return {

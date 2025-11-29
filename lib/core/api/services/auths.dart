@@ -1,7 +1,9 @@
 import 'package:doda_work/core/api/model/basic_success_model.dart';
+import 'package:doda_work/core/utils/message_helper.dart';
 import '../../../routes/routes.dart';
 import '../../../views/auth/login/model/login_model.dart';
 import '../../../views/auth/register/model/provider_otp_verify_model.dart';
+import '../../../views/vendor_profile/screen/vendor_profile_screen_mobile.dart';
 import '../../utils/app_storage.dart';
 import '../../utils/basic_import.dart';
 import 'api.dart';
@@ -20,8 +22,24 @@ class AuthService {
       isLoading: isLoading,
       body: inputBody,
       onSuccess: (result) {
+        final role = result.data.user.authId.role.toUpperCase(); // "USER" or "PROVIDER"
+        print("User Role: $role");
+
+        // Save token, role, and isVendor flag
         AppStorage.save(token: result.data.accessToken, isLoggedIn: true);
-        Get.offAllNamed(Routes.navigationScreen);
+        AppStorage.saveRole(role); // <-- New method to save role
+        AppStorage.isVendor = role == "PROVIDER";
+
+        // Navigate based on role
+        if (role == "PROVIDER") {
+          Get.offAllNamed(Routes.navigationScreen);
+        } else if (role == "USER") {
+          Get.offAllNamed(Routes.navigationScreen);
+        } else {
+          MessageHelper.showError("Please Select Your Role.\nThank you");
+        }
+
+
       },
     );
   }
@@ -92,7 +110,7 @@ class AuthService {
       onSuccess: (result) {
         AppStorage.isVendor == true
             ? Get.toNamed(Routes.aditionalScreen)
-            : Get.offAllNamed(Routes.navigationScreen);
+            : Get.offAllNamed(Routes.loginScreen);
         AppStorage.save(temporaryToken: result.data.accessToken);
       },
     );
@@ -134,7 +152,11 @@ class AuthService {
       isLoading: isLoading,
       body: inputBody,
       showSuccessSnackBar: true,
-      onSuccess: (result) => Get.back(),
+      onSuccess: (result){
+        MessageHelper.showSuccess("Change Password Success");
+        Get.back();
+        Get.toNamed(Routes.loginScreen);
+      },
     );
   }
 }

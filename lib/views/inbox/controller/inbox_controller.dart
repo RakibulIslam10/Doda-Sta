@@ -5,34 +5,43 @@ import 'package:web_socket_channel/io.dart';
 import '../model/send_message_model.dart';
 
 class InboxController extends GetxController {
+  /// Message list
   final messageList = <MessageModel>[].obs;
 
+  /// Input controller
   final textController = TextEditingController();
   final scrollController = ScrollController();
 
+  /// State flags
   final hasText = false.obs;
   final hasTextOrImage = false.obs;
 
+  /// Image picker
   final ImagePicker _picker = ImagePicker();
 
+  /// WebSocket channel
   late IOWebSocketChannel channel;
 
   @override
   void onInit() {
     super.onInit();
+
+    // Connect WebSocket
     connectToSocket();
 
+    // Listen text changes
     textController.addListener(() {
       hasText.value = textController.text.trim().isNotEmpty;
       hasTextOrImage.value = hasText.value;
     });
   }
 
+  /// Connect to WebSocket server
   void connectToSocket() {
     channel = IOWebSocketChannel.connect(Uri.parse('ws://10.10.11.28:8080'));
 
     channel.stream.listen(
-      (data) {
+          (data) {
         messageList.add(
           MessageModel(text: data.toString(), isMe: false, time: _getTime()),
         );
@@ -43,6 +52,7 @@ class InboxController extends GetxController {
     );
   }
 
+  /// Send text message
   void sendMessage() {
     final text = textController.text.trim();
     if (text.isEmpty) return;
@@ -56,7 +66,7 @@ class InboxController extends GetxController {
     hasText.value = false;
     hasTextOrImage.value = false;
 
-    /// Demo reply
+    // Demo reply
     Future.delayed(const Duration(milliseconds: 300), () {
       messageList.add(
         MessageModel(
@@ -69,18 +79,20 @@ class InboxController extends GetxController {
     });
   }
 
+  /// Pick image from gallery
   Future<void> pickImageFromGallery() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) sendImageMessage(image.path);
   }
 
+  /// Send image message
   void sendImageMessage(String imagePath) {
     messageList.add(
       MessageModel(imageUrl: imagePath, isMe: true, time: _getTime()),
     );
     _scrollToBottom();
 
-    /// Demo reply
+    // Demo reply
     Future.delayed(const Duration(seconds: 1), () {
       messageList.add(
         MessageModel(text: "Nice picture 👍", isMe: false, time: _getTime()),
@@ -89,11 +101,13 @@ class InboxController extends GetxController {
     });
   }
 
+  /// Get current time
   String _getTime() {
     final now = DateTime.now();
     return "${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}";
   }
 
+  /// Scroll chat to bottom
   void _scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (scrollController.hasClients) {
@@ -109,6 +123,8 @@ class InboxController extends GetxController {
   @override
   void onClose() {
     channel.sink.close();
+    textController.dispose();
+    scrollController.dispose();
     super.onClose();
   }
 }

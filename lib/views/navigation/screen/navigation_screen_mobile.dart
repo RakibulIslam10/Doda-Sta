@@ -8,11 +8,12 @@ class NavigationScreenMobile extends GetView<NavigationController> {
     double width = MediaQuery.of(context).size.width;
 
     final List<Widget> pages = [
-      AppStorage.isVendor == true ? HomeVendorScreen() : const HomeScreen(),
-      AppStorage.isVendor == true ? CategoryScreen() : const RequestScreen(),
+      AppStorage.isProvider ? HomeVendorScreen() : const HomeScreen(),
+      AppStorage.isProvider ? CategoryScreen() : const RequestScreen(),
       const ChatScreen(),
       const ProfileScreen(),
     ];
+
 
     return Scaffold(
       body: Obx(() => pages[controller.selectedIndex.value]),

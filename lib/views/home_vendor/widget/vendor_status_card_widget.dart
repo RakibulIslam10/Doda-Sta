@@ -223,7 +223,7 @@ class VendorStatusCardWidget extends StatelessWidget {
 
                                 child: TextWidget(
                                   'Accept',
-                                  color: CustomColors.whiteColor,
+                                  color: CustomColors.blueColor,
                                   fontSize: Dimensions.titleSmall,
                                 ),
                               ),

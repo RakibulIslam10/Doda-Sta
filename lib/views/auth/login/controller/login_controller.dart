@@ -38,6 +38,7 @@ class LoginController extends GetxController {
 
     /// Default test credentials
     emailController.text = 'temrakib@yopmail.com';
+    // emailController.text = 'rakibvendor@yopmail.com';
     passwordController.text = '123456';
   }
 
@@ -55,7 +56,6 @@ class LoginController extends GetxController {
     );
   }
 
-
   /// =======================================
   /// 🔥 GOOGLE SIGN IN (Android / iOS / Web)
   /// =======================================
@@ -66,7 +66,7 @@ class LoginController extends GetxController {
       if (kIsWeb) {
         googleSignIn = GoogleSignIn(
           clientId:
-          "621538781171-8f9t0fpop11e2cfg4jc5qc9iukbb1sq5.apps.googleusercontent.com",
+              "621538781171-8f9t0fpop11e2cfg4jc5qc9iukbb1sq5.apps.googleusercontent.com",
           scopes: ['email', 'profile'],
         );
       } else {
@@ -86,8 +86,9 @@ class LoginController extends GetxController {
         idToken: googleAuth.idToken,
       );
 
-      final userCredential =
-      await FirebaseAuth.instance.signInWithCredential(credential);
+      final userCredential = await FirebaseAuth.instance.signInWithCredential(
+        credential,
+      );
 
       firebaseUser.value = userCredential.user;
 

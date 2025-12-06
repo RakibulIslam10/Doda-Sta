@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:doda_work/core/utils/basic_import.dart';
+import 'package:doda_work/routes/routes.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -19,7 +20,9 @@ class RequestController extends GetxController {
 
   void onCategorySelected(String categoryId) {
     selectedCategoryId.value = categoryId;
-    final selectedCat = categoryController.allCategory.firstWhereOrNull((c) => c.id == categoryId);
+    final selectedCat = categoryController.allCategory.firstWhereOrNull(
+      (c) => c.id == categoryId,
+    );
     categoryController.availableSubcategories
       ..clear()
       ..addAll(selectedCat?.subcategories ?? []);
@@ -37,7 +40,9 @@ class RequestController extends GetxController {
   final ImagePicker _picker = ImagePicker();
 
   Future<void> pickImage() async {
-    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    final XFile? pickedFile = await _picker.pickImage(
+      source: ImageSource.gallery,
+    );
     if (pickedFile != null) {
       photos.add(File(pickedFile.path));
     }
@@ -56,12 +61,16 @@ class RequestController extends GetxController {
     selectedLatLng.value = null;
     selectedAddress.value = '';
 
+
     photos.clear();
   }
 
   final RxBool isLoading = false.obs;
 
-  Future<void> bookingService({required String customerPhone, required String description,}) async {
+  Future<void> bookingService({
+    required String customerPhone,
+    required String description,
+  }) async {
     final Map<String, String> payload = {
       "serviceCategory": selectedCategoryId.value,
       "subcategory": selectedSubCategoryId.value,
@@ -80,8 +89,8 @@ class RequestController extends GetxController {
     try {
       isLoading.value = true;
       final response = await ApiClient.multipartRequest(
-          url: ApiEndPoints.serviceCreate(), 
-          body: payload,
+        url: ApiEndPoints.serviceCreate(),
+        body: payload,
         reqType: "POST",
         multipartBody: photos
             .map((file) => MultipartBody("attachments", file))
@@ -97,7 +106,8 @@ class RequestController extends GetxController {
         );
 
         resetForm();
-        Get.find<NavigationController>().goToHome();
+        Get.offAllNamed(Routes.navigationScreen);
+        // Get.find<NavigationController>().goToHome();
       } else {
         Get.snackbar(
           "Failed",

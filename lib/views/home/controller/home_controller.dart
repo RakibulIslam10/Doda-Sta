@@ -102,7 +102,6 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
 
-    // Setup paging listeners for Home Services
     pagingControllers.forEach((status, controller) {
       controller.addPageRequestListener((pageKey) {
         fetch(status, pageKey);
@@ -120,15 +119,6 @@ class HomeController extends GetxController {
     });
   }
 
-  // =============================
-  // DISPOSE CONTROLLERS
-  // =============================
-  @override
-  void onClose() {
-    pagingControllers.forEach((_, controller) => controller.dispose());
-    requestPagingController.dispose();
-    super.onClose();
-  }
 
   // =============================
   // REFRESH FUNCTIONS

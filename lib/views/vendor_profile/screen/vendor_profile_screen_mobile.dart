@@ -12,7 +12,7 @@ class VendorProfileScreenMobile extends GetView<VendorProfileController> {
 
   @override
   Widget build(BuildContext context) {
-    // final profileInfo = controller.providerUpdateProfileModel.data;
+    final profileInfo = controller.providerUpdateProfileModel.data;
 
     return Scaffold(
       appBar: CommonAppBar(title: 'Edit Profile'),

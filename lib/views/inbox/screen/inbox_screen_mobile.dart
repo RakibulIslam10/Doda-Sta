@@ -55,6 +55,7 @@ class InboxScreenMobile extends GetView<InboxController> {
                   );
                 }),
                 if (participantEmailArg != null)
+
                   Text(
                     participantEmailArg,
                     style: TextStyle(

@@ -15,6 +15,7 @@ class RegisterScreenMobile extends GetView<RegisterController> {
           children: [
             Space.height.v10,
             TextWidget(
+
               'Sign Up',
               fontSize: Dimensions.titleLarge,
               fontWeight: FontWeight.bold,
@@ -42,6 +43,7 @@ class RegisterScreenMobile extends GetView<RegisterController> {
                   padding: Dimensions.widthSize.edgeLeft * 0.24,
                   'Sign In',
                   onTap: () {
+
                     Get.offAllNamed(Routes.loginScreen);
                   },
                   color: CustomColors.primary,

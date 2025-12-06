@@ -113,9 +113,12 @@ class AuthService {
       isLoading: isLoading,
       body: inputBody,
       onSuccess: (result) {
-        AppStorage.isVendor == true
-            ? Get.toNamed(Routes.aditionalScreen)
-            : Get.offAllNamed(Routes.loginScreen);
+
+        AppStorage.users == "PROVIDER"?Get.toNamed(Routes.aditionalScreen) : Get.offAllNamed(Routes.loginScreen);
+
+        // AppStorage.isVendor == true
+        //     ? Get.toNamed(Routes.aditionalScreen)
+        //     : Get.offAllNamed(Routes.loginScreen);
         AppStorage.save(temporaryToken: result.data.accessToken);
       },
     );

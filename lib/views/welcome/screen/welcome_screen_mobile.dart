@@ -5,6 +5,10 @@ class WelcomeScreenMobile extends GetView<WelcomeController> {
 
   @override
   Widget build(BuildContext context) {
+    print('+++++++++++++++++++++++++++++++++++++++++++++++++++');
+    print('+++++++++++++++++++++++++++++++++++++++++++++++++++');
+    print('+++++++++++++++++++++++++++++++++++++++++++++++++++');
+    print(AppStorage.users);
     return Scaffold(
       bottomNavigationBar: SafeArea(
         child: SizedBox(
@@ -89,8 +93,8 @@ class WelcomeScreenMobile extends GetView<WelcomeController> {
               // ),
               GestureDetector(
                 onTap: () {
+                  AppStorage.save(isUsers: 'USER');
                   Get.toNamed(Routes.loginScreen);
-                  AppStorage.save(isVendor: false);
                 },
 
                 child: AnimatedContainer(
@@ -137,7 +141,8 @@ class WelcomeScreenMobile extends GetView<WelcomeController> {
               GestureDetector(
                 onTap: () {
                   Get.offAllNamed(Routes.loginScreen);
-                  AppStorage.save(isVendor: true);
+                  AppStorage.save(isUsers: 'PROVIDER');
+                  print(AppStorage.users);
                 },
                 child: AnimatedContainer(
                   margin: EdgeInsetsGeometry.symmetric(

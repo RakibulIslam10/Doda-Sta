@@ -38,20 +38,38 @@ class MyApp extends StatelessWidget {
         initialBinding: BindingsBuilder(() {
           Get.lazyPut(() => SplashController());
         }),
+
         builder: (context, widget) {
-          ScreenUtil.init(context);
-          return MediaQuery(
-            data: MediaQuery.of(
-              context,
-            ).copyWith(textScaler: TextScaler.linear(1.0)),
-            child: Directionality(
-              textDirection: Get.locale?.languageCode == 'ar'
-                  ? TextDirection.rtl
-                  : TextDirection.ltr,
-              child: widget!,
-            ),
+          return Overlay(
+            initialEntries: [
+              OverlayEntry(
+                builder: (ctx) {
+                  return Directionality(
+                    textDirection: Get.locale?.languageCode == 'ar'
+                        ? TextDirection.rtl
+                        : TextDirection.ltr,
+                    child: widget!,
+                  );
+                },
+              ),
+            ],
           );
         },
+
+        // builder: (context, widget) {
+        //   ScreenUtil.init(context);
+        //   return MediaQuery(
+        //     data: MediaQuery.of(
+        //       context,
+        //     ).copyWith(textScaler: TextScaler.linear(1.0)),
+        //     child: Directionality(
+        //       textDirection: Get.locale?.languageCode == 'ar'
+        //           ? TextDirection.rtl
+        //           : TextDirection.ltr,
+        //       child: widget!,
+        //     ),
+        //   );
+        // },
       ),
     );
   }

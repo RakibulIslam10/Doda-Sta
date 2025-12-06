@@ -5,6 +5,10 @@ class LoginScreenMobile extends GetView<LoginController> {
 
   @override
   Widget build(BuildContext context) {
+    print('+++++++++++++++++++++++++++++++++++++++++++++++++++');
+    print('+++++++++++++++++++++++++++++++++++++++++++++++++++');
+    print('+++++++++++++++++++++++++++++++++++++++++++++++++++');
+    print(AppStorage.users);
     return Scaffold(
       body: SafeArea(
         child: ListView(

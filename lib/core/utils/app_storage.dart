@@ -7,6 +7,7 @@ class AppStorage {
   // ========================= KEYS =========================
   static const String _tokenKey = 'token';
   static const String _uIdKey = 'uId';
+  static const String _isUserKey = 'isUsers';
   static const String _temporaryTokenKey = 'temporaryToken';
   static const String _mobileCodeKey = 'mobileCode';
   static const String _onboardSaveKey = 'onboardSave';
@@ -23,6 +24,7 @@ class AppStorage {
   static Future<void> save({
     String? token,
     String? uId,
+    String? isUsers,
     String? temporaryToken,
     String? mobileCode,
     bool? onboardSave,
@@ -34,15 +36,21 @@ class AppStorage {
     bool? isVendor,
     String? role,
   }) async {
-    if (token != null) await _storage.write(_tokenKey, token.replaceAll('"', '').trim());
-    if (temporaryToken != null) await _storage.write(_temporaryTokenKey, temporaryToken);
+    if (token != null)
+      await _storage.write(_tokenKey, token.replaceAll('"', '').trim());
+    if (temporaryToken != null)
+      await _storage.write(_temporaryTokenKey, temporaryToken);
     if (uId != null) await _storage.write(_uIdKey, uId);
+    if (isUsers != null) await _storage.write(_isUserKey, isUsers);
     if (mobileCode != null) await _storage.write(_mobileCodeKey, mobileCode);
     if (onboardSave != null) await _storage.write(_onboardSaveKey, onboardSave);
     if (isLoggedIn != null) await _storage.write(_isLoggedInKey, isLoggedIn);
-    if (isEmailVerified != null) await _storage.write(_isEmailVerifiedKey, isEmailVerified);
-    if (isKycVerified != null) await _storage.write(_isKycVerifiedKey, isKycVerified);
-    if (isSmsVerified != null) await _storage.write(_isSmsVerifiedKey, isSmsVerified);
+    if (isEmailVerified != null)
+      await _storage.write(_isEmailVerifiedKey, isEmailVerified);
+    if (isKycVerified != null)
+      await _storage.write(_isKycVerifiedKey, isKycVerified);
+    if (isSmsVerified != null)
+      await _storage.write(_isSmsVerifiedKey, isSmsVerified);
     if (isKycStatus != null) await _storage.write(_kycStatusKey, isKycStatus);
     if (isVendor != null) isVendor = isVendor; // use setter
     if (role != null) await saveRole(role);
@@ -54,16 +62,30 @@ class AppStorage {
 
   // ========================= GETTERS =========================
   static String get token => (_storage.read(_tokenKey) ?? '').trim();
+
   static String get temporaryToken => _storage.read(_temporaryTokenKey) ?? '';
+
   static String get uId => _storage.read(_uIdKey) ?? '';
+
+  static String get users => _storage.read(_isUserKey) ?? '';
+
   static String get mobileCode => _storage.read(_mobileCodeKey) ?? '';
+
   static bool get isLoggedIn => _storage.read(_isLoggedInKey) ?? false;
+
   static bool get onboardSave => _storage.read(_onboardSaveKey) ?? false;
-  static bool get isEmailVerified => _storage.read(_isEmailVerifiedKey) ?? false;
+
+  static bool get isEmailVerified =>
+      _storage.read(_isEmailVerifiedKey) ?? false;
+
   static bool get isKycVerified => _storage.read(_isKycVerifiedKey) ?? false;
+
   static bool get isSmsVerified => _storage.read(_isSmsVerifiedKey) ?? false;
+
   static bool get isKycStatus => _storage.read(_kycStatusKey) ?? false;
+
   static bool get isVendor => _storage.read(_isVendorKey) ?? false;
+
   static Map<String, dynamic>? get profile => _storage.read(_profileKey);
 
   // ✅ New getter for logged-in user ID
@@ -82,7 +104,9 @@ class AppStorage {
   }
 
   static String get role => (_storage.read(_roleKey) ?? "USER").toUpperCase();
+
   static bool get isUser => role == "USER";
+
   static bool get isProvider => role == "PROVIDER";
 
   // ========================= SETTERS =========================
@@ -104,11 +128,14 @@ class AppStorage {
       isKycStatus ? 1 : 0,
       temporaryToken: temporaryToken,
       mobileCode: mobileCode,
+      isUsers: users,
     );
   }
 
   static bool get seenOnboarding => _storage.read(_onboardSaveKey) ?? false;
-  static set seenOnboarding(bool value) => _storage.write(_onboardSaveKey, value);
+
+  static set seenOnboarding(bool value) =>
+      _storage.write(_onboardSaveKey, value);
 
   // ========================= CLEAR DATA =========================
   static Future<void> clear() async => await _storage.erase();

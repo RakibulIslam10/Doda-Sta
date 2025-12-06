@@ -12,7 +12,7 @@ class AddPhotoGrid extends StatelessWidget {
       crossAxisAlignment: crossStart,
       children: [
         TextWidget(
-          title ?? 'Add Photo or video',
+          title ?? 'Add Attachment',
           fontSize: Dimensions.titleSmall,
           fontWeight: FontWeight.w500,
           color: CustomColors.blackColor.withAlpha(888),

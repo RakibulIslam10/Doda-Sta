@@ -50,7 +50,7 @@ class ProfileTopHeaderWidgetView extends GetView<ProfileController> {
                     ? (controller
                                   .providerProfileModel
                                   ?.companyName
-                                  ?.isNotEmpty ??
+                                  .isNotEmpty ??
                               false
                           ? "${ApiEndPoints.baseUrl}${controller.providerProfileModel!.companyName}"
                           : 'https://picsum.photos/200/300?random=')

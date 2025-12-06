@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:doda_work/views/profile/controller/profile_controller.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -37,7 +38,8 @@ class UpdateController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
+    nameController.text =
+        Get.find<ProfileController>().userProfileModel?.data?.name ?? "";
     emailController.addListener(() {
       final email = emailController.text.trim();
       isEmailValid.value = GetUtils.isEmail(email);
@@ -76,17 +78,15 @@ class UpdateController extends GetxController {
       reqType: "PATCH",
       isLoading: isLoading,
       body: body,
-      files: fileMap, // just pass the map
+      files: fileMap,
+      // just pass the map
       fromJson: UserUpdateProfileModel.fromJson,
       showSuccessSnackBar: true,
       onSuccess: (_) {
         Future.delayed(const Duration(milliseconds: 200), () {
-         Get.offAllNamed(Routes.navigationScreen);
+          Get.offAllNamed(Routes.navigationScreen);
         });
-
-
       },
     );
   }
-
 }

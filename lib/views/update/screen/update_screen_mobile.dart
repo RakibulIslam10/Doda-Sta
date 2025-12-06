@@ -5,6 +5,8 @@ class UpdateScreenMobile extends GetView<UpdateController> {
 
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
       appBar: CommonAppBar(title: 'Update Profile'),
       body: SafeArea(
@@ -27,7 +29,7 @@ class UpdateScreenMobile extends GetView<UpdateController> {
                           fit: BoxFit.cover,
                         )
                             : CachedNetworkImage(
-                          imageUrl: 'https://picsum.photos/200/300?random=${DateTime.now().millisecondsSinceEpoch}',
+                          imageUrl: '${ApiEndPoints.baseUrl}/${Get.find<ProfileController>().userProfileModel?.data?.profileImage ?? ""}',
                           fit: BoxFit.cover,
                           placeholder: (context, url) =>
                               Container(color: Colors.grey.shade300),

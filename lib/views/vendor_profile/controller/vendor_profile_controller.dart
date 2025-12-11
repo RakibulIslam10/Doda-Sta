@@ -78,12 +78,7 @@ class VendorProfileController extends GetxController {
 
   Future<void> vendorUpdateProfile() async {
     try {
-      // Validate required fields
-      final validationError = _validateForm();
-      if (validationError != null) {
-        _showSnackBar(validationError, isError: true);
-        return;
-      }
+
 
       // Get authentication token - FIXED: Using correct AppStorage method
       final token = _getAuthToken();
@@ -128,25 +123,6 @@ class VendorProfileController extends GetxController {
     }
   }
 
-  String? _validateForm() {
-    if (nameController.text.isEmpty) {
-      return 'Please enter company name';
-    }
-
-    if (contactPersonController.text.isEmpty) {
-      return 'Please enter contact person name';
-    }
-
-    if (selectedLatLng.value == null) {
-      return 'Please select service location';
-    }
-
-    if (selectedServiceList.isEmpty) {
-      return 'Please select at least one service category';
-    }
-
-    return null;
-  }
 
   String? _getAuthToken() {
     final token = AppStorage.token;

@@ -13,12 +13,12 @@ class HomeAppBarWidgetView extends GetView<ProfileController> {
 
     // Get name dynamically based on role
     final userName = isVendor
-        ? controller.providerProfileModel?.companyName ?? 'Provider'
+        ? controller.providerProfileModel?.data.companyName ?? 'Provider'
         : controller.userProfileModel?.data?.name ?? 'User';
 
     // Get email dynamically based on role
     final userEmail = isVendor
-        ? controller.providerProfileModel?.authId?.email ?? 'Email'
+        ? controller.providerProfileModel?.data.authId.email ?? 'Email'
         : controller.userProfileModel?.data?.email ?? 'Email';
 
     // Role label

@@ -5,8 +5,6 @@ class UpdateScreenMobile extends GetView<UpdateController> {
 
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
       appBar: CommonAppBar(title: 'Update Profile'),
       body: SafeArea(
@@ -19,26 +17,27 @@ class UpdateScreenMobile extends GetView<UpdateController> {
               child: Stack(
                 children: [
                   Obx(
-                        () => ClipOval(
+                    () => ClipOval(
                       child: SizedBox(
                         height: 120,
                         width: 120,
                         child: controller.selectedImg.value != null
                             ? Image.file(
-                          controller.selectedImg.value!,
-                          fit: BoxFit.cover,
-                        )
+                                controller.selectedImg.value!,
+                                fit: BoxFit.cover,
+                              )
                             : CachedNetworkImage(
-                          imageUrl: '${ApiEndPoints.baseUrl}/${Get.find<ProfileController>().userProfileModel?.data?.profileImage ?? ""}',
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) =>
-                              Container(color: Colors.grey.shade300),
-                          errorWidget: (context, url, error) => Icon(
-                            Icons.person,
-                            size: 110,
-                            color: Colors.grey,
-                          ),
-                        ),
+                                imageUrl:
+                                    '${ApiEndPoints.baseUrl}/${Get.find<ProfileController>().userProfileModel?.data?.profileImage ?? ""}',
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) =>
+                                    Container(color: Colors.grey.shade300),
+                                errorWidget: (context, url, error) => Icon(
+                                  Icons.person,
+                                  size: 110,
+                                  color: Colors.grey,
+                                ),
+                              ),
                       ),
                     ),
                   ),

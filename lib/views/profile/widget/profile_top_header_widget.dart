@@ -15,12 +15,13 @@ class ProfileTopHeaderWidgetView extends GetView<ProfileController> {
     final double cardHeight = MediaQuery.of(context).size.height * 0.12;
 
     return Obx(() {
-      final bool isVendor = AppStorage.isProvider;
+      // Get user data
+      final userData = controller.userProfileModel?.data;
 
-      // Get profile based on role
-      final profile = isVendor
-          ? controller.providerProfileModel
-          : controller.userProfileModel?.data; // for user model
+      // Profile image URL
+      final profileImageUrl = userData?.profileImage?.isNotEmpty == true
+          ? "${ApiEndPoints.baseUrl}${userData!.profileImage}"
+          : 'https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png';
 
       return Container(
         height: cardHeight,
@@ -46,22 +47,173 @@ class ProfileTopHeaderWidgetView extends GetView<ProfileController> {
                 bottomLeft: Radius.circular(Dimensions.radius * 0.8),
               ),
               child: CachedNetworkImage(
-                imageUrl: isVendor
-                    ? (controller
-                                  .providerProfileModel
-                                  ?.companyName
-                                  .isNotEmpty ??
-                              false
-                          ? "${ApiEndPoints.baseUrl}${controller.providerProfileModel!.companyName}"
-                          : 'https://picsum.photos/200/300?random=')
-                    : (controller
-                                  .userProfileModel
-                                  ?.data
-                                  ?.profileImage
-                                  ?.isNotEmpty ??
-                              false
-                          ? "${ApiEndPoints.baseUrl}${controller.userProfileModel!.data!.profileImage}"
-                          : 'https://picsum.photos/200/300?random='),
+                imageUrl: profileImageUrl,
+                width: imageWidth * 0.85,
+                height: cardHeight,
+                fit: BoxFit.cover,
+                placeholder: (context, url) => Container(
+                  color: Colors.grey.shade300,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: CustomColors.primary,
+                    ),
+                  ),
+                ),
+                errorWidget: (context, url, error) => Container(
+                  color: Colors.grey.shade400,
+                  child: const Icon(
+                    Icons.person,
+                    size: 40,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+
+            Space.width.v10,
+
+            // User Info
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: Dimensions.paddingSize * 0.5,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // User Name
+                    TextWidget(
+                      userData?.name ?? "User Name",
+                      fontSize: Dimensions.titleSmall,
+                      fontWeight: FontWeight.w600,
+                      color: CustomColors.primary,
+                      maxLines: 1,
+                      textOverflow: TextOverflow.ellipsis,
+                    ),
+
+                    Space.height.v5,
+
+                    // Email
+                    TextWidget(
+                      userData?.email ?? "user@example.com",
+                      fontSize: Dimensions.titleSmall * 0.85,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey.shade700,
+                      maxLines: 1,
+                      textOverflow: TextOverflow.ellipsis,
+                    ),
+
+                    Space.height.v5,
+
+                    // Phone Number
+                    if (userData?.phoneNumber?.isNotEmpty == true)
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.phone,
+                            size: Dimensions.iconSizeSmall,
+                            color: Colors.grey.shade600,
+                          ),
+                          SizedBox(width: 4),
+                          Expanded(
+                            child: TextWidget(
+                              userData!.phoneNumber!,
+                              fontSize: Dimensions.titleSmall * 0.8,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.grey.shade600,
+                              maxLines: 1,
+                              textOverflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
+              ),
+            ),
+
+            // Edit Button
+            Align(
+              alignment: Alignment.topRight,
+              child: InkWell(
+                onTap: () => Get.toNamed(Routes.updateScreen),
+                child: Container(
+                  margin: EdgeInsets.all(Dimensions.paddingSize * 0.5),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Dimensions.defaultHorizontalSize * 0.3,
+                    vertical: Dimensions.verticalSize * 0.2,
+                  ),
+                  decoration: BoxDecoration(
+                    color: CustomColors.primary.withOpacity(0.1),
+                    border: Border.all(color: CustomColors.primary, width: 1.5),
+                    borderRadius: BorderRadius.circular(
+                      Dimensions.radius * 0.5,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.edit,
+                        color: CustomColors.primary,
+                        size: Dimensions.iconSizeSmall * 1.2,
+                      ),
+                      SizedBox(width: 4),
+                      TextWidget(
+                        'Edit',
+                        fontSize: Dimensions.titleSmall * 0.7,
+                        color: CustomColors.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ).withShadifyLoading(loading: controller.isLoading.value);
+    });
+  }
+}
+
+class ProfileTopWidgetView extends GetView<ProfileController> {
+  const ProfileTopWidgetView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final double imageWidth = MediaQuery.of(context).size.width * 0.28;
+    final double cardHeight = MediaQuery.of(context).size.height * 0.12;
+
+    return Obx(() {
+      return Container(
+        height: cardHeight,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),
+          border: Border.all(color: Colors.grey.withAlpha(555)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              spreadRadius: 1,
+              blurRadius: 6,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            // Profile Image
+            ClipRRect(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(Dimensions.radius * 0.8),
+                bottomLeft: Radius.circular(Dimensions.radius * 0.8),
+              ),
+              child: CachedNetworkImage(
+                imageUrl:
+                    'https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png',
 
                 width: imageWidth * 0.85,
                 height: cardHeight,
@@ -83,39 +235,31 @@ class ProfileTopHeaderWidgetView extends GetView<ProfileController> {
                 children: [
                   Space.height.v10,
                   TextWidget(
-                    isVendor
-                        ? controller.providerProfileModel?.companyName ??
-                              "Provider Name"
-                        : controller.userProfileModel?.data?.name ??
-                              "User Name",
+                    controller.providerProfileModel?.data.companyName ?? '',
                     fontSize: Dimensions.titleSmall,
                     fontWeight: FontWeight.w500,
                     color: CustomColors.primary,
                   ),
                   Space.height.v5,
                   TextWidget(
-                    isVendor
-                        ? controller.providerProfileModel?.authId?.email ??
-                              "Provider Email"
-                        : controller.userProfileModel?.data?.email ??
-                              "User Email",
+                    controller.providerProfileModel?.data.authId.email ?? '',
                     fontSize: Dimensions.titleSmall,
                     fontWeight: FontWeight.w500,
                     color: CustomColors.primary,
                   ),
                   Space.height.v5,
-                  if (!isVendor)
-                    TextWidget(
-                      controller.userProfileModel?.data?.phoneNumber ?? "",
-                      fontSize: Dimensions.titleSmall * 0.8,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  if (isVendor &&
-                      controller.providerProfileModel?.rating != null)
-                    TextWidget(
-                      "Rating: ${controller.providerProfileModel!.rating} (${controller.providerProfileModel!.totalReviews} reviews)",
-                      fontSize: Dimensions.titleSmall * 0.8,
-                    ),
+                  // if (!isVendor)
+                  //   TextWidget(
+                  //     controller.userProfileModel?.data?.phoneNumber ?? "",
+                  //     fontSize: Dimensions.titleSmall * 0.8,
+                  //     fontWeight: FontWeight.w500,
+                  //   ),
+                  // if (isVendor &&
+                  //     controller.providerProfileModel?.rating != null)
+                  //   TextWidget(
+                  //     "Rating: ${controller.providerProfileModel!.rating} (${controller.providerProfileModel!.totalReviews} reviews)",
+                  //     fontSize: Dimensions.titleSmall * 0.8,
+                  //   ),
                 ],
               ),
             ),
@@ -123,9 +267,7 @@ class ProfileTopHeaderWidgetView extends GetView<ProfileController> {
             Align(
               alignment: Alignment.topRight,
               child: InkWell(
-                onTap: () => Get.toNamed(
-                  isVendor ? Routes.vendor_profileScreen : Routes.updateScreen,
-                ),
+                onTap: () => Get.toNamed(Routes.vendor_profileScreen),
                 child: Container(
                   margin: EdgeInsets.all(Dimensions.paddingSize * 0.2),
                   padding: EdgeInsets.symmetric(

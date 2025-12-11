@@ -2,13 +2,13 @@ import 'package:doda_work/core/api/services/api.dart';
 import 'package:doda_work/core/utils/app_storage.dart';
 import 'package:doda_work/core/utils/basic_import.dart';
 import 'package:doda_work/views/profile/model/user_profile_model.dart';
-import '../model/provider_profile_model.dart';
+import '../model/provider_model.dart';
 
 class ProfileController extends GetxController {
   RxBool isLoading = false.obs;
 
   UserProfileModel? userProfileModel;
-  ProviderProfileModel? providerProfileModel;
+  ProviderProfileModels? providerProfileModel;
 
   @override
   void onInit() {
@@ -49,13 +49,12 @@ class ProfileController extends GetxController {
   /// GET PROVIDER PROFILE
   Future<void> getProviderProfile() async {
     try {
-      await ApiRequest.get<ProviderProfileModel>(
-        fromJson: ProviderProfileModel.fromJson,
+      await ApiRequest.get<ProviderProfileModels>(
+        fromJson: ProviderProfileModels.fromJson,
         endPoint: ApiEndPoints.providerProfile,
         isLoading: isLoading,
         onSuccess: (result) {
           providerProfileModel = result;
-          print("Provider Company: ${providerProfileModel?.companyName}");
         },
       );
     } catch (e) {

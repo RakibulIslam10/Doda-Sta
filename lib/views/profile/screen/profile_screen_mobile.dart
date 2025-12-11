@@ -50,7 +50,10 @@ class ProfileScreenMobile extends GetView<ProfileController> {
               : ListView(
                   padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
                   children: [
-                    ProfileTopHeaderWidgetView(),
+                    if (AppStorage.users == 'USER')
+                      ProfileTopHeaderWidgetView(),
+                    ProfileTopWidgetView(),
+
                     Space.height.v20,
                     ProfileCardSectionWidgetView(),
                   ],

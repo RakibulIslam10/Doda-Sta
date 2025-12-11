@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:doda_work/views/profile/controller/profile_controller.dart';
@@ -36,7 +35,7 @@ class VendorProfileController extends GetxController {
   final _imagePicker = ImagePicker();
   bool isPickingImage = false;
   List<ServiceCategory> serviceCategoryList = [];
-   ProviderUpdateProfileModel? providerUpdateProfileModel;
+  ProviderUpdateProfileModel? providerUpdateProfileModel;
 
   Future<void> pickImg() async {
     if (isPickingImage) return;
@@ -78,8 +77,6 @@ class VendorProfileController extends GetxController {
 
   Future<void> vendorUpdateProfile() async {
     try {
-
-
       // Get authentication token - FIXED: Using correct AppStorage method
       final token = _getAuthToken();
       if (token == null) return;
@@ -103,7 +100,8 @@ class VendorProfileController extends GetxController {
 
       // Make API call - FIXED: Using temporaryToken if needed, but prefer actual token
       final result = await ApiRequest.multiMultipartRequest(
-        token: token, // Use the actual token from AppStorage
+        token: token,
+        // Use the actual token from AppStorage
         endPoint: ApiEndPoints.providerUpdateProfile,
         reqType: "PATCH",
         isLoading: isLoading,
@@ -117,12 +115,10 @@ class VendorProfileController extends GetxController {
       );
 
       print('✅ Profile update completed successfully');
-
     } catch (e) {
       _handleError(e);
     }
   }
-
 
   String? _getAuthToken() {
     final token = AppStorage.token;
@@ -184,7 +180,10 @@ class VendorProfileController extends GetxController {
       _handleAuthorizationError();
     } else if (errorString.contains('timeout') ||
         errorString.contains('socket')) {
-      _showSnackBar('Network error. Please check your connection.', isError: true);
+      _showSnackBar(
+        'Network error. Please check your connection.',
+        isError: true,
+      );
     } else {
       _showSnackBar('Failed to update profile: $error', isError: true);
     }
@@ -217,13 +216,11 @@ class VendorProfileController extends GetxController {
         selectedServiceList.isNotEmpty;
   }
 
-
   @override
   void onInit() {
     super.onInit();
 
     getServiceCategory();
-
 
     // Debug: Print current storage state
     print('🔐 Storage State:');
@@ -231,5 +228,4 @@ class VendorProfileController extends GetxController {
     print('   Is Vendor: ${AppStorage.isVendor}');
     print('   Is Logged In: ${AppStorage.isLoggedIn}');
   }
-
 }

@@ -1,7 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
-
 import 'core/utils/basic_import.dart';
-import 'firebase_options.dart';
 import 'initial.dart';
 import 'routes/routes.dart';
 import 'views/splash/controller/splash_controller.dart';
@@ -11,7 +9,6 @@ void main() async {
   await Initial.init();
 
   await Firebase.initializeApp();
-
   runApp(const MyApp());
 }
 
@@ -38,7 +35,6 @@ class MyApp extends StatelessWidget {
         initialBinding: BindingsBuilder(() {
           Get.lazyPut(() => SplashController());
         }),
-
         builder: (context, widget) {
           return Overlay(
             initialEntries: [

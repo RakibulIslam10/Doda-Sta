@@ -50,9 +50,7 @@ class NavigationScreenMobile extends GetView<NavigationController> {
 
   _buildNavItem(int index) {
     bool isSelected = controller.selectedIndex.value == index;
-    print(
-      '******************************************************************************************',
-    );
+    print('******************************************************************************************',);
 
     print('Is Vendor---- ${AppStorage.isVendor}');
     return GestureDetector(

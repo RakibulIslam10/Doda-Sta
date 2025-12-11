@@ -1,6 +1,7 @@
 import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
+import '../../../core/utils/app_storage.dart';
 import '../../../core/utils/basic_import.dart';
 import '../../../core/utils/extensions.dart';
 import '../../../routes/routes.dart';
@@ -17,7 +18,14 @@ class HomeScreenMobile extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     final List<String> statusText = ['Pending', 'Ongoing', 'Completed'];
-
+    print('+++++++++++++++++++++++++++++++++++++++++++++++++++');
+    print('+++++++++++++++++++++++++++++++++++++++++++++++++++');
+    print('+++++++++++++++++++++++++++++++++++++++++++++++++++');
+    print(AppStorage.users);
+    print(AppStorage.isProvider);
+    print('+++++++++++++++++++++++++++++++++++++++++++++++++++');
+    print('+++++++++++++++++++++++++++++++++++++++++++++++++++');
+    print('+++++++++++++++++++++++++++++++++++++++++++++++++++');
     return DefaultTabController(
       length: statusText.length,
       child: Scaffold(

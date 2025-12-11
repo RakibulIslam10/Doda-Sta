@@ -7,16 +7,15 @@ class NavigationController extends GetxController {
     NavigationModel(iconPath: Assets.icons.home, name: "Home"),
     NavigationModel(
       iconPath: AppStorage.isProvider
-          ? Assets.icons.category   // Vendor sees Categories
-          : Assets.icons.request1,  // User sees Service Request
-      name: AppStorage.isProvider
-          ? "Categories"
-          : "Service Request",
+          ? Assets
+                .icons
+                .category // Vendor sees Categories
+          : Assets.icons.request1, // User sees Service Request
+      name: AppStorage.isProvider ? "Categories" : "Service Request",
     ),
     NavigationModel(iconPath: Assets.icons.frame1, name: "Chat"),
     NavigationModel(iconPath: Assets.icons.vuesax, name: "Profile"),
   ];
-
 
   var selectedIndex = 0.obs;
 

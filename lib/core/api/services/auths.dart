@@ -29,7 +29,6 @@ class AuthService {
 
         AppStorage.save(uId: id);
 
-
         print('-------------------------------');
         print('U ID = ${AppStorage.uId}');
 
@@ -113,8 +112,9 @@ class AuthService {
       isLoading: isLoading,
       body: inputBody,
       onSuccess: (result) {
-
-        AppStorage.users == "PROVIDER"?Get.toNamed(Routes.aditionalScreen) : Get.offAllNamed(Routes.loginScreen);
+        AppStorage.users == "PROVIDER"
+            ? Get.toNamed(Routes.aditionalScreen)
+            : Get.offAllNamed(Routes.loginScreen);
 
         // AppStorage.isVendor == true
         //     ? Get.toNamed(Routes.aditionalScreen)

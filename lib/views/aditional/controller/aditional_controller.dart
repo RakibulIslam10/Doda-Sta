@@ -137,11 +137,13 @@ class AditionalController extends GetxController {
   RxBool providerRegIsLoading = false.obs;
 
   providerRegisterProcess() async {
+    print('-----------------------------------------------');
+    print(AppStorage.temporaryToken,);
     return await ApiRequest.multiMultipartRequest(
       fromJson: ProviderRegisterModel.fromJson,
       endPoint: ApiEndPoints.providerRegister,
       isLoading: providerRegIsLoading,
-      token: AppStorage.temporaryToken,
+      token: AppStorage.token,
 
       files: {},
 

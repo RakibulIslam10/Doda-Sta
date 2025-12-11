@@ -20,6 +20,18 @@ class ApiRequest {
     };
   }
 
+  static void printBody(Map<String, dynamic> body) {
+    body.forEach((key, value) {
+      log("🔹 '$key': '$value'");
+    });
+    log('╚════════════════════════════════════════════════════════════════════════════════════════════╚═══');
+  }
+  static void printUrl(String url) {
+    log('╔════════════════════════════════════════════════════════════════════════════════════════════');
+    log("📍 'End Point': '$url'");
+  }
+
+
   static void printBodyLineByLine(Map<String, dynamic> body) {
     body.forEach((key, value) {
       log("🔹 '$key': '$value'");
@@ -365,16 +377,19 @@ class ApiRequest {
     required String reqType,
     required Map<String, dynamic> body,
     required Map<String, File?> files,
-    Map<String, List<File>>? filesList, // ✅ Added new parameter
+    Map<String, List<File>>? filesList,
+    RxList<File>? selectedImages,
+    List<String>? sizes,
     String? singleQueryParam,
     required R Function(Map<String, dynamic>) fromJson,
     bool showSuccessSnackBar = false,
     Function(R result)? onSuccess,
-    String? token, // ✅ Added token parameter
+    String? token,
+
   }) async {
     try {
       isLoading.value = true;
-      final headers = await _bearerHeaderInfo(token); // ✅ Pass token here
+      final headers = await _bearerHeaderInfo(token);
 
       // Build URL
       String fullUrl = '${ApiEndPoints.baseUrl}$endPoint';
@@ -382,13 +397,11 @@ class ApiRequest {
         if (!singleQueryParam.startsWith('/')) fullUrl += '/';
         fullUrl += singleQueryParam;
       }
-
       final uri = Uri.parse(fullUrl);
       log('📤 MULTIPART REQUEST STARTED');
       log('🔗 Method  : $reqType');
-      log('🔗 URL     : $uri');
-      log('📦 Body    : $body');
-      log('📑 Headers : $headers');
+      printBody(body);
+      printUrl(uri.toString());
 
       final request = http.MultipartRequest(reqType.toUpperCase(), uri);
       request.headers.addAll(headers);
@@ -401,6 +414,11 @@ class ApiRequest {
           request.fields[key] = value?.toString() ?? '';
         }
       });
+
+      if (sizes != null && sizes.isNotEmpty) {
+        request.fields['sizes'] = jsonEncode(sizes);
+        log('📏 SIZES: $sizes');
+      }
 
       // Add single files safely
       for (var entry in files.entries) {
@@ -420,43 +438,32 @@ class ApiRequest {
         );
       }
 
-      // ✅ Add multiple file lists as JSON strings
-      if (filesList != null && filesList.isNotEmpty) {
-        for (var entry in filesList.entries) {
-          final key = entry.key;
-          final fileList = entry.value;
+      if (selectedImages != null && selectedImages.isNotEmpty) {
+        for (var file in selectedImages) {
+          final mimeType =
+              lookupMimeType(file.path) ?? 'application/octet-stream';
+          log('🖼️ Adding image: ${file.path} | MIME: $mimeType');
 
-          // ফাইলের path কে string list হিসেবে পাঠানো
-          request.fields[key] = jsonEncode(
-            fileList.map((file) => file.path).toList(),
-          );
-
-          log(
-            '🧩 MULTI-FILE AS STRING [$key]: ${fileList.map((file) => file.path).toList()}',
+          request.files.add(await http.MultipartFile.fromPath('images',file.path,contentType: MediaType.parse(mimeType),),
           );
         }
       }
 
-      // Send request
+      // Rest of your code...
       final streamedResponse = await request.send().timeout(
         const Duration(seconds: 120),
       );
       final response = await http.Response.fromStream(streamedResponse);
 
       log('📬 RESPONSE STATUS: ${response.statusCode}');
-      log('📬 RESPONSE BODY  : ${response.body}');
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final json = jsonDecode(response.body);
         final result = fromJson(json);
 
         if (showSuccessSnackBar) {
-          final successMessage =
-              json['message'] ?? Strings.requestCompletedSuccessfully;
-          CustomSnackBar.success(
-            title: Strings.success,
-            message: successMessage,
-          );
+          final successMessage = json['message'] ?? 'Request completed successfully';
+          CustomSnackBar.success(title: 'Success', message: successMessage);
         }
 
         if (onSuccess != null) onSuccess(result);
@@ -466,7 +473,6 @@ class ApiRequest {
         final errorMessage = error['message'] ?? 'Something went wrong!';
         log('❌ MULTIPART ERROR: $errorMessage');
         CustomSnackBar.error(errorMessage);
-        MessageHelper.showError("The Some Error found. already company name exits.");
         throw Exception(errorMessage);
       }
     } catch (e) {
@@ -477,7 +483,8 @@ class ApiRequest {
     }
   }
 
-  /// Handle update profile process
+
+/// Handle update profile process
   // Future<UserProfileModel?> updateProfile() async {
   //   final Map<String, File?> fileMap = {};
   //   if (selectedImg.value != null) {

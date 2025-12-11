@@ -11,12 +11,13 @@ class ProviderProfileModels {
     required this.data,
   });
 
-  factory ProviderProfileModels.fromJson(Map<String, dynamic> json) => ProviderProfileModels(
-    statusCode: json["statusCode"],
-    success: json["success"],
-    message: json["message"],
-    data: Data.fromJson(json["data"]),
-  );
+  factory ProviderProfileModels.fromJson(Map<String, dynamic> json) =>
+      ProviderProfileModels(
+        statusCode: json["statusCode"],
+        success: json["success"],
+        message: json["message"],
+        data: Data.fromJson(json["data"]),
+      );
 
   Map<String, dynamic> toJson() => {
     "statusCode": statusCode,
@@ -66,7 +67,9 @@ class Data {
     authId: AuthId.fromJson(json["authId"]),
     companyName: json["companyName"],
     website: json["website"],
-    serviceCategories: List<ServiceCategory>.from(json["serviceCategories"].map((x) => ServiceCategory.fromJson(x))),
+    serviceCategories: List<ServiceCategory>.from(
+      json["serviceCategories"].map((x) => ServiceCategory.fromJson(x)),
+    ),
     latitude: json["latitude"]?.toDouble(),
     longitude: json["longitude"]?.toDouble(),
     coveredRadius: json["coveredRadius"],
@@ -84,7 +87,9 @@ class Data {
     "authId": authId.toJson(),
     "companyName": companyName,
     "website": website,
-    "serviceCategories": List<dynamic>.from(serviceCategories.map((x) => x.toJson())),
+    "serviceCategories": List<dynamic>.from(
+      serviceCategories.map((x) => x.toJson()),
+    ),
     "latitude": latitude,
     "longitude": longitude,
     "coveredRadius": coveredRadius,
@@ -103,23 +108,12 @@ class AuthId {
   final String name;
   final String email;
 
-  AuthId({
-    required this.id,
-    required this.name,
-    required this.email,
-  });
+  AuthId({required this.id, required this.name, required this.email});
 
-  factory AuthId.fromJson(Map<String, dynamic> json) => AuthId(
-    id: json["_id"],
-    name: json["name"],
-    email: json["email"],
-  );
+  factory AuthId.fromJson(Map<String, dynamic> json) =>
+      AuthId(id: json["_id"], name: json["name"], email: json["email"]);
 
-  Map<String, dynamic> toJson() => {
-    "_id": id,
-    "name": name,
-    "email": email,
-  };
+  Map<String, dynamic> toJson() => {"_id": id, "name": name, "email": email};
 }
 
 class PendingUpdates {
@@ -171,21 +165,10 @@ class ServiceCategory {
   final String name;
   final String icon;
 
-  ServiceCategory({
-    required this.id,
-    required this.name,
-    required this.icon,
-  });
+  ServiceCategory({required this.id, required this.name, required this.icon});
 
-  factory ServiceCategory.fromJson(Map<String, dynamic> json) => ServiceCategory(
-    id: json["_id"],
-    name: json["name"],
-    icon: json["icon"],
-  );
+  factory ServiceCategory.fromJson(Map<String, dynamic> json) =>
+      ServiceCategory(id: json["_id"], name: json["name"], icon: json["icon"]);
 
-  Map<String, dynamic> toJson() => {
-    "_id": id,
-    "name": name,
-    "icon": icon,
-  };
+  Map<String, dynamic> toJson() => {"_id": id, "name": name, "icon": icon};
 }

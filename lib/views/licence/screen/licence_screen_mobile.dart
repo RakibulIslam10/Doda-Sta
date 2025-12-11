@@ -12,25 +12,85 @@ class LicenceScreenMobile extends GetView<LicenceController> {
           padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
           children: [
             Obx(() {
-              final items = controller.photos;
+              final newItems = controller.photos; // File type
+              final oldItems = controller.oldPhotos; // String image URLs
+
               return Wrap(
                 spacing: 8,
                 runSpacing: 8,
                 children: [
-                  ...items.map(
-                        (photo) => Container(
-                      width: 100.w,
-                      height: 90.h,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.orange),
-                        borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),
-                        image: DecorationImage(
-                          image: FileImage(photo),
-                          fit: BoxFit.cover,
-                        ),
+                  // ---------- OLD IMAGES (From API) ----------
+                  // ---------- OLD IMAGES ----------
+                  if (oldItems.isNotEmpty) ...[
+                    ...oldItems.map(
+                          (imgUrl) => Stack(
+                        children: [
+                          Container(
+                            width: 100.w,
+                            height: 90.h,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.orange),
+                              borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),
+                              image: DecorationImage(
+                                image: NetworkImage('${ApiEndPoints.mainDomain}/$imgUrl'),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+
+                          // delete button
+                          Positioned(
+                            right: 4,
+                            top: 4,
+                            child: GestureDetector(
+                              onTap: () => controller.removeOldImage(imgUrl),
+                              child: const CircleAvatar(
+                                radius: 13,
+                                backgroundColor: Colors.black54,
+                                child: Icon(Icons.close, size: 16, color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
+                  ],
+
+                  // ---------- NEW IMAGES (Picked Files) ----------
+                  ...newItems.map(
+                        (photo) => Stack(
+                      children: [
+                        Container(
+                          width: 100.w,
+                          height: 90.h,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.orange),
+                            borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),
+                            image: DecorationImage(
+                              image: FileImage(photo),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+
+                        // ❌ Delete button for new image
+                        Positioned(
+                          right: 4,
+                          top: 4,
+                          child: GestureDetector(
+                            onTap: () => controller.photos.remove(photo),
+                            child: const CircleAvatar(
+                              radius: 13,
+                              backgroundColor: Colors.black54,
+                              child: Icon(Icons.close, size: 16, color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
+
+                  // ---------- ADD NEW IMAGE ----------
                   GestureDetector(
                     onTap: controller.pickImage,
                     child: Container(
@@ -53,6 +113,7 @@ class LicenceScreenMobile extends GetView<LicenceController> {
                 ],
               );
             }),
+
             Space.height.v20,
             Obx(() {
               final isLoading = controller.isUpdateLoading.value;

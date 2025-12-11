@@ -144,14 +144,14 @@ class PendingUpdates {
   });
 
   factory PendingUpdates.fromJson(Map<String, dynamic> json) => PendingUpdates(
-    companyName: json["companyName"],
-    website: json["website"],
-    serviceLocation: json["serviceLocation"],
-    coveredRadius: json["coveredRadius"],
-    contactPerson: json["contactPerson"],
-    latitude: json["latitude"]?.toDouble(),
-    longitude: json["longitude"]?.toDouble(),
-    profileImage: json["profile_image"],
+    companyName: json["companyName"] ?? '',
+    website: json["website"] ?? '',
+    serviceLocation: json["serviceLocation"] ?? '',
+    coveredRadius: json["coveredRadius"] ?? 0,
+    contactPerson: json["contactPerson"] ?? '',
+    latitude: json["latitude"]?.toDouble() ?? 0.0,
+    longitude: json["longitude"]?.toDouble() ?? 0.0,
+    profileImage: json["profile_image"] ?? '',
   );
 
   Map<String, dynamic> toJson() => {

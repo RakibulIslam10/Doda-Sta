@@ -1,34 +1,79 @@
 import 'dart:io';
 import 'package:doda_work/core/utils/basic_import.dart';
+import 'package:doda_work/views/profile/controller/profile_controller.dart';
 import 'package:image_picker/image_picker.dart';
 
 class LicenceController extends GetxController {
   final ImagePicker _picker = ImagePicker();
-  final RxList<File> photos = <File>[].obs;
+
+  final RxList<File> photos = <File>[].obs; // New picked photos
+  final RxList<String> oldPhotos = <String>[].obs; // Existing images from API
   final RxBool isUpdateLoading = false.obs;
 
+  @override
+  void onInit() {
+    super.onInit();
+    oldPhotos.addAll(
+      Get.find<ProfileController>().providerProfileModel?.data.attachments ?? [],
+    );
+  }
+
+  // ---------------- Pick Image ----------------
   Future<void> pickImage() async {
-    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 80);
+    final XFile? pickedFile = await _picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 80,
+    );
+
     if (pickedFile != null) {
       photos.add(File(pickedFile.path));
     }
   }
 
+  // ---------------- Delete old image ----------------
+  void removeOldImage(String url) {
+    oldPhotos.remove(url);
+  }
+
+  // ---------------- Delete new picked image ----------------
+  void removeNewImage(File file) {
+    photos.remove(file);
+  }
+
+  // ---------------- Update Profile ----------------
   Future<void> updateProfile({required Map<String, String> body}) async {
     try {
       isUpdateLoading.value = true;
 
-      final List<MultipartBody> multipartBody = photos.map((file) => MultipartBody("attachments", file)).toList();
+      // IMPORTANT: Send old image URLs back to server
+      body["old_images"] = oldPhotos.join(",");
 
-      final response = await ApiClient.multipartRequest(url: ApiEndPoints.updateProviderLicence, body: body, multipartBody: multipartBody, reqType: "PATCH");
+      // Attach new picked photos as multipart
+      final List<MultipartBody> multipartBody = photos
+          .map((file) => MultipartBody("attachments", file))
+          .toList();
 
-      if (response.statusCode == 200 && response.body["success"] == true && response.body["data"] != null) {
+      final response = await ApiClient.multipartRequest(
+        url: ApiEndPoints.updateProviderLicence,
+        body: body,
+        multipartBody: multipartBody,
+        reqType: "PATCH",
+      );
 
+      if (response.statusCode == 200 &&
+          response.body["success"] == true &&
+          response.body["data"] != null) {
         final message = response.body["data"]["message"] ?? "Update successful";
 
-        Get.snackbar("Success", message, snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green, colorText: Colors.white);
+        Get.snackbar(
+          "Success",
+          message,
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
 
-        photos.clear();
+        photos.clear(); // new images clear after success
       } else {
         Get.snackbar(
           "Error",
@@ -39,7 +84,13 @@ class LicenceController extends GetxController {
         );
       }
     } catch (e) {
-      Get.snackbar("Error", "An error occurred: $e", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red, colorText: Colors.white);
+      Get.snackbar(
+        "Error",
+        "An error occurred: $e",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
     } finally {
       isUpdateLoading.value = false;
     }

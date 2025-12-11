@@ -18,7 +18,7 @@ class HomeAppBarWidgetView extends GetView<ProfileController> {
 
     // Get email dynamically based on role
     final userEmail = isVendor
-        ? controller.providerProfileModel?.authId.email ?? 'Email'
+        ? controller.providerProfileModel?.authId?.email ?? 'Email'
         : controller.userProfileModel?.data?.email ?? 'Email';
 
     // Role label

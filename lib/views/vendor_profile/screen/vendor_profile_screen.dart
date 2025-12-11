@@ -8,7 +8,6 @@ import 'package:map_location_picker/map_location_picker.dart';
 import '../../request/widget/category_widget.dart';
 import '../controller/vendor_profile_controller.dart';
 
-
 class VendorProfileScreen extends GetView<VendorProfileController> {
   const VendorProfileScreen({super.key});
 

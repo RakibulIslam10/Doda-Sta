@@ -1,13 +1,12 @@
 class ProviderProfileModel {
   final String id;
-  final AuthIdModel authId;
+  final AuthIdModel? authId;
   final String companyName;
   final String website;
   final List<ServiceCategoryModel> serviceCategories;
   final double latitude;
   final double longitude;
   final int coveredRadius;
-  final List<WorkingHourModel> workingHours;
   final String serviceLocation;
   final bool isActive;
   final bool isVerified;
@@ -19,23 +18,19 @@ class ProviderProfileModel {
   final dynamic reservedProvider;
   final String? paymentIntentId;
   final List<dynamic> potentialProviders;
-  final String createdAt;
-  final String updatedAt;
   final List<String> attachments;
   final String contactPerson;
   final bool isRejected;
-  final StatsModel stats;
 
   ProviderProfileModel({
     required this.id,
-    required this.authId,
+     this.authId,
     required this.companyName,
     required this.website,
     required this.serviceCategories,
     required this.latitude,
     required this.longitude,
     required this.coveredRadius,
-    required this.workingHours,
     required this.serviceLocation,
     required this.isActive,
     required this.isVerified,
@@ -47,29 +42,28 @@ class ProviderProfileModel {
     this.reservedProvider,
     this.paymentIntentId,
     required this.potentialProviders,
-    required this.createdAt,
-    required this.updatedAt,
     required this.attachments,
     required this.contactPerson,
     required this.isRejected,
-    required this.stats,
   });
 
   factory ProviderProfileModel.fromJson(Map<String, dynamic> json) {
     return ProviderProfileModel(
       id: json["_id"] ?? '',
-      authId: AuthIdModel.fromJson(json["authId"]),
+      authId: json["authId"] != null
+          ? AuthIdModel.fromJson(json["authId"])
+          : null,
       companyName: json["companyName"] ?? "",
       website: json["website"] ?? "",
-      serviceCategories: (json["serviceCategories"] as List)
+      serviceCategories: json["serviceCategories"] != null
+          ? (json["serviceCategories"] as List)
           .map((e) => ServiceCategoryModel.fromJson(e))
-          .toList(),
+          .toList()
+          : [],
       latitude: (json["latitude"] ?? 0).toDouble(),
       longitude: (json["longitude"] ?? 0).toDouble(),
       coveredRadius: json["coveredRadius"] ?? 0,
-      workingHours: (json["workingHours"] as List)
-          .map((e) => WorkingHourModel.fromJson(e))
-          .toList(),
+
       serviceLocation: json["serviceLocation"] ?? "",
       isActive: json["isActive"] ?? false,
       isVerified: json["isVerified"] ?? false,
@@ -83,12 +77,11 @@ class ProviderProfileModel {
       reservedProvider: json["reservedProvider"],
       paymentIntentId: json["paymentIntentId"],
       potentialProviders: json["potentialProviders"] ?? [],
-      createdAt: json["createdAt"],
-      updatedAt: json["updatedAt"],
+
       attachments: List<String>.from(json["attachments"] ?? []),
       contactPerson: json["contactPerson"] ?? "",
       isRejected: json["isRejected"] ?? false,
-      stats: StatsModel.fromJson(json["stats"]),
+
     );
   }
 }

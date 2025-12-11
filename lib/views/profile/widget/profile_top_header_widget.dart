@@ -95,7 +95,7 @@ class ProfileTopHeaderWidgetView extends GetView<ProfileController> {
                   Space.height.v5,
                   TextWidget(
                     isVendor
-                        ? controller.providerProfileModel?.authId.email ??
+                        ? controller.providerProfileModel?.authId?.email ??
                               "Provider Email"
                         : controller.userProfileModel?.data?.email ??
                               "User Email",

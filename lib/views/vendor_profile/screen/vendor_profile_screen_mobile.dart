@@ -4,6 +4,7 @@ import '../../../core/utils/basic_import.dart';
 import '../../../core/utils/extensions.dart';
 import '../../../widgets/auth_app_bar.dart';
 import '../../../widgets/loading_widget.dart';
+import '../../profile/controller/profile_controller.dart';
 import '../../request/widget/category_widget.dart';
 import '../controller/vendor_profile_controller.dart';
 
@@ -12,7 +13,6 @@ class VendorProfileScreenMobile extends GetView<VendorProfileController> {
 
   @override
   Widget build(BuildContext context) {
-    final profileInfo = controller.providerUpdateProfileModel.data;
 
     return Scaffold(
       appBar: CommonAppBar(title: 'Edit Profile'),
@@ -38,7 +38,7 @@ class VendorProfileScreenMobile extends GetView<VendorProfileController> {
                                     )
                                   : CachedNetworkImage(
                                       imageUrl:
-                                          'https://picsum.photos/200/300?random=',
+                                          '',
                                       height: 120,
                                       width: 120,
                                       fit: BoxFit.cover,
@@ -91,7 +91,7 @@ class VendorProfileScreenMobile extends GetView<VendorProfileController> {
                       label: "Company Name",
                       controller: controller.nameController,
                       focusNode: controller.nameFocus,
-                      hintText: "Enter your companyName",
+                      hintText: "Enter your company Name",
                     ),
 
                     Space.height.betweenInputBox,

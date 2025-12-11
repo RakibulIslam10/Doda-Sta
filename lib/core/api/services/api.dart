@@ -9,13 +9,14 @@ import '../../utils/app_storage.dart';
 import '../../utils/basic_import.dart';
 
 class ApiRequest {
-  /// ✅ Header Generator
-  static Future<Map<String, String>> _bearerHeaderInfo([String? token]) async {
+  /// ✅ Header Generator with skipAuth option
+  static Future<Map<String, String>> _bearerHeaderInfo([String? token, bool skipAuth = false]) async {
     final authToken = token ?? AppStorage.token;
     return {
       HttpHeaders.acceptHeader: "application/json",
       HttpHeaders.contentTypeHeader: "application/json",
-      if (authToken.isNotEmpty)
+      // Only add authorization if not skipping auth AND token is not empty
+      if (!skipAuth && authToken.isNotEmpty)
         HttpHeaders.authorizationHeader: "Bearer $authToken",
     };
   }
@@ -26,11 +27,11 @@ class ApiRequest {
     });
     log('╚════════════════════════════════════════════════════════════════════════════════════════════╚═══');
   }
+
   static void printUrl(String url) {
     log('╔════════════════════════════════════════════════════════════════════════════════════════════');
     log("📍 'End Point': '$url'");
   }
-
 
   static void printBodyLineByLine(Map<String, dynamic> body) {
     body.forEach((key, value) {
@@ -39,10 +40,8 @@ class ApiRequest {
     });
   }
 
-  // ✅ FIXED HERE
   static void printEndPointLog(String url) {
     log('╔════════════════════════════════════════════════════════════════');
-
     log("📍 'End Point': '$url'");
   }
 
@@ -55,12 +54,12 @@ class ApiRequest {
     Map<String, dynamic>? queryParams,
     bool showSuccessSnackBar = false,
     Function(R result)? onSuccess,
+    bool skipAuth = false, // ✅ Added skipAuth parameter
   }) async {
     try {
       isLoading.value = true;
       log('|📤|---------[ 📦 POST REQUEST STARTED ]---------|📤|');
 
-      // ✅ Build URL with queryParams
       final uri = Uri.parse(
         '${ApiEndPoints.baseUrl}$endPoint',
       ).replace(queryParameters: queryParams);
@@ -69,7 +68,7 @@ class ApiRequest {
       printBodyLineByLine(body);
 
       final response = await http
-          .post(uri, headers: await _bearerHeaderInfo(), body: jsonEncode(body))
+          .post(uri, headers: await _bearerHeaderInfo(null, skipAuth), body: jsonEncode(body))
           .timeout(const Duration(seconds: 120));
 
       log('|✅|---------[ ✅ POST REQUEST COMPLETED ]---------|✅|');
@@ -94,12 +93,9 @@ class ApiRequest {
         final errorMessage = error['message'] ?? 'Something went wrong!';
         log('❌ Error: $errorMessage');
         CustomSnackBar.error(errorMessage);
-        CustomSnackBar.error(errorMessage);
         throw Exception(errorMessage);
-
       }
     } catch (e) {
-      
       MessageHelper.showError("Please Check Email and Password!");
       log('🐞🐞🐞 UNHANDLED ERROR:${e.toString()}');
       throw Exception(e.toString());
@@ -129,7 +125,7 @@ class ApiRequest {
       }
       final uri = Uri.parse(fullUrl).replace(
         queryParameters: queryParams?.map(
-          (key, value) => MapEntry(key, value.toString()),
+              (key, value) => MapEntry(key, value.toString()),
         ),
       );
 
@@ -139,7 +135,6 @@ class ApiRequest {
           .get(uri, headers: await _bearerHeaderInfo())
           .timeout(const Duration(seconds: 120));
 
-      // 🌟 Pretty print the response body here
       if (showResponse) {
         try {
           final prettyJson = const JsonEncoder.withIndent(
@@ -198,7 +193,6 @@ class ApiRequest {
       isLoading.value = true;
       log('|📤|---------[ 📦 PATCH REQUEST STARTED ]---------|📤|');
 
-      // ✅ Build URL with queryParams
       final uri = Uri.parse(
         '${ApiEndPoints.baseUrl}$endPoint',
       ).replace(queryParameters: queryParams);
@@ -208,10 +202,10 @@ class ApiRequest {
 
       final response = await http
           .patch(
-            uri,
-            headers: await _bearerHeaderInfo(),
-            body: jsonEncode(body),
-          )
+        uri,
+        headers: await _bearerHeaderInfo(),
+        body: jsonEncode(body),
+      )
           .timeout(const Duration(seconds: 120));
 
       log('|✅|---------[ ✅ PATCH REQUEST COMPLETED ]---------|✅|');
@@ -260,7 +254,6 @@ class ApiRequest {
       isLoading.value = true;
       log('|📤|---------[ 📦 PUT REQUEST STARTED ]---------|📤|');
 
-      // ✅ Build URL with queryParams
       final uri = Uri.parse(
         '${ApiEndPoints.baseUrl}$endPoint',
       ).replace(queryParameters: queryParams);
@@ -318,7 +311,6 @@ class ApiRequest {
       isLoading.value = true;
       log('|📤|---------[ 📦 DELETE REQUEST STARTED ]---------|📤|');
 
-      // ✅ Build URL with queryParams
       final uri = Uri.parse(
         '${ApiEndPoints.baseUrl}$endPoint',
       ).replace(queryParameters: queryParams);
@@ -328,10 +320,10 @@ class ApiRequest {
 
       final response = await http
           .delete(
-            uri,
-            headers: await _bearerHeaderInfo(),
-            body: body != null ? jsonEncode(body) : null,
-          )
+        uri,
+        headers: await _bearerHeaderInfo(),
+        body: body != null ? jsonEncode(body) : null,
+      )
           .timeout(const Duration(seconds: 120));
 
       log('|✅|---------[ ✅ DELETE REQUEST COMPLETED ]---------|✅|');
@@ -385,11 +377,11 @@ class ApiRequest {
     bool showSuccessSnackBar = false,
     Function(R result)? onSuccess,
     String? token,
-
+    bool skipAuth = false, // ✅ Added skipAuth parameter
   }) async {
     try {
       isLoading.value = true;
-      final headers = await _bearerHeaderInfo(token);
+      final headers = await _bearerHeaderInfo(token, skipAuth); // ✅ Pass skipAuth
 
       // Build URL
       String fullUrl = '${ApiEndPoints.baseUrl}$endPoint';
@@ -400,6 +392,7 @@ class ApiRequest {
       final uri = Uri.parse(fullUrl);
       log('📤 MULTIPART REQUEST STARTED');
       log('🔗 Method  : $reqType');
+      log('🔐 Skip Auth: $skipAuth'); // ✅ Log auth status
       printBody(body);
       printUrl(uri.toString());
 
@@ -438,18 +431,44 @@ class ApiRequest {
         );
       }
 
+      // Add multiple files from filesList
+      if (filesList != null && filesList.isNotEmpty) {
+        for (var entry in filesList.entries) {
+          final key = entry.key;
+          final fileList = entry.value;
+
+          for (var file in fileList) {
+            final mimeType =
+                lookupMimeType(file.path) ?? 'application/octet-stream';
+            log('📁 Adding file: ${file.path} | MIME: $mimeType');
+
+            request.files.add(
+              await http.MultipartFile.fromPath(
+                key, // Use the key directly (backend expects 'attachments')
+                file.path,
+                contentType: MediaType.parse(mimeType),
+              ),
+            );
+          }
+        }
+      }
+
       if (selectedImages != null && selectedImages.isNotEmpty) {
         for (var file in selectedImages) {
           final mimeType =
               lookupMimeType(file.path) ?? 'application/octet-stream';
           log('🖼️ Adding image: ${file.path} | MIME: $mimeType');
 
-          request.files.add(await http.MultipartFile.fromPath('images',file.path,contentType: MediaType.parse(mimeType),),
+          request.files.add(
+            await http.MultipartFile.fromPath(
+              'images',
+              file.path,
+              contentType: MediaType.parse(mimeType),
+            ),
           );
         }
       }
 
-      // Rest of your code...
       final streamedResponse = await request.send().timeout(
         const Duration(seconds: 120),
       );
@@ -482,155 +501,4 @@ class ApiRequest {
       isLoading.value = false;
     }
   }
-
-
-/// Handle update profile process
-  // Future<UserProfileModel?> updateProfile() async {
-  //   final Map<String, File?> fileMap = {};
-  //   if (selectedImg.value != null) {
-  //     fileMap['image'] = selectedImg.value;
-  //   }
-  //   return await ApiRequest.multiMultipartRequest(
-  //     endPoint: ApiEndPoints.updateProfile,
-  //     reqType: "PUT",
-  //     isLoading: isLoading,
-  //     body: {
-  //       'firstName': firstNameController.text.trim(),
-  //       'lastName': lastNameController.text.trim(),
-  //       'phone': phoneController.text.trim(),
-  //     },
-  //     files: fileMap,
-  //     fromJson: UserProfileModel.fromJson,
-  //     showSuccessSnackBar: true,
-  //     onSuccess: (_) => Get.back(),
-  //   );
-  // }
-
-  /// ✅ Check Internet Connection
-  // static Future<bool> checkInternetConnection() async {
-  //   final networkController = Get.find<NetworkController>();
-  //   if (!networkController.isConnected.value) {
-  //     // ✅ Show popup dialog
-  //     // Get.toNamed(noInterNetPageDesign)
-  //     Get.defaultDialog(
-  //       title: "No Internet Connection",
-  //       middleText: "Check your Internet Connection",
-  //       textConfirm: "Okay",
-  //       onConfirm: () => Get.back(),
-  //     );
-  //     return false;
-  //   }
-  //   return true;
-  // }
-
-
-  // static Future<R> multiMultipartRequest2<R>({
-  //   required String endPoint,
-  //   required RxBool isLoading,
-  //   required String reqType, // GET, POST, PATCH, PUT
-  //   required Map<String, dynamic> body,
-  //   required Map<String, File?> files,
-  //   Map<String, List<File>>? filesList,
-  //   String? singleQueryParam,
-  //   required R Function(Map<String, dynamic>) fromJson,
-  //   bool showSuccessSnackBar = false,
-  //   Function(R result)? onSuccess,
-  //   required String token, // ✅ Backend requires Bearer Token
-  // }) async {
-  //   try {
-  //     isLoading.value = true;
-  //
-  //     // 🔐 Add Token into header
-  //     final headers = {
-  //       "Accept": "application/json",
-  //       "Authorization": "Bearer ${AppStorage.token}", // <--- Required by backend
-  //     };
-  //
-  //     // Build URL
-  //     String fullUrl = '${ApiEndPoints.baseUrl}$endPoint';
-  //     if (singleQueryParam != null && singleQueryParam.isNotEmpty) {
-  //       if (!singleQueryParam.startsWith('/')) fullUrl += '/';
-  //       fullUrl += singleQueryParam;
-  //     }
-  //
-  //     final uri = Uri.parse(fullUrl);
-  //
-  //     final request = http.MultipartRequest(reqType.toUpperCase(), uri);
-  //     request.headers.addAll(headers);
-  //
-  //     // 📝 Add normal fields
-  //     body.forEach((key, value) {
-  //       if (value is List || value is Map) {
-  //         request.fields[key] = jsonEncode(value);
-  //       } else {
-  //         request.fields[key] = value?.toString() ?? '';
-  //       }
-  //     });
-  //
-  //     // 📁 Add single files
-  //     for (var entry in files.entries) {
-  //       final file = entry.value;
-  //       if (file == null) continue;
-  //
-  //       final mimeType = lookupMimeType(file.path) ?? 'application/octet-stream';
-  //
-  //       request.files.add(
-  //         await http.MultipartFile.fromPath(
-  //           entry.key,
-  //           file.path,
-  //           contentType: MediaType.parse(mimeType),
-  //         ),
-  //       );
-  //     }
-  //
-  //     // 📁📁 Add multi-files correctly
-  //     if (filesList != null && filesList.isNotEmpty) {
-  //       for (var entry in filesList.entries) {
-  //         final key = entry.key;
-  //         final fileList = entry.value;
-  //
-  //         for (var file in fileList) {
-  //           final mimeType =
-  //               lookupMimeType(file.path) ?? 'application/octet-stream';
-  //
-  //           request.files.add(
-  //             await http.MultipartFile.fromPath(
-  //               "$key[]", // array format (most backend uses this)
-  //               file.path,
-  //               contentType: MediaType.parse(mimeType),
-  //             ),
-  //           );
-  //         }
-  //       }
-  //     }
-  //
-  //     // Send request
-  //     final streamedResponse = await request.send();
-  //     final response = await http.Response.fromStream(streamedResponse);
-  //
-  //     if (response.statusCode == 200 || response.statusCode == 201) {
-  //       final json = jsonDecode(response.body);
-  //       final result = fromJson(json);
-  //
-  //       if (onSuccess != null) onSuccess(result);
-  //       if (showSuccessSnackBar) {
-  //         CustomSnackBar.success(
-  //           title: "Success",
-  //           message: json["message"] ?? "Request completed successfully",
-  //         );
-  //       }
-  //
-  //       return result;
-  //     } else {
-  //       final msg = jsonDecode(response.body)['message'] ?? "Something went wrong";
-  //       CustomSnackBar.error(msg);
-  //       throw Exception(msg);
-  //     }
-  //   } catch (e) {
-  //     throw Exception(e.toString());
-  //   } finally {
-  //     isLoading.value = false;
-  //   }
-  // }
-
 }

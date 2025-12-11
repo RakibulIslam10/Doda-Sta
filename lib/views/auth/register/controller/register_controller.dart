@@ -49,7 +49,7 @@ class RegisterController extends GetxController {
       email: emailController.text,
       phone: phoneController.text,
       password: passwordController.text,
-      role: AppStorage.isVendor == true ? "PROVIDER" : "USER",
+      role: AppStorage.users == "PROVIDER" ? "PROVIDER" : "USER",
       confirmPassword: passConfirmController.text,
 
     );

@@ -16,11 +16,11 @@ class DocumentScreenMobile extends GetView<DocumentController> {
               "Licence",
               () => Get.toNamed(Routes.licenceScreen),
             ),
-            _buildSectionCard(
-              Icons.vertical_shades_closed,
-              "certificate",
-              () => Get.toNamed(Routes.certificateScreen),
-            ),
+            // _buildSectionCard(
+            //   Icons.vertical_shades_closed,
+            //   "certificate",
+            //   () => Get.toNamed(Routes.certificateScreen),
+            // ),
             Space.height.betweenInputBox,
             Space.height.betweenInputBox,
           ],

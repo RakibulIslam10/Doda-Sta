@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:doda_work/core/api/services/api.dart';
 import 'package:doda_work/core/utils/app_storage.dart';
@@ -26,7 +27,9 @@ class AditionalController extends GetxController {
   final ImagePicker _picker = ImagePicker();
 
   Future<void> pickImage() async {
-    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    final XFile? pickedFile = await _picker.pickImage(
+      source: ImageSource.gallery,
+    );
     if (pickedFile != null) {
       photos.add(File(pickedFile.path));
     }
@@ -137,16 +140,16 @@ class AditionalController extends GetxController {
   RxBool providerRegIsLoading = false.obs;
 
   providerRegisterProcess() async {
-    print('-----------------------------------------------');
-    print(AppStorage.temporaryToken,);
+    // ✅ Check if token exists from user registration
+    final userToken =  AppStorage.token;
+
+    log('🔐 Using Token: ${userToken.isEmpty ? "NO TOKEN" : "TOKEN EXISTS"}');
+
     return await ApiRequest.multiMultipartRequest(
       fromJson: ProviderRegisterModel.fromJson,
       endPoint: ApiEndPoints.providerRegister,
       isLoading: providerRegIsLoading,
-      token: AppStorage.token,
-
       files: {},
-
       body: {
         "companyName": Get.find<RegisterController>().nameController.text,
         "website": linkController.text,
@@ -158,18 +161,14 @@ class AditionalController extends GetxController {
         "latitude": selectedLatLng.value?.latitude.toString() ?? "",
         "longitude": selectedLatLng.value?.longitude.toString() ?? "",
       },
-
       filesList: {
         "attachments": photos,
       },
-
       reqType: 'POST',
-
+      token: userToken, // ✅ Pass the user token explicitly
       onSuccess: (result) {
-        AppStorage.save(isLoggedIn: true);
         Get.offAllNamed(Routes.loginScreen);
       },
-
     );
   }
 }

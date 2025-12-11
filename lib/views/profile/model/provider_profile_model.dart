@@ -57,7 +57,7 @@ class ProviderProfileModel {
 
   factory ProviderProfileModel.fromJson(Map<String, dynamic> json) {
     return ProviderProfileModel(
-      id: json["_id"],
+      id: json["_id"] ?? '',
       authId: AuthIdModel.fromJson(json["authId"]),
       companyName: json["companyName"] ?? "",
       website: json["website"] ?? "",

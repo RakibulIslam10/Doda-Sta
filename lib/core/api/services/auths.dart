@@ -23,16 +23,16 @@ class AuthService {
       body: inputBody,
       onSuccess: (result) {
         final role = result.data.user.authId.role.toUpperCase();
-        print("User Role: $role");
-
         final id = result.data.user.id;
 
-        AppStorage.save(uId: id);
+        print("User Role: $role");
 
+        AppStorage.save(uId: id);
         print('-------------------------------');
         print('U ID = ${AppStorage.uId}');
 
         AppStorage.save(token: result.data.accessToken, isLoggedIn: true);
+
         AppStorage.saveRole(role);
         AppStorage.isVendor = role == "PROVIDER";
 
@@ -119,7 +119,8 @@ class AuthService {
         // AppStorage.isVendor == true
         //     ? Get.toNamed(Routes.aditionalScreen)
         //     : Get.offAllNamed(Routes.loginScreen);
-        AppStorage.save(temporaryToken: result.data.accessToken);
+
+        AppStorage.save(token: result.data.accessToken);
       },
     );
   }

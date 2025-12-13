@@ -77,18 +77,18 @@ class ChatScreenMobile extends StatelessWidget {
           return ListView.builder(
             itemCount: filteredChats.length,
             itemBuilder: (context, index) {
-                final chat = filteredChats[index];
+              final chat = filteredChats[index];
 
-                /// Find participants except myself
-                final participants = controller
-                    .getAllParticipants(chat)
-                    .where((p) => p.id != myId)
-                    .toList();
+              /// Find participants except myself
+              final participants = controller
+                  .getAllParticipants(chat)
+                  .where((p) => p.id != myId)
+                  .toList();
 
-                if (participants.isEmpty) return const SizedBox.shrink();
+              if (participants.isEmpty) return const SizedBox.shrink();
 
-                // For 1-to-1 chat, take the last participant
-                final participant = participants.last;
+              // For 1-to-1 chat, take the last participant
+              final participant = participants.last;
 
               return ListTile(
                 onTap: () => controller.openConversation(chat, participant),
@@ -96,8 +96,8 @@ class ChatScreenMobile extends StatelessWidget {
                   radius: 25,
                   backgroundColor: CustomColors.primary,
                   backgroundImage: participant.profileImage != null
-                      ? NetworkImage(
-                          "${ApiEndPoints.baseUrl}/${participant.profileImage}",
+                      ? CachedNetworkImageProvider(
+                          "${ApiEndPoints.mainDomain}/${participant.profileImage}",
                         )
                       : null,
                   child: participant.profileImage == null

@@ -12,14 +12,15 @@ class HomeController extends GetxController {
 
   /// Paging controller for general request list
   final PagingController<int, RequestService> requestPagingController =
-  PagingController(firstPageKey: 1);
+      PagingController(firstPageKey: 1);
 
   /// Paging controllers for Home Services by status
-  final Map<String, PagingController<int, HomeServiceItem>> pagingControllers = {
-    "PENDING": PagingController(firstPageKey: 1),
-    "ONGOING": PagingController(firstPageKey: 1),
-    "COMPLETED": PagingController(firstPageKey: 1),
-  };
+  final Map<String, PagingController<int, HomeServiceItem>> pagingControllers =
+      {
+        "PENDING": PagingController(firstPageKey: 1),
+        "ONGOING": PagingController(firstPageKey: 1),
+        "COMPLETED": PagingController(firstPageKey: 1),
+      };
 
   /// Loading state to prevent multiple API calls
   final Map<String, bool> isLoadingMap = {
@@ -31,7 +32,7 @@ class HomeController extends GetxController {
   // =============================
   // FETCH HOME SERVICES
   // =============================
-  Future<void> fetch(String status, int pageKey) async {
+  Future<void> fetch(String status, int pageKey, String statusR) async {
     if (isLoadingMap[status] == true) return;
     isLoadingMap[status] = true;
 
@@ -39,7 +40,7 @@ class HomeController extends GetxController {
 
     try {
       final response = await ApiClient.get(
-        url: ApiEndPoints.getServiceRequestAll(page: pageKey),
+        url: ApiEndPoints.myService(page: pageKey, status: statusR),
       );
 
       if (response.statusCode == 200) {
@@ -63,10 +64,12 @@ class HomeController extends GetxController {
   // =============================
   // FETCH REQUEST SERVICES
   // =============================
-  Future<void> fetchRequestList(int pageKey) async {
+  Future<void> fetchRequestList(int pageKey, String statusR) async {
     try {
       final token = await AppStorage.token;
-      final url = Uri.parse(ApiEndPoints.getServiceRequestAll(page: pageKey));
+      final url = Uri.parse(
+        ApiEndPoints.myService(page: pageKey, status: statusR),
+      );
 
       final response = await http.get(
         url,
@@ -104,21 +107,20 @@ class HomeController extends GetxController {
 
     pagingControllers.forEach((status, controller) {
       controller.addPageRequestListener((pageKey) {
-        fetch(status, pageKey);
+        fetch(status, pageKey, status);
       });
     });
 
     // Fetch first page for all statuses
-    fetch("PENDING", 1);
-    fetch("ONGOING", 2);
-    fetch("COMPLETED", 3);
+    fetch("PENDING", 1, "PENDING");
+    fetch("ONGOING", 2, "ONGOING");
+    fetch("COMPLETED", 3, "ONGOING");
 
     // Setup paging listener for request list
     requestPagingController.addPageRequestListener((pageKey) {
-      fetchRequestList(pageKey);
+      fetchRequestList(pageKey, 'PENDING');
     });
   }
-
 
   // =============================
   // REFRESH FUNCTIONS

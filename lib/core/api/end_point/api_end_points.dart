@@ -52,14 +52,14 @@ class ApiEndPoints {
 
   static final categoryAll = '${baseUrl}category/active-categories';
 
-  static String getServiceRequestAll({required int page}) {
-    return '${baseUrl}service-requests/my-requests?page=$page';
-  }
+  // static String getServiceRequestAll({required int page}) {
+  //   return '${baseUrl}service-requests/my-requests?page=$page';
+  // }
 
   static serviceCreate() => '${baseUrl}service-requests/create';
 
-  // static myService({required String status, required int page}) =>
-  //     '${baseUrl}service-requests/my-requests?status=$status&page=$page&limit=20';
+  static myService({required String status, required int page}) =>
+      '${baseUrl}service-requests/my-requests?status=$status&page=$page&limit=20';
 
   // static myService({required String status, required int page}) =>
   //     '${baseUrl}service-requests/my-requests';

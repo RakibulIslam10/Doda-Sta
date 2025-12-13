@@ -20,7 +20,9 @@ class ChatScreenMobile extends StatelessWidget {
         toolbarHeight: Dimensions.appBarHeight * 1.6,
         flexibleSpace: SafeArea(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: Dimensions.defaultHorizontalSize),
+            padding: EdgeInsets.symmetric(
+              horizontal: Dimensions.defaultHorizontalSize,
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -94,13 +96,15 @@ class ChatScreenMobile extends StatelessWidget {
                   radius: 25,
                   backgroundColor: CustomColors.primary,
                   backgroundImage: participant.profileImage != null
-                      ? NetworkImage("${ApiEndPoints.baseUrl}/${participant.profileImage}")
+                      ? NetworkImage(
+                          "${ApiEndPoints.baseUrl}/${participant.profileImage}",
+                        )
                       : null,
                   child: participant.profileImage == null
                       ? Text(
-                    participant.name[0].toUpperCase(),
-                    style: const TextStyle(color: Colors.white),
-                  )
+                          participant.name[0].toUpperCase(),
+                          style: const TextStyle(color: Colors.white),
+                        )
                       : null,
                 ),
                 title: Text(participant.name),

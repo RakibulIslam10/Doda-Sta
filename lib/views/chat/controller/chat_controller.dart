@@ -29,9 +29,7 @@ class ChatController extends GetxController {
         isLoading: isLoading,
         fromJson: (json) {
           final data = json['data'] as List;
-          return {
-            'chats': data.map((e) => ChatModel.fromJson(e)).toList(),
-          };
+          return {'chats': data.map((e) => ChatModel.fromJson(e)).toList()};
         },
       );
 
@@ -47,7 +45,7 @@ class ChatController extends GetxController {
   Participant getOtherParticipant(ChatModel chat) {
     final currentUserId = AppStorage.profile?['id']?.toString() ?? '';
     return chat.participants.firstWhere(
-          (p) => p.id != currentUserId,
+      (p) => p.id != currentUserId,
       orElse: () => chat.participants.first,
     );
   }
@@ -71,5 +69,4 @@ class ChatController extends GetxController {
       },
     );
   }
-
 }

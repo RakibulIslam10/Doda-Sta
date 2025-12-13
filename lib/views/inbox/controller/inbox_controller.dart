@@ -25,7 +25,8 @@ class InboxController extends GetxController {
   String? receiverRole;
 
   // Message List
-  final RxList<Map<String, dynamic>> messagesLists = <Map<String, dynamic>>[].obs;
+  final RxList<Map<String, dynamic>> messagesLists =
+      <Map<String, dynamic>>[].obs;
 
   // Chat images
   final ImagePicker _picker = ImagePicker();
@@ -38,12 +39,11 @@ class InboxController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
     final args = Get.arguments ?? {};
 
     conversationId = args["conversationId"];
-    receiverId = args["userId"];     // 👍 RECEIVER ID
-    receiverRole = args["role"];     // 👍 RECEIVER ROLE
+    receiverId = args["userId"]; // 👍 RECEIVER ID
+    receiverRole = args["role"]; // 👍 RECEIVER ROLE
 
     log("📌 Receiver ID: $receiverId");
     log("📌 Receiver Role: $receiverRole");
@@ -69,10 +69,7 @@ class InboxController extends GetxController {
       url,
       IO.OptionBuilder()
           .setTransports(['websocket'])
-          .setQuery({
-        "id": AppStorage.uId,
-        "role": AppStorage.role,
-      })
+          .setQuery({"id": AppStorage.uId, "role": AppStorage.role})
           .enableAutoConnect()
           .setReconnectionAttempts(10)
           .setReconnectionDelay(1000)
@@ -86,7 +83,9 @@ class InboxController extends GetxController {
 
     // Listen to ALL events for debugging
     socket.onAny((event, data) {
-      log("🎯 [SOCKET EVENT] '$event': ${data != null ? data.toString() : 'null'}");
+      log(
+        "🎯 [SOCKET EVENT] '$event': ${data != null ? data.toString() : 'null'}",
+      );
     });
 
     socket.onConnect((_) => log("🔄 Connecting to server..."));
@@ -96,13 +95,15 @@ class InboxController extends GetxController {
       log("✅ Query params: id=${AppStorage.uId}, role=${AppStorage.role}");
 
       // Test connection
-      socket.emit("ping", {"from": "flutter", "time": DateTime.now().toString()});
+      socket.emit("ping", {
+        "from": "flutter",
+        "time": DateTime.now().toString(),
+      });
     });
 
     socket.onConnectError((err) => log("❌ Connect error: $err"));
     socket.onError((_) => log("⏰ Connect timeout"));
     socket.onError((err) => log("❌ Socket error: $err"));
-
     socket.onDisconnect((reason) {
       log("❌ Disconnected: $reason");
     });
@@ -115,7 +116,6 @@ class InboxController extends GetxController {
     socket.on("pong", (data) {
       log("🏓 Pong received: $data");
     });
-
     // Listen for message acknowledgments
     socket.on("message_ack", (data) {
       log("📬 Message acknowledged: $data");
@@ -126,6 +126,7 @@ class InboxController extends GetxController {
     });
 
     // ✅ CORRECT: Listen for conversation updates
+
     socket.on("conversation_update", (data) {
       log("🔄 Conversation update received: $data");
 
@@ -134,7 +135,6 @@ class InboxController extends GetxController {
         final senderId = data["sender"]["id"];
         final receiverId = data["receiver"]["id"];
 
-        // If I'm the receiver of this message
         if (receiverId == AppStorage.uId || senderId == receiverId) {
           messagesLists.add({
             "textMsg": data["text"] ?? "",
@@ -207,8 +207,8 @@ class InboxController extends GetxController {
         "role": AppStorage.role.toUpperCase(), // "USER"
       },
       "receiver": {
-        "id": receiverId,      // "6901b96e81b56cadc12679e3"
-        "role": receiverRole,  // "PROVIDER"
+        "id": receiverId, // "6901b96e81b56cadc12679e3"
+        "role": receiverRole, // "PROVIDER"
       },
       "text": text,
       "images": [],
@@ -230,7 +230,7 @@ class InboxController extends GetxController {
 
     // Try these event names one by one
     List<String> eventsToTry = [
-      "message_new",           // Most likely
+      "message_new", // Most likely
       "send_message",
       "chat_message",
       "new_message",
@@ -243,13 +243,17 @@ class InboxController extends GetxController {
     }
 
     // Also try with acknowledgement
-    socket.emitWithAck("message_new", messageData, ack: (response) {
-      if (response != null) {
-        log("✅✅✅ SERVER ACKNOWLEDGED: $response");
-      } else {
-        log("⚠️ No acknowledgement from server");
-      }
-    });
+    socket.emitWithAck(
+      "message_new",
+      messageData,
+      ack: (response) {
+        if (response != null) {
+          log("✅✅✅ SERVER ACKNOWLEDGED: $response");
+        } else {
+          log("⚠️ No acknowledgement from server");
+        }
+      },
+    );
 
     // ===========================================
     // ✅ UPDATE UI (Optimistic update)
@@ -308,12 +312,11 @@ class InboxController extends GetxController {
     });
   }
 
-
-
   // ---------------------------------------------------
   // FETCH OLD MESSAGES
   // ---------------------------------------------------
   Future<void> fetchConversation(String conversationId) async {
+
     try {
       await ApiRequest.get(
         endPoint: ApiEndPoints.getConversationById(conversationId),
@@ -329,19 +332,21 @@ class InboxController extends GetxController {
           final List<dynamic> messages = conv["messages"] ?? [];
 
           final List<Map<String, dynamic>> formatted = messages.map((m) {
+
             return {
+
               "textMsg": m["text"] ?? "",
               "senderId": m["sender"]["id"] ?? "",
-              "image": (m["images"] != null && m["images"].isNotEmpty)
-                  ? m["images"][0]
-                  : null,
+              "image": (m["images"] != null && m["images"].isNotEmpty) ? m["images"][0] : null,
               "time": m["createdAt"] ?? "",
+
             };
+
           }).toList();
 
           // ✅ Clear old messages first
           messagesLists.clear();
-          messagesLists.addAll(formatted); // Do NOT reverse if you want oldest at top
+          messagesLists.addAll(formatted);
 
           // Scroll to last message after UI renders
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -355,8 +360,6 @@ class InboxController extends GetxController {
       log("❌ Error fetching conversation: $e");
     }
   }
-
-
 
   @override
   void onClose() {

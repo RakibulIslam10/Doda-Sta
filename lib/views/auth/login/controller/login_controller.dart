@@ -35,14 +35,16 @@ class LoginController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    //   USER
+    // emailController.text = 'ra56@yopmail.com';
+    // passwordController.text = '111111';
+    //
+    // emailController.text = 'ceo56@yopmail.com';
+    // passwordController.text = '111111';
 
-    /// Default test credentials
-    emailController.text = 'temrakib@yopmail.com';
-    // emailController.text = 'rakibvendor@yopmail.com';
-    passwordController.text = '123456';
   }
 
-  /// ❌ REMOVE dispose()
+  /// ❌ REMOVE dispose()7
   /// GetX নিজেই lifecycle handle করবে
 
   /// =======================================

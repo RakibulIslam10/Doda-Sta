@@ -79,7 +79,9 @@ class Data {
     isRejected: json["isRejected"],
     isVerified: json["isVerified"],
     attachments: List<String>.from(json["attachments"].map((x) => x)),
-    pendingUpdates: PendingUpdates.fromJson(json["pendingUpdates"]),
+    pendingUpdates: PendingUpdates.fromJson(
+      json["pendingUpdates"] ?? {},
+    ),
   );
 
   Map<String, dynamic> toJson() => {

@@ -96,8 +96,8 @@ class ChatScreenMobile extends StatelessWidget {
                   radius: 25,
                   backgroundColor: CustomColors.primary,
                   backgroundImage: participant.profileImage != null
-                      ? CachedNetworkImageProvider(
-                          "${ApiEndPoints.mainDomain}/${participant.profileImage}",
+                      ? NetworkImage(
+                          "${ApiEndPoints.baseUrl}/${participant.profileImage}",
                         )
                       : null,
                   child: participant.profileImage == null

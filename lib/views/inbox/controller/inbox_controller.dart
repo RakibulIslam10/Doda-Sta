@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import '../../../core/api/end_point/api_end_points.dart';
 import '../../../core/api/services/api.dart';
+import '../../../core/helpers/helpers.dart';
 import '../../../core/utils/app_storage.dart';
 import '../../../widgets/custom_snackbar.dart';
 
@@ -14,13 +15,12 @@ class InboxController extends GetxController {
   final RxBool isLoading = false.obs;
   final RxBool isPaginationLoading = false.obs;
   final Rx<XFile?> selectedImage = Rx<XFile?>(null);
+  final String myId = AppStorage.uId;
 
+  // Argument
   String? receiverId;
-  String? roomId;
   String? name;
   String? avatar;
-  late IO.Socket socket;
-  RxList<Map<String, dynamic>> messagesList = <Map<String, dynamic>>[].obs;
 
   // Pagination
   int limit = 20;
@@ -31,19 +31,19 @@ class InboxController extends GetxController {
   void onInit() {
     super.onInit();
     receiverId = Get.parameters['receiverId'];
-
     name = Get.parameters['name'] ?? 'Unknown';
     avatar = Get.parameters['avatar'];
     _initSocket();
-    if (roomId?.isNotEmpty ?? false) fetchMessages();
+    if (receiverId?.isNotEmpty ?? false) getOldMessages();
   }
 
-
+  late IO.Socket socket;
+  RxList<Map<String, dynamic>> messagesList = <Map<String, dynamic>>[].obs;
 
   void _initSocket() {
     socket = IO.io(
       "http://10.10.20.52:6002"
-          "?id=${AppStorage.uId}&role=${AppStorage.users}",
+      "?id=${AppStorage.uId}&role=${AppStorage.users}",
       IO.OptionBuilder()
           .setTransports(['websocket'])
           .enableAutoConnect()
@@ -59,14 +59,10 @@ class InboxController extends GetxController {
       log("❌ Socket disconnected");
     });
 
-
-    final String myId = AppStorage.uId;
-
-// New message listener
+    // New message listener
     socket.on("message_new/$receiverId", (data) {
       log("📩 New Message: $data");
-      if (data["sender"]["_id"] == AppStorage.uId) return;
-
+      if (data["sender"]["id"] == AppStorage.uId) return;
 
       messagesList.add({
         "message": data["text"] ?? '',
@@ -77,32 +73,13 @@ class InboxController extends GetxController {
       });
     });
 
-// Conversation update listener
+    // Conversation update listener
     socket.on("conversation_update/$myId", (data) {
       log("🔄 Conversation updated: $data");
     });
-
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  Future<void> fetchMessages({bool isPagination = false}) async {
+  Future<void> getOldMessages({bool isPagination = false}) async {
     if (isPagination && !hasMore) return;
 
     if (isPagination) {
@@ -113,52 +90,42 @@ class InboxController extends GetxController {
 
     await ApiRequest.get(
       fromJson: AllConversationModel.fromJson,
-      endPoint: '${ApiEndPoints.allMessage}/$receiverId?page=1&limit=$limit',
+      endPoint: '${ApiEndPoints.allMessage}$receiverId&page=1&limit=$limit',
       isLoading: isLoading,
       onSuccess: (result) {
-        final msgs = <Map<String, dynamic>>[];
+        final newMsg = <Map<String, dynamic>>[];
 
-        for (var conversion in result.conversation.messages ?? []) {
-          msgs.add({
-            "message": conversion.message ?? '',
-            "isMe": conversion.isMe ?? false,
+        for (var conversion in result.conversation.messages) {
+          newMsg.add({
+            "message": conversion.text,
+            "isMe": conversion.sender.id == myId,
             "isSent": true,
-            // "formattedTime": Helpers.formatTimestamp(conversion.createdAt),
             "id": conversion.id,
-            "type": conversion.type ?? "text",
-            "files": conversion.files,
+            "type": conversion.images.isNotEmpty ? "image" : "text",
+            "files": conversion.images,
+            "formattedTime": Helpers.formatTimestamp(
+              conversion.createdAt.toString(),
+            ),
+            "video": conversion.video,
+            "seen": conversion.seen,
           });
         }
 
         if (isPagination) {
-          messagesList.insertAll(0, msgs);
+          messagesList.insertAll(0, newMsg);
         } else {
           messagesList.clear();
-          messagesList.addAll(msgs);
+          messagesList.addAll(newMsg);
         }
 
-        skip += msgs.length;
-        if (msgs.length < limit) hasMore = false;
+        skip += newMsg.length;
+        if (newMsg.length < limit) hasMore = false;
       },
     );
 
     isPaginationLoading.value = false;
     isLoading.value = false;
   }
-
-  Future<void> pickImageFromGallery() async {
-    try {
-      final image = await ImagePicker().pickImage(
-        source: ImageSource.gallery,
-        imageQuality: 80,
-      );
-      if (image != null) selectedImage.value = image;
-    } catch (e) {
-      CustomSnackBar.error('Failed to pick image');
-    }
-  }
-
-  void removeImage() => selectedImage.value = null;
 
   void sendMessage() {
     final msg = textController.text.trim();
@@ -176,76 +143,40 @@ class InboxController extends GetxController {
         "message": msg,
         "isMe": true,
         "isSent": true,
-        // "formattedTime": Helpers.formatTimestamp(DateTime.now().toString()),
+        "formattedTime": Helpers.formatTimestamp(DateTime.now().toString()),
         "type": "text",
       });
 
       // Send via socket
-      socket.emit("message", {"receiver": receiverId, "message": msg});
+      socket.emit("message_new", {
+        "sender": {"id": myId, "role": AppStorage.users},
+        "receiver": {
+          "id": receiverId,
+          "role": AppStorage.users == "USER" ? "PROVIDER" : "USER",
+        },
+        "text": msg,
+        "images": [],
+        "video": "",
+        "videoCover": "",
+      });
 
       textController.clear();
     }
   }
 
-  // Future<void> _sendImageWithText(String message) async {
-  //   if (selectedImage.value == null) return;
-  //
-  //   final tempId = DateTime.now().millisecondsSinceEpoch.toString();
-  //   final localPath = selectedImage.value!.path;
-  //
-  //   // Add message + image bubble immediately
-  //   messagesList.add({
-  //     "id": tempId,
-  //     "isMe": true,
-  //     "type": "file",
-  //     "files": [localPath],
-  //     "message": message,
-  //     "isLoading": true,
-  //     "isSent": false,
-  //     // "formattedTime": Helpers.formatTimestamp(DateTime.now().toString()),
-  //   });
-  //
-  //   selectedImage.value = null;
-  //   textController.clear();
-  //
-  //   try {
-  //     final result = await ApiRequest.multiMultipartRequest(
-  //       reqType: "POST",
-  //       fromJson: BasicSuccessModel.fromJson,
-  //       endPoint: ApiEndPoints.chats,
-  //       isLoading: RxBool(false),
-  //       files: {"files": File(localPath)},
-  //       body: {
-  //         "receiver": receiverId,
-  //         if (message.isNotEmpty) "message": message,
-  //       },
-  //       onSuccess: (res) {
-  //         final index = messagesList.indexWhere((m) => m["id"] == tempId);
-  //         if (index != -1) {
-  //           messagesList[index] = {
-  //             ...messagesList[index],
-  //             "isSent": true,
-  //             "isLoading": false,
-  //             "message": message,
-  //             "files": messagesList[index]["files"],
-  //           };
-  //           messagesList.refresh();
-  //         }
-  //
-  //         socket.emit("message", {
-  //           "receiver": receiverId,
-  //           "message": message,
-  //           "files": [localPath],
-  //           "type": "file",
-  //         });
-  //       },
-  //     );
-  //   } catch (e) {
-  //     messagesList.removeWhere((m) => m["id"] == tempId);
-  //     CustomSnackBar.error("Failed to send message");
-  //     log("Error sending image+text: $e");
-  //   }
-  // }
+  Future<void> pickImageFromGallery() async {
+    try {
+      final image = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 80,
+      );
+      if (image != null) selectedImage.value = image;
+    } catch (e) {
+      CustomSnackBar.error('Failed to pick image');
+    }
+  }
+
+  void removeImage() => selectedImage.value = null;
 
   @override
   void onClose() {

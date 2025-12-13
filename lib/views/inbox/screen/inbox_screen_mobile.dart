@@ -13,11 +13,12 @@ class InboxScreenMobile extends GetView<InboxController> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+
     // Pagination: scroll listener
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        controller.fetchMessages(isPagination: true);
+        controller.getOldMessages(isPagination: true);
       }
     });
 
@@ -152,7 +153,8 @@ class InboxScreenMobile extends GetView<InboxController> {
                               if (!isMe) ...[
                                 ProfileAvatarWidget(
                                   size: 40.r,
-                                  imageUrl: controller.avatar,
+                                  imageUrl:
+                                      '${ApiEndPoints.mainDomain}/${controller.avatar}',
                                 ),
                                 const SizedBox(width: 6),
                               ],

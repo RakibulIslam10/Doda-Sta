@@ -1,7 +1,9 @@
 part of '../screen/home_screen.dart';
+
 class CustomStatusCardWidget extends StatelessWidget {
   final int index;
   final bool isUser;
+  final bool? isChatButton;
   final String requestId;
   final String category;
   final String subCategory;
@@ -21,6 +23,7 @@ class CustomStatusCardWidget extends StatelessWidget {
     required this.category,
     required this.subCategory,
     this.image,
+    this.isChatButton = false,
     required this.address,
     required this.status,
     this.onTap,
@@ -33,8 +36,6 @@ class CustomStatusCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final url = "${ApiEndPoints.baseUrl}$image";
     final fixedUrl = url.replaceAll(r'\', '/');
-
-
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -58,10 +59,15 @@ class CustomStatusCardWidget extends StatelessWidget {
                     : 'https://picsum.photos/200/300?random=${index + 1}',
                 width: 100,
                 height: 120,
-                placeholder: (context, url) => Container(color: Colors.grey.shade300),
+                placeholder: (context, url) =>
+                    Container(color: Colors.grey.shade300),
                 errorWidget: (context, url, error) => Container(
                   color: Colors.grey.shade400,
-                  child: const Icon(Icons.image_not_supported, color: Colors.grey, size: 40),
+                  child: const Icon(
+                    Icons.image_not_supported,
+                    color: Colors.grey,
+                    size: 40,
+                  ),
                 ),
                 fit: BoxFit.cover,
               ),
@@ -81,17 +87,28 @@ class CustomStatusCardWidget extends StatelessWidget {
                             color: CustomColors.primary,
                             fontSize: Dimensions.titleSmall * 0.85,
                           ),
-                          TextWidget(requestId, maxLines: 1, fontSize: Dimensions.titleSmall * 0.9),
+                          TextWidget(
+                            requestId,
+                            maxLines: 1,
+                            fontSize: Dimensions.titleSmall * 0.9,
+                          ),
                         ],
                       ),
                       Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 3,
+                        ),
                         decoration: BoxDecoration(
                           color: CustomColors.primary,
                           borderRadius: BorderRadius.only(
                             topRight: Radius.circular(Dimensions.radius * 0.4),
-                            bottomRight: Radius.circular(Dimensions.radius * 0.4),
-                            bottomLeft: Radius.circular(Dimensions.radius * 0.4),
+                            bottomRight: Radius.circular(
+                              Dimensions.radius * 0.4,
+                            ),
+                            bottomLeft: Radius.circular(
+                              Dimensions.radius * 0.4,
+                            ),
                           ),
                         ),
                         child: TextWidget(
@@ -133,17 +150,16 @@ class CustomStatusCardWidget extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  if(!isUser && status == "PENDING")
+                  SizedBox(height: 5),
+                  if (!isUser && status == "PENDING")
                     Row(
                       spacing: 12,
                       children: [
                         GestureDetector(
                           onTap: () => _showConfirmationDialog(
                             title: "Accept Request",
-                            description: "Are you sure you want to accept this request?",
+                            description:
+                                "Are you sure you want to accept this request?",
                             confirmText: "Yes, Accept",
                             onConfirm: () {
                               Get.back();
@@ -152,19 +168,26 @@ class CustomStatusCardWidget extends StatelessWidget {
                             },
                           ),
                           child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 2,
+                            ),
                             decoration: BoxDecoration(
                               border: Border.all(color: CustomColors.primary),
                               color: CustomColors.primary,
                               borderRadius: BorderRadius.circular(4),
                             ),
-                            child: Text("Accept", style: TextStyle(color: CustomColors.whiteColor),),
+                            child: Text(
+                              "Accept",
+                              style: TextStyle(color: CustomColors.whiteColor),
+                            ),
                           ),
                         ),
                         GestureDetector(
                           onTap: () => _showConfirmationDialog(
                             title: "Decline Request",
-                            description: "Are you sure you want to decline this request?",
+                            description:
+                                "Are you sure you want to decline this request?",
                             confirmText: "Yes, Decline",
                             onConfirm: () {
                               Get.back();
@@ -172,7 +195,10 @@ class CustomStatusCardWidget extends StatelessWidget {
                             },
                           ),
                           child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 2,
+                            ),
                             decoration: BoxDecoration(
                               border: Border.all(color: CustomColors.primary),
                               borderRadius: BorderRadius.circular(4),
@@ -182,14 +208,15 @@ class CustomStatusCardWidget extends StatelessWidget {
                         ),
                       ],
                     ),
-                  if(!isUser && status == "ONGOING")
+                  if (!isUser && status == "ONGOING")
                     Row(
                       spacing: 12,
                       children: [
                         GestureDetector(
                           onTap: () => _showConfirmationDialog(
                             title: "Complete Request",
-                            description: "Are you sure you want to complete this request?",
+                            description:
+                                "Are you sure you want to complete this request?",
                             confirmText: "Yes, Complete",
                             onConfirm: () {
                               Get.back();
@@ -198,16 +225,54 @@ class CustomStatusCardWidget extends StatelessWidget {
                             },
                           ),
                           child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 2,
+                            ),
                             decoration: BoxDecoration(
                               border: Border.all(color: CustomColors.primary),
                               color: CustomColors.primary,
                               borderRadius: BorderRadius.circular(4),
                             ),
-                            child: Text("Complete", style: TextStyle(color: CustomColors.whiteColor),),
+                            child: Text(
+                              "Complete",
+                              style: TextStyle(color: CustomColors.whiteColor),
+                            ),
                           ),
                         ),
                       ],
+                    ),
+
+                  if (isUser && status == "ONGOING")
+                    InkWell(
+                      onTap: () {
+                        Get.toNamed(Routes.inboxScreen, arguments: {});
+                      },
+                      child: Container(
+                        width: 60.w,
+                        padding: EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: CustomColors.primary),
+                          borderRadius: BorderRadius.circular(
+                            Dimensions.radius * 0.4,
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.chat,
+                              color: CustomColors.primary,
+                              size: Dimensions.iconSizeDefault,
+                            ),
+                            SizedBox(width: 4),
+                            TextWidget(
+                              'Chat',
+                              fontSize: Dimensions.titleSmall * 0.9,
+                              color: CustomColors.primary,
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                 ],
               ),
@@ -250,10 +315,7 @@ class CustomStatusCardWidget extends StatelessWidget {
                 const SizedBox(height: 10),
                 TextWidget(
                   description,
-                  style: const TextStyle(
-                    color: Colors.black54,
-                    fontSize: 14,
-                  ),
+                  style: const TextStyle(color: Colors.black54, fontSize: 14),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 20),
@@ -271,10 +333,16 @@ class CustomStatusCardWidget extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 10,
+                        ),
                       ),
                       onPressed: onConfirm,
-                      child: Text(confirmText, style: TextStyle(color: CustomColors.whiteColor),),
+                      child: Text(
+                        confirmText,
+                        style: TextStyle(color: CustomColors.whiteColor),
+                      ),
                     ),
                   ],
                 ),

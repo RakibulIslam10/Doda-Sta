@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-
 import '../../../core/api/end_point/api_end_points.dart';
 import '../../../core/api/services/api.dart';
 import '../../../core/utils/app_storage.dart';
@@ -316,7 +315,6 @@ class InboxController extends GetxController {
   // FETCH OLD MESSAGES
   // ---------------------------------------------------
   Future<void> fetchConversation(String conversationId) async {
-
     try {
       await ApiRequest.get(
         endPoint: ApiEndPoints.getConversationById(conversationId),
@@ -332,16 +330,14 @@ class InboxController extends GetxController {
           final List<dynamic> messages = conv["messages"] ?? [];
 
           final List<Map<String, dynamic>> formatted = messages.map((m) {
-
             return {
-
               "textMsg": m["text"] ?? "",
               "senderId": m["sender"]["id"] ?? "",
-              "image": (m["images"] != null && m["images"].isNotEmpty) ? m["images"][0] : null,
+              "image": (m["images"] != null && m["images"].isNotEmpty)
+                  ? m["images"][0]
+                  : null,
               "time": m["createdAt"] ?? "",
-
             };
-
           }).toList();
 
           // ✅ Clear old messages first

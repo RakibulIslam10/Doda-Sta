@@ -157,6 +157,7 @@ class AditionalController extends GetxController {
         "serviceLocation": selectedAddress.value,
         "contactPerson": contactPersonController.text,
         "coveredRadius": 100,
+        //todo
         "workingHours": getAvailabilityData(),
         "latitude": selectedLatLng.value?.latitude.toString() ?? "",
         "longitude": selectedLatLng.value?.longitude.toString() ?? "",

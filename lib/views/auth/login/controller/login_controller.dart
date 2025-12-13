@@ -38,8 +38,11 @@ class LoginController extends GetxController {
     //   USER
     emailController.text = 'ra56@yopmail.com';
     passwordController.text = '111111';
-    //
+
     // emailController.text = 'ceo56@yopmail.com';
+    // passwordController.text = '111111';
+
+    // emailController.text = 'sceo56@yopmail.com';
     // passwordController.text = '111111';
   }
 

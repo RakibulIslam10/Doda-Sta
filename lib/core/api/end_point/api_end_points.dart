@@ -41,6 +41,10 @@ class ApiEndPoints {
   static const providerUpdateProfile = 'provider/update-profile';
   static const deleteProfile = 'user/delete-account';
 
+  //chat
+
+  static const allMessage = 'chat/get-conversation?partnerId=';
+
   //bookmark
   static const bookMark = 'home/save';
   static const bookMarkData = 'home/saved';

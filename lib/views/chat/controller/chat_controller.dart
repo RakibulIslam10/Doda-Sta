@@ -55,18 +55,4 @@ class ChatController extends GetxController {
     return chat.participants;
   }
 
-  /// Open inbox screen for a conversation
-  void openConversation(ChatModel chat, Participant user) {
-    Get.toNamed(
-      Routes.inboxScreen,
-      arguments: {
-        "conversationId": chat.conversationId,
-        "userId": user.id,
-        "name": user.name,
-        "email": user.email,
-        "profileImage": user.profileImage,
-        "role": user.role,
-      },
-    );
-  }
 }

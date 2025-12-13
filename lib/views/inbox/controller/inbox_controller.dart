@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:doda_work/views/inbox/controller/s.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -6,364 +7,250 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import '../../../core/api/end_point/api_end_points.dart';
 import '../../../core/api/services/api.dart';
 import '../../../core/utils/app_storage.dart';
+import '../../../widgets/custom_snackbar.dart';
 
 class InboxController extends GetxController {
-  // TextField
   final textController = TextEditingController();
+  final RxBool isLoading = false.obs;
+  final RxBool isPaginationLoading = false.obs;
+  final Rx<XFile?> selectedImage = Rx<XFile?>(null);
 
-  // Scroll Controller
-  final scrollController = ScrollController();
-
-  // Participant Info
-  final participantName = ''.obs;
-  final participantEmail = ''.obs;
-  final participantProfile = ''.obs;
-
-  // Dynamic Receiver Info
   String? receiverId;
-  String? receiverRole;
-
-  // Message List
-  final RxList<Map<String, dynamic>> messagesLists =
-      <Map<String, dynamic>>[].obs;
-
-  // Chat images
-  final ImagePicker _picker = ImagePicker();
-
-  // Socket
+  String? roomId;
+  String? name;
+  String? avatar;
   late IO.Socket socket;
+  RxList<Map<String, dynamic>> messagesList = <Map<String, dynamic>>[].obs;
 
-  String? conversationId;
+  // Pagination
+  int limit = 20;
+  int skip = 0;
+  bool hasMore = true;
 
   @override
   void onInit() {
     super.onInit();
-    final args = Get.arguments ?? {};
+    receiverId = Get.parameters['receiverId'];
 
-    conversationId = args["conversationId"];
-    receiverId = args["userId"]; // 👍 RECEIVER ID
-    receiverRole = args["role"]; // 👍 RECEIVER ROLE
-
-    log("📌 Receiver ID: $receiverId");
-    log("📌 Receiver Role: $receiverRole");
-
-    if (conversationId != null) {
-      fetchConversation(conversationId!);
-    }
-
-    connectToSocket();
+    name = Get.parameters['name'] ?? 'Unknown';
+    avatar = Get.parameters['avatar'];
+    _initSocket();
+    if (roomId?.isNotEmpty ?? false) fetchMessages();
   }
 
-  // ---------------------------------------------------
-  // SOCKET CONNECTION
-  // ---------------------------------------------------
-  void connectToSocket() {
-    // Use the HTTP URL, not WebSocket URL for Socket.IO
-    // Socket.IO will handle the WebSocket connection internally
-    final url = ApiEndPoints.baseUrl; // e.g., "http://10.10.20.52:6002"
 
-    log("🔌 Connecting to socket: $url");
 
+  void _initSocket() {
     socket = IO.io(
-      url,
+      "http://10.10.20.52:6002"
+          "?id=${AppStorage.uId}&role=${AppStorage.users}",
       IO.OptionBuilder()
           .setTransports(['websocket'])
-          .setQuery({"id": AppStorage.uId, "role": AppStorage.role})
           .enableAutoConnect()
           .setReconnectionAttempts(10)
-          .setReconnectionDelay(1000)
-          .setTimeout(20000)
           .build(),
     );
 
-    // ===========================================
-    // ✅ 1. DEBUG LISTENERS (OUTSIDE onConnect!)
-    // ===========================================
-
-    // Listen to ALL events for debugging
-    socket.onAny((event, data) {
-      log(
-        "🎯 [SOCKET EVENT] '$event': ${data != null ? data.toString() : 'null'}",
-      );
+    socket.onConnect((_) {
+      log("✅ Socket connected: ${AppStorage.uId}");
     });
 
-    socket.onConnect((_) => log("🔄 Connecting to server..."));
+    socket.onDisconnect((_) {
+      log("❌ Socket disconnected");
+    });
 
-    socket.onConnect((_) {
-      log("✅✅✅ SOCKET CONNECTED! ID: ${socket.id}");
-      log("✅ Query params: id=${AppStorage.uId}, role=${AppStorage.role}");
 
-      // Test connection
-      socket.emit("ping", {
-        "from": "flutter",
-        "time": DateTime.now().toString(),
+    final String myId = AppStorage.uId;
+
+// New message listener
+    socket.on("message_new/$receiverId", (data) {
+      log("📩 New Message: $data");
+      if (data["sender"]["_id"] == AppStorage.uId) return;
+
+
+      messagesList.add({
+        "message": data["text"] ?? '',
+        "isMe": false,
+        "isSent": true,
+        "type": data["type"] ?? "text",
+        "images": data["images"],
       });
     });
 
-    socket.onConnectError((err) => log("❌ Connect error: $err"));
-    socket.onError((_) => log("⏰ Connect timeout"));
-    socket.onError((err) => log("❌ Socket error: $err"));
-    socket.onDisconnect((reason) {
-      log("❌ Disconnected: $reason");
+// Conversation update listener
+    socket.on("conversation_update/$myId", (data) {
+      log("🔄 Conversation updated: $data");
     });
 
-    // ===========================================
-    // ✅ 2. MESSAGE EVENT LISTENERS
-    // ===========================================
-
-    // Listen for ping response
-    socket.on("pong", (data) {
-      log("🏓 Pong received: $data");
-    });
-    // Listen for message acknowledgments
-    socket.on("message_ack", (data) {
-      log("📬 Message acknowledged: $data");
-    });
-
-    socket.on("message_error", (error) {
-      log("❌ Message error: $error");
-    });
-
-    // ✅ CORRECT: Listen for conversation updates
-
-    socket.on("conversation_update", (data) {
-      log("🔄 Conversation update received: $data");
-
-      // Check if this message is for the current conversation
-      if (data != null && data["sender"] != null && data["receiver"] != null) {
-        final senderId = data["sender"]["id"];
-        final receiverId = data["receiver"]["id"];
-
-        if (receiverId == AppStorage.uId || senderId == receiverId) {
-          messagesLists.add({
-            "textMsg": data["text"] ?? "",
-            "senderId": senderId ?? "",
-            "isMe": senderId == AppStorage.uId,
-            "time": DateTime.now().toString(),
-          });
-          _scrollToBottom();
-        }
-      }
-    });
-
-    // ✅ ALSO listen to the specific event with your ID
-    socket.on("conversation_update/${AppStorage.uId}", (data) {
-      log("📥 Direct message for me: $data");
-
-      if (data != null) {
-        messagesLists.add({
-          "textMsg": data["text"] ?? "",
-          "senderId": data["sender"]?["id"] ?? "",
-          "isMe": false,
-          "time": DateTime.now().toString(),
-        });
-        _scrollToBottom();
-      }
-    });
-
-    // Listen for any new message event
-    socket.on("message_new", (data) {
-      log("📥 Generic message_new event: $data");
-    });
-
-    socket.on("new_message", (data) {
-      log("📥 New message event: $data");
-    });
-
-    // ===========================================
-    // ✅ 3. CONNECT THE SOCKET (ONLY ONCE!)
-    // ===========================================
-
-    log("🚀 Attempting socket connection...");
-    socket.connect();
   }
 
-  // ---------------------------------------------------
-  // SEND TEXT MESSAGE
-  // ---------------------------------------------------
-  void sendMessage() {
-    final text = textController.text.trim();
-    if (text.isEmpty) return;
 
-    if (receiverId == null || receiverRole == null) {
-      Get.snackbar("Error", "Receiver information missing");
-      return;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  Future<void> fetchMessages({bool isPagination = false}) async {
+    if (isPagination && !hasMore) return;
+
+    if (isPagination) {
+      isPaginationLoading.value = true;
+    } else {
+      isLoading.value = true;
     }
 
-    // Check connection
-    if (!socket.connected) {
-      log("❌ Socket not connected!");
-      Get.snackbar("Error", "Not connected to server");
-      return;
-    }
+    await ApiRequest.get(
+      fromJson: AllConversationModel.fromJson,
+      endPoint: '${ApiEndPoints.allMessage}/$receiverId?page=1&limit=$limit',
+      isLoading: isLoading,
+      onSuccess: (result) {
+        final msgs = <Map<String, dynamic>>[];
 
-    log("✅ Socket connected: ${socket.connected}, ID: ${socket.id}");
-
-    // Prepare message data (match your Postman format)
-    final messageData = {
-      "sender": {
-        "id": AppStorage.uId,
-        "role": AppStorage.role.toUpperCase(), // "USER"
-      },
-      "receiver": {
-        "id": receiverId, // "6901b96e81b56cadc12679e3"
-        "role": receiverRole, // "PROVIDER"
-      },
-      "text": text,
-      "images": [],
-      "video": "",
-      "videoCover": "",
-      "timestamp": DateTime.now().toIso8601String(),
-    };
-
-    log("=" * 50);
-    log("🚀 SENDING MESSAGE");
-    log("=" * 50);
-    log("📤 Event: 'message_new'");
-    log("📦 Payload: ${messageData.toString()}");
-    log("=" * 50);
-
-    // ===========================================
-    // ✅ TRY DIFFERENT EVENT NAMES
-    // ===========================================
-
-    // Try these event names one by one
-    List<String> eventsToTry = [
-      "message_new", // Most likely
-      "send_message",
-      "chat_message",
-      "new_message",
-      "message",
-    ];
-
-    for (var event in eventsToTry) {
-      log("🔄 Trying event: '$event'");
-      socket.emit(event, messageData);
-    }
-
-    // Also try with acknowledgement
-    socket.emitWithAck(
-      "message_new",
-      messageData,
-      ack: (response) {
-        if (response != null) {
-          log("✅✅✅ SERVER ACKNOWLEDGED: $response");
-        } else {
-          log("⚠️ No acknowledgement from server");
+        for (var conversion in result.conversation.messages ?? []) {
+          msgs.add({
+            "message": conversion.message ?? '',
+            "isMe": conversion.isMe ?? false,
+            "isSent": true,
+            // "formattedTime": Helpers.formatTimestamp(conversion.createdAt),
+            "id": conversion.id,
+            "type": conversion.type ?? "text",
+            "files": conversion.files,
+          });
         }
+
+        if (isPagination) {
+          messagesList.insertAll(0, msgs);
+        } else {
+          messagesList.clear();
+          messagesList.addAll(msgs);
+        }
+
+        skip += msgs.length;
+        if (msgs.length < limit) hasMore = false;
       },
     );
 
-    // ===========================================
-    // ✅ UPDATE UI (Optimistic update)
-    // ===========================================
-
-    messagesLists.add({
-      "textMsg": text,
-      "senderId": AppStorage.uId,
-      "isMe": true,
-      "time": DateTime.now().toString(),
-    });
-
-    textController.clear();
-    _scrollToBottom();
-
-    log("✅ Message added to UI");
+    isPaginationLoading.value = false;
+    isLoading.value = false;
   }
 
-  // ---------------------------------------------------
-  // PICK IMAGE
-  // ---------------------------------------------------
   Future<void> pickImageFromGallery() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-
-    if (image != null) {
-      sendImageMessage(image.path);
-    }
-  }
-
-  // ---------------------------------------------------
-  // SEND IMAGE MESSAGE
-  // ---------------------------------------------------
-  void sendImageMessage(String imagePath) {
-    messagesLists.add({
-      "textMsg": "",
-      "image": imagePath,
-      "senderId": AppStorage.uId,
-      "time": DateTime.now().toString(),
-    });
-
-    _scrollToBottom();
-  }
-
-  // ---------------------------------------------------
-  // AUTO SCROLL
-  // ---------------------------------------------------
-  void _scrollToBottom() {
-    Future.delayed(const Duration(milliseconds: 100), () {
-      if (scrollController.hasClients) {
-        scrollController.animateTo(
-          scrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 250),
-          curve: Curves.easeOut,
-        );
-      }
-    });
-  }
-
-  // ---------------------------------------------------
-  // FETCH OLD MESSAGES
-  // ---------------------------------------------------
-  Future<void> fetchConversation(String conversationId) async {
     try {
-      await ApiRequest.get(
-        endPoint: ApiEndPoints.getConversationById(conversationId),
-        isLoading: false.obs,
-        fromJson: (json) {
-          final conv = json['conversation'];
-          final part = json['participant'];
-
-          participantName.value = part['name'] ?? '';
-          participantEmail.value = part['email'] ?? '';
-          participantProfile.value = part['profileImage'] ?? '';
-
-          final List<dynamic> messages = conv["messages"] ?? [];
-
-          final List<Map<String, dynamic>> formatted = messages.map((m) {
-            return {
-              "textMsg": m["text"] ?? "",
-              "senderId": m["sender"]["id"] ?? "",
-              "image": (m["images"] != null && m["images"].isNotEmpty)
-                  ? m["images"][0]
-                  : null,
-              "time": m["createdAt"] ?? "",
-            };
-          }).toList();
-
-          // ✅ Clear old messages first
-          messagesLists.clear();
-          messagesLists.addAll(formatted);
-
-          // Scroll to last message after UI renders
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            _scrollToBottom();
-          });
-
-          return true;
-        },
+      final image = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 80,
       );
+      if (image != null) selectedImage.value = image;
     } catch (e) {
-      log("❌ Error fetching conversation: $e");
+      CustomSnackBar.error('Failed to pick image');
     }
   }
+
+  void removeImage() => selectedImage.value = null;
+
+  void sendMessage() {
+    final msg = textController.text.trim();
+    final hasImage = selectedImage.value != null;
+
+    if (msg.isEmpty && !hasImage) return;
+
+    if (hasImage) {
+      // _sendImageWithText(msg);
+    } else {
+      // Add text locally for sender
+      final tempId = DateTime.now().millisecondsSinceEpoch.toString();
+      messagesList.add({
+        "id": tempId,
+        "message": msg,
+        "isMe": true,
+        "isSent": true,
+        // "formattedTime": Helpers.formatTimestamp(DateTime.now().toString()),
+        "type": "text",
+      });
+
+      // Send via socket
+      socket.emit("message", {"receiver": receiverId, "message": msg});
+
+      textController.clear();
+    }
+  }
+
+  // Future<void> _sendImageWithText(String message) async {
+  //   if (selectedImage.value == null) return;
+  //
+  //   final tempId = DateTime.now().millisecondsSinceEpoch.toString();
+  //   final localPath = selectedImage.value!.path;
+  //
+  //   // Add message + image bubble immediately
+  //   messagesList.add({
+  //     "id": tempId,
+  //     "isMe": true,
+  //     "type": "file",
+  //     "files": [localPath],
+  //     "message": message,
+  //     "isLoading": true,
+  //     "isSent": false,
+  //     // "formattedTime": Helpers.formatTimestamp(DateTime.now().toString()),
+  //   });
+  //
+  //   selectedImage.value = null;
+  //   textController.clear();
+  //
+  //   try {
+  //     final result = await ApiRequest.multiMultipartRequest(
+  //       reqType: "POST",
+  //       fromJson: BasicSuccessModel.fromJson,
+  //       endPoint: ApiEndPoints.chats,
+  //       isLoading: RxBool(false),
+  //       files: {"files": File(localPath)},
+  //       body: {
+  //         "receiver": receiverId,
+  //         if (message.isNotEmpty) "message": message,
+  //       },
+  //       onSuccess: (res) {
+  //         final index = messagesList.indexWhere((m) => m["id"] == tempId);
+  //         if (index != -1) {
+  //           messagesList[index] = {
+  //             ...messagesList[index],
+  //             "isSent": true,
+  //             "isLoading": false,
+  //             "message": message,
+  //             "files": messagesList[index]["files"],
+  //           };
+  //           messagesList.refresh();
+  //         }
+  //
+  //         socket.emit("message", {
+  //           "receiver": receiverId,
+  //           "message": message,
+  //           "files": [localPath],
+  //           "type": "file",
+  //         });
+  //       },
+  //     );
+  //   } catch (e) {
+  //     messagesList.removeWhere((m) => m["id"] == tempId);
+  //     CustomSnackBar.error("Failed to send message");
+  //     log("Error sending image+text: $e");
+  //   }
+  // }
 
   @override
   void onClose() {
-    try {
-      socket.dispose();
-      socket.disconnect();
-    } catch (_) {}
-
+    socket.disconnect();
+    socket.dispose();
     textController.dispose();
     super.onClose();
   }

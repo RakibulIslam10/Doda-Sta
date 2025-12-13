@@ -89,15 +89,24 @@ class ChatScreenMobile extends StatelessWidget {
 
               // For 1-to-1 chat, take the last participant
               final participant = participants.last;
-
               return ListTile(
-                onTap: () => controller.openConversation(chat, participant),
+                onTap: () {
+                  Get.toNamed(
+                    Routes.inboxScreen,
+                    parameters: {
+                      'receiverId': participant.id,
+                      'avatar': participant.profileImage ?? '',
+                      'name': participant.name,
+                    },
+                  );
+                },
+
                 leading: CircleAvatar(
                   radius: 25,
                   backgroundColor: CustomColors.primary,
                   backgroundImage: participant.profileImage != null
-                      ? NetworkImage(
-                          "${ApiEndPoints.baseUrl}/${participant.profileImage}",
+                      ? CachedNetworkImageProvider(
+                          "${ApiEndPoints.mainDomain}/${participant.profileImage}",
                         )
                       : null,
                   child: participant.profileImage == null

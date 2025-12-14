@@ -9,6 +9,8 @@ class CustomStatusCardWidget extends StatelessWidget {
   final String subCategory;
   final String address;
   final String? image;
+  final CustomerId? customerId; // ✅ Add this
+
   final String status;
   final void Function()? onTap;
   final VoidCallback? onTapAccept;
@@ -29,7 +31,7 @@ class CustomStatusCardWidget extends StatelessWidget {
     this.onTap,
     this.onTapAccept,
     this.onTapDecline,
-    this.onTapComplete,
+    this.onTapComplete, this.customerId,
   });
 
   @override
@@ -150,6 +152,48 @@ class CustomStatusCardWidget extends StatelessWidget {
                       ),
                     ],
                   ),
+
+                  if (!isUser && status == "ACCEPTED")
+                    InkWell(
+                      onTap: () {
+                        Get.toNamed(Routes.inboxScreen, parameters: {
+                          'name': customerId?.name ?? '',
+                          'receiverId': customerId?.id ?? '',
+                          'avatar':  '',
+
+                        });
+
+                        print('==================================================================');
+                        print('============ FROM PROVIDER ======================================================');
+
+                      },
+                      child: Container(
+                        width: 60.w,
+                        padding: EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: CustomColors.primary),
+                          borderRadius: BorderRadius.circular(
+                            Dimensions.radius * 0.4,
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.chat,
+                              color: CustomColors.primary,
+                              size: Dimensions.iconSizeDefault,
+                            ),
+                            SizedBox(width: 4),
+                            TextWidget(
+                              'Chat',
+                              fontSize: Dimensions.titleSmall * 0.9,
+                              color: CustomColors.primary,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
                   SizedBox(height: 5),
                   if (!isUser && status == "PENDING")
                     Row(

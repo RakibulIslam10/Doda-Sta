@@ -154,6 +154,7 @@ class HomeVendorScreenMobile extends GetView<HomeVendorController> {
   Widget _buildRequestCard(HomeServiceItem item, String status, int itemIndex) {
     return CustomStatusCardWidget(
       index: itemIndex,
+      customerId: item.customerId,
       requestId: item.requestId ?? "N/A",
       category: item.subcategory ?? "No Category",
       subCategory: item.serviceCategory?.name ?? "No Subcategory",

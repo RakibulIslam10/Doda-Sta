@@ -18,14 +18,6 @@ class HomeScreenMobile extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     final List<String> statusText = ['Pending', 'Ongoing', 'Completed'];
-    print('+++++++++++++++++++++++++++++++++++++++++++++++++++');
-    print('+++++++++++++++++++++++++++++++++++++++++++++++++++');
-    print('+++++++++++++++++++++++++++++++++++++++++++++++++++');
-    print(AppStorage.users);
-    print(AppStorage.isProvider);
-    print('+++++++++++++++++++++++++++++++++++++++++++++++++++');
-    print('+++++++++++++++++++++++++++++++++++++++++++++++++++');
-    print('+++++++++++++++++++++++++++++++++++++++++++++++++++');
     return DefaultTabController(
       length: statusText.length,
       child: Scaffold(
@@ -88,6 +80,7 @@ class HomeScreenMobile extends GetView<HomeController> {
                                         image: item.attachments?.firstOrNull,
                                         isUser: true,
                                         status: status,
+                                        customerId: item.customerId, // ✅ Add this line
                                         onTap: () {
                                           Get.toNamed(
                                             Routes.summaryScreen,

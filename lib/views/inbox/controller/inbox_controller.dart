@@ -32,7 +32,7 @@ class InboxController extends GetxController {
     super.onInit();
     receiverId = Get.parameters['receiverId'];
     name = Get.parameters['name'] ?? 'Unknown';
-    avatar = Get.parameters['avatar'];
+    avatar = Get.parameters['avatar'] ?? '';
     _initSocket();
     if (receiverId?.isNotEmpty ?? false) getOldMessages();
   }
@@ -95,16 +95,18 @@ class InboxController extends GetxController {
       onSuccess: (result) {
         final newMsg = <Map<String, dynamic>>[];
 
-        for (var conversion in result.conversation.messages) {
+        for (final conversion in result.conversation?.messages ?? []) {
           newMsg.add({
             "message": conversion.text,
             "isMe": conversion.sender.id == myId,
             "isSent": true,
             "id": conversion.id,
-            "type": conversion.images.isNotEmpty ? "image" : "text",
+            "type": (conversion.images.isNotEmpty)
+                ? "image"
+                : (conversion.video.isNotEmpty ? "video" : "text"),
             "files": conversion.images,
             "formattedTime": Helpers.formatTimestamp(
-              conversion.createdAt.toString(),
+              conversion.createdAt.toIso8601String(),
             ),
             "video": conversion.video,
             "seen": conversion.seen,

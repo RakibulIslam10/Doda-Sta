@@ -1,6 +1,6 @@
 class AllConversationModel {
   final bool status;
-  final Conversation conversation;
+  final Conversation? conversation;
   final String message;
   final BlockStatus blockStatus;
 
@@ -11,16 +11,29 @@ class AllConversationModel {
     required this.blockStatus,
   });
 
-  factory AllConversationModel.fromJson(Map<String, dynamic> json) => AllConversationModel(
-    status: json["status"],
-    conversation: Conversation.fromJson(json["conversation"]),
-    message: json["message"],
-    blockStatus: BlockStatus.fromJson(json["blockStatus"]),
-  );
+  factory AllConversationModel.fromJson(Map<String, dynamic> json) =>
+      AllConversationModel(
+        status: json["status"] ?? false,
+        conversation: json["conversation"] == null
+            ? null
+            : Conversation.fromJson(
+          json["conversation"] as Map<String, dynamic>,
+        ),
+        message: json["message"] ?? '',
+        blockStatus: json["blockStatus"] == null
+            ? BlockStatus(
+          isBlockedByYou: false,
+          isBlockedByPartner: false,
+          isBlocked: false,
+        )
+            : BlockStatus.fromJson(
+          json["blockStatus"] as Map<String, dynamic>,
+        ),
+      );
 
   Map<String, dynamic> toJson() => {
     "status": status,
-    "conversation": conversation.toJson(),
+    "conversation": conversation?.toJson(),
     "message": message,
     "blockStatus": blockStatus.toJson(),
   };

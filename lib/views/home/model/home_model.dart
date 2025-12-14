@@ -170,14 +170,16 @@ class CustomerId {
   final String? id;
   final String? name;
   final String? email;
+  final String? avatar;
   final String? phoneNumber;
 
-  CustomerId({this.id, this.name, this.email, this.phoneNumber});
+  CustomerId({this.id, this.name, this.email, this.phoneNumber, this.avatar});
 
   factory CustomerId.fromJson(Map<String, dynamic> json) => CustomerId(
     id: json["_id"],
     name: json["name"],
     email: json["email"],
+    avatar: json["avatar"],
     phoneNumber: json["phoneNumber"],
   );
 
@@ -185,6 +187,7 @@ class CustomerId {
     "_id": id,
     "name": name,
     "email": email,
+    "avatar": avatar,
     "phoneNumber": phoneNumber,
   };
 }

@@ -159,7 +159,7 @@ class CustomStatusCardWidget extends StatelessWidget {
                         Get.toNamed(Routes.inboxScreen, parameters: {
                           'name': customerId?.name ?? '',
                           'receiverId': customerId?.id ?? '',
-                          'avatar':  '',
+                          'avatar':  customerId?.avatar ?? '',
 
                         });
 

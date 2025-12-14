@@ -7,10 +7,7 @@ class HomeVendorScreenMobile extends GetView<HomeVendorController> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: HomeVendorController.statusTypes.length,
-      child: Scaffold(
-        appBar: _buildAppBar(),
-        body: _buildBody(),
-      ),
+      child: Scaffold(appBar: _buildAppBar(), body: _buildBody()),
     );
   }
 
@@ -20,7 +17,7 @@ class HomeVendorScreenMobile extends GetView<HomeVendorController> {
       child: AppBar(
         automaticallyImplyLeading: false,
         scrolledUnderElevation: 0,
-        flexibleSpace:  HomeAppBarWidgetView(),
+        flexibleSpace: HomeAppBarWidgetView(),
         actions: [_buildNotificationIcon()],
       ),
     );
@@ -63,11 +60,7 @@ class HomeVendorScreenMobile extends GetView<HomeVendorController> {
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.all(12.0),
-        child: Column(
-          children: [
-            Obx(() => _buildTabBar(controller)),
-          ],
-        ),
+        child: Column(children: [Obx(() => _buildTabBar(controller))]),
       ),
     );
   }
@@ -84,7 +77,7 @@ class HomeVendorScreenMobile extends GetView<HomeVendorController> {
       onTap: _onTabChanged,
       tabs: List.generate(
         HomeVendorController.statusTypes.length,
-            (index) => _buildTabItem(controller, index),
+        (index) => _buildTabItem(controller, index),
       ),
     );
   }
@@ -110,7 +103,9 @@ class HomeVendorScreenMobile extends GetView<HomeVendorController> {
       margin: const EdgeInsets.only(left: 6),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: isSelected ? CustomColors.primary : CustomColors.primary.withAlpha(858),
+        color: isSelected
+            ? CustomColors.primary
+            : CustomColors.primary.withAlpha(858),
         borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),
       ),
       child: Center(
@@ -127,15 +122,10 @@ class HomeVendorScreenMobile extends GetView<HomeVendorController> {
   Widget _buildTabViews() {
     return TabBarView(
       physics: const NeverScrollableScrollPhysics(),
-      children: List.generate(
-        HomeVendorController.statusTypes.length,
-            (index) {
-          final status = HomeVendorController.statusTypes[index];
-          return KeepAlivePage(
-            child: _buildRequestList(status),
-          );
-        },
-      ),
+      children: List.generate(HomeVendorController.statusTypes.length, (index) {
+        final status = HomeVendorController.statusTypes[index];
+        return KeepAlivePage(child: _buildRequestList(status));
+      }),
     );
   }
 
@@ -168,10 +158,10 @@ class HomeVendorScreenMobile extends GetView<HomeVendorController> {
       category: item.subcategory ?? "No Category",
       subCategory: item.serviceCategory?.name ?? "No Subcategory",
       address: item.address ?? "No Address",
-      image: item.attachments?.firstOrNull,
+      image: item.attachments.firstOrNull,
       status: status,
       isUser: false,
-      onTapAccept: () => _handleStatusChange(item, "ACCEPTED"),
+      onTapAccept: () => _handleStatusChange(item, "ACCEPT"),
       onTapDecline: () => _handleStatusChange(item, "DECLINED"),
       onTapComplete: () => _handleStatusChange(item, "COMPLETED"),
       onTap: () => _navigateToSummary(item),
@@ -291,7 +281,10 @@ class HomeVendorScreenMobile extends GetView<HomeVendorController> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: CustomColors.primary,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 12,
+                ),
               ),
               child: const Text("Try Again"),
             ),
@@ -314,6 +307,7 @@ class HomeVendorScreenMobile extends GetView<HomeVendorController> {
 
 class KeepAlivePage extends StatefulWidget {
   final Widget child;
+
   const KeepAlivePage({required this.child, super.key});
 
   @override

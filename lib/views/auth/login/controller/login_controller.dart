@@ -36,14 +36,12 @@ class LoginController extends GetxController {
   void onInit() {
     super.onInit();
     //   USER
-    emailController.text = 'rakibx10@yopmail.com';
+    emailController.text = 'ra56@yopmail.com';
     passwordController.text = '111111';
 
     // emailController.text = 'ceo56@yopmail.com';
     // passwordController.text = '111111';
 
-    // emailController.text = 'sceo56@yopmail.com';
-    // passwordController.text = '111111';
   }
 
   /// ❌ REMOVE dispose()7

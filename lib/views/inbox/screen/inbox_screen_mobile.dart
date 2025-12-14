@@ -14,7 +14,6 @@ class InboxScreenMobile extends GetView<InboxController> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
 
-    // Pagination: scroll listener
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
@@ -25,11 +24,24 @@ class InboxScreenMobile extends GetView<InboxController> {
     ever(controller.messagesList, (_) {
       Future.delayed(const Duration(milliseconds: 100), () {
         if (_scrollController.hasClients) {
-          _scrollController.animateTo(
-            0,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeOut,
-          );
+          if (controller.shouldAutoScroll.value) {
+            _scrollController.animateTo(
+              0,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeOut,
+            );
+            controller.shouldAutoScroll.value = false;
+          } else {
+            final isNearBottom = _scrollController.position.pixels < 100;
+
+            if (isNearBottom) {
+              _scrollController.animateTo(
+                0,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeOut,
+              );
+            }
+          }
         }
       });
     });
@@ -58,7 +70,6 @@ class InboxScreenMobile extends GetView<InboxController> {
                     icon: Icon(Icons.arrow_back_ios),
                   ),
                   SizedBox(width: 10),
-
                   ProfileAvatarWidget(
                     imageUrl: '${ApiEndPoints.mainDomain}/${controller.avatar}',
                   ),
@@ -86,7 +97,6 @@ class InboxScreenMobile extends GetView<InboxController> {
             ),
           ),
         ),
-
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -140,7 +150,7 @@ class InboxScreenMobile extends GetView<InboxController> {
                                 index];
                         final isMe = msg["isMe"] as bool;
                         final messageType = msg["type"] ?? "text";
-                        final isLoading = msg["isLoading"] ?? false;
+                        final isUploading = msg["isUploading"] ?? false;
 
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 8),
@@ -164,67 +174,18 @@ class InboxScreenMobile extends GetView<InboxController> {
                                       ? CrossAxisAlignment.end
                                       : CrossAxisAlignment.start,
                                   children: [
-                                    // IMAGE BUBBLE
-                                    if (messageType == "file" &&
-                                        msg["files"] != null)
-                                      Stack(
-                                        children: [
-                                          ClipRRect(
-                                            borderRadius: BorderRadius.circular(
-                                              12,
-                                            ),
-                                            child:
-                                                (msg["files"] as List)[0]
-                                                    .toString()
-                                                    .startsWith('http')
-                                                ? Image.network(
-                                                    (msg["files"] as List)[0],
-                                                    width: width * 0.6,
-                                                    fit: BoxFit.cover,
-                                                  )
-                                                : Image.file(
-                                                    File(
-                                                      (msg["files"] as List)[0],
-                                                    ),
-                                                    width: width * 0.6,
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                          ),
-                                          if (isLoading)
-                                            Positioned.fill(
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  color: Colors.black45,
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                ),
-                                                child: const Center(
-                                                  child: Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      CircularProgressIndicator(
-                                                        color: Colors.white,
-                                                        strokeWidth: 3,
-                                                      ),
-                                                      SizedBox(height: 8),
-                                                      Text(
-                                                        "Sending...",
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 12,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                        ],
+                                    // ========== MULTIPLE IMAGES SECTION ==========
+                                    if (messageType == "image" &&
+                                        msg["images"] != null &&
+                                        (msg["images"] as List).isNotEmpty)
+                                      _buildImageGrid(
+                                        images: msg["images"] as List,
+                                        width: width,
+                                        isUploading: isUploading,
                                       ),
 
-                                    if (messageType == "file" &&
-                                        msg["files"] != null)
+                                    if (messageType == "image" &&
+                                        msg["images"] != null)
                                       const SizedBox(height: 5),
 
                                     // TEXT BUBBLE
@@ -322,9 +283,9 @@ class InboxScreenMobile extends GetView<InboxController> {
               }),
             ),
 
-            // ------------------ SELECTED IMAGE PREVIEW ------------------
+            // ------------------ SELECTED IMAGES PREVIEW (Multiple) ------------------
             Obx(() {
-              if (controller.selectedImage.value == null) {
+              if (controller.selectedImages.isEmpty) {
                 return const SizedBox.shrink();
               }
 
@@ -332,36 +293,87 @@ class InboxScreenMobile extends GetView<InboxController> {
                 height: 100,
                 padding: const EdgeInsets.all(8),
                 color: Colors.grey[100],
-                child: Stack(
+                child: Row(
                   children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.file(
-                        File(controller.selectedImage.value!.path),
-                        width: 80,
-                        height: 80,
-                        fit: BoxFit.cover,
+                    Expanded(
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: controller.selectedImages.length,
+                        itemBuilder: (context, index) {
+                          return Stack(
+                            children: [
+                              Container(
+                                width: 80,
+                                height: 80,
+                                margin: const EdgeInsets.only(right: 8),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.file(
+                                    File(controller.selectedImages[index].path),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                top: 4,
+                                right: 12,
+                                child: GestureDetector(
+                                  onTap: () => controller.removeImage(index),
+                                  child: Container(
+                                    padding: const EdgeInsets.all(4),
+                                    decoration: const BoxDecoration(
+                                      color: Colors.red,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const Icon(
+                                      Icons.close,
+                                      color: Colors.white,
+                                      size: 16,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
                       ),
                     ),
-                    Positioned(
-                      top: 4,
-                      right: 4,
-                      child: GestureDetector(
-                        onTap: controller.removeImage,
+                    // Add more button if less than max
+                    if (controller.selectedImages.length <
+                        controller.maxImageCount)
+                      GestureDetector(
+                        onTap: controller.pickImagesFromGallery,
                         child: Container(
-                          padding: const EdgeInsets.all(4),
-                          decoration: const BoxDecoration(
-                            color: Colors.black54,
-                            shape: BoxShape.circle,
+                          width: 80,
+                          height: 80,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: Colors.grey[400]!,
+                              width: 2,
+                              style: BorderStyle.solid,
+                            ),
                           ),
-                          child: const Icon(
-                            Icons.close,
-                            color: Colors.white,
-                            size: 16,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.add_photo_alternate,
+                                color: Colors.grey[600],
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                'Add',
+                                style: TextStyle(
+                                  color: Colors.grey[600],
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                    ),
                   ],
                 ),
               );
@@ -386,11 +398,11 @@ class InboxScreenMobile extends GetView<InboxController> {
                   children: [
                     IconButton(
                       icon: Icon(Icons.camera_alt, color: Colors.blue[600]),
-                      onPressed: () {},
+                      onPressed: controller.pickImageFromCamera,
                     ),
                     IconButton(
                       icon: Icon(Icons.photo, color: Colors.blue[600]),
-                      onPressed: controller.pickImageFromGallery,
+                      onPressed: controller.showImagePickerOptions,
                     ),
                     Expanded(
                       child: Container(
@@ -418,20 +430,45 @@ class InboxScreenMobile extends GetView<InboxController> {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    GestureDetector(
-                      onTap: controller.sendMessage,
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: const BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [Color(0xFF0084FF), Color(0xFF0066FF)],
+                    Obx(
+                      () => GestureDetector(
+                        onTap: controller.isProcessingImages.value
+                            ? null
+                            : controller.sendMessage,
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            gradient: controller.isProcessingImages.value
+                                ? LinearGradient(
+                                    colors: [
+                                      Colors.grey[400]!,
+                                      Colors.grey[500]!,
+                                    ],
+                                  )
+                                : const LinearGradient(
+                                    colors: [
+                                      Color(0xFF0084FF),
+                                      Color(0xFF0066FF),
+                                    ],
+                                  ),
+                            shape: BoxShape.circle,
                           ),
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.send,
-                          color: Colors.white,
-                          size: 20,
+                          child: controller.isProcessingImages.value
+                              ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.white,
+                                    ),
+                                  ),
+                                )
+                              : const Icon(
+                                  Icons.send,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
                         ),
                       ),
                     ),
@@ -442,6 +479,152 @@ class InboxScreenMobile extends GetView<InboxController> {
           ],
         ),
       ),
+    );
+  }
+
+  // ========== Build Image Grid for Multiple Images ==========
+  Widget _buildImageGrid({
+    required List images,
+    required double width,
+    required bool isUploading,
+  }) {
+    final imageCount = images.length;
+
+    if (imageCount == 1) {
+      // Single image - full width
+      return _buildSingleImage(images[0], width, isUploading);
+    } else if (imageCount == 2) {
+      // Two images - side by side
+      return Row(
+        children: [
+          Expanded(child: _buildSingleImage(images[0], width, isUploading)),
+          const SizedBox(width: 4),
+          Expanded(child: _buildSingleImage(images[1], width, isUploading)),
+        ],
+      );
+    } else if (imageCount == 3) {
+      // Three images - 1 large + 2 small
+      return Column(
+        children: [
+          _buildSingleImage(images[0], width, isUploading),
+          const SizedBox(height: 4),
+          Row(
+            children: [
+              Expanded(child: _buildSingleImage(images[1], width, isUploading)),
+              const SizedBox(width: 4),
+              Expanded(child: _buildSingleImage(images[2], width, isUploading)),
+            ],
+          ),
+        ],
+      );
+    } else {
+      // 4+ images - Grid layout
+      return GridView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 4,
+          mainAxisSpacing: 4,
+        ),
+        itemCount: imageCount > 4 ? 4 : imageCount,
+        itemBuilder: (context, index) {
+          if (index == 3 && imageCount > 4) {
+            // Show +N overlay for extra images
+            return Stack(
+              children: [
+                _buildSingleImage(images[index], width, isUploading),
+                Positioned.fill(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black54,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Center(
+                      child: Text(
+                        '+${imageCount - 4}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }
+          return _buildSingleImage(images[index], width, isUploading);
+        },
+      );
+    }
+  }
+
+  Widget _buildSingleImage(String imagePath, double width, bool isUploading) {
+    return Stack(
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: imagePath.startsWith('http')
+              ? Image.network(
+                  imagePath,
+                  width: double.infinity,
+                  height: 200,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      width: double.infinity,
+                      height: 200,
+                      color: Colors.grey[300],
+                      child: const Icon(Icons.broken_image, size: 50),
+                    );
+                  },
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Container(
+                      width: double.infinity,
+                      height: 200,
+                      color: Colors.grey[200],
+                      child: const Center(
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                    );
+                  },
+                )
+              : Image.file(
+                  File(imagePath),
+                  width: double.infinity,
+                  height: 200,
+                  fit: BoxFit.cover,
+                ),
+        ),
+        if (isUploading)
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.black45,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 3,
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      "Sending...",
+                      style: TextStyle(color: Colors.white, fontSize: 12),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+      ],
     );
   }
 }
@@ -461,7 +644,6 @@ class InboxShimmerWidget extends StatelessWidget {
         child: Column(
           children: [
             Space.height.v20,
-            // -------- CHAT MESSAGES SHIMMER --------
             Expanded(
               child: ListView.separated(
                 reverse: true,
@@ -494,7 +676,6 @@ class InboxShimmerWidget extends StatelessWidget {
                               ? CrossAxisAlignment.end
                               : CrossAxisAlignment.start,
                           children: [
-                            // Text bubble shimmer
                             Container(
                               width: width * 0.4,
                               height: 25,

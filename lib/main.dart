@@ -12,6 +12,9 @@ void main() async {
   runApp(const MyApp());
 }
 
+
+
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -25,9 +28,11 @@ class MyApp extends StatelessWidget {
       builder: (_, child) => GetMaterialApp(
         debugShowCheckedModeBanner: false,
         initialRoute: Routes.splashScreen,
+
         title: Strings.appName,
         theme: Themes.light,
         darkTheme: Themes.dark,
+
         getPages: Routes.list,
         defaultTransition: Transition.cupertino,
         transitionDuration: const Duration(milliseconds: 300),

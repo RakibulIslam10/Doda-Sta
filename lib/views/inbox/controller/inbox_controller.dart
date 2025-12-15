@@ -1,9 +1,11 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:doda_work/views/inbox/controller/s.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide FormData, MultipartFile;
+import 'package:http/http.dart' hide MultipartFile;
+import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import '../../../core/api/end_point/api_end_points.dart';
@@ -48,6 +50,7 @@ class InboxController extends GetxController {
     socket.onConnect((_) {
       log("✅ Socket connected: $myId");
     });
+
     socket.onDisconnect((_) {
       log("❌ Socket disconnected");
     });
@@ -62,9 +65,13 @@ class InboxController extends GetxController {
         "isMe": false,
         "isSent": true,
         "type": data["type"] ?? "text",
-        "images": data["images"] ?? [],
+        "images": (data["images"] as List?)?.map((path) => path.toString()).toList() ?? [],
+        "video": data["video"] ?? "",
         "formattedTime": Helpers.formatTimestamp(DateTime.now().toString()),
       });
+
+      // Auto scroll to bottom
+      shouldAutoScroll.value = true;
     });
 
     // Conversation update listener
@@ -73,7 +80,7 @@ class InboxController extends GetxController {
     });
   }
 
-  // get old message
+  // ============= Get Old Messages =============
   final RxBool isLoading = false.obs;
   final RxBool isPaginationLoading = false.obs;
 
@@ -106,7 +113,7 @@ class InboxController extends GetxController {
             "type": (conversion.images.isNotEmpty)
                 ? "image"
                 : (conversion.video.isNotEmpty ? "video" : "text"),
-            "files": conversion.images,
+            "images": conversion.images,
             "formattedTime": Helpers.formatTimestamp(
               conversion.createdAt.toIso8601String(),
             ),
@@ -114,6 +121,7 @@ class InboxController extends GetxController {
             "seen": conversion.seen,
           });
         }
+
         final reversedMsg = newMsg.reversed.toList();
 
         if (isPagination) {
@@ -132,29 +140,20 @@ class InboxController extends GetxController {
     isLoading.value = false;
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   // ============= Multiple Image Selection =============
   final RxList<XFile> selectedImages = <XFile>[].obs;
   final int maxImageCount = 5;
   final RxBool isProcessingImages = false.obs;
-// InboxController এ add করুন
   final RxBool shouldAutoScroll = true.obs;
 
+  // ============= Image URL Helper =============
+  String getImageUrl(String path) {
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      return path; // Already full URL
+    }
+    // Backend base URL + path (backslash replace করা)
+    return 'http://10.10.20.52:6002/$path'.replaceAll('\\', '/');
+  }
 
   // ============= Send Message =============
   void sendMessage() {
@@ -199,14 +198,13 @@ class InboxController extends GetxController {
     textController.clear();
   }
 
-  // Send message with images (Base64)
+  // Send message with images
   Future<void> _sendMessageWithImages(String text) async {
     try {
-      isProcessingImages.value = true;
       final tempId = DateTime.now().millisecondsSinceEpoch.toString();
       shouldAutoScroll.value = true;
 
-      // Add temporary message to UI
+      // Show message with uploading state (local preview)
       messagesList.add({
         "id": tempId,
         "message": text,
@@ -218,28 +216,27 @@ class InboxController extends GetxController {
         "isUploading": true,
       });
 
-      // Convert images to base64
-      final List<String> base64Images = await _convertImagesToBase64(selectedImages);
+      // Upload images to server
+      final List<String> uploadedImagePaths = await _uploadImages(selectedImages);
 
-      if (base64Images.isEmpty) {
-        CustomSnackBar.error('Failed to process images');
+      if (uploadedImagePaths.isEmpty) {
+        CustomSnackBar.error('Failed to upload images');
         messagesList.removeWhere((msg) => msg["id"] == tempId);
-        isProcessingImages.value = false;
         return;
       }
 
-      // Update message status
+      // Update message with uploaded paths
       final messageIndex = messagesList.indexWhere((msg) => msg["id"] == tempId);
       if (messageIndex != -1) {
         messagesList[messageIndex] = {
           ...messagesList[messageIndex],
           "isSent": true,
           "isUploading": false,
-          "images": base64Images,
+          "images": uploadedImagePaths,
         };
       }
 
-      // Send via socket with base64 images
+
       socket.emit("message_new", {
         "sender": {"id": myId, "role": AppStorage.users},
         "receiver": {
@@ -247,36 +244,119 @@ class InboxController extends GetxController {
           "role": AppStorage.users == "USER" ? "PROVIDER" : "USER",
         },
         "text": text,
-        "images": base64Images, // Base64 strings array
+        "images": uploadedImagePaths, // ✅ Backend paths
         "video": "",
         "videoCover": "",
       });
 
-      log('✅ Message with ${base64Images.length} images sent via socket');
+      log('✅ Message sent with ${uploadedImagePaths.length} images');
 
       // Clear input
       textController.clear();
       selectedImages.clear();
-      isProcessingImages.value = false;
+
     } catch (e) {
       log('❌ Error sending images: $e');
       CustomSnackBar.error('Failed to send images');
-      isProcessingImages.value = false;
+
+      // Error হলে temporary message remove
+      // messagesList.removeWhere((msg) => msg["id"] == tempId);
     }
   }
 
+  // Upload images to server
+  Future<List<String>> _uploadImages(List<XFile> images) async {
+    try {
+      final List<String> uploadedPaths = [];
+      final dio = Dio();
 
+      for (int i = 0; i < images.length; i++) {
+        final image = images[i];
 
+        // Detect MIME type
+        String mimeType = 'image/jpeg';
+        if (image.path.toLowerCase().endsWith('.png')) {
+          mimeType = 'image/png';
+        } else if (image.path.toLowerCase().endsWith('.jpg') ||
+            image.path.toLowerCase().endsWith('.jpeg')) {
+          mimeType = 'image/jpeg';
+        } else if (image.path.toLowerCase().endsWith('.gif')) {
+          mimeType = 'image/gif';
+        } else if (image.path.toLowerCase().endsWith('.webp')) {
+          mimeType = 'image/webp';
+        }
 
+        final formData = FormData.fromMap({
+          'chatImage': await MultipartFile.fromFile(
+            image.path,
+            filename: image.name,
+            contentType: MediaType.parse(mimeType),
+          ),
+        });
 
+        log('📤 Uploading image ${i + 1}/${images.length}: ${image.name}');
 
+        final response = await dio.post(
+          'http://10.10.20.52:6002/chat/chat-images-video',
+          data: formData,
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer ${AppStorage.token}',
+              'Content-Type': 'multipart/form-data',
+            },
+            validateStatus: (status) => status! < 500,
+          ),
+          onSendProgress: (sent, total) {
+            final progress = (sent / total * 100).toStringAsFixed(0);
+            log('📊 Upload progress: $progress%');
+          },
+        );
 
+        log('📥 Response status: ${response.statusCode}');
+        log('📥 Response data: ${response.data}');
 
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          // ✅ Backend response থেকে images array extract
+          final responseData = response.data;
 
+          if (responseData['success'] == true &&
+              responseData['images'] != null &&
+              responseData['images'] is List) {
 
+            final imagesList = responseData['images'] as List;
 
+            // প্রতিটি image path add করা
+            for (var imagePath in imagesList) {
+              if (imagePath != null && imagePath.toString().isNotEmpty) {
+                uploadedPaths.add(imagePath.toString());
+                log('✅ Image path added: $imagePath');
+              }
+            }
+          } else {
+            log('❌ Invalid response structure: ${response.data}');
+            CustomSnackBar.error('Image ${i + 1} upload failed: Invalid response');
+          }
+        } else {
+          log('❌ Upload failed with status ${response.statusCode}');
+          CustomSnackBar.error('Image ${i + 1} upload failed');
+        }
+      }
 
+      log('✅ Total uploaded paths: ${uploadedPaths.length}');
+      return uploadedPaths;
 
+    } catch (e) {
+      log('❌ Error uploading images: $e');
+      if (e is DioException) {
+        log('❌ DioException type: ${e.type}');
+        log('❌ DioException Response: ${e.response?.data}');
+        log('❌ DioException Message: ${e.message}');
+        log('❌ DioException StatusCode: ${e.response?.statusCode}');
+      }
+      CustomSnackBar.error('Network error during upload');
+      return [];
+    }
+  }
 
   // Pick multiple images from gallery
   Future<void> pickImagesFromGallery() async {
@@ -298,6 +378,8 @@ class InboxController extends GetxController {
       }
 
       selectedImages.addAll(images);
+      log('✅ ${images.length} images selected from gallery');
+
     } catch (e) {
       log('❌ Error picking images: $e');
       CustomSnackBar.error('Failed to pick images');
@@ -321,42 +403,11 @@ class InboxController extends GetxController {
 
       if (image != null) {
         selectedImages.add(image);
+        log('✅ Image captured from camera');
       }
     } catch (e) {
       log('❌ Error capturing image: $e');
       CustomSnackBar.error('Failed to capture image');
-    }
-  }
-
-
-
-  // Convert images to base64
-  Future<List<String>> _convertImagesToBase64(List<XFile> images) async {
-    try {
-      final List<String> base64List = [];
-
-      for (int i = 0; i < images.length; i++) {
-        final image = images[i];
-        log('📷 Converting image ${i + 1}/${images.length} to base64...');
-
-        // Read file as bytes
-        final File file = File(image.path);
-        final List<int> imageBytes = await file.readAsBytes();
-
-        // Convert to base64
-        final String base64Image = base64Encode(imageBytes);
-
-        // Optional: Add data URI prefix if needed by your backend
-        // final String base64WithPrefix = 'data:image/jpeg;base64,$base64Image';
-
-        base64List.add(base64Image);
-        log('✅ Image ${i + 1} converted successfully');
-      }
-
-      return base64List;
-    } catch (e) {
-      log('❌ Error converting images to base64: $e');
-      return [];
     }
   }
 
@@ -417,25 +468,19 @@ class InboxController extends GetxController {
     );
   }
 
-
-
-
-
-
-
-
-
-
-
   // Remove specific image
   void removeImage(int index) {
     if (index >= 0 && index < selectedImages.length) {
       selectedImages.removeAt(index);
+      log('✅ Image removed at index $index');
     }
   }
 
   // Clear all images
-  void clearAllImages() => selectedImages.clear();
+  void clearAllImages() {
+    selectedImages.clear();
+    log('✅ All images cleared');
+  }
 
   @override
   void onClose() {

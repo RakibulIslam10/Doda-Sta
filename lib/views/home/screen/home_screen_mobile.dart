@@ -1,10 +1,12 @@
 import 'package:get/get_state_manager/src/simple/get_view.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../../core/utils/app_storage.dart';
 import '../../../core/utils/basic_import.dart';
 import '../../../core/utils/extensions.dart';
 import '../../../routes/routes.dart';
+import '../../../widgets/image_picker_bottom_sheet.dart';
 import '../../summary/model/summary_model.dart';
 import '../controller/home_controller.dart';
 import '../model/home_model.dart';
@@ -29,7 +31,25 @@ class HomeScreenMobile extends GetView<HomeController> {
             flexibleSpace: HomeAppBarWidgetView(),
             actions: [
               GestureDetector(
-                onTap: () => Get.toNamed(Routes.notificationScreen),
+                onTap: () {
+                  // Get.toNamed(Routes.notificationScreen);
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return ImagePickerBottomSheet(
+                        onGalleryPressed: () {
+                          Get.back();
+                          // controller.pickImage(ImageSource.gallery);
+                        },
+                        onCameraPressed: () {
+                          Get.back();
+                          // controller.pickImage(ImageSource.camera);
+                        },
+                      );
+                    },
+                  );
+                },
+
                 child: Container(
                   margin: Dimensions.defaultHorizontalSize.edgeRight,
                   padding: EdgeInsets.all(Dimensions.paddingSize * 0.35),
@@ -80,7 +100,8 @@ class HomeScreenMobile extends GetView<HomeController> {
                                         image: item.attachments?.firstOrNull,
                                         isUser: true,
                                         status: status,
-                                        customerId: item.customerId, // ✅ Add this line
+                                        customerId: item.customerId,
+                                        // ✅ Add this line
                                         onTap: () {
                                           Get.toNamed(
                                             Routes.summaryScreen,

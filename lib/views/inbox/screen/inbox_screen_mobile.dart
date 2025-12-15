@@ -143,11 +143,11 @@ class InboxScreenMobile extends GetView<InboxController> {
                       itemCount: controller.messagesList.length,
                       itemBuilder: (context, index) {
                         final msg =
-                            controller.messagesList[controller
-                                    .messagesList
-                                    .length -
-                                1 -
-                                index];
+                        controller.messagesList[controller
+                            .messagesList
+                            .length -
+                            1 -
+                            index];
                         final isMe = msg["isMe"] as bool;
                         final messageType = msg["type"] ?? "text";
                         final isUploading = msg["isUploading"] ?? false;
@@ -164,7 +164,7 @@ class InboxScreenMobile extends GetView<InboxController> {
                                 ProfileAvatarWidget(
                                   size: 40.r,
                                   imageUrl:
-                                      '${ApiEndPoints.mainDomain}/${controller.avatar}',
+                                  '${ApiEndPoints.mainDomain}/${controller.avatar}',
                                 ),
                                 const SizedBox(width: 6),
                               ],
@@ -174,7 +174,7 @@ class InboxScreenMobile extends GetView<InboxController> {
                                       ? CrossAxisAlignment.end
                                       : CrossAxisAlignment.start,
                                   children: [
-                                    // ========== MULTIPLE IMAGES SECTION ==========
+                                    // ========== MULTIPLE IMAGES SECTION - IMPROVED ==========
                                     if (messageType == "image" &&
                                         msg["images"] != null &&
                                         (msg["images"] as List).isNotEmpty)
@@ -182,11 +182,14 @@ class InboxScreenMobile extends GetView<InboxController> {
                                         images: msg["images"] as List,
                                         width: width,
                                         isUploading: isUploading,
+                                        isMe: isMe,
                                       ),
 
                                     if (messageType == "image" &&
-                                        msg["images"] != null)
-                                      const SizedBox(height: 5),
+                                        msg["images"] != null &&
+                                        msg["message"] != null &&
+                                        msg["message"].toString().isNotEmpty)
+                                      const SizedBox(height: 6),
 
                                     // TEXT BUBBLE
                                     if (msg["message"] != null &&
@@ -202,11 +205,11 @@ class InboxScreenMobile extends GetView<InboxController> {
                                         decoration: BoxDecoration(
                                           gradient: isMe
                                               ? const LinearGradient(
-                                                  colors: [
-                                                    Color(0xFF0084FF),
-                                                    Color(0xFF0066FF),
-                                                  ],
-                                                )
+                                            colors: [
+                                              Color(0xFF0084FF),
+                                              Color(0xFF0066FF),
+                                            ],
+                                          )
                                               : null,
                                           color: isMe ? null : Colors.grey[200],
                                           borderRadius: BorderRadius.circular(
@@ -292,7 +295,15 @@ class InboxScreenMobile extends GetView<InboxController> {
               return Container(
                 height: 100,
                 padding: const EdgeInsets.all(8),
-                color: Colors.grey[100],
+                decoration: BoxDecoration(
+                  color: Colors.grey[50],
+                  border: Border(
+                    top: BorderSide(
+                      color: Colors.grey[200]!,
+                      width: 1,
+                    ),
+                  ),
+                ),
                 child: Row(
                   children: [
                     Expanded(
@@ -306,6 +317,16 @@ class InboxScreenMobile extends GetView<InboxController> {
                                 width: 80,
                                 height: 80,
                                 margin: const EdgeInsets.only(right: 8),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.1),
+                                      blurRadius: 4,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                  ],
+                                ),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(8),
                                   child: Image.file(
@@ -321,14 +342,20 @@ class InboxScreenMobile extends GetView<InboxController> {
                                   onTap: () => controller.removeImage(index),
                                   child: Container(
                                     padding: const EdgeInsets.all(4),
-                                    decoration: const BoxDecoration(
-                                      color: Colors.red,
+                                    decoration: BoxDecoration(
+                                      color: Colors.black87,
                                       shape: BoxShape.circle,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.3),
+                                          blurRadius: 4,
+                                        ),
+                                      ],
                                     ),
                                     child: const Icon(
                                       Icons.close,
                                       color: Colors.white,
-                                      size: 16,
+                                      size: 14,
                                     ),
                                   ),
                                 ),
@@ -347,10 +374,10 @@ class InboxScreenMobile extends GetView<InboxController> {
                           width: 80,
                           height: 80,
                           decoration: BoxDecoration(
-                            color: Colors.grey[300],
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
-                              color: Colors.grey[400]!,
+                              color: Colors.grey[300]!,
                               width: 2,
                               style: BorderStyle.solid,
                             ),
@@ -359,8 +386,9 @@ class InboxScreenMobile extends GetView<InboxController> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
-                                Icons.add_photo_alternate,
+                                Icons.add_photo_alternate_outlined,
                                 color: Colors.grey[600],
+                                size: 28,
                               ),
                               const SizedBox(height: 4),
                               Text(
@@ -368,6 +396,7 @@ class InboxScreenMobile extends GetView<InboxController> {
                                 style: TextStyle(
                                   color: Colors.grey[600],
                                   fontSize: 12,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ],
@@ -431,7 +460,7 @@ class InboxScreenMobile extends GetView<InboxController> {
                     ),
                     const SizedBox(width: 8),
                     Obx(
-                      () => GestureDetector(
+                          () => GestureDetector(
                         onTap: controller.isProcessingImages.value
                             ? null
                             : controller.sendMessage,
@@ -440,35 +469,35 @@ class InboxScreenMobile extends GetView<InboxController> {
                           decoration: BoxDecoration(
                             gradient: controller.isProcessingImages.value
                                 ? LinearGradient(
-                                    colors: [
-                                      Colors.grey[400]!,
-                                      Colors.grey[500]!,
-                                    ],
-                                  )
+                              colors: [
+                                Colors.grey[400]!,
+                                Colors.grey[500]!,
+                              ],
+                            )
                                 : const LinearGradient(
-                                    colors: [
-                                      Color(0xFF0084FF),
-                                      Color(0xFF0066FF),
-                                    ],
-                                  ),
+                              colors: [
+                                Color(0xFF0084FF),
+                                Color(0xFF0066FF),
+                              ],
+                            ),
                             shape: BoxShape.circle,
                           ),
                           child: controller.isProcessingImages.value
                               ? const SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                      Colors.white,
-                                    ),
-                                  ),
-                                )
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.white,
+                              ),
+                            ),
+                          )
                               : const Icon(
-                                  Icons.send,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
+                            Icons.send,
+                            color: Colors.white,
+                            size: 20,
+                          ),
                         ),
                       ),
                     ),
@@ -482,142 +511,362 @@ class InboxScreenMobile extends GetView<InboxController> {
     );
   }
 
-  // ========== Build Image Grid for Multiple Images ==========
+  // ========== IMPROVED Image Grid for Multiple Images ==========
   Widget _buildImageGrid({
     required List images,
     required double width,
     required bool isUploading,
+    required bool isMe,
   }) {
     final imageCount = images.length;
+    final maxWidth = width * 0.7;
 
     if (imageCount == 1) {
-      // Single image - full width
-      return _buildSingleImage(images[0], width, isUploading);
+      // Single image - optimized size
+      return _buildSingleImage(
+        images[0],
+        maxWidth,
+        isUploading,
+        isMe,
+        isSingle: true,
+      );
     } else if (imageCount == 2) {
-      // Two images - side by side
-      return Row(
-        children: [
-          Expanded(child: _buildSingleImage(images[0], width, isUploading)),
-          const SizedBox(width: 4),
-          Expanded(child: _buildSingleImage(images[1], width, isUploading)),
-        ],
+      // Two images - side by side with proper spacing
+      return SizedBox(
+        width: maxWidth,
+        child: Row(
+          children: [
+            Expanded(
+              child: _buildSingleImage(
+                images[0],
+                maxWidth / 2,
+                isUploading,
+                isMe,
+              ),
+            ),
+            const SizedBox(width: 3),
+            Expanded(
+              child: _buildSingleImage(
+                images[1],
+                maxWidth / 2,
+                isUploading,
+                isMe,
+              ),
+            ),
+          ],
+        ),
       );
     } else if (imageCount == 3) {
-      // Three images - 1 large + 2 small
-      return Column(
-        children: [
-          _buildSingleImage(images[0], width, isUploading),
-          const SizedBox(height: 4),
-          Row(
-            children: [
-              Expanded(child: _buildSingleImage(images[1], width, isUploading)),
-              const SizedBox(width: 4),
-              Expanded(child: _buildSingleImage(images[2], width, isUploading)),
-            ],
-          ),
-        ],
-      );
-    } else {
-      // 4+ images - Grid layout
-      return GridView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 4,
-          mainAxisSpacing: 4,
-        ),
-        itemCount: imageCount > 4 ? 4 : imageCount,
-        itemBuilder: (context, index) {
-          if (index == 3 && imageCount > 4) {
-            // Show +N overlay for extra images
-            return Stack(
+      // Three images - 1 large on top + 2 small below
+      return SizedBox(
+        width: maxWidth,
+        child: Column(
+          children: [
+            _buildSingleImage(
+              images[0],
+              maxWidth,
+              isUploading,
+              isMe,
+              height: 200,
+            ),
+            const SizedBox(height: 3),
+            Row(
               children: [
-                _buildSingleImage(images[index], width, isUploading),
-                Positioned.fill(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black54,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Center(
-                      child: Text(
-                        '+${imageCount - 4}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
+                Expanded(
+                  child: _buildSingleImage(
+                    images[1],
+                    maxWidth / 2,
+                    isUploading,
+                    isMe,
+                    height: 120,
+                  ),
+                ),
+                const SizedBox(width: 3),
+                Expanded(
+                  child: _buildSingleImage(
+                    images[2],
+                    maxWidth / 2,
+                    isUploading,
+                    isMe,
+                    height: 120,
                   ),
                 ),
               ],
-            );
-          }
-          return _buildSingleImage(images[index], width, isUploading);
-        },
+            ),
+          ],
+        ),
+      );
+    } else if (imageCount == 4) {
+      // Four images - 2x2 grid
+      return SizedBox(
+        width: maxWidth,
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: _buildSingleImage(
+                    images[0],
+                    maxWidth / 2,
+                    isUploading,
+                    isMe,
+                    height: 140,
+                  ),
+                ),
+                const SizedBox(width: 3),
+                Expanded(
+                  child: _buildSingleImage(
+                    images[1],
+                    maxWidth / 2,
+                    isUploading,
+                    isMe,
+                    height: 140,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 3),
+            Row(
+              children: [
+                Expanded(
+                  child: _buildSingleImage(
+                    images[2],
+                    maxWidth / 2,
+                    isUploading,
+                    isMe,
+                    height: 140,
+                  ),
+                ),
+                const SizedBox(width: 3),
+                Expanded(
+                  child: _buildSingleImage(
+                    images[3],
+                    maxWidth / 2,
+                    isUploading,
+                    isMe,
+                    height: 140,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    } else {
+      // 5+ images - 2x2 grid with +N overlay on last image
+      return SizedBox(
+        width: maxWidth,
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: _buildSingleImage(
+                    images[0],
+                    maxWidth / 2,
+                    isUploading,
+                    isMe,
+                    height: 140,
+                  ),
+                ),
+                const SizedBox(width: 3),
+                Expanded(
+                  child: _buildSingleImage(
+                    images[1],
+                    maxWidth / 2,
+                    isUploading,
+                    isMe,
+                    height: 140,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 3),
+            Row(
+              children: [
+                Expanded(
+                  child: _buildSingleImage(
+                    images[2],
+                    maxWidth / 2,
+                    isUploading,
+                    isMe,
+                    height: 140,
+                  ),
+                ),
+                const SizedBox(width: 3),
+                Expanded(
+                  child: Stack(
+                    children: [
+                      _buildSingleImage(
+                        images[3],
+                        maxWidth / 2,
+                        isUploading,
+                        isMe,
+                        height: 140,
+                      ),
+                      // +N Overlay
+                      Positioned.fill(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.65),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Center(
+                            child: Text(
+                              '+${imageCount - 4}',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       );
     }
   }
 
-  Widget _buildSingleImage(String imagePath, double width, bool isUploading) {
+  Widget _buildSingleImage(
+      String imagePath,
+      double width,
+      bool isUploading,
+      bool isMe, {
+        double? height,
+        bool isSingle = false,
+      }) {
+    // ✅ Clean path: remove leading slash and backslashes
+    final cleanPath = imagePath.replaceAll('\\', '/').replaceFirst(RegExp(r'^/+'), '');
+    final fullImageUrl = '${ApiEndPoints.mainDomain}/$cleanPath';
+
+    final imageWidget = Image.network(
+      fullImageUrl,
+      // ✅ Single image: no fixed width/height, let it maintain aspect ratio
+      fit: isSingle ? BoxFit.contain : BoxFit.cover,
+      // Only set constraints for grid images, not single
+      width: isSingle ? null : double.infinity,
+      height: isSingle ? null : (height ?? 180),
+      errorBuilder: (context, error, stackTrace) {
+        return Container(
+          width: isSingle ? null : double.infinity,
+          height: isSingle ? 200 : (height ?? 180),
+          constraints: isSingle
+              ? BoxConstraints(
+            maxWidth: width * 0.85,
+            minWidth: 200,
+            minHeight: 150,
+          )
+              : null,
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.broken_image_outlined,
+                size: 40,
+                color: Colors.grey[400],
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Failed to load',
+                style: TextStyle(
+                  color: Colors.grey[500],
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+      loadingBuilder: (context, child, loadingProgress) {
+        if (loadingProgress == null) return child;
+        return Container(
+          width: isSingle ? null : double.infinity,
+          height: isSingle ? 200 : (height ?? 180),
+          constraints: isSingle
+              ? BoxConstraints(
+            maxWidth: width * 0.85,
+            minWidth: 200,
+            minHeight: 150,
+          )
+              : null,
+          decoration: BoxDecoration(
+            color: Colors.grey[100],
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Center(
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              value: loadingProgress.expectedTotalBytes != null
+                  ? loadingProgress.cumulativeBytesLoaded /
+                  loadingProgress.expectedTotalBytes!
+                  : null,
+            ),
+          ),
+        );
+      },
+    );
+
     return Stack(
       children: [
-        ClipRRect(
+        // ✅ For single image, add constraints container
+        isSingle
+            ? ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: width * 0.85, // Max 85% of message width
+            maxHeight: 400, // Max height to prevent too tall images
+            minWidth: 200, // Min width for very small images
+            minHeight: 150, // Min height
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: imageWidget,
+          ),
+        )
+            : ClipRRect(
           borderRadius: BorderRadius.circular(12),
-          child: imagePath.startsWith('http')
-              ? Image.network(
-                  imagePath,
-                  width: double.infinity,
-                  height: 200,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      width: double.infinity,
-                      height: 200,
-                      color: Colors.grey[300],
-                      child: const Icon(Icons.broken_image, size: 50),
-                    );
-                  },
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Container(
-                      width: double.infinity,
-                      height: 200,
-                      color: Colors.grey[200],
-                      child: const Center(
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      ),
-                    );
-                  },
-                )
-              : Image.file(
-                  File(imagePath),
-                  width: double.infinity,
-                  height: 200,
-                  fit: BoxFit.cover,
-                ),
+          child: imageWidget,
         ),
+        // Uploading overlay
         if (isUploading)
           Positioned.fill(
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.black45,
+                color: Colors.black.withOpacity(0.5),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: const Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    CircularProgressIndicator(
-                      color: Colors.white,
-                      strokeWidth: 3,
+                    SizedBox(
+                      width: 32,
+                      height: 32,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 3,
+                      ),
                     ),
-                    SizedBox(height: 8),
+                    SizedBox(height: 12),
                     Text(
-                      "Sending...",
-                      style: TextStyle(color: Colors.white, fontSize: 12),
+                      "Uploading...",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 0.3,
+                      ),
                     ),
                   ],
                 ),

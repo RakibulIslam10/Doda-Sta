@@ -96,7 +96,7 @@ class ApiRequest {
         throw Exception(errorMessage);
       }
     } catch (e) {
-      MessageHelper.showError("Please Check Email and Password!");
+      // MessageHelper.showError("Please Check Email and Password!");
       log('🐞🐞🐞 UNHANDLED ERROR:${e.toString()}');
       throw Exception(e.toString());
     } finally {

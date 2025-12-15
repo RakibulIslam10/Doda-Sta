@@ -17,6 +17,9 @@ class ApiEndPoints {
   static const privacy = 'manage/get-privacy-policy';
   static const terms = 'manage/get-terms-conditions';
   static const allEbookGet = 'ebooks/get';
+  static const blockUser = 'chat/block/:targetUserId';
+  static const unBlockUser = 'chat/unblock/:targetUserId';
+  static const deleteMessage = 'ebooks/get';
   static const getAllBookCategory = 'book-categories/get';
   static const singlePost = 'home/book';
 

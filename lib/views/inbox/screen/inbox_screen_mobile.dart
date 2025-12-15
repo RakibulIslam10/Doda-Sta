@@ -63,35 +63,60 @@ class InboxScreenMobile extends GetView<InboxController> {
             padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
             child: SafeArea(
               child: Row(
-                crossAxisAlignment: crossCenter,
+                mainAxisAlignment: mainSpaceBet,
                 children: [
-                  IconButton(
-                    onPressed: () => Get.back(),
-                    icon: Icon(Icons.arrow_back_ios),
-                  ),
-                  SizedBox(width: 10),
-                  ProfileAvatarWidget(
-                    imageUrl: '${ApiEndPoints.mainDomain}/${controller.avatar}',
-                  ),
-                  SizedBox(width: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: mainCenter,
+                  Row(
+                    crossAxisAlignment: crossCenter,
                     children: [
-                      Text(
-                        controller.name ?? '',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
+                      IconButton(
+                        onPressed: () => Get.back(),
+                        icon: Icon(Icons.arrow_back_ios),
                       ),
-                      Text(
-                        "Active now",
-                        style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                      SizedBox(width: 10.w),
+                      ProfileAvatarWidget(
+                        imageUrl:
+                            '${ApiEndPoints.mainDomain}/${controller.avatar}',
+                      ),
+                      SizedBox(width: 10.w),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: mainCenter,
+                        children: [
+                          Text(
+                            controller.name ?? '',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Text(
+                            "Active now",
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
+                  Obx(() => controller.isBlockLoading.value ? CircularProgressIndicator() : PopupMenuButton(
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                          value: controller.isBlock.value ? 'Unblock' : 'Block',
+                          child: TextWidget(controller.isBlock.value ? 'Unblock' : 'Block')
+                      ),
+                    ],
+
+                    onSelected: (value) {
+                      if (value == 'Block') {
+                        controller.blockUser();
+                      } else if (value == 'Unblock') {
+                        controller.unBlockUser();
+                      }
+                    },
+                  ),)
                 ],
               ),
             ),
@@ -406,102 +431,114 @@ class InboxScreenMobile extends GetView<InboxController> {
             }),
 
             // ------------------ INPUT FIELD ------------------
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, -2),
-                  ),
-                ],
-              ),
-              child: SafeArea(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.camera_alt, color: Colors.blue[600]),
-                      onPressed: controller.pickImageFromCamera,
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.photo, color: Colors.blue[600]),
-                      onPressed: controller.showImagePickerOptions,
-                    ),
-                    Expanded(
-                      child: Container(
-                        constraints: const BoxConstraints(maxHeight: 120),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[100],
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: TextField(
-                          controller: controller.textController,
-                          maxLines: null,
-                          minLines: 1,
-                          textInputAction: TextInputAction.newline,
-                          decoration: InputDecoration(
-                            hintText: "Aa",
-                            hintStyle: TextStyle(color: Colors.grey[500]),
-                            border: InputBorder.none,
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 10,
-                            ),
-                          ),
-                          style: const TextStyle(fontSize: 15),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Obx(
-                      () => GestureDetector(
-                        onTap: controller.isProcessingImages.value
-                            ? null
-                            : controller.sendMessage,
-                        child: Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            gradient: controller.isProcessingImages.value
-                                ? LinearGradient(
-                                    colors: [
-                                      Colors.grey[400]!,
-                                      Colors.grey[500]!,
-                                    ],
-                                  )
-                                : const LinearGradient(
-                                    colors: [
-                                      Color(0xFF0084FF),
-                                      Color(0xFF0066FF),
-                                    ],
-                                  ),
-                            shape: BoxShape.circle,
-                          ),
-                          child: controller.isProcessingImages.value
-                              ? const SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                      Colors.white,
-                                    ),
-                                  ),
-                                )
-                              : const Icon(
-                                  Icons.send,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
-                        ),
-                      ),
+            Obx(() {
+              if (controller.isBlock.value) {
+                return BlockedChatNotice(
+                  text: controller.isBlockedByMe.value
+                      ? "You blocked this user"
+                      : "You can't reply to this conversation",
+                );
+              }
+              return Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, -2),
                     ),
                   ],
                 ),
-              ),
-            ),
+                child: SafeArea(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.camera_alt, color: Colors.blue[600]),
+                        onPressed: controller.pickImageFromCamera,
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.photo, color: Colors.blue[600]),
+                        onPressed: controller.showImagePickerOptions,
+                      ),
+                      Expanded(
+                        child: Container(
+                          constraints: const BoxConstraints(maxHeight: 120),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[100],
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: TextField(
+                            controller: controller.textController,
+                            maxLines: null,
+                            minLines: 1,
+                            textInputAction: TextInputAction.newline,
+                            decoration: InputDecoration(
+                              hintText: "Aa",
+                              hintStyle: TextStyle(color: Colors.grey[500]),
+                              border: InputBorder.none,
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 10,
+                              ),
+                            ),
+                            style: const TextStyle(fontSize: 15),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Obx(
+                        () => GestureDetector(
+                          onTap: controller.isProcessingImages.value
+                              ? null
+                              : controller.sendMessage,
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              gradient: controller.isProcessingImages.value
+                                  ? LinearGradient(
+                                      colors: [
+                                        Colors.grey[400]!,
+                                        Colors.grey[500]!,
+                                      ],
+                                    )
+                                  : const LinearGradient(
+                                      colors: [
+                                        Color(0xFF0084FF),
+                                        Color(0xFF0066FF),
+                                      ],
+                                    ),
+                              shape: BoxShape.circle,
+                            ),
+                            child: controller.isProcessingImages.value
+                                ? const SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.white,
+                                      ),
+                                    ),
+                                  )
+                                : const Icon(
+                                    Icons.send,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }),
           ],
         ),
       ),
@@ -947,6 +984,43 @@ class InboxShimmerWidget extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class BlockedChatNotice extends StatelessWidget {
+  final String text;
+
+  const BlockedChatNotice({
+    super.key,
+    this.text = "You can’t reply to this conversation",
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
+    return Container(
+      width: size.width,
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade100,
+        border: Border(top: BorderSide(color: Colors.grey.shade300)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.block, size: 18, color: Colors.grey.shade600),
+          const SizedBox(width: 8),
+          Flexible(
+            child: Text(
+              text,
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
+            ),
+          ),
+        ],
       ),
     );
   }

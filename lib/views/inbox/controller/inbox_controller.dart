@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:doda_work/core/api/model/basic_success_model.dart';
 import 'package:doda_work/views/inbox/controller/s.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide FormData, MultipartFile;
@@ -39,7 +40,7 @@ class InboxController extends GetxController {
   void _initSocket() {
     socket = IO.io(
       "http://10.10.20.52:6002"
-          "?id=$myId&role=${AppStorage.users}",
+      "?id=$myId&role=${AppStorage.users}",
       IO.OptionBuilder()
           .setTransports(['websocket'])
           .enableAutoConnect()
@@ -64,18 +65,22 @@ class InboxController extends GetxController {
       List<String> imagesList = [];
 
       if (data["images"] != null && data["images"] is List) {
-        imagesList = (data["images"] as List).map((path) => path.toString()).toList();
+        imagesList = (data["images"] as List)
+            .map((path) => path.toString())
+            .toList();
       }
 
       messagesList.add({
         "message": data["text"] ?? '',
         "isMe": false,
         "isSent": true,
-        "type": imagesList.isNotEmpty ? "image" : "text", // ✅ Set type based on images
+        "type": imagesList.isNotEmpty ? "image" : "text",
+        // ✅ Set type based on images
         "images": imagesList,
         "video": data["video"] ?? "",
         "formattedTime": Helpers.formatTimestamp(DateTime.now().toString()),
-        "isUploading": false, // ✅ Not uploading, it's received message
+        "isUploading": false,
+        // ✅ Not uploading, it's received message
       });
 
       // Auto scroll to bottom
@@ -95,6 +100,8 @@ class InboxController extends GetxController {
   int limit = 20;
   int skip = 0;
   bool hasMore = true;
+  RxBool isBlock = false.obs;
+  RxBool isBlockedByMe = false.obs;
 
   Future<void> getOldMessages({bool isPagination = false}) async {
     if (isPagination && !hasMore) return;
@@ -110,6 +117,9 @@ class InboxController extends GetxController {
       endPoint: '${ApiEndPoints.allMessage}$receiverId&page=1&limit=$limit',
       isLoading: isLoading,
       onSuccess: (result) {
+        isBlock.value = result.blockStatus.isBlocked;
+        isBlockedByMe.value = result.blockStatus.isBlockedByYou;
+
         final newMsg = <Map<String, dynamic>>[];
 
         for (final conversion in result.conversation?.messages ?? []) {
@@ -221,12 +231,16 @@ class InboxController extends GetxController {
         "isSent": false,
         "formattedTime": Helpers.formatTimestamp(DateTime.now().toString()),
         "type": "image",
-        "images": selectedImages.map((img) => img.path).toList(), // ✅ LOCAL paths for instant display
-        "isUploading": true, // ✅ Flag for showing local images
+        "images": selectedImages.map((img) => img.path).toList(),
+        // ✅ LOCAL paths for instant display
+        "isUploading": true,
+        // ✅ Flag for showing local images
       });
 
       // Upload images to server
-      final List<String> uploadedImagePaths = await _uploadImages(selectedImages);
+      final List<String> uploadedImagePaths = await _uploadImages(
+        selectedImages,
+      );
 
       if (uploadedImagePaths.isEmpty) {
         CustomSnackBar.error('Failed to upload images');
@@ -235,7 +249,9 @@ class InboxController extends GetxController {
       }
 
       // ✅ Update message with uploaded BACKEND paths
-      final messageIndex = messagesList.indexWhere((msg) => msg["id"] == tempId);
+      final messageIndex = messagesList.indexWhere(
+        (msg) => msg["id"] == tempId,
+      );
       if (messageIndex != -1) {
         messagesList[messageIndex] = {
           ...messagesList[messageIndex],
@@ -263,14 +279,12 @@ class InboxController extends GetxController {
       // Clear input
       textController.clear();
       selectedImages.clear();
-
     } catch (e) {
       log('❌ Error sending images: $e');
       CustomSnackBar.error('Failed to send images');
     }
   }
 
-  // Upload images to server
   Future<List<String>> _uploadImages(List<XFile> images) async {
     try {
       final List<String> uploadedPaths = [];
@@ -328,7 +342,6 @@ class InboxController extends GetxController {
           if (responseData['success'] == true &&
               responseData['images'] != null &&
               responseData['images'] is List) {
-
             final imagesList = responseData['images'] as List;
 
             // প্রতিটি image path add করা
@@ -340,7 +353,9 @@ class InboxController extends GetxController {
             }
           } else {
             log('❌ Invalid response structure: ${response.data}');
-            CustomSnackBar.error('Image ${i + 1} upload failed: Invalid response');
+            CustomSnackBar.error(
+              'Image ${i + 1} upload failed: Invalid response',
+            );
           }
         } else {
           log('❌ Upload failed with status ${response.statusCode}');
@@ -350,7 +365,6 @@ class InboxController extends GetxController {
 
       log('✅ Total uploaded paths: ${uploadedPaths.length}');
       return uploadedPaths;
-
     } catch (e) {
       log('❌ Error uploading images: $e');
       if (e is DioException) {
@@ -362,6 +376,30 @@ class InboxController extends GetxController {
       CustomSnackBar.error('Network error during upload');
       return [];
     }
+  }
+
+  RxBool isBlockLoading = false.obs;
+
+  Future<BasicSuccessModel> blockUser() async {
+    return await ApiRequest.post(
+      fromJson: BasicSuccessModel.fromJson,
+      endPoint: ApiEndPoints.blockUser,
+      isLoading: isBlockLoading,
+      body: {},
+      queryParams: {'partnerId': receiverId},
+      onSuccess: (result) => Get.close(1),
+    );
+  }
+
+  Future<BasicSuccessModel> unBlockUser() async {
+    return await ApiRequest.post(
+      fromJson: BasicSuccessModel.fromJson,
+      endPoint: ApiEndPoints.unBlockUser,
+      isLoading: isBlockLoading,
+      body: {},
+      queryParams: {'partnerId': receiverId},
+      onSuccess: (result) => Get.close(1),
+    );
   }
 
   // Pick multiple images from gallery
@@ -385,14 +423,12 @@ class InboxController extends GetxController {
 
       selectedImages.addAll(images);
       log('✅ ${images.length} images selected from gallery');
-
     } catch (e) {
       log('❌ Error picking images: $e');
       CustomSnackBar.error('Failed to pick images');
     }
   }
 
-  // Pick single image from camera
   Future<void> pickImageFromCamera() async {
     try {
       if (selectedImages.length >= maxImageCount) {
@@ -417,7 +453,6 @@ class InboxController extends GetxController {
     }
   }
 
-  // Show image picker options
   void showImagePickerOptions() {
     Get.bottomSheet(
       Container(
@@ -474,7 +509,6 @@ class InboxController extends GetxController {
     );
   }
 
-  // Remove specific image
   void removeImage(int index) {
     if (index >= 0 && index < selectedImages.length) {
       selectedImages.removeAt(index);
@@ -482,7 +516,6 @@ class InboxController extends GetxController {
     }
   }
 
-  // Clear all images
   void clearAllImages() {
     selectedImages.clear();
     log('✅ All images cleared');

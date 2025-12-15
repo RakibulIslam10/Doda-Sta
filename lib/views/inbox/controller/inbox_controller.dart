@@ -55,19 +55,28 @@ class InboxController extends GetxController {
       log("❌ Socket disconnected");
     });
 
-    // New message listener
+    // New message listener - FIXED for instant image display
     socket.on("message_new/$receiverId", (data) {
       log("📩 New Message: $data");
       if (data["sender"]["id"] == myId) return;
+
+      // ✅ Parse images array properly
+      List<String> imagesList = [];
+      if (data["images"] != null && data["images"] is List) {
+        imagesList = (data["images"] as List)
+            .map((path) => path.toString())
+            .toList();
+      }
 
       messagesList.add({
         "message": data["text"] ?? '',
         "isMe": false,
         "isSent": true,
-        "type": data["type"] ?? "text",
-        "images": (data["images"] as List?)?.map((path) => path.toString()).toList() ?? [],
+        "type": imagesList.isNotEmpty ? "image" : "text", // ✅ Set type based on images
+        "images": imagesList,
         "video": data["video"] ?? "",
         "formattedTime": Helpers.formatTimestamp(DateTime.now().toString()),
+        "isUploading": false, // ✅ Not uploading, it's received message
       });
 
       // Auto scroll to bottom
@@ -119,6 +128,7 @@ class InboxController extends GetxController {
             ),
             "video": conversion.video,
             "seen": conversion.seen,
+            "isUploading": false, // ✅ Old messages are not uploading
           });
         }
 
@@ -204,7 +214,7 @@ class InboxController extends GetxController {
       final tempId = DateTime.now().millisecondsSinceEpoch.toString();
       shouldAutoScroll.value = true;
 
-      // Show message with uploading state (local preview)
+      // ✅ Show message with uploading state (local preview with LOCAL paths)
       messagesList.add({
         "id": tempId,
         "message": text,
@@ -212,8 +222,8 @@ class InboxController extends GetxController {
         "isSent": false,
         "formattedTime": Helpers.formatTimestamp(DateTime.now().toString()),
         "type": "image",
-        "images": selectedImages.map((img) => img.path).toList(),
-        "isUploading": true,
+        "images": selectedImages.map((img) => img.path).toList(), // ✅ LOCAL paths for instant display
+        "isUploading": true, // ✅ Flag for showing local images
       });
 
       // Upload images to server
@@ -225,18 +235,18 @@ class InboxController extends GetxController {
         return;
       }
 
-      // Update message with uploaded paths
+      // ✅ Update message with uploaded BACKEND paths
       final messageIndex = messagesList.indexWhere((msg) => msg["id"] == tempId);
       if (messageIndex != -1) {
         messagesList[messageIndex] = {
           ...messagesList[messageIndex],
           "isSent": true,
-          "isUploading": false,
-          "images": uploadedImagePaths,
+          "isUploading": false, // ✅ Now show backend images
+          "images": uploadedImagePaths, // ✅ BACKEND paths
         };
       }
 
-
+      // ✅ Emit to socket with backend paths
       socket.emit("message_new", {
         "sender": {"id": myId, "role": AppStorage.users},
         "receiver": {
@@ -258,9 +268,6 @@ class InboxController extends GetxController {
     } catch (e) {
       log('❌ Error sending images: $e');
       CustomSnackBar.error('Failed to send images');
-
-      // Error হলে temporary message remove
-      // messagesList.removeWhere((msg) => msg["id"] == tempId);
     }
   }
 

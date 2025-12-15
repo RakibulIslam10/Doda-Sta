@@ -143,11 +143,11 @@ class InboxScreenMobile extends GetView<InboxController> {
                       itemCount: controller.messagesList.length,
                       itemBuilder: (context, index) {
                         final msg =
-                        controller.messagesList[controller
-                            .messagesList
-                            .length -
-                            1 -
-                            index];
+                            controller.messagesList[controller
+                                    .messagesList
+                                    .length -
+                                1 -
+                                index];
                         final isMe = msg["isMe"] as bool;
                         final messageType = msg["type"] ?? "text";
                         final isUploading = msg["isUploading"] ?? false;
@@ -164,7 +164,7 @@ class InboxScreenMobile extends GetView<InboxController> {
                                 ProfileAvatarWidget(
                                   size: 40.r,
                                   imageUrl:
-                                  '${ApiEndPoints.mainDomain}/${controller.avatar}',
+                                      '${ApiEndPoints.mainDomain}/${controller.avatar}',
                                 ),
                                 const SizedBox(width: 6),
                               ],
@@ -205,11 +205,11 @@ class InboxScreenMobile extends GetView<InboxController> {
                                         decoration: BoxDecoration(
                                           gradient: isMe
                                               ? const LinearGradient(
-                                            colors: [
-                                              Color(0xFF0084FF),
-                                              Color(0xFF0066FF),
-                                            ],
-                                          )
+                                                  colors: [
+                                                    Color(0xFF0084FF),
+                                                    Color(0xFF0066FF),
+                                                  ],
+                                                )
                                               : null,
                                           color: isMe ? null : Colors.grey[200],
                                           borderRadius: BorderRadius.circular(
@@ -298,10 +298,7 @@ class InboxScreenMobile extends GetView<InboxController> {
                 decoration: BoxDecoration(
                   color: Colors.grey[50],
                   border: Border(
-                    top: BorderSide(
-                      color: Colors.grey[200]!,
-                      width: 1,
-                    ),
+                    top: BorderSide(color: Colors.grey[200]!, width: 1),
                   ),
                 ),
                 child: Row(
@@ -460,7 +457,7 @@ class InboxScreenMobile extends GetView<InboxController> {
                     ),
                     const SizedBox(width: 8),
                     Obx(
-                          () => GestureDetector(
+                      () => GestureDetector(
                         onTap: controller.isProcessingImages.value
                             ? null
                             : controller.sendMessage,
@@ -469,35 +466,35 @@ class InboxScreenMobile extends GetView<InboxController> {
                           decoration: BoxDecoration(
                             gradient: controller.isProcessingImages.value
                                 ? LinearGradient(
-                              colors: [
-                                Colors.grey[400]!,
-                                Colors.grey[500]!,
-                              ],
-                            )
+                                    colors: [
+                                      Colors.grey[400]!,
+                                      Colors.grey[500]!,
+                                    ],
+                                  )
                                 : const LinearGradient(
-                              colors: [
-                                Color(0xFF0084FF),
-                                Color(0xFF0066FF),
-                              ],
-                            ),
+                                    colors: [
+                                      Color(0xFF0084FF),
+                                      Color(0xFF0066FF),
+                                    ],
+                                  ),
                             shape: BoxShape.circle,
                           ),
                           child: controller.isProcessingImages.value
                               ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                Colors.white,
-                              ),
-                            ),
-                          )
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.white,
+                                    ),
+                                  ),
+                                )
                               : const Icon(
-                            Icons.send,
-                            color: Colors.white,
-                            size: 20,
-                          ),
+                                  Icons.send,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
                         ),
                       ),
                     ),
@@ -512,6 +509,7 @@ class InboxScreenMobile extends GetView<InboxController> {
   }
 
   // ========== IMPROVED Image Grid for Multiple Images ==========
+
   Widget _buildImageGrid({
     required List images,
     required double width,
@@ -531,7 +529,6 @@ class InboxScreenMobile extends GetView<InboxController> {
         isSingle: true,
       );
     } else if (imageCount == 2) {
-      // Two images - side by side with proper spacing
       return SizedBox(
         width: maxWidth,
         child: Row(
@@ -557,7 +554,6 @@ class InboxScreenMobile extends GetView<InboxController> {
         ),
       );
     } else if (imageCount == 3) {
-      // Three images - 1 large on top + 2 small below
       return SizedBox(
         width: maxWidth,
         child: Column(
@@ -736,15 +732,17 @@ class InboxScreenMobile extends GetView<InboxController> {
   }
 
   Widget _buildSingleImage(
-      String imagePath,
-      double width,
-      bool isUploading,
-      bool isMe, {
-        double? height,
-        bool isSingle = false,
-      }) {
+    String imagePath,
+    double width,
+    bool isUploading,
+    bool isMe, {
+    double? height,
+    bool isSingle = false,
+  }) {
     // ✅ Clean path: remove leading slash and backslashes
-    final cleanPath = imagePath.replaceAll('\\', '/').replaceFirst(RegExp(r'^/+'), '');
+    final cleanPath = imagePath
+        .replaceAll('\\', '/')
+        .replaceFirst(RegExp(r'^/+'), '');
     final fullImageUrl = '${ApiEndPoints.mainDomain}/$cleanPath';
 
     final imageWidget = Image.network(
@@ -760,10 +758,10 @@ class InboxScreenMobile extends GetView<InboxController> {
           height: isSingle ? 200 : (height ?? 180),
           constraints: isSingle
               ? BoxConstraints(
-            maxWidth: width * 0.85,
-            minWidth: 200,
-            minHeight: 150,
-          )
+                  maxWidth: width * 0.85,
+                  minWidth: 200,
+                  minHeight: 150,
+                )
               : null,
           decoration: BoxDecoration(
             color: Colors.grey[200],
@@ -780,10 +778,7 @@ class InboxScreenMobile extends GetView<InboxController> {
               const SizedBox(height: 8),
               Text(
                 'Failed to load',
-                style: TextStyle(
-                  color: Colors.grey[500],
-                  fontSize: 12,
-                ),
+                style: TextStyle(color: Colors.grey[500], fontSize: 12),
               ),
             ],
           ),
@@ -796,10 +791,10 @@ class InboxScreenMobile extends GetView<InboxController> {
           height: isSingle ? 200 : (height ?? 180),
           constraints: isSingle
               ? BoxConstraints(
-            maxWidth: width * 0.85,
-            minWidth: 200,
-            minHeight: 150,
-          )
+                  maxWidth: width * 0.85,
+                  minWidth: 200,
+                  minHeight: 150,
+                )
               : null,
           decoration: BoxDecoration(
             color: Colors.grey[100],
@@ -810,7 +805,7 @@ class InboxScreenMobile extends GetView<InboxController> {
               strokeWidth: 2,
               value: loadingProgress.expectedTotalBytes != null
                   ? loadingProgress.cumulativeBytesLoaded /
-                  loadingProgress.expectedTotalBytes!
+                        loadingProgress.expectedTotalBytes!
                   : null,
             ),
           ),
@@ -823,21 +818,21 @@ class InboxScreenMobile extends GetView<InboxController> {
         // ✅ For single image, add constraints container
         isSingle
             ? ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: width * 0.85, // Max 85% of message width
-            maxHeight: 400, // Max height to prevent too tall images
-            minWidth: 200, // Min width for very small images
-            minHeight: 150, // Min height
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: imageWidget,
-          ),
-        )
+                constraints: BoxConstraints(
+                  maxWidth: width * 0.85, // Max 85% of message width
+                  maxHeight: 400, // Max height to prevent too tall images
+                  minWidth: 200, // Min width for very small images
+                  minHeight: 150, // Min height
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: imageWidget,
+                ),
+              )
             : ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: imageWidget,
-        ),
+                borderRadius: BorderRadius.circular(12),
+                child: imageWidget,
+              ),
         // Uploading overlay
         if (isUploading)
           Positioned.fill(

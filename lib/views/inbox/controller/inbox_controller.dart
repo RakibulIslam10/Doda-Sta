@@ -62,10 +62,9 @@ class InboxController extends GetxController {
 
       // ✅ Parse images array properly
       List<String> imagesList = [];
+
       if (data["images"] != null && data["images"] is List) {
-        imagesList = (data["images"] as List)
-            .map((path) => path.toString())
-            .toList();
+        imagesList = (data["images"] as List).map((path) => path.toString()).toList();
       }
 
       messagesList.add({

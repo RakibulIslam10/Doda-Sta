@@ -14,7 +14,7 @@ class Helpers {
     }
 
     try {
-      final bdTime = _toBDTime(timestamp); // converted BD time
+      final bdTime = _toBDTime(timestamp);
       final now = DateTime.now().toUtc().add(const Duration(hours: 6)); // current BD time
       final today = DateTime(now.year, now.month, now.day);
       final messageDate = DateTime(bdTime.year, bdTime.month, bdTime.day);

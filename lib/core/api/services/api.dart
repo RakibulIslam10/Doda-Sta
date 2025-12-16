@@ -51,42 +51,60 @@ class ApiRequest {
     required String endPoint,
     required RxBool isLoading,
     required Map<String, dynamic> body,
+    String? id,
     Map<String, dynamic>? queryParams,
     bool showSuccessSnackBar = false,
     Function(R result)? onSuccess,
-    bool skipAuth = false, // ✅ Added skipAuth parameter
+    bool skipAuth = false,
   }) async {
     try {
       isLoading.value = true;
       log('|📤|---------[ 📦 POST REQUEST STARTED ]---------|📤|');
 
+      // ✅ Fix: Properly handle slashes
+      String finalEndPoint = endPoint;
+      if (id != null) {
+        // Remove trailing slash from endpoint if exists
+        if (finalEndPoint.endsWith('/')) {
+          finalEndPoint = finalEndPoint.substring(0, finalEndPoint.length - 1);
+        }
+        finalEndPoint = '$finalEndPoint/$id';
+      }
+
+      // ✅ Fix: Remove leading slash from endpoint if baseUrl ends with slash
+      if (finalEndPoint.startsWith('/') && ApiEndPoints.baseUrl.endsWith('/')) {
+        finalEndPoint = finalEndPoint.substring(1);
+      }
+
       final uri = Uri.parse(
-        '${ApiEndPoints.baseUrl}$endPoint',
+        '${ApiEndPoints.baseUrl}$finalEndPoint',
       ).replace(queryParameters: queryParams);
 
       printEndPointLog(uri.toString());
       printBodyLineByLine(body);
 
-      final response = await http
-          .post(uri, headers: await _bearerHeaderInfo(null, skipAuth), body: jsonEncode(body))
-          .timeout(const Duration(seconds: 120));
+      final response = await http.post(
+        uri,
+        headers: await _bearerHeaderInfo(null, skipAuth),
+        body: jsonEncode(body),
+      ).timeout(const Duration(seconds: 120));
 
-      log('|✅|---------[ ✅ POST REQUEST COMPLETED ]---------|✅|');
+      log('|📬|---------[ RESPONSE STATUS: ${response.statusCode} ]---------|📬|');
+      log('|📬|---------[ RESPONSE BODY: ${response.body} ]---------|📬|');
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final Map<String, dynamic> json = jsonDecode(response.body);
         final result = fromJson(json);
 
-        final successMessage =
-            json['message'] ?? Strings.requestCompletedSuccessfully;
+        final successMessage = json['message'] ?? Strings.requestCompletedSuccessfully;
         if (showSuccessSnackBar) {
           CustomSnackBar.success(
             title: Strings.success,
             message: successMessage,
           );
         }
-        if (onSuccess != null) onSuccess(result);
 
+        if (onSuccess != null) onSuccess(result);
         return result;
       } else {
         final error = jsonDecode(response.body);
@@ -96,14 +114,14 @@ class ApiRequest {
         throw Exception(errorMessage);
       }
     } catch (e) {
-      // MessageHelper.showError("Please Check Email and Password!");
-      log('🐞🐞🐞 UNHANDLED ERROR:${e.toString()}');
+      log('🐞🐞🐞 UNHANDLED ERROR: ${e.toString()}');
+      CustomSnackBar.error(e.toString());
       throw Exception(e.toString());
     } finally {
       isLoading.value = false;
+      log('|✅|---------[ ✅ POST REQUEST COMPLETED ]---------|✅|');
     }
   }
-
   /// =========================================================== ✅ GET REQUEST =========================================================== ///
   static Future<R> get<R>({
     required R Function(Map<String, dynamic>) fromJson,

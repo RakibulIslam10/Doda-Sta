@@ -7,24 +7,26 @@ class TermsController extends GetxController {
   /// ============================= GET Terms Condition =====================================
 
   @override
-  void onReady() {
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
     getTermsCondition();
-    super.onReady();
   }
+
   final Rx<TermsModel> termsData = TermsModel().obs;
-  final RxBool isLoading = false.obs;
+  final RxBool isLoading = true.obs;
+
   Future<void> getTermsCondition() async {
-    try{
+    try {
       isLoading.value = true;
-      var response = await ApiClient.get(url: ApiEndPoints.faqGet);
+      var response = await ApiClient.get(
+        url: '${ApiEndPoints.baseUrl}manage/get-terms-conditions',
+      );
       if (response.statusCode == 200) {
         termsData.value = TermsModel.fromJson(response.body);
-
       }
-    }finally{
+    } finally {
       isLoading.value = false;
     }
-
   }
 }
- 

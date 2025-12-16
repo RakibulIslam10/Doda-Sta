@@ -6,15 +6,14 @@ import 'package:get/get.dart';
 import 'package:doda_work/core/utils/dimensions.dart'; // Ensure this import is correct
 import 'package:doda_work/views/terms/controller/terms_controller.dart'; // Ensure the correct path is used
 
-
 class TermsScreenMobile extends GetView<TermsController> {
   const TermsScreenMobile({super.key});
 
   @override
   Widget build(BuildContext context) {
+    controller.getTermsCondition();
     return Scaffold(
-      appBar: CommonAppBar(title: 'Terms & Condition'),
-
+      appBar: CommonAppBar(title: 'Terms & Conditions'),
       body: SafeArea(
         child: Obx(() {
           if (controller.isLoading.value) {
@@ -39,16 +38,14 @@ class TermsScreenMobile extends GetView<TermsController> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Html(
-                    data: controller.termsData.value.data?.description ?? "",  // Use the HTML content from the API response
+                    data: controller.termsData.value.data?.description ?? "",
                     style: {
                       "h1": Style(
-                        fontSize: FontSize(24),  // Adjust the font size of h1
+                        fontSize: FontSize(24),
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
-                      "u": Style(
-                        textDecoration: TextDecoration.underline,
-                      ),
+                      "u": Style(textDecoration: TextDecoration.underline),
                     },
                   ),
                 ),
@@ -62,4 +59,3 @@ class TermsScreenMobile extends GetView<TermsController> {
     );
   }
 }
- 

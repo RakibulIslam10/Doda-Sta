@@ -20,7 +20,7 @@ class PrivacyScreenMobile extends GetView<PrivacyController> {
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Text(
-                    'Terms & Conditions',
+                    'Privacy Policy',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,

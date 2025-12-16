@@ -12,8 +12,10 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import '../../../core/api/end_point/api_end_points.dart';
 import '../../../core/api/services/api.dart';
 import '../../../core/helpers/helpers.dart';
+import '../../../core/languages/strings.dart';
 import '../../../core/utils/app_storage.dart';
 import '../../../widgets/custom_snackbar.dart';
+import '../model/block_model.dart';
 
 class InboxController extends GetxController {
   final textController = TextEditingController();
@@ -40,7 +42,7 @@ class InboxController extends GetxController {
   void _initSocket() {
     socket = IO.io(
       "http://10.10.20.52:6002"
-      "?id=$myId&role=${AppStorage.users}",
+          "?id=$myId&role=${AppStorage.users}",
       IO.OptionBuilder()
           .setTransports(['websocket'])
           .enableAutoConnect()
@@ -119,6 +121,11 @@ class InboxController extends GetxController {
       onSuccess: (result) {
         isBlock.value = result.blockStatus.isBlocked;
         isBlockedByMe.value = result.blockStatus.isBlockedByYou;
+        print('-----------------------------------------------------------------------');
+        print('-----------------------------------------------------------------------');
+        print('-----------------------------------------------------------------------');
+        print(result.blockStatus.isBlockedByYou);
+        print(result.blockStatus.isBlocked);
 
         final newMsg = <Map<String, dynamic>>[];
 
@@ -190,7 +197,10 @@ class InboxController extends GetxController {
 
   // Send text-only message
   void _sendTextMessage(String text) {
-    final tempId = DateTime.now().millisecondsSinceEpoch.toString();
+    final tempId = DateTime
+        .now()
+        .millisecondsSinceEpoch
+        .toString();
     shouldAutoScroll.value = true;
 
     messagesList.add({
@@ -220,7 +230,10 @@ class InboxController extends GetxController {
   // Send message with images
   Future<void> _sendMessageWithImages(String text) async {
     try {
-      final tempId = DateTime.now().millisecondsSinceEpoch.toString();
+      final tempId = DateTime
+          .now()
+          .millisecondsSinceEpoch
+          .toString();
       shouldAutoScroll.value = true;
 
       // ✅ Show message with uploading state (local preview with LOCAL paths)
@@ -250,7 +263,7 @@ class InboxController extends GetxController {
 
       // ✅ Update message with uploaded BACKEND paths
       final messageIndex = messagesList.indexWhere(
-        (msg) => msg["id"] == tempId,
+            (msg) => msg["id"] == tempId,
       );
       if (messageIndex != -1) {
         messagesList[messageIndex] = {
@@ -346,7 +359,9 @@ class InboxController extends GetxController {
 
             // প্রতিটি image path add করা
             for (var imagePath in imagesList) {
-              if (imagePath != null && imagePath.toString().isNotEmpty) {
+              if (imagePath != null && imagePath
+                  .toString()
+                  .isNotEmpty) {
                 uploadedPaths.add(imagePath.toString());
                 log('✅ Image path added: $imagePath');
               }
@@ -380,27 +395,79 @@ class InboxController extends GetxController {
 
   RxBool isBlockLoading = false.obs;
 
-  Future<BasicSuccessModel> blockUser() async {
-    return await ApiRequest.post(
-      fromJson: BasicSuccessModel.fromJson,
-      endPoint: ApiEndPoints.blockUser,
-      isLoading: isBlockLoading,
-      body: {},
-      queryParams: {'partnerId': receiverId},
-      onSuccess: (result) => Get.close(1),
-    );
+
+// Block user method
+  Future<void> blockUser() async {
+    log('🔴 Block User Started');
+    log('🔴 Receiver ID: $receiverId');
+    log('🔴 Token: ${AppStorage.token}');
+
+    try {
+      final result = await ApiRequest.post<BlockUnblockResponse>(
+        fromJson: (json) {
+          log('🔴 Response JSON: $json');
+          return BlockUnblockResponse.fromJson(json);
+        },
+        endPoint: ApiEndPoints.blockUser,
+        id: receiverId,
+        isLoading: isBlockLoading,
+        body: {},
+        showSuccessSnackBar: false,
+        onSuccess: (result) {
+          log('🔴 Success Callback: ${result.success}');
+          log('🔴 Message: ${result.message}');
+          if (result.success == true) {
+            isBlock.value = true;
+            Get.close(1);
+          }
+        },
+      );
+    } catch (e) {
+      log('🔴 Block Error: $e');
+    }
   }
 
-  Future<BasicSuccessModel> unBlockUser() async {
-    return await ApiRequest.post(
-      fromJson: BasicSuccessModel.fromJson,
-      endPoint: ApiEndPoints.unBlockUser,
-      isLoading: isBlockLoading,
-      body: {},
-      queryParams: {'partnerId': receiverId},
-      onSuccess: (result) => Get.close(1),
-    );
+
+
+  Future<void> unBlockUser() async {
+    log('🔴 un Block User Started');
+    log('🔴 Receiver ID: $receiverId');
+    log('🔴 Token: ${AppStorage.token}');
+
+    try {
+      final result = await ApiRequest.post<BlockUnblockResponse>(
+        fromJson: (json) {
+          log('🔴 Response JSON: $json');
+          return BlockUnblockResponse.fromJson(json);
+        },
+        endPoint: ApiEndPoints.unBlockUser,
+        id: receiverId,
+        isLoading: isBlockLoading,
+        body: {},
+        showSuccessSnackBar: false,
+        onSuccess: (result) {
+          log('🔴 Success Callback: ${result.success}');
+          log('🔴 Message: ${result.message}');
+          if (result.success == true) {
+            isBlock.value = true;
+            Get.close(1);
+
+          }
+        },
+      );
+    } catch (e) {
+      log('🔴 Block Error: $e');
+    }
   }
+
+
+
+
+
+
+
+
+
 
   // Pick multiple images from gallery
   Future<void> pickImagesFromGallery() async {
@@ -416,7 +483,8 @@ class InboxController extends GetxController {
       final totalImages = selectedImages.length + images.length;
       if (totalImages > maxImageCount) {
         CustomSnackBar.error(
-          'Maximum $maxImageCount images allowed. You can select ${maxImageCount - selectedImages.length} more.',
+          'Maximum $maxImageCount images allowed. You can select ${maxImageCount -
+              selectedImages.length} more.',
         );
         return;
       }

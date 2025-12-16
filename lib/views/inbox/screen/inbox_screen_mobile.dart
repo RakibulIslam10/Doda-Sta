@@ -101,22 +101,45 @@ class InboxScreenMobile extends GetView<InboxController> {
                       ),
                     ],
                   ),
-                  Obx(() => controller.isBlockLoading.value ? CircularProgressIndicator() : PopupMenuButton(
-                    itemBuilder: (context) => [
-                      PopupMenuItem(
-                          value: controller.isBlock.value ? 'Unblock' : 'Block',
-                          child: TextWidget(controller.isBlock.value ? 'Unblock' : 'Block')
-                      ),
-                    ],
 
-                    onSelected: (value) {
-                      if (value == 'Block') {
-                        controller.blockUser();
-                      } else if (value == 'Unblock') {
-                        controller.unBlockUser();
-                      }
-                    },
-                  ),)
+                  Obx(() {
+                    if (controller.isBlockLoading.value) {
+                      return const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      );
+                    }
+
+                    return PopupMenuButton<String>(
+                      icon: const Icon(Icons.more_vert),
+                      itemBuilder: (context) => [
+                        PopupMenuItem<String>(
+                          value: controller.isBlock.value ? 'Unblock' : 'Block',
+                          child: TextWidget(
+                            controller.isBlock.value ? 'Unblock' : 'Block',
+                          ),
+                        ),
+                      ],
+                      onSelected: (value) {
+                        if (value == 'Block') {
+                          controller.blockUser();
+                        } else if (value == 'Unblock') {
+                          controller.unBlockUser();
+                        }
+                      },
+                    );
+                  })
+
+                  //
+                  // Obx(
+                  //   () => controller.isBlockLoading.value
+                  //       ? CircularProgressIndicator()
+                  //       : IconButton(
+                  //           onPressed: () => controller.blockUser(),
+                  //           icon: Icon(Icons.block),
+                  //         ),
+                  // ),
                 ],
               ),
             ),

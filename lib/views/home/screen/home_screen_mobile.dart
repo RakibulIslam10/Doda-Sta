@@ -16,7 +16,7 @@ class HomeScreenMobile extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> statusText = ['Pending', 'Ongoing', 'Completed'];
+    final List<String> statusText = ['Pending', 'Processing', 'Completed'];
     return DefaultTabController(
       length: statusText.length,
       child: Scaffold(
@@ -28,25 +28,7 @@ class HomeScreenMobile extends GetView<HomeController> {
             flexibleSpace: HomeAppBarWidgetView(),
             actions: [
               GestureDetector(
-                onTap: () {
-                  // Get.toNamed(Routes.notificationScreen);
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      return ImagePickerBottomSheet(
-                        onGalleryPressed: () {
-                          Get.back();
-                          // controller.pickImage(ImageSource.gallery);
-                        },
-                        onCameraPressed: () {
-                          Get.back();
-                          // controller.pickImage(ImageSource.camera);
-                        },
-                      );
-                    },
-                  );
-                },
-
+                onTap: () => Get.toNamed(Routes.notificationScreen),
                 child: Container(
                   margin: Dimensions.defaultHorizontalSize.edgeRight,
                   padding: EdgeInsets.all(Dimensions.paddingSize * 0.35),
@@ -98,7 +80,6 @@ class HomeScreenMobile extends GetView<HomeController> {
                                         isUser: true,
                                         status: status,
                                         customerId: item.customerId,
-                                        // ✅ Add this line
                                         onTap: () {
                                           Get.toNamed(
                                             Routes.summaryScreen,
@@ -123,7 +104,6 @@ class HomeScreenMobile extends GetView<HomeController> {
                                       );
                                     },
 
-                                    // ✅ Fix: Remove SliverToBoxAdapter and use normal widgets
                                     noItemsFoundIndicatorBuilder: (_) => Center(
                                       child: Padding(
                                         padding: const EdgeInsets.all(20),

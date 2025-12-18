@@ -15,7 +15,6 @@ class RegisterScreenMobile extends GetView<RegisterController> {
           children: [
             Space.height.v10,
             TextWidget(
-
               'Sign Up',
               fontSize: Dimensions.titleLarge,
               fontWeight: FontWeight.bold,
@@ -60,51 +59,4 @@ class RegisterScreenMobile extends GetView<RegisterController> {
   }
 }
 
-class ShakeWidget extends StatefulWidget {
-  final Widget child;
 
-  const ShakeWidget({super.key, required this.child});
-
-  @override
-  State<ShakeWidget> createState() => _ShakeWidgetState();
-}
-
-class _ShakeWidgetState extends State<ShakeWidget>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _offsetAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 400),
-      vsync: this,
-    );
-    _offsetAnimation = Tween(
-      begin: 0.0,
-      end: 8.0,
-    ).chain(CurveTween(curve: Curves.elasticIn)).animate(_controller);
-    _controller.forward();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _offsetAnimation,
-      builder: (context, child) {
-        return Transform.translate(
-          offset: Offset(_offsetAnimation.value, 0),
-          child: child,
-        );
-      },
-      child: widget.child,
-    );
-  }
-}

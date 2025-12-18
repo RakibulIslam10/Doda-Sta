@@ -42,7 +42,7 @@ class InboxController extends GetxController {
   void _initSocket() {
     socket = IO.io(
       "http://10.10.20.52:6002"
-          "?id=$myId&role=${AppStorage.users}",
+      "?id=$myId&role=${AppStorage.users}",
       IO.OptionBuilder()
           .setTransports(['websocket'])
           .enableAutoConnect()
@@ -121,9 +121,15 @@ class InboxController extends GetxController {
       onSuccess: (result) {
         isBlock.value = result.blockStatus.isBlocked;
         isBlockedByMe.value = result.blockStatus.isBlockedByYou;
-        print('-----------------------------------------------------------------------');
-        print('-----------------------------------------------------------------------');
-        print('-----------------------------------------------------------------------');
+        print(
+          '-----------------------------------------------------------------------',
+        );
+        print(
+          '-----------------------------------------------------------------------',
+        );
+        print(
+          '-----------------------------------------------------------------------',
+        );
         print(result.blockStatus.isBlockedByYou);
         print(result.blockStatus.isBlocked);
 
@@ -197,10 +203,7 @@ class InboxController extends GetxController {
 
   // Send text-only message
   void _sendTextMessage(String text) {
-    final tempId = DateTime
-        .now()
-        .millisecondsSinceEpoch
-        .toString();
+    final tempId = DateTime.now().millisecondsSinceEpoch.toString();
     shouldAutoScroll.value = true;
 
     messagesList.add({
@@ -230,10 +233,7 @@ class InboxController extends GetxController {
   // Send message with images
   Future<void> _sendMessageWithImages(String text) async {
     try {
-      final tempId = DateTime
-          .now()
-          .millisecondsSinceEpoch
-          .toString();
+      final tempId = DateTime.now().millisecondsSinceEpoch.toString();
       shouldAutoScroll.value = true;
 
       // ✅ Show message with uploading state (local preview with LOCAL paths)
@@ -263,7 +263,7 @@ class InboxController extends GetxController {
 
       // ✅ Update message with uploaded BACKEND paths
       final messageIndex = messagesList.indexWhere(
-            (msg) => msg["id"] == tempId,
+        (msg) => msg["id"] == tempId,
       );
       if (messageIndex != -1) {
         messagesList[messageIndex] = {
@@ -359,9 +359,7 @@ class InboxController extends GetxController {
 
             // প্রতিটি image path add করা
             for (var imagePath in imagesList) {
-              if (imagePath != null && imagePath
-                  .toString()
-                  .isNotEmpty) {
+              if (imagePath != null && imagePath.toString().isNotEmpty) {
                 uploadedPaths.add(imagePath.toString());
                 log('✅ Image path added: $imagePath');
               }
@@ -395,8 +393,7 @@ class InboxController extends GetxController {
 
   RxBool isBlockLoading = false.obs;
 
-
-// Block user method
+  // Block user method
   Future<void> blockUser() async {
     log('🔴 Block User Started');
     log('🔴 Receiver ID: $receiverId');
@@ -427,8 +424,6 @@ class InboxController extends GetxController {
     }
   }
 
-
-
   Future<void> unBlockUser() async {
     log('🔴 un Block User Started');
     log('🔴 Receiver ID: $receiverId');
@@ -451,7 +446,6 @@ class InboxController extends GetxController {
           if (result.success == true) {
             isBlock.value = true;
             Get.close(1);
-
           }
         },
       );
@@ -459,15 +453,6 @@ class InboxController extends GetxController {
       log('🔴 Block Error: $e');
     }
   }
-
-
-
-
-
-
-
-
-
 
   // Pick multiple images from gallery
   Future<void> pickImagesFromGallery() async {
@@ -483,8 +468,7 @@ class InboxController extends GetxController {
       final totalImages = selectedImages.length + images.length;
       if (totalImages > maxImageCount) {
         CustomSnackBar.error(
-          'Maximum $maxImageCount images allowed. You can select ${maxImageCount -
-              selectedImages.length} more.',
+          'Maximum $maxImageCount images allowed. You can select ${maxImageCount - selectedImages.length} more.',
         );
         return;
       }

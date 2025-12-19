@@ -10,7 +10,7 @@ import '../../../../routes/routes.dart';
 import '../controller/login_controller.dart';
 
 class ButtonSectionWidget extends GetView<LoginController> {
-  ButtonSectionWidget({super.key});
+  const ButtonSectionWidget({super.key});
 
   /// ----------------------
   /// 🔥 APPLE LOGIN HANDLER
@@ -104,7 +104,9 @@ class ButtonSectionWidget extends GetView<LoginController> {
 
         /// ----------------------
         /// 🔥 GOOGLE SIGN-IN
-        /// ----------------------
+        /// -----------------------
+
+
         GestureDetector(
           onTap: () => handleGoogleLogin(context),
           child: Container(
@@ -137,7 +139,7 @@ class ButtonSectionWidget extends GetView<LoginController> {
             height: Dimensions.buttonHeight * 0.7,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(Dimensions.radius * 3),
-              border: Border.all(color: CustomColors.primary, width: 1.4),
+              border: Border.all(color: CustomColors.primary, width: 1.4.w),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -152,6 +154,49 @@ class ButtonSectionWidget extends GetView<LoginController> {
           ),
         ),
       ],
+    );
+  }
+}
+
+
+class SocialLoginButton extends StatelessWidget {
+  final String iconPath;
+  final String title;
+  final double ?  radius;
+  final VoidCallback onTap;
+
+  const SocialLoginButton({
+    super.key,
+    required this.iconPath,
+    required this.title,
+     this.radius,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final double effectiveRadius = radius ?? Dimensions.radius;
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: EdgeInsets.only(top: Dimensions.heightSize * 0.2),
+        height: Dimensions.buttonHeight * 0.7,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(effectiveRadius),
+          border: Border.all(color: CustomColors.primary, width: 1.4),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset(iconPath),
+            TextWidget(
+              title,
+              padding: Dimensions.widthSize.edgeLeft,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

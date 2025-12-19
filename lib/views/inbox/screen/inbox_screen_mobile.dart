@@ -653,7 +653,7 @@ class InboxScreenMobile extends GetView<InboxController> {
         ),
       );
     } else if (imageCount == 4) {
-      // Four images - 2x2 grid
+
       return SizedBox(
         width: maxWidth,
         child: Column(
@@ -709,7 +709,6 @@ class InboxScreenMobile extends GetView<InboxController> {
         ),
       );
     } else {
-      // 5+ images - 2x2 grid with +N overlay on last image
       return SizedBox(
         width: maxWidth,
         child: Column(
@@ -799,7 +798,6 @@ class InboxScreenMobile extends GetView<InboxController> {
     double? height,
     bool isSingle = false,
   }) {
-    // ✅ Clean path: remove leading slash and backslashes
     final cleanPath = imagePath
         .replaceAll('\\', '/')
         .replaceFirst(RegExp(r'^/+'), '');

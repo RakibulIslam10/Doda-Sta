@@ -28,7 +28,7 @@ class FaqScreenMobile extends GetView<FaqController> {
                     ),
                   ),
                 ),
-                ...controller.faqList.map((faq) => _buildFaqItem(faq)).toList(),
+                ...controller.faqList.map((faq) => _buildFaqItem(faq)),
               ],
             );
           }

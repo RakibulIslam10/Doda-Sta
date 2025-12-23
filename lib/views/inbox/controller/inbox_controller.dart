@@ -1,7 +1,5 @@
 import 'dart:developer';
-import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:doda_work/core/api/model/basic_success_model.dart';
 import 'package:doda_work/views/inbox/controller/s.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide FormData, MultipartFile;
@@ -12,7 +10,6 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import '../../../core/api/end_point/api_end_points.dart';
 import '../../../core/api/services/api.dart';
 import '../../../core/helpers/helpers.dart';
-import '../../../core/languages/strings.dart';
 import '../../../core/utils/app_storage.dart';
 import '../../../widgets/custom_snackbar.dart';
 import '../model/block_model.dart';
@@ -150,7 +147,7 @@ class InboxController extends GetxController {
             ),
             "video": conversion.video,
             "seen": conversion.seen,
-            "isUploading": false, // ✅ Old messages are not uploading
+            "isUploading": false,
           });
         }
 
@@ -247,7 +244,6 @@ class InboxController extends GetxController {
         "images": selectedImages.map((img) => img.path).toList(),
         // ✅ LOCAL paths for instant display
         "isUploading": true,
-        // ✅ Flag for showing local images
       });
 
       // Upload images to server

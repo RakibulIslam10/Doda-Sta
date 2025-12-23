@@ -117,7 +117,7 @@ class ChatScreenMobile extends StatelessWidget {
                       : null,
                 ),
                 title: Text(participant.name),
-                subtitle: Text(participant.email ?? ""),
+                // subtitle: Text(participant.email ?? ""),
               );
             },
           );

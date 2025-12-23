@@ -28,8 +28,8 @@ class HomeScreenMobile extends GetView<HomeController> {
               GestureDetector(
                 onTap: () => Get.toNamed(Routes.notificationScreen),
                 child: Container(
-                  margin: Dimensions.defaultHorizontalSize.edgeRight,
-                  padding: EdgeInsets.all(Dimensions.paddingSize * 0.35),
+                  margin: Dimensions.defaultHorizontalSize.edgeRight * 0.2,
+                  padding: EdgeInsets.all(Dimensions.paddingSize * 0.3),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(color: CustomColors.primary),

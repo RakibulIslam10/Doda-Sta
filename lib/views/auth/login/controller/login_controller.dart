@@ -1,11 +1,9 @@
 import 'dart:io';
-import 'package:doda_work/core/api/services/auth_service.dart';
 import 'package:doda_work/core/utils/basic_import.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-
 import '../../../../core/api/services/auths.dart';
 
 class LoginController extends GetxController {
@@ -36,8 +34,11 @@ class LoginController extends GetxController {
   void onInit() {
     super.onInit();
 
+
+    // logo change in appbar
+    // profile image and product  a dd image not showing
     //   USER
-    emailController.text = 'rakibu8s5@yopmail.com';
+    emailController.text = 'dsf26@yopmail.com';
     passwordController.text = '111111';
 
     // emailController.text = 'betopia54c@yopmail.com';

@@ -47,7 +47,7 @@ class ProfileTopHeaderWidgetView extends GetView<ProfileController> {
                 bottomLeft: Radius.circular(Dimensions.radius * 0.8),
               ),
               child: CachedNetworkImage(
-                imageUrl: profileImageUrl,
+                imageUrl: userData?.profileImage ?? '',
                 width: imageWidth * 0.85,
                 height: cardHeight,
                 fit: BoxFit.cover,
@@ -212,9 +212,7 @@ class ProfileTopWidgetView extends GetView<ProfileController> {
                 bottomLeft: Radius.circular(Dimensions.radius * 0.8),
               ),
               child: CachedNetworkImage(
-                imageUrl:
-                    'https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png',
-
+                imageUrl: 'https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png',
                 width: imageWidth * 0.85,
                 height: cardHeight,
                 fit: BoxFit.cover,

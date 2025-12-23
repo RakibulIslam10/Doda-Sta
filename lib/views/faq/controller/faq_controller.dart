@@ -20,7 +20,7 @@ class FaqController extends GetxController {
       isLoading.value = true;
       var response = await ApiClient.get(
 
-          url: ApiEndPoints.faqGet);
+          url: '${ApiEndPoints.baseUrl}/${ApiEndPoints.faqGet}');
 
       if (response.statusCode == 200) {
         FaqModel faqModel = FaqModel.fromJson(response.body);

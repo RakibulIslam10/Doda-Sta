@@ -31,7 +31,7 @@ class HomeAppBarWidgetView extends GetView<ProfileController> {
           children: [
             GestureDetector(
               onTap: () => Get.find<NavigationController>().goToProfile(),
-              child: SvgPicture.asset(Assets.logo.appLogo, height: 50.h),
+              child: Image.asset(Assets.logo.aaplogo.path,height: 50,),
             ),
             Space.width.v10,
 
@@ -42,6 +42,7 @@ class HomeAppBarWidgetView extends GetView<ProfileController> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       TextWidget(
                         "Hello ",

@@ -129,7 +129,7 @@ class InboxScreenMobile extends GetView<InboxController> {
                         }
                       },
                     );
-                  })
+                  }),
 
                   //
                   // Obx(
@@ -653,7 +653,6 @@ class InboxScreenMobile extends GetView<InboxController> {
         ),
       );
     } else if (imageCount == 4) {
-
       return SizedBox(
         width: maxWidth,
         child: Column(

@@ -1,33 +1,39 @@
 import 'package:get/get.dart';
 import '../../../core/api/end_point/api_end_points.dart';
+import '../../../core/api/services/api.dart';
 import '../../../core/api/services/api_request.dart';
 import '../model/faq_model.dart';
 
 class FaqController extends GetxController {
   /// ============================= GET FAQ Data =====================================
 
-  final RxList<Data> faqList = <Data>[].obs;
-  final RxBool isLoading = false.obs;
+  RxList<FaqData> faqList = <FaqData>[].obs;
+  var expandedIndex = (-1).obs;
 
-  @override
-  void onReady() {
-    fetchFaqs();
-    super.onReady();
+  void toggleExpand(int index) {
+    if (expandedIndex.value == index) {
+      expandedIndex.value = -1;
+    } else {
+      expandedIndex.value = index;
+    }
   }
 
-  Future<void> fetchFaqs() async {
-    try {
-      isLoading.value = true;
-      var response = await ApiClient.get(
+  @override
+  void onInit() {
+    super.onInit();
+    fetchFaqs();
+  }
 
-          url: '${ApiEndPoints.baseUrl}/${ApiEndPoints.faqGet}');
+  RxBool isLoading = false.obs;
 
-      if (response.statusCode == 200) {
-        FaqModel faqModel = FaqModel.fromJson(response.body);
-        faqList.value = faqModel.data ?? [];
-      }
-    } finally {
-      isLoading.value = false;
-    }
+  Future<FaqModel> fetchFaqs() async {
+    return await ApiRequest.get(
+      endPoint: ApiEndPoints.faqGet,
+      fromJson: FaqModel.fromJson,
+      onSuccess: (result) {
+        faqList.assignAll(result.data);
+      },
+      isLoading: isLoading,
+    );
   }
 }

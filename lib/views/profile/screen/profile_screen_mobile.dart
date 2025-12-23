@@ -7,6 +7,7 @@ class ProfileScreenMobile extends GetView<ProfileController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: Dimensions.appBarHeight * 1.5,
         scrolledUnderElevation: 0,
         flexibleSpace: SafeArea(
           child: Padding(
@@ -18,7 +19,7 @@ class ProfileScreenMobile extends GetView<ProfileController> {
               children: [
                 GestureDetector(
                   onTap: () => Get.find<NavigationController>().goToProfile(),
-                  child: SvgPicture.asset(Assets.logo.appLogo, height: 45.h),
+                  child: Image.asset(Assets.logo.aaplogo.path,height: 55,),
                 ),
                 TextWidget(
                   'Profile',
@@ -29,7 +30,6 @@ class ProfileScreenMobile extends GetView<ProfileController> {
                 GestureDetector(
                   onTap: () => Get.toNamed(Routes.notificationScreen),
                   child: Container(
-                    margin: Dimensions.defaultHorizontalSize.edgeRight,
                     padding: EdgeInsets.all(Dimensions.paddingSize * 0.35),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,

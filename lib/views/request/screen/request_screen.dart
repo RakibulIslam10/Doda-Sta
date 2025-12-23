@@ -39,9 +39,9 @@ class _RequestScreenState extends State<RequestScreen> {
         scrolledUnderElevation: 0,
         titleSpacing: 0,
         leadingWidth: 80,
-        leading: GestureDetector(
+        leading:             GestureDetector(
           onTap: () => Get.find<NavigationController>().goToProfile(),
-          child: SvgPicture.asset(Assets.logo.appLogo, height: 45.h),
+          child: Image.asset(Assets.logo.aaplogo.path,height: 50,),
         ),
         title: TextWidget(
           'Book a Service Appointment',
@@ -63,6 +63,7 @@ class _RequestScreenState extends State<RequestScreen> {
               child: SvgPicture.asset(Assets.icons.group),
             ),
           ),
+          Space.width.v10,
         ],
       ),
       body: Form(

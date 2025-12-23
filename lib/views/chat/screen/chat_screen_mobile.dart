@@ -28,7 +28,7 @@ class ChatScreenMobile extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () => Get.find<NavigationController>().goToProfile(),
-                  child: SvgPicture.asset(Assets.logo.appLogo, height: 45),
+                  child: Image.asset(Assets.logo.aaplogo.path,height: 55,),
                 ),
                 TextWidget(
                   'Chat',
@@ -39,8 +39,7 @@ class ChatScreenMobile extends StatelessWidget {
                 GestureDetector(
                   onTap: () => Get.toNamed(Routes.notificationScreen),
                   child: Container(
-                    margin: Dimensions.defaultHorizontalSize.edgeRight,
-                    padding: EdgeInsets.all(Dimensions.paddingSize * 0.35),
+                    padding: EdgeInsets.all(Dimensions.paddingSize * 0.40),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(color: CustomColors.primary),

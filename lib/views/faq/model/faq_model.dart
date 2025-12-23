@@ -1,68 +1,73 @@
+// To parse this JSON data, do
+//
+//     final faqModel = faqModelFromJson(jsonString);
+
+import 'dart:convert';
+
+FaqModel faqModelFromJson(String str) => FaqModel.fromJson(json.decode(str));
+
+String faqModelToJson(FaqModel data) => json.encode(data.toJson());
+
 class FaqModel {
-  int? statusCode;
-  bool? success;
-  String? message;
-  List<Data>? data;
+  final int statusCode;
+  final bool success;
+  final String message;
+  final List<FaqData> data;
 
-  FaqModel({this.statusCode, this.success, this.message, this.data});
+  FaqModel({
+    required this.statusCode,
+    required this.success,
+    required this.message,
+    required this.data,
+  });
 
-  FaqModel.fromJson(Map<String, dynamic> json) {
-    statusCode = json['statusCode'];
-    success = json['success'];
-    message = json['message'];
-    if (json['data'] != null) {
-      data = <Data>[];
-      json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
-      });
-    }
-  }
+  factory FaqModel.fromJson(Map<String, dynamic> json) => FaqModel(
+    statusCode: json["statusCode"],
+    success: json["success"],
+    message: json["message"],
+    data: List<FaqData>.from(json["data"].map((x) => FaqData.fromJson(x))),
+  );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['statusCode'] = this.statusCode;
-    data['success'] = this.success;
-    data['message'] = this.message;
-    if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+    "statusCode": statusCode,
+    "success": success,
+    "message": message,
+    "data": List<dynamic>.from(data.map((x) => x.toJson())),
+  };
 }
 
-class Data {
-  String? sId;
-  String? question;
-  String? description;
-  String? createdAt;
-  String? updatedAt;
-  int? iV;
+class FaqData {
+  final String id;
+  final String question;
+  final String description;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final int v;
 
-  Data(
-      {this.sId,
-        this.question,
-        this.description,
-        this.createdAt,
-        this.updatedAt,
-        this.iV});
+  FaqData({
+    required this.id,
+    required this.question,
+    required this.description,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.v,
+  });
 
-  Data.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
-    question = json['question'];
-    description = json['description'];
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
-    iV = json['__v'];
-  }
+  factory FaqData.fromJson(Map<String, dynamic> json) => FaqData(
+    id: json["_id"],
+    question: json["question"],
+    description: json["description"],
+    createdAt: DateTime.parse(json["createdAt"]),
+    updatedAt: DateTime.parse(json["updatedAt"]),
+    v: json["__v"],
+  );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
-    data['question'] = this.question;
-    data['description'] = this.description;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
-    data['__v'] = this.iV;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+    "_id": id,
+    "question": question,
+    "description": description,
+    "createdAt": createdAt.toIso8601String(),
+    "updatedAt": updatedAt.toIso8601String(),
+    "__v": v,
+  };
 }

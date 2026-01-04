@@ -1,3 +1,5 @@
+import 'package:google_fonts/google_fonts.dart';
+
 import '../core/utils/basic_import.dart';
 
 class TextWidget extends StatelessWidget {
@@ -46,7 +48,7 @@ class TextWidget extends StatelessWidget {
             overflow: textOverflow,
             maxLines: maxLines,
             textScaler: TextScaler.linear(ScreenUtil().textScaleFactor),
-            style: TextStyle(
+            style: GoogleFonts.poppins(
               color: color ?? CustomColors.blackColor,
               fontSize: fontSize ?? Dimensions.titleMedium,
               fontWeight: fontWeight,

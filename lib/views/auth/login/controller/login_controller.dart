@@ -34,7 +34,6 @@ class LoginController extends GetxController {
   void onInit() {
     super.onInit();
 
-
     // logo change in appbar
     // profile image and product  a dd image not showing
     //   USER
@@ -43,7 +42,6 @@ class LoginController extends GetxController {
 
     // emailController.text = 'betopia54c@yopmail.com';
     // passwordController.text = '111111';
-
   }
 
   /// ❌ REMOVE dispose()7
@@ -72,7 +70,6 @@ class LoginController extends GetxController {
 
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
-
       if (googleUser == null) {
         Get.snackbar(
           "Cancelled",
@@ -84,7 +81,7 @@ class LoginController extends GetxController {
 
       // Obtain the auth details from the request
       final GoogleSignInAuthentication googleAuth =
-      await googleUser.authentication;
+          await googleUser.authentication;
 
       // Debug: Check if we have tokens
       if (kDebugMode) {
@@ -102,8 +99,8 @@ class LoginController extends GetxController {
       );
 
       // Sign in to Firebase with the Google credential
-      final UserCredential userCredential =
-      await FirebaseAuth.instance.signInWithCredential(credential);
+      final UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithCredential(credential);
 
       // Update your observable/state
       firebaseUser.value = userCredential.user;
@@ -132,14 +129,14 @@ class LoginController extends GetxController {
       );
 
       return userCredential.user;
-
     } on FirebaseAuthException catch (e) {
       debugPrint("Firebase Auth Error: ${e.code} - ${e.message}");
 
       String errorMessage;
       switch (e.code) {
         case 'account-exists-with-different-credential':
-          errorMessage = "An account already exists with a different sign-in method";
+          errorMessage =
+              "An account already exists with a different sign-in method";
           break;
         case 'invalid-credential':
           errorMessage = "Invalid credentials. Please try again";
@@ -168,7 +165,6 @@ class LoginController extends GetxController {
 
       firebaseUser.value = null;
       return null;
-
     } on PlatformException catch (e) {
       debugPrint("Platform Error: ${e.code} - ${e.message}");
 
@@ -193,7 +189,6 @@ class LoginController extends GetxController {
       await FirebaseAuth.instance.signOut();
       firebaseUser.value = null;
       return null;
-
     } catch (e) {
       debugPrint("Unexpected Error: $e");
 
@@ -211,6 +206,7 @@ class LoginController extends GetxController {
       return null;
     }
   }
+
   /// =======================================
   /// 🔥 SIGN OUT (Google + Firebase)
   /// =======================================
@@ -299,7 +295,8 @@ class LoginController extends GetxController {
         print("✅ Display Name: ${userCredential.user?.displayName}");
 
         // Apple provides name only on first sign-in
-        if (appleCredential.givenName != null || appleCredential.familyName != null) {
+        if (appleCredential.givenName != null ||
+            appleCredential.familyName != null) {
           print("✅ Given Name: ${appleCredential.givenName}");
           print("✅ Family Name: ${appleCredential.familyName}");
         }
@@ -310,8 +307,9 @@ class LoginController extends GetxController {
       if (userCredential.user != null &&
           userCredential.user!.displayName == null &&
           appleCredential.givenName != null) {
-
-        final displayName = '${appleCredential.givenName ?? ''} ${appleCredential.familyName ?? ''}'.trim();
+        final displayName =
+            '${appleCredential.givenName ?? ''} ${appleCredential.familyName ?? ''}'
+                .trim();
 
         if (displayName.isNotEmpty) {
           await userCredential.user!.updateDisplayName(displayName);
@@ -328,7 +326,6 @@ class LoginController extends GetxController {
       );
 
       return userCredential;
-
     } on SignInWithAppleAuthorizationException catch (e) {
       debugPrint("Apple Authorization Error: ${e.code} - ${e.message}");
 
@@ -362,14 +359,14 @@ class LoginController extends GetxController {
       );
 
       return null;
-
     } on FirebaseAuthException catch (e) {
       debugPrint("Firebase Auth Error: ${e.code} - ${e.message}");
 
       String errorMessage;
       switch (e.code) {
         case 'account-exists-with-different-credential':
-          errorMessage = "An account already exists with a different sign-in method";
+          errorMessage =
+              "An account already exists with a different sign-in method";
           break;
         case 'invalid-credential':
           errorMessage = "Invalid Apple credentials";
@@ -394,7 +391,6 @@ class LoginController extends GetxController {
       );
 
       return null;
-
     } catch (e) {
       debugPrint("Unexpected Apple Sign-In Error: $e");
 
@@ -410,6 +406,7 @@ class LoginController extends GetxController {
       return null;
     }
   }
+
   /// =======================================
   /// 🔥 CURRENT USER
   /// =======================================

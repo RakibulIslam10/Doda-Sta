@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'model.dart';
 part 'custom_colors.dart';
 
@@ -41,9 +42,8 @@ final ThemeData lightThemeData = ThemeData.light().copyWith(
       statusBarBrightness: Brightness.light,
     ),
   ),
-  textTheme: ThemeData.light().textTheme.apply(
-    // fontFamily: GoogleFonts.montserrat().fontFamily,
-  ),
+  textTheme: GoogleFonts.poppinsTextTheme(ThemeData.light().textTheme),  // Update this
+
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       surfaceTintColor: Colors.transparent,
@@ -68,9 +68,8 @@ final ThemeData darkThemeData = ThemeData.dark().copyWith(
       statusBarBrightness: Brightness.dark,
     ),
   ),
-  textTheme: ThemeData.dark().textTheme.apply(
-    // fontFamily: GoogleFonts.inter().fontFamily,
-  ),
+  textTheme: GoogleFonts.poppinsTextTheme(ThemeData.dark().textTheme),  // Update this
+
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       surfaceTintColor: Colors.transparent,

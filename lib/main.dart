@@ -9,9 +9,15 @@ void main() async {
   await Initial.init();
 
   await Firebase.initializeApp();
+
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent, // white এর বদলে transparent
+    statusBarIconBrightness: Brightness.dark, // icon গুলো dark রাখুন
+    statusBarBrightness: Brightness.light, // iOS এর জন্য
+  ));
+
   runApp(const MyApp());
 }
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -25,11 +31,9 @@ class MyApp extends StatelessWidget {
       builder: (_, child) => GetMaterialApp(
         debugShowCheckedModeBanner: false,
         initialRoute: Routes.splashScreen,
-
         title: Strings.appName,
         theme: Themes.light,
         darkTheme: Themes.dark,
-
         getPages: Routes.list,
         defaultTransition: Transition.cupertino,
         transitionDuration: const Duration(milliseconds: 300),
@@ -53,7 +57,6 @@ class MyApp extends StatelessWidget {
             ],
           );
         },
-
         // builder: (context, widget) {
         //   ScreenUtil.init(context);
         //   return MediaQuery(

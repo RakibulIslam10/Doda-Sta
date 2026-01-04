@@ -9,24 +9,33 @@ class LoginScreenMobile extends GetView<LoginController> {
     print('+++++++++++++++++++++++++++++++++++++++++++++++++++');
     print('+++++++++++++++++++++++++++++++++++++++++++++++++++');
     print(AppStorage.users);
-    return Scaffold(
-      body: SafeArea(
-        child: ListView(
-          padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
-          children: [
-            TextWidget(
-              'Welcome Back',
-              fontSize: Dimensions.titleLarge * 1.2,
-              fontWeight: FontWeight.bold,
-            ),
-            SvgPicture.asset(
-              Assets.dummy.tabletLoginAmico1,
-              width: double.infinity,
-              height: MediaQuery.of(context).size.height * 0.26,
-            ),
-            FieldSectionWidget(),
-            ButtonSectionWidget(),
-          ],
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.white,
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.light,
+      ),
+      child: Scaffold(
+
+        body: SafeArea(
+
+          child: ListView(
+            padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
+            children: [
+              TextWidget(
+                'Welcome Back',
+                fontSize: Dimensions.titleLarge * 1.2,
+                fontWeight: FontWeight.bold,
+              ),
+              SvgPicture.asset(
+                Assets.dummy.tabletLoginAmico1,
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height * 0.26,
+              ),
+              FieldSectionWidget(),
+              ButtonSectionWidget(),
+            ],
+          ),
         ),
       ),
     );

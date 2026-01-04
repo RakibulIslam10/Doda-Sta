@@ -65,54 +65,152 @@ class LoginController extends GetxController {
   /// =======================================
   Future<User?> signInWithGoogle(BuildContext context) async {
     try {
-      GoogleSignIn googleSignIn;
+      // Initialize GoogleSignIn
+      final GoogleSignIn googleSignIn = GoogleSignIn(
+        scopes: ['email', 'profile'],
+      );
 
-      if (kIsWeb) {
-        googleSignIn = GoogleSignIn(
-          clientId:
-              "621538781171-8f9t0fpop11e2cfg4jc5qc9iukbb1sq5.apps.googleusercontent.com",
-          scopes: ['email', 'profile'],
-        );
-      } else {
-        googleSignIn = GoogleSignIn(scopes: ['email', 'profile']);
-      }
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
-      final googleUser = await googleSignIn.signIn();
+
       if (googleUser == null) {
-        Get.snackbar("Cancelled", "Google sign-in cancelled");
+        Get.snackbar(
+          "Cancelled",
+          "Google sign-in was cancelled",
+          snackPosition: SnackPosition.BOTTOM,
+        );
         return null;
       }
 
-      final googleAuth = await googleUser.authentication;
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication googleAuth =
+      await googleUser.authentication;
 
-      final credential = GoogleAuthProvider.credential(
+      // Debug: Check if we have tokens
+      if (kDebugMode) {
+        print("==========================================");
+        print("Google Auth Tokens:");
+        print("Access Token: ${googleAuth.accessToken?.substring(0, 20)}...");
+        print("ID Token: ${googleAuth.idToken?.substring(0, 20)}...");
+        print("==========================================");
+      }
+
+      // Create a new credential
+      final OAuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      final userCredential = await FirebaseAuth.instance.signInWithCredential(
-        credential,
-      );
+      // Sign in to Firebase with the Google credential
+      final UserCredential userCredential =
+      await FirebaseAuth.instance.signInWithCredential(credential);
 
+      // Update your observable/state
       firebaseUser.value = userCredential.user;
 
+      // Get Firebase ID Token (এটা backend এ পাঠাতে হবে)
+      final firebaseToken = await userCredential.user?.getIdToken();
+
+      if (kDebugMode) {
+        print("==========================================");
+        print("Firebase User Info:");
+        print("UID: ${userCredential.user?.uid}");
+        print("Email: ${userCredential.user?.email}");
+        print("Display Name: ${userCredential.user?.displayName}");
+        print("Firebase Token: ${firebaseToken?.substring(0, 30)}...");
+        print("Token Length: ${firebaseToken?.length}");
+        print("==========================================");
+      }
+
+      // Show success message
       Get.snackbar(
         "Success",
-        "Signed in as ${userCredential.user?.displayName}",
+        "Signed in as ${userCredential.user?.displayName ?? 'User'}",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
       );
 
       return userCredential.user;
-    } catch (e) {
-      debugPrint("Google Sign-In Error: $e");
+
+    } on FirebaseAuthException catch (e) {
+      debugPrint("Firebase Auth Error: ${e.code} - ${e.message}");
+
+      String errorMessage;
+      switch (e.code) {
+        case 'account-exists-with-different-credential':
+          errorMessage = "An account already exists with a different sign-in method";
+          break;
+        case 'invalid-credential':
+          errorMessage = "Invalid credentials. Please try again";
+          break;
+        case 'operation-not-allowed':
+          errorMessage = "Google sign-in is not enabled";
+          break;
+        case 'user-disabled':
+          errorMessage = "This user account has been disabled";
+          break;
+        case 'user-not-found':
+          errorMessage = "No user found with this account";
+          break;
+        default:
+          errorMessage = "Authentication failed: ${e.message}";
+      }
+
+      Get.snackbar(
+        "Authentication Error",
+        errorMessage,
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 4),
+      );
+
+      firebaseUser.value = null;
+      return null;
+
+    } on PlatformException catch (e) {
+      debugPrint("Platform Error: ${e.code} - ${e.message}");
+
+      String errorMessage;
+      if (e.code == 'sign_in_failed') {
+        errorMessage = "Sign-in failed. Please check SHA-1 configuration";
+      } else if (e.code == 'network_error') {
+        errorMessage = "Network error. Check your internet connection";
+      } else {
+        errorMessage = "Sign-in failed: ${e.message ?? 'Unknown error'}";
+      }
+
+      Get.snackbar(
+        "Sign-In Error",
+        errorMessage,
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 4),
+      );
 
       await FirebaseAuth.instance.signOut();
       firebaseUser.value = null;
+      return null;
 
-      Get.snackbar("Error", "Google Sign-In failed: $e");
+    } catch (e) {
+      debugPrint("Unexpected Error: $e");
+
+      Get.snackbar(
+        "Error",
+        "An unexpected error occurred: ${e.toString()}",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 4),
+      );
+
+      await FirebaseAuth.instance.signOut();
+      firebaseUser.value = null;
       return null;
     }
   }
-
   /// =======================================
   /// 🔥 SIGN OUT (Google + Firebase)
   /// =======================================
@@ -138,16 +236,32 @@ class LoginController extends GetxController {
   /// =======================================
   static Future<UserCredential?> signInWithApple() async {
     try {
+      // Platform check
       if (kIsWeb) {
-        print("❌ Apple Sign-In not supported on Web");
+        debugPrint("❌ Apple Sign-In not supported on Web");
+        Get.snackbar(
+          "Not Supported",
+          "Apple Sign-In is not available on web",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.orange,
+          colorText: Colors.white,
+        );
         return null;
       }
 
       if (!Platform.isIOS && !Platform.isMacOS) {
-        print("❌ Apple Sign-In only supports iOS/macOS");
+        debugPrint("❌ Apple Sign-In only supports iOS/macOS");
+        Get.snackbar(
+          "Not Supported",
+          "Apple Sign-In is only available on iOS/macOS devices",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.orange,
+          colorText: Colors.white,
+        );
         return null;
       }
 
+      // Request Apple ID credential
       final appleCredential = await SignInWithApple.getAppleIDCredential(
         scopes: [
           AppleIDAuthorizationScopes.email,
@@ -155,18 +269,147 @@ class LoginController extends GetxController {
         ],
       );
 
+      // Check if we got the credential
+      if (appleCredential.identityToken == null) {
+        debugPrint("❌ Apple Sign-In: No identity token received");
+        Get.snackbar(
+          "Error",
+          "Failed to get Apple credentials",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+        return null;
+      }
+
+      // Create OAuth credential for Firebase
       final oauthCredential = OAuthProvider("apple.com").credential(
         idToken: appleCredential.identityToken,
         accessToken: appleCredential.authorizationCode,
       );
 
-      return await _auth.signInWithCredential(oauthCredential);
+      // Sign in to Firebase
+      final userCredential = await _auth.signInWithCredential(oauthCredential);
+
+      // Debug info
+      if (kDebugMode) {
+        print("========== APPLE SIGN-IN SUCCESS ==========");
+        print("✅ User ID: ${userCredential.user?.uid}");
+        print("✅ Email: ${userCredential.user?.email}");
+        print("✅ Display Name: ${userCredential.user?.displayName}");
+
+        // Apple provides name only on first sign-in
+        if (appleCredential.givenName != null || appleCredential.familyName != null) {
+          print("✅ Given Name: ${appleCredential.givenName}");
+          print("✅ Family Name: ${appleCredential.familyName}");
+        }
+        print("==========================================");
+      }
+
+      // Update display name if available (only first time)
+      if (userCredential.user != null &&
+          userCredential.user!.displayName == null &&
+          appleCredential.givenName != null) {
+
+        final displayName = '${appleCredential.givenName ?? ''} ${appleCredential.familyName ?? ''}'.trim();
+
+        if (displayName.isNotEmpty) {
+          await userCredential.user!.updateDisplayName(displayName);
+          await userCredential.user!.reload();
+        }
+      }
+
+      Get.snackbar(
+        "Success",
+        "Signed in with Apple successfully",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+
+      return userCredential;
+
+    } on SignInWithAppleAuthorizationException catch (e) {
+      debugPrint("Apple Authorization Error: ${e.code} - ${e.message}");
+
+      String errorMessage;
+      switch (e.code) {
+        case AuthorizationErrorCode.canceled:
+          errorMessage = "Apple Sign-In was cancelled";
+          break;
+        case AuthorizationErrorCode.failed:
+          errorMessage = "Apple Sign-In failed";
+          break;
+        case AuthorizationErrorCode.invalidResponse:
+          errorMessage = "Invalid response from Apple";
+          break;
+        case AuthorizationErrorCode.notHandled:
+          errorMessage = "Apple Sign-In not handled";
+          break;
+        case AuthorizationErrorCode.unknown:
+          errorMessage = "Unknown error occurred";
+          break;
+        default:
+          errorMessage = "Apple Sign-In error: ${e.message}";
+      }
+
+      Get.snackbar(
+        "Sign-In Error",
+        errorMessage,
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+
+      return null;
+
+    } on FirebaseAuthException catch (e) {
+      debugPrint("Firebase Auth Error: ${e.code} - ${e.message}");
+
+      String errorMessage;
+      switch (e.code) {
+        case 'account-exists-with-different-credential':
+          errorMessage = "An account already exists with a different sign-in method";
+          break;
+        case 'invalid-credential':
+          errorMessage = "Invalid Apple credentials";
+          break;
+        case 'operation-not-allowed':
+          errorMessage = "Apple Sign-In is not enabled";
+          break;
+        case 'user-disabled':
+          errorMessage = "This user account has been disabled";
+          break;
+        default:
+          errorMessage = "Authentication failed: ${e.message}";
+      }
+
+      Get.snackbar(
+        "Authentication Error",
+        errorMessage,
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 4),
+      );
+
+      return null;
+
     } catch (e) {
-      debugPrint("Apple Sign-In Error: $e");
+      debugPrint("Unexpected Apple Sign-In Error: $e");
+
+      Get.snackbar(
+        "Error",
+        "An unexpected error occurred: ${e.toString()}",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 4),
+      );
+
       return null;
     }
   }
-
   /// =======================================
   /// 🔥 CURRENT USER
   /// =======================================

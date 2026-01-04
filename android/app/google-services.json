@@ -12,7 +12,20 @@
           "package_name": "com.mazlmario.dodawork"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "621538781171-5lriu6j0om3qj83e8abd1t8tnm15j3ep.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mazlmario.dodawork",
+            "certificate_hash": "f28c0efc80ddd6b65f419c7487b786c378e36e34"
+          }
+        },
+        {
+          "client_id": "621538781171-aq5ivgocr6otgp90d5mbhmvicnrn1re1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyC2Exan6YHCf4b7SdglY7mdOsnYzfx0wYs"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "621538781171-aq5ivgocr6otgp90d5mbhmvicnrn1re1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "621538781171-a4hfmf93k5h08tt3jch7neffehkekmea.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mazlmario.dodawork"
+              }
+            }
+          ]
         }
       }
     }

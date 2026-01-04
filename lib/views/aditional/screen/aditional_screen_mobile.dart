@@ -204,15 +204,25 @@ class AditionalScreenMobile extends GetView<AditionalController> {
                     Obx(() {
                       final isPick = controller.selectedAddress.isNotEmpty;
                       return GestureDetector(
-                        onTap: () => _openPicker(context),
+                        onTap: () {
+                          _openPicker(context);
+                        },
                         child: Container(
-                          padding: EdgeInsets.all(12),
+                          width: MediaQuery.of(context).size.width,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 12.w,
+                            vertical: 12.h,
+                          ),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
+                            color: Theme.of(context).colorScheme.surface,
+                            borderRadius: BorderRadius.circular(
+                              Dimensions.radius,
+                            ),
                             border: Border.all(
                               color: isPick
                                   ? CustomColors.primary
                                   : CustomColors.disableColor,
+                              width: 1.4,
                             ),
                           ),
                           child: Text(
@@ -320,11 +330,12 @@ class AditionalScreenMobile extends GetView<AditionalController> {
             onNext: (result) {
               if (result != null &&
                   result.geometry?.location.lat != null &&
-                  result.geometry?.location.lng != null) {
+                  result.geometry?.location.lat != null) {
                 controller.selectedLatLng.value = LatLng(
                   result.geometry!.location.lat,
                   result.geometry!.location.lng,
                 );
+
                 controller.selectedAddress.value =
                     result.formattedAddress ?? "";
               }

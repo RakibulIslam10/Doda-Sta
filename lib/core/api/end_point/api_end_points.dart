@@ -1,6 +1,6 @@
 class ApiEndPoints {
   static final mainDomain = 'http://3.96.86.190:3001';
-  static final baseUrl = '$mainDomain/';
+    static final baseUrl = '$mainDomain/';
 
   /// API End Points
   // Auth

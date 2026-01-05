@@ -52,8 +52,8 @@ class HomeAppBarWidgetView extends GetView<ProfileController> {
                       TextWidget(
                         userName,
                         fontSize: Dimensions.titleSmall,
-                        fontWeight: FontWeight.w500,
-                        color: CustomColors.primary,
+                        fontWeight: FontWeight.w600,
+                        color: CustomColors.blackColor,
                       ),
                     ],
                   ),

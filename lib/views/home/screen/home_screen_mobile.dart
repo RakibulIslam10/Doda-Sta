@@ -62,8 +62,7 @@ class HomeScreenMobile extends GetView<HomeController> {
                         child: CustomScrollView(
                           slivers: [
                             PagedSliverList<int, HomeServiceItem>(
-                              pagingController:
-                                  controller.pagingControllers[status]!,
+                              pagingController: controller.pagingControllers[status]!,
                               builderDelegate:
                                   PagedChildBuilderDelegate<HomeServiceItem>(
                                     itemBuilder: (context, item, itemIndex) {
@@ -74,7 +73,7 @@ class HomeScreenMobile extends GetView<HomeController> {
                                         subCategory:
                                             item.serviceCategory?.name ?? "",
                                         address: item.address ?? "",
-                                        image: item.attachments.firstOrNull,
+                                        image: '${ApiEndPoints.mainDomain}/${item.attachments.firstOrNull}',
                                         isUser: true,
                                         status: status,
                                         customerId: item.customerId,

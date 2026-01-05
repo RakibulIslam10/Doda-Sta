@@ -36,12 +36,13 @@ class LoginController extends GetxController {
 
     // logo change in appbar
     // profile image and product  a dd image not showing
-    //   USER
-    emailController.text = 'dsf26@yopmail.com';
-    passwordController.text = '111111';
 
-    // emailController.text = 'betopia54c@yopmail.com';
+    // //   USER
+    // emailController.text = 'dsf26@yopmail.com';
     // passwordController.text = '111111';
+
+    emailController.text = 'betopia54c@yopmail.com';
+    passwordController.text = '111111';
   }
 
   /// ❌ REMOVE dispose()7

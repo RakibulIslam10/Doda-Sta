@@ -7,17 +7,18 @@ import 'views/splash/controller/splash_controller.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Initial.init();
-
   await Firebase.initializeApp();
 
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent, // white এর বদলে transparent
-    statusBarIconBrightness: Brightness.dark, // icon গুলো dark রাখুন
-    statusBarBrightness: Brightness.light, // iOS এর জন্য
-  ));
-
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+      statusBarBrightness: Brightness.light,
+    ),
+  );
   runApp(const MyApp());
 }
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 

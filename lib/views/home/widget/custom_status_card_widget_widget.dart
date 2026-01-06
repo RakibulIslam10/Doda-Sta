@@ -36,7 +36,7 @@ class CustomStatusCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final url = "${ApiEndPoints.baseUrl}$image";
+    final url = "$image";
     final fixedUrl = url.replaceAll(r'\', '/');
     return GestureDetector(
       onTap: onTap,
@@ -56,9 +56,7 @@ class CustomStatusCardWidget extends StatelessWidget {
                 bottomLeft: Radius.circular(Dimensions.radius * 0.8),
               ),
               child: CachedNetworkImage(
-                imageUrl: image != null
-                    ? fixedUrl
-                    : 'https://picsum.photos/200/300?random=${index + 1}',
+                imageUrl: image ?? '',
                 width: 100,
                 height: 120,
                 placeholder: (context, url) =>
@@ -72,6 +70,7 @@ class CustomStatusCardWidget extends StatelessWidget {
                   ),
                 ),
                 fit: BoxFit.cover,
+
               ),
             ),
             Space.width.v5,
@@ -143,7 +142,7 @@ class CustomStatusCardWidget extends StatelessWidget {
                       ),
                       Flexible(
                         child: TextWidget(
-                          address + address + address,
+                          address,
                           color: CustomColors.primary,
                           maxLines: 1,
                           textOverflow: TextOverflow.ellipsis,

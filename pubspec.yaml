@@ -45,6 +45,8 @@ dependencies:
   flutter_image_compress :
   webview_flutter: ^4.13.0
   google_fonts: ^6.1.0
+  geocoding: ^3.0.0
+
 
 dev_dependencies:
   change_app_package_name: ^1.4.0

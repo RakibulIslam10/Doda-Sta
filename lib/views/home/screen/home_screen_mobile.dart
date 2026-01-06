@@ -55,6 +55,8 @@ class HomeScreenMobile extends GetView<HomeController> {
                   physics: const NeverScrollableScrollPhysics(),
                   children: List.generate(statusText.length, (index) {
                     final status = statusText[index].toUpperCase();
+
+
                     return KeepAlivePage(
                       child: RefreshIndicator(
                         onRefresh: () async =>
@@ -66,14 +68,24 @@ class HomeScreenMobile extends GetView<HomeController> {
                               builderDelegate:
                                   PagedChildBuilderDelegate<HomeServiceItem>(
                                     itemBuilder: (context, item, itemIndex) {
+                                      String extractPostalCode(String? address) {
+                                        if (address == null || address.isEmpty) {
+                                          return "No Postal Code";
+                                        }
+                                        // Indian postal code pattern (6 digits)
+                                        final RegExp postalCodeRegex = RegExp(r'\b\d{6}\b');
+                                        final match = postalCodeRegex.firstMatch(address);
+
+                                        return match != null ? match.group(0)! : "No Postal Code";
+                                      }
                                       return CustomStatusCardWidget(
                                         index: itemIndex,
                                         requestId: item.requestId ?? "",
                                         category: item.subcategory ?? "",
                                         subCategory:
                                             item.serviceCategory?.name ?? "",
-                                        address: item.address ?? "",
-                                        image: '${ApiEndPoints.mainDomain}/${item.attachments.firstOrNull}',
+                                        address: extractPostalCode(item.address),
+                                        image: item.attachments.first,
                                         isUser: true,
                                         status: status,
                                         customerId: item.customerId,

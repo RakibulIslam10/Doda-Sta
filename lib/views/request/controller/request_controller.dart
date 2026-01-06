@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:doda_work/core/utils/basic_import.dart';
 import 'package:doda_work/routes/routes.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -125,6 +126,28 @@ class RequestController extends GetxController {
       );
     } finally {
       isLoading.value = false;
+    }
+  }
+
+
+
+  final RxString postalCode = ''.obs;
+
+  Future<void> fetchPostalCode() async {
+    if (selectedLatLng.value == null) return;
+
+    final lat = selectedLatLng.value!.latitude;
+    final lng = selectedLatLng.value!.longitude;
+
+    try {
+      final placemarks = await placemarkFromCoordinates(lat, lng);
+
+      if (placemarks.isNotEmpty) {
+        postalCode.value = placemarks.first.postalCode ?? '';
+      }
+    } catch (e) {
+      postalCode.value = '';
+      debugPrint('Error fetching postal code: $e');
     }
   }
 }

@@ -5,6 +5,8 @@ class AditionalScreenMobile extends GetView<AditionalController> {
 
   @override
   Widget build(BuildContext context) {
+    var apiKeyMap =  Platform.isAndroid ? "AIzaSyC_qKHmzl-HHB9hr8-fWGmhETSVR2H0894" : "AIzaSyDNVuOBQjhjZlxvhBtowqjYN5_YsYfqezQ";
+
     return Scaffold(
       appBar: CommonAppBar(title: 'Service Provider registration'),
       body: Obx(
@@ -205,7 +207,7 @@ class AditionalScreenMobile extends GetView<AditionalController> {
                       final isPick = controller.selectedAddress.isNotEmpty;
                       return GestureDetector(
                         onTap: () {
-                          _openPicker(context);
+                          _openPicker(context,apiKeyMap);
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width,
@@ -320,13 +322,15 @@ class AditionalScreenMobile extends GetView<AditionalController> {
     );
   }
 
-  void _openPicker(BuildContext context) async {
+  void _openPicker(BuildContext context, String apiKey) async {
+
+
     await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => MapLocationPicker(
           config: MapLocationPickerConfig(
-            apiKey: "AIzaSyC_qKHmzl-HHB9hr8-fWGmhETSVR2H0894",
+            apiKey: apiKey,
             onNext: (result) {
               if (result != null &&
                   result.geometry?.location.lat != null &&
@@ -345,10 +349,10 @@ class AditionalScreenMobile extends GetView<AditionalController> {
             },
           ),
           geoCodingConfig: GeoCodingConfig(
-            apiKey: "AIzaSyC_qKHmzl-HHB9hr8-fWGmhETSVR2H0894",
+            apiKey: apiKey,
           ),
           searchConfig: SearchConfig(
-            apiKey: "AIzaSyC_qKHmzl-HHB9hr8-fWGmhETSVR2H0894",
+            apiKey: apiKey,
           ),
         ),
       ),

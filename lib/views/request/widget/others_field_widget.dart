@@ -16,6 +16,8 @@ class OthersFieldWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var apiKeyMap =  Platform.isAndroid ? "AIzaSyC_qKHmzl-HHB9hr8-fWGmhETSVR2H0894" : "AIzaSyDNVuOBQjhjZlxvhBtowqjYN5_YsYfqezQ";
+
     return Column(
       crossAxisAlignment: crossStart,
       children: [
@@ -123,7 +125,7 @@ class OthersFieldWidget extends StatelessWidget {
           final isPick = controller.selectedAddress.isNotEmpty;
           return GestureDetector(
             onTap: () {
-              _openPicker(context);
+              _openPicker(context,apiKeyMap);
             },
             child: Container(
               width: MediaQuery
@@ -166,14 +168,14 @@ class OthersFieldWidget extends StatelessWidget {
     );
   }
 
-  void _openPicker(BuildContext context) async {
+  void _openPicker(BuildContext context, String apiKey) async {
     await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) =>
             MapLocationPicker(
               config: MapLocationPickerConfig(
-                apiKey: "AIzaSyC_qKHmzl-HHB9hr8-fWGmhETSVR2H0894",
+                apiKey: apiKey,
                 onNext: (result) {
                   if (result != null && result.geometry?.location.lat != null &&
                       result.geometry?.location.lat != null) {
@@ -183,6 +185,7 @@ class OthersFieldWidget extends StatelessWidget {
                     );
 
                     controller.selectedAddress.value = result.formattedAddress ?? "";
+                    // controller.fetchPostalCode();
                   }
                   if (Navigator.canPop(context)) {
                     Navigator.pop(context);
@@ -190,10 +193,10 @@ class OthersFieldWidget extends StatelessWidget {
                 },
               ),
               geoCodingConfig: GeoCodingConfig(
-                  apiKey: "AIzaSyC_qKHmzl-HHB9hr8-fWGmhETSVR2H0894"
+                  apiKey: apiKey
               ),
               searchConfig: SearchConfig(
-                apiKey: "AIzaSyC_qKHmzl-HHB9hr8-fWGmhETSVR2H0894",
+                apiKey: apiKey,
               ),
             ),
       ),

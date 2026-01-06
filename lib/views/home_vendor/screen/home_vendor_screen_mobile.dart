@@ -159,13 +159,17 @@ class HomeVendorScreenMobile extends GetView<HomeVendorController> {
       category: item.subcategory ?? "No Category",
       subCategory: item.serviceCategory?.name ?? "No Subcategory",
       address: item.address ?? "No Address",
-      image: item.attachments.firstOrNull,
+      image: (item.attachments.isNotEmpty ?? false)
+          ? '${ApiEndPoints.mainDomain}/${item.attachments.first}'
+          : '',
       status: status,
       isUser: false,
       onTapAccept: () => _handleStatusChange(item, "ACCEPT"),
       onTapDecline: () => _handleStatusChange(item, "DECLINED"),
       onTapComplete: () => _handleStatusChange(item, "COMPLETED"),
-      onTap: () => _navigateToSummary(item),
+      onTap: () => status == "PENDING"
+          ? _showErrorSnackbar("Request not yet accepted")
+          : _navigateToSummary(item)
     );
   }
 

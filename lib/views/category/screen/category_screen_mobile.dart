@@ -11,13 +11,15 @@ class CategoryScreenMobile extends GetView<CategoryController> {
         toolbarHeight: Dimensions.appBarHeight * 1.6,
         flexibleSpace: SafeArea(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: Dimensions.defaultHorizontalSize),
+            padding: EdgeInsets.symmetric(
+              horizontal: Dimensions.defaultHorizontalSize,
+            ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween, // Fixed alignment
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 GestureDetector(
                   onTap: () => Get.find<NavigationController>().goToProfile(),
-                  child: SvgPicture.asset(Assets.logo.appLogo, height: 45.h),
+                  child: Image.asset(Assets.logo.aaplogo.path, height: 55),
                 ),
                 TextWidget(
                   'My Verified Service',
@@ -28,7 +30,9 @@ class CategoryScreenMobile extends GetView<CategoryController> {
                 GestureDetector(
                   onTap: () => Get.toNamed(Routes.notificationScreen),
                   child: Container(
-                    margin: EdgeInsets.only(right: Dimensions.defaultHorizontalSize),
+                    margin: EdgeInsets.only(
+                      right: Dimensions.defaultHorizontalSize,
+                    ),
                     padding: EdgeInsets.all(Dimensions.paddingSize * 0.35),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
@@ -64,7 +68,9 @@ class ExpandableCardList extends GetView<CategoryController> {
             onTap: () => controller.toggleExpand(category.id ?? ""),
             child: Card(
               margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Dimensions.radius)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(Dimensions.radius),
+              ),
               elevation: 2,
               child: Padding(
                 padding: const EdgeInsets.all(12),
@@ -77,40 +83,53 @@ class ExpandableCardList extends GetView<CategoryController> {
                       children: [
                         Expanded(
                           child: TextWidget(
-                            category.name ?? "Unnamed Category", // Display category name
+                            category.name ?? "Unnamed Category",
+                            // Display category name
                             fontSize: Dimensions.titleSmall,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                         Obx(() {
-                          final isExpanded = controller.expandedCategoryId.value == category.id;
+                          final isExpanded =
+                              controller.expandedCategoryId.value ==
+                              category.id;
                           return Icon(
-                            isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                            isExpanded
+                                ? Icons.keyboard_arrow_up
+                                : Icons.keyboard_arrow_down,
                             color: CustomColors.primary,
                           );
                         }),
                       ],
                     ),
                     Obx(() {
-                      final isExpanded = controller.expandedCategoryId.value == category.id;
-                      return isExpanded ? Column(
-                        children: [
-                          const SizedBox(height: 10),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              for (var subcategory in category.subcategories ?? [])
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 4),
-                                  child: TextWidget(
-                                    "➤ ${subcategory.name ?? 'Unnamed Subcategory'}", // Subcategory name
-                                    color: CustomColors.blackColor.withAlpha(200),
-                                  ),
+                      final isExpanded =
+                          controller.expandedCategoryId.value == category.id;
+                      return isExpanded
+                          ? Column(
+                              children: [
+                                const SizedBox(height: 10),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    for (var subcategory
+                                        in category.subcategories ?? [])
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 4,
+                                        ),
+                                        child: TextWidget(
+                                          "➤ ${subcategory.name ?? 'Unnamed Subcategory'}",
+                                          // Subcategory name
+                                          color: CustomColors.blackColor
+                                              .withAlpha(200),
+                                        ),
+                                      ),
+                                  ],
                                 ),
-                            ],
-                          ),
-                        ],
-                      ) : SizedBox();
+                              ],
+                            )
+                          : SizedBox();
                     }),
                   ],
                 ),
@@ -122,4 +141,3 @@ class ExpandableCardList extends GetView<CategoryController> {
     });
   }
 }
-

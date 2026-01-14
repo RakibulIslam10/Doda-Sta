@@ -5,6 +5,7 @@ class SettingScreenMobile extends GetView<SettingController> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(SettingController());
     return Scaffold(
       appBar: CommonAppBar(title: 'Account Setting'),
       body: SafeArea(
@@ -31,6 +32,8 @@ class SettingScreenMobile extends GetView<SettingController> {
   }
 
   void _showDeleteDialog() {
+    final controller =  Get.put(SettingController());
+
     Get.dialog(
       AlertDialog(
         shape: RoundedRectangleBorder(

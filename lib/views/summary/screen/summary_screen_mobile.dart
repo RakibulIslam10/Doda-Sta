@@ -42,6 +42,18 @@ class SummaryScreenMobile extends GetView<SummaryController> {
               description: model.description,
               attachments: model.attachments,
             ),
+            Space.height.v20,
+            PrimaryButtonWidget(
+              title: 'Mark as complete',
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return CompleteTaskDialog();
+                  },
+                );
+              },
+            )
 
             // AddPhotoGrid(title: 'Attachments'),
 

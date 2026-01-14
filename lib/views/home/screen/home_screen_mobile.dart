@@ -56,7 +56,6 @@ class HomeScreenMobile extends GetView<HomeController> {
                   children: List.generate(statusText.length, (index) {
                     final status = statusText[index].toUpperCase();
 
-
                     return KeepAlivePage(
                       child: RefreshIndicator(
                         onRefresh: () async =>

@@ -19,7 +19,7 @@ class HomeController extends GetxController {
   final Map<String, PagingController<int, HomeServiceItem>> pagingControllers =
   {
     "PENDING": PagingController(firstPageKey: 1),
-    "PROCESSING": PagingController(firstPageKey: 1),
+    "IN_PROGRESS": PagingController(firstPageKey: 1),
     "COMPLETED": PagingController(firstPageKey: 1),
   };
 
@@ -27,7 +27,7 @@ class HomeController extends GetxController {
   /// ✅ CHANGED: "ONGOING" -> "PROCESSING"
   final Map<String, bool> isLoadingMap = {
     "PENDING": false,
-    "PROCESSING": false,
+    "IN_PROGRESS": false,
     "COMPLETED": false,
   };
 
@@ -116,7 +116,7 @@ class HomeController extends GetxController {
     // Fetch first page for all statuses
     // ✅ CHANGED: "ONGOING" -> "PROCESSING"
     fetch("PENDING", 1, "PENDING");
-    fetch("PROCESSING", 1, "PROCESSING");
+    fetch("IN_PROGRESS", 1, "IN_PROGRESS");
     fetch("COMPLETED", 1, "COMPLETED");
 
     // Setup paging listener for request list

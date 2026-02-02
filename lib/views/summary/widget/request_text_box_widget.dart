@@ -54,7 +54,7 @@ class RequestTextBoxWidget extends GetView<SummaryController> {
                   child: ClipRRect(
                     borderRadius: BorderRadiusGeometry.circular(12),
                     child: CachedNetworkImage(
-                      imageUrl: (attachments?[index] != null && (attachments?[index]?.isNotEmpty ?? false)) ? ApiEndPoints.baseUrl+ fixedUrl: image,
+                      imageUrl: (attachments?[index] != null && (attachments?[index]?.isNotEmpty ?? false)) ? fixedUrl: image,
                       width: 120.w,
                       height: 120.h,
                       placeholder: (context, url) => Container(color: Colors.grey.shade300),

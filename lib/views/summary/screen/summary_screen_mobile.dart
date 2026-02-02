@@ -7,7 +7,6 @@ class SummaryScreenMobile extends GetView<SummaryController> {
   @override
   Widget build(BuildContext context) {
     final SummaryModel model = Get.arguments;
-
     return Scaffold(
       appBar: CommonAppBar(title: 'Service Summary'),
       body: SafeArea(
@@ -43,7 +42,8 @@ class SummaryScreenMobile extends GetView<SummaryController> {
               attachments: model.attachments,
             ),
             Space.height.v20,
-            PrimaryButtonWidget(
+
+            AppStorage.isUser ?           SizedBox.shrink()  :PrimaryButtonWidget(
               title: 'Mark as complete',
               onPressed: () {
                 showDialog(
@@ -51,7 +51,7 @@ class SummaryScreenMobile extends GetView<SummaryController> {
                   builder: (BuildContext context) {
                     return CompleteTaskDialog();
                   },
-                );
+                   );
               },
             )
 

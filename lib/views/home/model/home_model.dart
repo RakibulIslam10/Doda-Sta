@@ -46,6 +46,7 @@ class Data {
 
 class HomeServiceItem {
   final String? id;
+  final int? leadPrice;
   final CustomerId? customerId;
   final String? customerPhone;
   final ServiceCategory? serviceCategory;
@@ -92,11 +93,12 @@ class HomeServiceItem {
     this.potentialProviders = const [],
     this.createdAt,
     this.updatedAt,
-    this.requestId,
+    this.requestId, this.leadPrice,
   });
 
   factory HomeServiceItem.fromJson(Map<String, dynamic> json) => HomeServiceItem(
     id: json["_id"],
+    leadPrice: json["leadPrice"],
     customerId: json["customerId"] != null
         ? CustomerId.fromJson(json["customerId"])
         : null,

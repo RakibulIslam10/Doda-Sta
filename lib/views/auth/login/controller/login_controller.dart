@@ -41,8 +41,8 @@ class LoginController extends GetxController {
     // emailController.text = 'dsf26@yopmail.com';
     // passwordController.text = '111111';
     //
-    emailController.text = 'd15r@yopmail.com';
-    passwordController.text = '111111';
+    emailController.text = 'zyanx45@yopmail.com';
+    passwordController.text = '123456';
   }
 
   /// ❌ REMOVE dispose()7

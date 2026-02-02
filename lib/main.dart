@@ -30,50 +30,51 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       ensureScreenSize: true,
       designSize: const Size(375, 812),
-      builder: (_, child) => GetMaterialApp(
-        debugShowCheckedModeBanner: false,
-        initialRoute: Routes.splashScreen,
-        title: Strings.appName,
-        theme: Themes.light,
-        darkTheme: Themes.dark,
-        getPages: Routes.list,
-        defaultTransition: Transition.cupertino,
-        transitionDuration: const Duration(milliseconds: 300),
-        themeMode: ThemeMode.light,
-        initialBinding: BindingsBuilder(() {
-          Get.lazyPut(() => SplashController());
-        }),
-        builder: (context, widget) {
-          return Overlay(
-            initialEntries: [
-              OverlayEntry(
-                builder: (ctx) {
-                  return Directionality(
-                    textDirection: Get.locale?.languageCode == 'ar'
-                        ? TextDirection.rtl
-                        : TextDirection.ltr,
-                    child: widget!,
-                  );
-                },
-              ),
-            ],
-          );
-        },
-        // builder: (context, widget) {
-        //   ScreenUtil.init(context);
-        //   return MediaQuery(
-        //     data: MediaQuery.of(
-        //       context,
-        //     ).copyWith(textScaler: TextScaler.linear(1.0)),
-        //     child: Directionality(
-        //       textDirection: Get.locale?.languageCode == 'ar'
-        //           ? TextDirection.rtl
-        //           : TextDirection.ltr,
-        //       child: widget!,
-        //     ),
-        //   );
-        // },
-      ),
+      builder: (_, child) =>
+          GetMaterialApp(
+            debugShowCheckedModeBanner: false,
+            initialRoute: Routes.splashScreen,
+            title: Strings.appName,
+            theme: Themes.light,
+            darkTheme: Themes.dark,
+            getPages: Routes.list,
+            defaultTransition: Transition.cupertino,
+            transitionDuration: const Duration(milliseconds: 300),
+            themeMode: ThemeMode.light,
+            initialBinding: BindingsBuilder(() {
+              Get.lazyPut(() => SplashController());
+            }),
+            builder: (context, widget) {
+              return Overlay(
+                initialEntries: [
+                  OverlayEntry(
+                    builder: (ctx) {
+                      return Directionality(
+                        textDirection: Get.locale?.languageCode == 'ar'
+                            ? TextDirection.rtl
+                            : TextDirection.ltr,
+                        child: widget!,
+                      );
+                    },
+                  ),
+                ],
+              );
+            },
+            // builder: (context, widget) {
+            //   ScreenUtil.init(context);
+            //   return MediaQuery(
+            //     data: MediaQuery.of(
+            //       context,
+            //     ).copyWith(textScaler: TextScaler.linear(1.0)),
+            //     child: Directionality(
+            //       textDirection: Get.locale?.languageCode == 'ar'
+            //           ? TextDirection.rtl
+            //           : TextDirection.ltr,
+            //       child: widget!,
+            //     ),
+            //   );
+            // },
+          ),
     );
   }
 }

@@ -6,7 +6,7 @@ class ImageHeaderWidget extends GetView<SummaryController> {
 
   @override
   Widget build(BuildContext context) {
-    final url = "${ApiEndPoints.baseUrl}$image";
+    final url = "$image";
     final fixedUrl = url.replaceAll(r'\', '/');
 
     return ClipRRect(

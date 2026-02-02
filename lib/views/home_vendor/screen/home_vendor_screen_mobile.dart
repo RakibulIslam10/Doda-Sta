@@ -153,23 +153,24 @@ class HomeVendorScreenMobile extends GetView<HomeVendorController> {
 
   Widget _buildRequestCard(HomeServiceItem item, String status, int itemIndex) {
     return CustomStatusCardWidget(
-      index: itemIndex,
-      customerId: item.customerId,
-      requestId: item.requestId ?? "N/A",
-      category: item.subcategory ?? "No Category",
-      subCategory: item.serviceCategory?.name ?? "No Subcategory",
-      address: item.address ?? "No Address",
-      image: (item.attachments.isNotEmpty ?? false)
-          ? '${ApiEndPoints.mainDomain}/${item.attachments.first}'
-          : '',
-      status: status,
-      isUser: false,
-      onTapAccept: () => _handleStatusChange(item, "ACCEPT"),
-      onTapDecline: () => _handleStatusChange(item, "DECLINED"),
-      onTapComplete: () => _handleStatusChange(item, "COMPLETED"),
-      onTap: () => status == "PENDING"
-          ? _showErrorSnackbar("Request not yet accepted")
-          : _navigateToSummary(item)
+        index: itemIndex,
+        customerId: item.customerId,
+        requestId: item.requestId ?? "N/A",
+        category: item.subcategory ?? "No Category",
+        subCategory: item.serviceCategory?.name ?? "No Subcategory",
+        address: item.address ?? "No Address",
+        image: (item.attachments.isNotEmpty)
+            ? item.attachments.first
+            : '',
+        leadPrice: item.leadPrice,
+        status: status,
+        isUser: false,
+        onTapAccept: () => _handleStatusChange(item, "ACCEPT"),
+        onTapDecline: () => _handleStatusChange(item, "DECLINED"),
+        onTapComplete: () => _handleStatusChange(item, "COMPLETED"),
+        onTap: () => status == "PENDING"
+            ? _showErrorSnackbar("Request not yet accepted")
+            : _navigateToSummary(item)
     );
   }
 

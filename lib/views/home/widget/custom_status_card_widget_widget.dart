@@ -2,6 +2,7 @@ part of '../screen/home_screen.dart';
 
 class CustomStatusCardWidget extends StatelessWidget {
   final int index;
+  final num? leadPrice;
   final bool isUser;
   final bool? isChatButton;
   final String requestId;
@@ -9,7 +10,7 @@ class CustomStatusCardWidget extends StatelessWidget {
   final String subCategory;
   final String address;
   final String? image;
-  final CustomerId? customerId; // ✅ Add this
+  final CustomerId? customerId;
 
   final String status;
   final void Function()? onTap;
@@ -20,6 +21,7 @@ class CustomStatusCardWidget extends StatelessWidget {
   const CustomStatusCardWidget({
     super.key,
     required this.index,
+    this.leadPrice,
     required this.isUser,
     required this.requestId,
     required this.category,
@@ -31,13 +33,17 @@ class CustomStatusCardWidget extends StatelessWidget {
     this.onTap,
     this.onTapAccept,
     this.onTapDecline,
-    this.onTapComplete, this.customerId,
+    this.onTapComplete,
+    this.customerId,
   });
 
   @override
   Widget build(BuildContext context) {
     final url = "$image";
     final fixedUrl = url.replaceAll(r'\', '/');
+
+    String formattedLeadPrice = leadPrice != null ? '\$${(leadPrice! / 100).toStringAsFixed(2)}' : 'N/A';
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -70,7 +76,6 @@ class CustomStatusCardWidget extends StatelessWidget {
                   ),
                 ),
                 fit: BoxFit.cover,
-
               ),
             ),
             Space.width.v5,
@@ -155,16 +160,21 @@ class CustomStatusCardWidget extends StatelessWidget {
                   if (!isUser && status == "ACCEPTED")
                     InkWell(
                       onTap: () {
-                        Get.toNamed(Routes.inboxScreen, parameters: {
-                          'name': customerId?.name ?? '',
-                          'receiverId': customerId?.id ?? '',
-                          'avatar':  customerId?.avatar ?? '',
+                        Get.toNamed(
+                          Routes.inboxScreen,
+                          parameters: {
+                            'name': customerId?.name ?? '',
+                            'receiverId': customerId?.id ?? '',
+                            'avatar': customerId?.avatar ?? '',
+                          },
+                        );
 
-                        });
-
-                        print('==================================================================');
-                        print('============ FROM PROVIDER ======================================================');
-
+                        print(
+                          '==================================================================',
+                        );
+                        print(
+                          '============ FROM PROVIDER ======================================================',
+                        );
                       },
                       child: Container(
                         width: 60.w,
@@ -196,58 +206,88 @@ class CustomStatusCardWidget extends StatelessWidget {
                   SizedBox(height: 5),
                   if (!isUser && status == "PENDING")
                     Row(
-                      spacing: 12,
+                      mainAxisAlignment: mainSpaceBet,
                       children: [
-                        GestureDetector(
-                          onTap: () => _showConfirmationDialog(
-                            title: "Accept Request",
-                            description:
-                                "Are you sure you want to accept this request?",
-                            confirmText: "Yes, Accept",
-                            onConfirm: () {
-                              Get.back();
-                              print("object");
-                              onTapAccept?.call();
-                            },
-                          ),
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 2,
+                        Wrap(
+                          spacing: 12,
+                          children: [
+                            GestureDetector(
+                              onTap: () => _showConfirmationDialog(
+                                title: "Accept Request",
+                                description:
+                                    "Are you sure you want to accept this request?",
+                                confirmText: "Yes, Accept",
+                                onConfirm: () {
+                                  Get.back();
+                                  print("object");
+                                  onTapAccept?.call();
+                                },
+                              ),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 2,
+                                ),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: CustomColors.primary,
+                                  ),
+                                  color: CustomColors.primary,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Text(
+                                  "Accept",
+                                  style: TextStyle(
+                                    color: CustomColors.whiteColor,
+                                  ),
+                                ),
+                              ),
                             ),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: CustomColors.primary),
-                              color: CustomColors.primary,
-                              borderRadius: BorderRadius.circular(4),
+                            GestureDetector(
+                              onTap: () => _showConfirmationDialog(
+                                title: "Decline Request",
+                                description:
+                                    "Are you sure you want to decline this request?",
+                                confirmText: "Yes, Decline",
+                                onConfirm: () {
+                                  Get.back();
+                                  onTapDecline?.call();
+                                },
+                              ),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 2,
+                                ),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: CustomColors.primary,
+                                  ),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Text("Decline"),
+                              ),
                             ),
-                            child: Text(
-                              "Accept",
-                              style: TextStyle(color: CustomColors.whiteColor),
-                            ),
-                          ),
+                          ],
                         ),
-                        GestureDetector(
-                          onTap: () => _showConfirmationDialog(
-                            title: "Decline Request",
-                            description:
-                                "Are you sure you want to decline this request?",
-                            confirmText: "Yes, Decline",
-                            onConfirm: () {
-                              Get.back();
-                              onTapDecline?.call();
-                            },
-                          ),
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 2,
+                        Column(
+                          mainAxisAlignment: mainEnd,
+                          mainAxisSize: mainMin,
+                          crossAxisAlignment: crossEnd,
+                          children: [
+                            TextWidget(
+                              'Lead price',
+                              fontSize: Dimensions.titleSmall * 0.75,
+                              fontWeight: FontWeight.w500,
+                              color: CustomColors.grayShade,
                             ),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: CustomColors.primary),
-                              borderRadius: BorderRadius.circular(4),
+                            TextWidget(
+                              formattedLeadPrice, // ✅ formatted value
+                              fontSize: Dimensions.titleSmall * 0.9,
+                              fontWeight: FontWeight.bold,
+                              color: CustomColors.primary,
                             ),
-                            child: Text("Decline"),
-                          ),
+                          ],
                         ),
                       ],
                     ),

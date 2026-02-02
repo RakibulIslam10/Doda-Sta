@@ -73,7 +73,7 @@ class AllCategoryScreenMobile extends GetView<AllCategoryController> {
                           Container(color: Colors.grey.shade300),
                       errorWidget: (context, url, error) =>
                           Container(color: Colors.grey.shade300,
-                              child: const Icon(Icons.error, color: Colors.red)),
+                              child:  Icon(Icons.image_not_supported_rounded, color: Colors.grey)),
                     ),
                   ),
                   const SizedBox(height: 5),

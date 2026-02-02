@@ -14,7 +14,10 @@ class HomeScreenMobile extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> statusText = ['Pending', 'Processing', 'Completed'];
+
+    final List<String> statusText = ['Pending', 'Ongoing', 'Completed'];
+    final List<String> statusApi = ['PENDING', 'IN_PROGRESS', 'COMPLETED'];
+
     return DefaultTabController(
       length: statusText.length,
       child: Scaffold(
@@ -50,12 +53,12 @@ class HomeScreenMobile extends GetView<HomeController> {
               SizedBox(height: 12),
               CategoryWidgetView(),
               Obx(() => _buildTabBar(controller, statusText)),
+              Space.height.v10,
               Expanded(
                 child: TabBarView(
                   physics: const NeverScrollableScrollPhysics(),
                   children: List.generate(statusText.length, (index) {
-                    final status = statusText[index].toUpperCase();
-
+                    final status = statusApi[index];
                     return KeepAlivePage(
                       child: RefreshIndicator(
                         onRefresh: () async =>
@@ -65,83 +68,70 @@ class HomeScreenMobile extends GetView<HomeController> {
                             PagedSliverList<int, HomeServiceItem>(
                               pagingController: controller.pagingControllers[status]!,
                               builderDelegate:
-                                  PagedChildBuilderDelegate<HomeServiceItem>(
-                                    itemBuilder: (context, item, itemIndex) {
-                                      String extractPostalCode(String? address) {
-                                        if (address == null || address.isEmpty) {
-                                          return "No Postal Code";
-                                        }
-                                        // Indian postal code pattern (6 digits)
-                                        final RegExp postalCodeRegex = RegExp(r'\b\d{6}\b');
-                                        final match = postalCodeRegex.firstMatch(address);
+                              PagedChildBuilderDelegate<HomeServiceItem>(
+                                itemBuilder: (context, item, itemIndex) {
+                                  String extractPostalCode(String? address) {
+                                    if (address == null || address.isEmpty) {
+                                      return "No Postal Code";
+                                    }
+                                    final RegExp postalCodeRegex = RegExp(r'\b\d{6}\b');
+                                    final match = postalCodeRegex.firstMatch(address);
 
-                                        return match != null ? match.group(0)! : "No Postal Code";
-                                      }
-                                      return CustomStatusCardWidget(
-                                        index: itemIndex,
-                                        requestId: item.requestId ?? "",
-                                        category: item.subcategory ?? "",
-                                        subCategory:
-                                            item.serviceCategory?.name ?? "",
-                                        address: extractPostalCode(item.address),
-                                        image: item.attachments.first,
-                                        isUser: true,
-                                        status: status,
-                                        customerId: item.customerId,
-                                        onTap: () {
-                                          Get.toNamed(
-                                            Routes.summaryScreen,
-                                            arguments: SummaryModel(
-                                              isUser: true,
-                                              requestId: item.requestId,
-                                              categoryIcon:
-                                                  item.serviceCategory?.icon,
-                                              categoryName:
-                                                  item.serviceCategory?.name,
-                                              customerPhone: item.customerPhone,
-                                              customerName:
-                                                  item.customerId?.name,
-                                              priority: item.priority,
-                                              address: item.address,
-                                              subcategory: item.subcategory,
-                                              description: item.description,
-                                              attachments: item.attachments,
-                                            ),
-                                          );
-                                        },
+                                    return match != null ? match.group(0)! : "No Postal Code";
+                                  }
+                                  return CustomStatusCardWidget(
+                                    index: itemIndex,
+                                    requestId: item.requestId ?? "",
+                                    category: item.subcategory ?? "",
+                                    subCategory:
+                                    item.serviceCategory?.name ?? "",
+                                    address: extractPostalCode(item.address),
+                                    image: item.attachments.first,
+                                    isUser: true,
+                                    status: status,
+                                    customerId: item.customerId,
+                                    onTap: () {
+                                      Get.toNamed(
+                                        Routes.summaryScreen,
+                                        arguments: SummaryModel(
+                                          isUser: true,
+                                          requestId: item.requestId,
+                                          categoryIcon:
+                                          item.serviceCategory?.icon,
+                                          categoryName:
+                                          item.serviceCategory?.name,
+                                          customerPhone: item.customerPhone,
+                                          customerName:
+                                          item.customerId?.name,
+                                          priority: item.priority,
+                                          address: item.address,
+                                          subcategory: item.subcategory,
+                                          description: item.description,
+                                          attachments: item.attachments,
+                                        ),
                                       );
                                     },
+                                  );
+                                },
 
-                                    noItemsFoundIndicatorBuilder: (_) => Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(20),
-                                        child: Text(
-                                          "No $status requests found",
-                                          style: TextStyle(
-                                            fontSize: Dimensions.titleSmall,
-                                            color: CustomColors.grayShade,
-                                          ),
-                                        ),
+                                noItemsFoundIndicatorBuilder: (_) => Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(20),
+                                    child: Text(
+                                      "No ${statusText[index]} requests found",
+                                      style: TextStyle(
+                                        fontSize: Dimensions.titleSmall,
+                                        color: CustomColors.grayShade,
                                       ),
                                     ),
-                                    firstPageErrorIndicatorBuilder: (_) =>
-                                        Center(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(20),
-                                            child: Text(
-                                              "Error loading $status requests",
-                                              style: TextStyle(
-                                                fontSize: Dimensions.titleSmall,
-                                                color: Colors.red,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                    newPageErrorIndicatorBuilder: (_) => Center(
+                                  ),
+                                ),
+                                firstPageErrorIndicatorBuilder: (_) =>
+                                    Center(
                                       child: Padding(
                                         padding: const EdgeInsets.all(20),
                                         child: Text(
-                                          "Error loading more $status requests",
+                                          "Error loading ${statusText[index]} requests",
                                           style: TextStyle(
                                             fontSize: Dimensions.titleSmall,
                                             color: Colors.red,
@@ -149,7 +139,19 @@ class HomeScreenMobile extends GetView<HomeController> {
                                         ),
                                       ),
                                     ),
+                                newPageErrorIndicatorBuilder: (_) => Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(20),
+                                    child: Text(
+                                      "Error loading more ${statusText[index]} requests",
+                                      style: TextStyle(
+                                        fontSize: Dimensions.titleSmall,
+                                        color: Colors.red,
+                                      ),
+                                    ),
                                   ),
+                                ),
+                              ),
                             ),
                           ],
                         ),

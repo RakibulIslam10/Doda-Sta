@@ -1,5 +1,3 @@
-
-
 import 'package:get/get_state_manager/src/simple/get_view.dart';
 
 import '../../../core/utils/basic_import.dart';
@@ -71,7 +69,7 @@ class CategoryWidgetView extends GetView<HomeController> {
             }
 
             return SizedBox(
-              height: screenWidth * 0.25, // height for horizontal list
+              height: screenWidth * 0.25,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemCount: categoryController.allCategory.length,
@@ -94,7 +92,7 @@ class CategoryWidgetView extends GetView<HomeController> {
                             placeholder: (context, url) =>
                                 Container(color: Colors.grey.shade300),
                             errorWidget: (context, url, error) =>
-                                Container(color: Colors.grey.shade300, child: const Icon(Icons.error, color: Colors.red)),
+                                Container(color: Colors.grey.shade300, child: Icon(Icons.image_not_supported_rounded, color: Colors.grey)),
                           ),
                         ),
                         const SizedBox(height: 5),

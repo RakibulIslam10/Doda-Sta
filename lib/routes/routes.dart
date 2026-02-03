@@ -1,3 +1,6 @@
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/bindings_interface.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import '../bind/aditional_binding.dart';
 import '../bind/all_category_binding.dart';
@@ -49,6 +52,8 @@ import '../views/category_preview/screen/category_preview_screen.dart';
 import '../views/certificate/screen/certificate_screen.dart';
 import '../views/change_password/screen/change_password_screen.dart';
 import '../views/chat/screen/chat_screen.dart';
+import '../views/congratulations/controller/congratulations_controller.dart';
+import '../views/congratulations/screen/congratulations_screen.dart';
 import '../views/document/screen/document_screen.dart';
 import '../views/faq/screen/faq_screen.dart';
 import '../views/favorite/screen/favorite_screen.dart';
@@ -95,6 +100,8 @@ static const otpScreen = '/otpScreen';
   static const reviewRatingScreen = '/review_ratingScreen';
   static const settingScreen = '/settingScreen';
   static const inboxScreen = '/inboxScreen';
+  static const congratulationsScreen = '/congratulationsScreen';
+
   static const categoryPreviewScreen = '/categoryPreviewScreen';
   static const allCategoryScreen = '/all_categoryScreen';
   static const summaryScreen = '/summaryScreen';

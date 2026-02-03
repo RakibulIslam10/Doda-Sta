@@ -8,6 +8,12 @@ class RoutePageList {
       page: () => const OtpScreen(),
       binding: OtpBinding(),
     ),
+
+    GetPage(
+      name: Routes.congratulationsScreen,
+      page: () => const CongratulationsScreen(),
+      binding: CongratulationsBinding(),
+    ),
     GetPage(
       name: Routes.aditionalScreen,
       page: () => const AditionalScreen(),
@@ -191,4 +197,12 @@ class RoutePageList {
       binding: SplashBinding(),
     ),
   ];
+}
+
+class CongratulationsBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<CongratulationsController>(
+        () => CongratulationsController());
+  }
 }

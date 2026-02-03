@@ -100,6 +100,14 @@ class HomeController extends GetxController {
     }
   }
 
+
+
+
+
+
+
+
+
   // =============================
   // INIT
   // =============================
@@ -112,6 +120,24 @@ class HomeController extends GetxController {
         fetch(status, pageKey, status);
       });
     });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // Fetch first page for all statuses
     // ✅ CHANGED: "ONGOING" -> "PROCESSING"

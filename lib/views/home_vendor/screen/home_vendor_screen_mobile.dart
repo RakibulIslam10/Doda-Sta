@@ -153,32 +153,66 @@ class HomeVendorScreenMobile extends GetView<HomeVendorController> {
 
   Widget _buildRequestCard(HomeServiceItem item, String status, int itemIndex) {
     return CustomStatusCardWidget(
-        index: itemIndex,
-        customerId: item.customerId,
-        requestId: item.requestId ?? "N/A",
-        category: item.subcategory ?? "No Category",
-        subCategory: item.serviceCategory?.name ?? "No Subcategory",
-        address: item.address ?? "No Address",
-        image: (item.attachments.isNotEmpty)
-            ? item.attachments.first
-            : '',
-        leadPrice: item.leadPrice,
-        status: status,
-        isUser: false,
-        onTapAccept: () => _handleStatusChange(item, "ACCEPT"),
-        onTapDecline: () => _handleStatusChange(item, "DECLINED"),
-        onTapComplete: () => _handleStatusChange(item, "COMPLETED"),
-        onTap: () => status == "PENDING"
-            ? _showErrorSnackbar("Request not yet accepted")
-            : _navigateToSummary(item)
+      index: itemIndex,
+      customerId: item.customerId,
+      requestId: item.requestId ?? "N/A",
+      category: item.subcategory ?? "No Category",
+      subCategory: item.serviceCategory?.name ?? "No Subcategory",
+      address: item.address ?? "No Address",
+      image: (item.attachments.isNotEmpty) ? item.attachments.first : '',
+      leadPrice: item.leadPrice,
+      status: status,
+      isUser: false,
+      onTapAccept: () => _handleStatusChange(item, "ACCEPT"),
+      onTapDecline: () => _handleStatusChange(item, "DECLINED"),
+      onTapComplete: () => _handleStatusChange(item, "COMPLETED"),
+      onTap: () => status == "PENDING"
+          ? _showErrorSnackbar("Request not yet accepted")
+          : _navigateToSummary(item),
     );
   }
 
-  void _handleStatusChange(HomeServiceItem item, String newStatus) {
-    if (item.id != null) {
-      controller.changeStatus(status: newStatus, id: item.id!);
+  void _handleStatusChange(HomeServiceItem item, String newStatus) async {
+    if (item.id == null) {
+      _showErrorSnackbar("Unable to process request - Invalid Request ID");
+      return;
+    }
+
+    if (newStatus == "ACCEPT") {
+      Get.dialog(
+        WillPopScope(
+          onWillPop: () async => false,
+          child: Center(
+            child: Container(
+              padding: EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CircularProgressIndicator(color: CustomColors.primary),
+                  SizedBox(height: 16),
+                  TextWidget(
+                    'Processing request...',
+                    fontSize: Dimensions.titleMedium,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        barrierDismissible: false,
+      );
+      await controller.acceptRequest(requestId: item.id!);
+
+      if (controller.paymentUrl.value.isEmpty) {
+        Get.back();
+      }
     } else {
-      _showErrorSnackbar("Unable to process request - Invalid ID");
+      await controller.changeStatus(status: newStatus, id: item.id!);
     }
   }
 

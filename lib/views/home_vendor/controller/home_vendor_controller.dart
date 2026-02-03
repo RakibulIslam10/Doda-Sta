@@ -1,10 +1,18 @@
+import '../../../core/api/services/api.dart';
 import '../../../core/utils/basic_import.dart';
 import 'package:doda_work/views/home/model/home_model.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import '../../../widgets/web_payment_widget.dart';
+import '../model/provider_status_response_model.dart';
 
 class HomeVendorController extends GetxController {
   final RxInt selectedStatus = 0.obs;
   final RxBool isLoading = false.obs;
+
+  RxString paymentUrl = ''.obs;
+
+  // ✅ Accept loading
+  RxBool isAcceptLoading = false.obs;
 
   // Constants for status types
   static const List<String> statusTypes = [
@@ -14,14 +22,14 @@ class HomeVendorController extends GetxController {
     "DECLINED",
   ];
 
-  final Map<String, PagingController<int, HomeServiceItem>> pagingControllers = {
-    for (var status in statusTypes)
-      status: PagingController(firstPageKey: 1),
-  };
+  final Map<String, PagingController<int, HomeServiceItem>> pagingControllers =
+      {
+        for (var status in statusTypes)
+          status: PagingController(firstPageKey: 1),
+      };
 
   final Map<String, bool> isLoadingMap = {
-    for (var status in statusTypes)
-      status: false,
+    for (var status in statusTypes) status: false,
   };
 
   @override
@@ -42,8 +50,46 @@ class HomeVendorController extends GetxController {
     }
   }
 
+  Future<ProviderStatusResponseModel> acceptRequest({
+    required String requestId,
+  }) async {
+    Map<String, dynamic> inputBody = {
+      'requestId': requestId,
+      'action': 'ACCEPT',
+    };
+
+    return await ApiRequest.patch(
+      fromJson: ProviderStatusResponseModel.fromJson,
+      endPoint: ApiEndPoints.providerChangeStatus(),
+      isLoading: isAcceptLoading,
+      body: inputBody,
+      onSuccess: (result) {
+        if (result.data.requiresPayment) {
+          paymentUrl.value = result.data.paymentUrl;
+
+          debugPrint("🔗 Payment URL: ${result.data.paymentUrl}");
+
+          Get.back();
+
+          Future.delayed(Duration(milliseconds: 100), () {
+            Get.to(() => WebPaymentScreen());
+          });
+        } else {
+          Get.back(); // Close loading dialog
+
+          CustomSnackBar.success(
+            title: "Success",
+            message: result.data.message,
+          );
+        }
+
+        refreshAll();
+      },
+
+    );
+  }
+
   Future<void> fetch(String status, int pageKey) async {
-    // Prevent multiple simultaneous requests for same status
     if (isLoadingMap[status] == true) return;
 
     isLoadingMap[status] = true;
@@ -68,17 +114,14 @@ class HomeVendorController extends GetxController {
   }
 
   Future<void> _handleSuccessResponse(
-      dynamic response,
-      PagingController<int, HomeServiceItem> controller,
-      int pageKey
-      ) async {
+    dynamic response,
+    PagingController<int, HomeServiceItem> controller,
+    int pageKey,
+  ) async {
     try {
       final homeModel = HomeModel.fromJson(response.body);
       final newItems = homeModel.data?.requests ?? [];
 
-      // Since there's no meta data, use a simple pagination approach
-      // Assume there are more pages if we got a non-empty list
-      // You might need to adjust this based on your API's actual behavior
       if (newItems.isNotEmpty) {
         final nextPageKey = pageKey + 1;
         controller.appendPage(newItems, nextPageKey);
@@ -91,13 +134,12 @@ class HomeVendorController extends GetxController {
   }
 
   void _handleErrorResponse(
-      PagingController<int, HomeServiceItem> controller,
-      dynamic response
-      ) {
+    PagingController<int, HomeServiceItem> controller,
+    dynamic response,
+  ) {
     final errorMessage = response.body?["message"] ?? "Failed to load data";
     controller.error = errorMessage;
 
-    // Show error snackbar for first page errors only
     if (controller.firstPageKey == 1) {
       Get.snackbar(
         "Error",
@@ -110,14 +152,13 @@ class HomeVendorController extends GetxController {
 
   void _handleException(String status, Object e) {
     pagingControllers[status]!.error = e.toString();
-
-    // Log the error for debugging
     print('Error fetching $status requests: $e');
   }
 
+  // ✅ পুরনো API (Decline/Complete এর জন্য)
   Future<void> changeStatus({
     required String status,
-    required String id
+    required String id,
   }) async {
     if (isLoading.value) return;
 
@@ -125,10 +166,7 @@ class HomeVendorController extends GetxController {
 
     try {
       final response = await ApiClient.patch(
-        body: {
-          "requestId": id,
-          "action": status,
-        },
+        body: {"requestId": id, "action": status},
         url: ApiEndPoints.providerChangeStatus(),
       );
 
@@ -145,7 +183,6 @@ class HomeVendorController extends GetxController {
   }
 
   Future<void> _handleStatusChangeSuccess() async {
-    // Refresh all controllers to reflect status changes
     for (final controller in pagingControllers.values) {
       controller.refresh();
     }
@@ -179,23 +216,19 @@ class HomeVendorController extends GetxController {
       colorText: Colors.white,
     );
 
-    // Log the error
     print('Error changing status: $e');
   }
 
-  // Helper method to refresh all tabs
   Future<void> refreshAll() async {
     for (final controller in pagingControllers.values) {
       controller.refresh();
     }
   }
 
-  // Helper method to get status by index
   String getStatusByIndex(int index) {
     return statusTypes[index];
   }
 
-  // Helper method to get current status
   String get currentStatus => statusTypes[selectedStatus.value];
 
   @override

@@ -76,7 +76,7 @@ class ApiEndPoints {
   static providerService({required String status, required int page}) =>
       '${baseUrl}provider/potential-requests?providerStatus=$status&page=$page&limit=20';
 
-  static providerChangeStatus() => '${baseUrl}provider/handle-request';
+  static providerChangeStatus() => 'provider/handle-request';
 
   static notification({required int page}) =>
       '${baseUrl}notification/get-all-notifications?page=$page&limit=20';

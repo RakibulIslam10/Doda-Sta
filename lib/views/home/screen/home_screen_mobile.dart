@@ -90,6 +90,7 @@ class HomeScreenMobile extends GetView<HomeController> {
                                     isUser: true,
                                     status: status,
                                     customerId: item.customerId,
+
                                     onTap: () {
                                       Get.toNamed(
                                         Routes.summaryScreen,

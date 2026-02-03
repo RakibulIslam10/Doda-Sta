@@ -47,7 +47,7 @@ class SummaryScreenMobile extends GetView<SummaryController> {
                     title: model.status == 'IN_PROGRESS'
                         ? 'Mark as complete'
                         : 'Prove Submitted',
-                    onPressed: model.status == 'COMPLETED'
+                    onPressed: model.status == 'COMPLETED' || model.status == 'APPROVED'
                         ? () {}
                         : () {
                             showDialog(
@@ -83,7 +83,6 @@ class SummaryScreenMobile extends GetView<SummaryController> {
                   proofs: model.completionProof!,
                   providerNotes: model.providerNotes,
                   onAccept: () {
-
                   },
 
                 ),

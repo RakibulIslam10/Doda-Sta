@@ -47,12 +47,9 @@ class SummaryController extends GetxController {
       endPoint: 'service-requests/update-status',
       isLoading: isLoadingAccept,
       showSuccessSnackBar: true,
-      body: {
-        'requestId': id,
-        'status': 'APPROVED',
-      },
+      body: {'requestId': id, 'status': 'APPROVED'},
       onSuccess: (result) {
-      Get.offAllNamed(Routes.navigationScreen);
+        Get.offAllNamed(Routes.navigationScreen);
       },
     );
   }
@@ -98,7 +95,6 @@ class SummaryController extends GetxController {
     );
   }
 
-
   Future<void> submitCompletion(SummaryModel model) async {
     if (selectedImage.value == null) {
       CustomSnackBar.error('Please attach an image');
@@ -111,16 +107,11 @@ class SummaryController extends GetxController {
       endPoint: 'service-requests/complete',
       isLoading: isLoading,
       showSuccessSnackBar: true,
-      body: {
-        'requestId': model.id ?? '',
-        'notes': noteController.text.trim(),
-      },
-      files: {
-        'completionProof': selectedImage.value!,
-      },
+      body: {'requestId': model.id ?? '', 'notes': noteController.text.trim()},
+      files: {'completionProof': selectedImage.value!},
       onSuccess: (result) {
         clearData();
-       Get.offAllNamed(Routes.navigationScreen);
+       Get.close(2);
       },
     );
   }

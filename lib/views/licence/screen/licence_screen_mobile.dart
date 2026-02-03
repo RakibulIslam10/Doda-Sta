@@ -32,7 +32,7 @@ class LicenceScreenMobile extends GetView<LicenceController> {
                               border: Border.all(color: Colors.orange),
                               borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),
                               image: DecorationImage(
-                                image: NetworkImage('${ApiEndPoints.mainDomain}/$imgUrl'),
+                                image: NetworkImage(imgUrl),
                                 fit: BoxFit.cover,
                               ),
                             ),

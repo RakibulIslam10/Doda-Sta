@@ -178,34 +178,45 @@ class HomeVendorScreenMobile extends GetView<HomeVendorController> {
       return;
     }
 
+    // ✅ Accept এর জন্য loading overlay দেখান
     if (newStatus == "ACCEPT") {
+      // Full screen loading শুরু করুন
       Get.dialog(
         WillPopScope(
-          onWillPop: () async => false,
-          child: Center(
-            child: Container(
-              padding: EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CircularProgressIndicator(color: CustomColors.primary),
-                  SizedBox(height: 16),
-                  TextWidget(
-                    'Processing request...',
-                    fontSize: Dimensions.titleMedium,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ],
+          onWillPop: () async => false, // Back button disable
+          child: Material(
+            color: Colors.black54, // Semi-transparent background
+            child: Center(
+              child: Container(
+                padding: EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CircularProgressIndicator(
+                      color: CustomColors.primary,
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      'Processing request...',
+                      style: TextStyle(
+                        fontSize: Dimensions.titleMedium,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
         ),
         barrierDismissible: false,
       );
+
       await controller.acceptRequest(requestId: item.id!);
 
       if (controller.paymentUrl.value.isEmpty) {
@@ -215,7 +226,6 @@ class HomeVendorScreenMobile extends GetView<HomeVendorController> {
       await controller.changeStatus(status: newStatus, id: item.id!);
     }
   }
-
   void _navigateToSummary(HomeServiceItem item) {
     Get.toNamed(
       Routes.summaryScreen,

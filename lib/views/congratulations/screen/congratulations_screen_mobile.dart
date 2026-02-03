@@ -19,10 +19,10 @@ class CongratulationsScreenMobile extends GetView<CongratulationsController> {
         child: Padding(
           padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
           child: ConfirmationWidget(
-            title: 'Successful',
-            subtitle: "",
+            title: 'Payment Completed',
+            subtitle: 'Your transaction has been processed successfully',
+          )
           ),
-        ),
       ),
     );
   }
@@ -82,7 +82,7 @@ class ConfirmationWidget extends StatelessWidget {
         crossAxisAlignment: crossCenter,
         mainAxisAlignment: mainCenter,
         children: [
-        Icon(Icons.verified_rounded,size: Dimensions.iconSizeLarge * 1.25,color: CustomColors.primary,),
+        Icon(Icons.verified_rounded,size: Dimensions.iconSizeLarge * 5,color: CustomColors.primary,),
           TextWidget(
             padding: EdgeInsetsGeometry.only(
               top: Dimensions.heightSize * 2,

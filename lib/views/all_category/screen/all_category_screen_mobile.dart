@@ -56,7 +56,7 @@ class AllCategoryScreenMobile extends GetView<AllCategoryController> {
             return GestureDetector(
               onTap: () => Get.toNamed(
                   Routes.categoryPreviewScreen,
-                  arguments: category.id // use the correct ID field
+                  arguments: category.id
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,

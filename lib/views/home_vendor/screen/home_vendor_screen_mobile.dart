@@ -87,7 +87,6 @@ class HomeVendorScreenMobile extends GetView<HomeVendorController> {
     final status = HomeVendorController.statusTypes[value];
     final pagingController = controller.pagingControllers[status]!;
 
-    // Refresh if empty, has error, or needs update
     if (pagingController.itemList == null ||
         pagingController.itemList!.isEmpty ||
         pagingController.error != null) {
@@ -156,15 +155,16 @@ class HomeVendorScreenMobile extends GetView<HomeVendorController> {
       index: itemIndex,
       customerId: item.customerId,
       requestId: item.requestId ?? "N/A",
-      category: item.subcategory ?? "No Category",
-      subCategory: item.serviceCategory?.name ?? "No Subcategory",
+      category: item.serviceCategory?.name ?? "No Category",
+
+      subCategory: item.subcategory ?? "No Subcategory",
       address: item.address ?? "No Address",
       image: (item.attachments.isNotEmpty) ? item.attachments.first : '',
       leadPrice: item.leadPrice,
       status: status,
       isUser: false,
       onTapAccept: () => _handleStatusChange(item, "ACCEPT"),
-      onTapDecline: () => _handleStatusChange(item, "DECLINED"),
+      onTapDecline: () => _handleStatusChange(item, "DECLINE"),
       onTapComplete: () => _handleStatusChange(item, "COMPLETED"),
       onTap: () => status == "PENDING"
           ? _showErrorSnackbar("Request not yet accepted")
@@ -178,14 +178,12 @@ class HomeVendorScreenMobile extends GetView<HomeVendorController> {
       return;
     }
 
-    // ✅ Accept এর জন্য loading overlay দেখান
     if (newStatus == "ACCEPT") {
-      // Full screen loading শুরু করুন
       Get.dialog(
         WillPopScope(
           onWillPop: () async => false, // Back button disable
           child: Material(
-            color: Colors.black54, // Semi-transparent background
+            color: Colors.black54,
             child: Center(
               child: Container(
                 padding: EdgeInsets.all(24),

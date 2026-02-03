@@ -95,16 +95,45 @@ class HomeVendorController extends GetxController {
     isLoadingMap[status] = true;
 
     try {
-      final response = await ApiClient.get(
-        url: ApiEndPoints.providerService(status: status, page: pageKey),
-      );
-
       final controller = pagingControllers[status]!;
 
-      if (response.statusCode == 200) {
-        await _handleSuccessResponse(response, controller, pageKey);
+      if (status == "PENDING") {
+        final pendingResponse = await ApiClient.get(
+          url: ApiEndPoints.providerService(status: "PENDING", page: pageKey),
+        );
+
+        final awaitingResponse = await ApiClient.get(
+          url: ApiEndPoints.providerService(status: "AWAITING_PAYMENT", page: pageKey),
+        );
+
+        if (pendingResponse.statusCode == 200 && awaitingResponse.statusCode == 200) {
+          final pendingModel = HomeModel.fromJson(pendingResponse.body);
+          final awaitingModel = HomeModel.fromJson(awaitingResponse.body);
+
+          final List<HomeServiceItem> allItems = [
+            ...(pendingModel.data?.requests ?? []),
+            ...(awaitingModel.data?.requests ?? []),
+          ];
+
+          if (allItems.isNotEmpty) {
+            final nextPageKey = pageKey + 1;
+            controller.appendPage(allItems, nextPageKey);
+          } else {
+            controller.appendLastPage(allItems);
+          }
+        } else {
+          _handleErrorResponse(controller, pendingResponse);
+        }
       } else {
-        _handleErrorResponse(controller, response);
+        final response = await ApiClient.get(
+          url: ApiEndPoints.providerService(status: status, page: pageKey),
+        );
+
+        if (response.statusCode == 200) {
+          await _handleSuccessResponse(response, controller, pageKey);
+        } else {
+          _handleErrorResponse(controller, response);
+        }
       }
     } catch (e) {
       _handleException(status, e);
@@ -112,7 +141,6 @@ class HomeVendorController extends GetxController {
       isLoadingMap[status] = false;
     }
   }
-
   Future<void> _handleSuccessResponse(
     dynamic response,
     PagingController<int, HomeServiceItem> controller,
@@ -155,7 +183,6 @@ class HomeVendorController extends GetxController {
     print('Error fetching $status requests: $e');
   }
 
-  // ✅ পুরনো API (Decline/Complete এর জন্য)
   Future<void> changeStatus({
     required String status,
     required String id,
@@ -173,7 +200,7 @@ class HomeVendorController extends GetxController {
       if (response.statusCode == 200) {
         await _handleStatusChangeSuccess();
       } else {
-        _handleStatusChangeError(response);
+        // _handleStatusChangeError(response);
       }
     } catch (e) {
       _handleStatusChangeException(e);
@@ -196,17 +223,6 @@ class HomeVendorController extends GetxController {
     );
   }
 
-  void _handleStatusChangeError(dynamic response) {
-    final errorMessage = response.body?["message"] ?? "Something went wrong!";
-
-    Get.snackbar(
-      "Error",
-      errorMessage,
-      backgroundColor: Colors.redAccent,
-      colorText: Colors.white,
-      duration: const Duration(seconds: 3),
-    );
-  }
 
   void _handleStatusChangeException(Object e) {
     Get.snackbar(

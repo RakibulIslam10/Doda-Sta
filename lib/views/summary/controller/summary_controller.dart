@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:doda_work/core/api/model/basic_success_model.dart';
+import 'package:doda_work/routes/routes.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../core/api/services/api.dart';
 import '../../../core/utils/basic_import.dart';
@@ -38,6 +39,8 @@ class SummaryController extends GetxController {
     selectedImage.value = null;
   }
 
+  RxString submitedProveStatus = ''.obs;
+
   Future<BasicSuccessModel> acceptApprove({required String id}) async {
     return await ApiRequest.patch(
       fromJson: BasicSuccessModel.fromJson,
@@ -49,7 +52,7 @@ class SummaryController extends GetxController {
         'status': 'APPROVED',
       },
       onSuccess: (result) {
-        Get.close(1);
+      Get.offAllNamed(Routes.navigationScreen);
       },
     );
   }
@@ -117,7 +120,7 @@ class SummaryController extends GetxController {
       },
       onSuccess: (result) {
         clearData();
-        Get.close(1);
+       Get.offAllNamed(Routes.navigationScreen);
       },
     );
   }

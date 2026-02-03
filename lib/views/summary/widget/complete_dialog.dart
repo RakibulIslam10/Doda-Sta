@@ -1,19 +1,11 @@
 import 'package:doda_work/views/summary/controller/summary_controller.dart';
-
 import '../../../core/utils/basic_import.dart';
-
-import 'package:doda_work/views/summary/controller/summary_controller.dart';
 import 'package:doda_work/views/summary/model/summary_model.dart';
-
-import '../../../core/utils/basic_import.dart';
 
 class CompleteTaskDialog extends GetView<SummaryController> {
   final SummaryModel model;
 
-  const CompleteTaskDialog({
-    super.key,
-    required this.model,
-  });
+  const CompleteTaskDialog({super.key, required this.model});
 
   @override
   Widget build(BuildContext context) {
@@ -133,9 +125,11 @@ class CompleteTaskDialog extends GetView<SummaryController> {
               );
             }),
 
-            Obx(() => controller.selectedImage.value != null
-                ? Space.height.v20
-                : SizedBox.shrink()),
+            Obx(
+              () => controller.selectedImage.value != null
+                  ? Space.height.v20
+                  : SizedBox.shrink(),
+            ),
 
             // Notes section
             TextWidget(
@@ -170,56 +164,57 @@ class CompleteTaskDialog extends GetView<SummaryController> {
             Space.height.v20,
 
             // Action buttons
-            Obx(() => Row(
-              mainAxisAlignment: mainEnd,
-              children: [
-                TextButton(
-                  onPressed: controller.isLoading.value
-                      ? null
-                      : () {
-                    controller.clearData();
-                    Get.back();
-                  },
-                  child: TextWidget(
-                    'Cancel',
-                    color: CustomColors.grayShade,
-                    fontSize: Dimensions.bodyLarge,
-                  ),
-                ),
-                Space.width.v10,
-                ElevatedButton(
-                  onPressed: controller.isLoading.value
-                      ? null
-                      : () => controller.submitCompletion(model),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: CustomColors.primary,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: Dimensions.paddingSize * 1.5,
-                      vertical: Dimensions.heightSize * 1.5,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                      BorderRadius.circular(Dimensions.radius),
+            Obx(
+              () => Row(
+                mainAxisAlignment: mainEnd,
+                children: [
+                  TextButton(
+                    onPressed: controller.isLoading.value
+                        ? null
+                        : () {
+                            controller.clearData();
+                            Get.back();
+                          },
+                    child: TextWidget(
+                      'Cancel',
+                      color: CustomColors.grayShade,
+                      fontSize: Dimensions.bodyLarge,
                     ),
                   ),
-                  child: controller.isLoading.value
-                      ? SizedBox(
-                    width: 20.w,
-                    height: 20.h,
-                    child: CircularProgressIndicator(
-                      color: CustomColors.whiteColor,
-                      strokeWidth: 2,
+                  Space.width.v10,
+                  ElevatedButton(
+                    onPressed: controller.isLoading.value
+                        ? null
+                        : () => controller.submitCompletion(model),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: CustomColors.primary,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Dimensions.paddingSize * 1.5,
+                        vertical: Dimensions.heightSize * 1.5,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(Dimensions.radius),
+                      ),
                     ),
-                  )
-                      : TextWidget(
-                    'Submit',
-                    color: CustomColors.whiteColor,
-                    fontSize: Dimensions.bodyLarge,
-                    fontWeight: FontWeight.w600,
+                    child: controller.isLoading.value
+                        ? SizedBox(
+                            width: 20.w,
+                            height: 20.h,
+                            child: CircularProgressIndicator(
+                              color: CustomColors.whiteColor,
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : TextWidget(
+                            'Submit',
+                            color: CustomColors.whiteColor,
+                            fontSize: Dimensions.bodyLarge,
+                            fontWeight: FontWeight.w600,
+                          ),
                   ),
-                ),
-              ],
-            )),
+                ],
+              ),
+            ),
           ],
         ),
       ),

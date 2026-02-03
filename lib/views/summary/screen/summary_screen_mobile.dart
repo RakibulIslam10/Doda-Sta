@@ -24,7 +24,7 @@ class SummaryScreenMobile extends GetView<SummaryController> {
               customerName: model.customerName ?? "",
               address: model.address ?? "",
             ),
-
+            Space.height.v20,
             if (model.isUser)
               TextWidget(
                 padding: EdgeInsetsGeometry.symmetric(
@@ -34,6 +34,7 @@ class SummaryScreenMobile extends GetView<SummaryController> {
                 fontWeight: FontWeight.bold,
                 fontSize: Dimensions.titleMedium,
               ),
+
             RequestTextBoxWidget(
               description: model.description,
               attachments: model.attachments,
@@ -43,16 +44,20 @@ class SummaryScreenMobile extends GetView<SummaryController> {
             AppStorage.isUser
                 ? SizedBox.shrink()
                 : PrimaryButtonWidget(
-              title: 'Mark as complete',
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return CompleteTaskDialog(model: model);
-                  },
-                );
-              },
-            ),
+                    title: model.status == 'IN_PROGRESS'
+                        ? 'Mark as complete'
+                        : 'Prove Submitted',
+                    onPressed: model.status == 'COMPLETED'
+                        ? () {}
+                        : () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return CompleteTaskDialog(model: model);
+                              },
+                            );
+                          },
+                  ),
 
             if (model.completionProof != null &&
                 model.completionProof!.isNotEmpty) ...[
@@ -65,11 +70,11 @@ class SummaryScreenMobile extends GetView<SummaryController> {
               Space.height.v10,
               if (AppStorage.isUser)
                 Obx(
-                      () => CompletionProofGrid(
+                  () => CompletionProofGrid(
                     proofs: model.completionProof!,
                     providerNotes: model.providerNotes,
                     onAccept: () =>
-                        controller.acceptApprove(id: model.requestId ?? ''),
+                        controller.acceptApprove(id: model.id ?? ''),
                     isLoading: controller.isLoadingAccept.value,
                   ),
                 )
@@ -77,6 +82,10 @@ class SummaryScreenMobile extends GetView<SummaryController> {
                 CompletionProofGrid(
                   proofs: model.completionProof!,
                   providerNotes: model.providerNotes,
+                  onAccept: () {
+
+                  },
+
                 ),
             ],
             Space.height.v20,
@@ -88,12 +97,14 @@ class SummaryScreenMobile extends GetView<SummaryController> {
 }
 
 class CompletionProofGrid extends StatelessWidget {
+  final SummaryModel model = Get.arguments;
+
   final List<CompletionProof> proofs;
   final String? providerNotes;
   final VoidCallback? onAccept;
   final bool isLoading;
 
-  const CompletionProofGrid({
+  CompletionProofGrid({
     super.key,
     required this.proofs,
     this.providerNotes,
@@ -191,8 +202,11 @@ class CompletionProofGrid extends StatelessWidget {
         if (onAccept != null) ...[
           Space.height.v20,
           PrimaryButtonWidget(
-            title: "Accept Completion",
-            onPressed: onAccept!,
+            title: model.status == 'COMPLETED'
+                ? 'Approve Completion'
+                : 'Approved',
+            onPressed: model.status == 'COMPLETED' ? onAccept! : () {},
+            fontWeight: FontWeight.w600,
             isLoading: isLoading,
           ),
         ],

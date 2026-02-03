@@ -15,7 +15,6 @@ class HomeController extends GetxController {
   PagingController(firstPageKey: 1);
 
   /// Paging controllers for Home Services by status
-  /// ✅ CHANGED: "ONGOING" -> "PROCESSING"
   final Map<String, PagingController<int, HomeServiceItem>> pagingControllers =
   {
     "PENDING": PagingController(firstPageKey: 1),
@@ -24,7 +23,6 @@ class HomeController extends GetxController {
   };
 
   /// Loading state to prevent multiple API calls
-  /// ✅ CHANGED: "ONGOING" -> "PROCESSING"
   final Map<String, bool> isLoadingMap = {
     "PENDING": false,
     "IN_PROGRESS": false,
@@ -41,20 +39,52 @@ class HomeController extends GetxController {
     final controller = pagingControllers[status]!;
 
     try {
-      final response = await ApiClient.get(
-        url: ApiEndPoints.myService(page: pageKey, status: statusR),
-      );
+      // ✅ COMPLETED tab এর জন্য APPROVED status ও fetch করা হবে
+      if (status == "COMPLETED") {
+        final completedResponse = await ApiClient.get(
+          url: ApiEndPoints.myService(page: pageKey, status: "COMPLETED"),
+        );
 
-      if (response.statusCode == 200) {
-        final newItems = HomeModel.fromJson(response.body).data?.requests ?? [];
+        final approvedResponse = await ApiClient.get(
+          url: ApiEndPoints.myService(page: pageKey, status: "APPROVED"),
+        );
 
-        if (newItems.isEmpty) {
-          controller.appendLastPage(newItems);
+        List<HomeServiceItem> completedItems = [];
+        List<HomeServiceItem> approvedItems = [];
+
+        if (completedResponse.statusCode == 200) {
+          completedItems = HomeModel.fromJson(completedResponse.body).data?.requests ?? [];
+        }
+
+        if (approvedResponse.statusCode == 200) {
+          approvedItems = HomeModel.fromJson(approvedResponse.body).data?.requests ?? [];
+        }
+
+        // ✅ দুটি list merge করা হলো
+        final allItems = [...completedItems, ...approvedItems];
+
+        if (allItems.isEmpty) {
+          controller.appendLastPage(allItems);
         } else {
-          controller.appendPage(newItems, pageKey + 1);
+          controller.appendPage(allItems, pageKey + 1);
         }
       } else {
-        controller.error = 'Error fetching data';
+        // অন্যান্য status এর জন্য normal fetch
+        final response = await ApiClient.get(
+          url: ApiEndPoints.myService(page: pageKey, status: statusR),
+        );
+
+        if (response.statusCode == 200) {
+          final newItems = HomeModel.fromJson(response.body).data?.requests ?? [];
+
+          if (newItems.isEmpty) {
+            controller.appendLastPage(newItems);
+          } else {
+            controller.appendPage(newItems, pageKey + 1);
+          }
+        } else {
+          controller.error = 'Error fetching data';
+        }
       }
     } catch (e) {
       controller.error = e.toString();
@@ -100,14 +130,6 @@ class HomeController extends GetxController {
     }
   }
 
-
-
-
-
-
-
-
-
   // =============================
   // INIT
   // =============================
@@ -121,26 +143,7 @@ class HomeController extends GetxController {
       });
     });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     // Fetch first page for all statuses
-    // ✅ CHANGED: "ONGOING" -> "PROCESSING"
     fetch("PENDING", 1, "PENDING");
     fetch("IN_PROGRESS", 1, "IN_PROGRESS");
     fetch("COMPLETED", 1, "COMPLETED");

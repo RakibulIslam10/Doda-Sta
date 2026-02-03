@@ -1,60 +1,59 @@
 import 'dart:io';
-import 'package:get/get.dart';
-import 'package:flutter/material.dart';
+import 'package:doda_work/core/api/model/basic_success_model.dart';
 import 'package:image_picker/image_picker.dart';
-
-import '../../../core/themes/token.dart';
+import '../../../core/api/services/api.dart';
 import '../../../core/utils/basic_import.dart';
-import '../../../core/utils/dimensions.dart';
+import '../model/summary_model.dart';
 
 class SummaryController extends GetxController {
   final TextEditingController noteController = TextEditingController();
-  final RxList<File> selectedImages = <File>[].obs;
+  final Rx<File?> selectedImage = Rx<File?>(null);
   final ImagePicker _picker = ImagePicker();
   final RxBool isLoading = false.obs;
+  final RxBool isLoadingAccept = false.obs;
 
-  // Pick multiple images from gallery
-  Future<void> pickImagesFromGallery() async {
+  Future<void> pickImageFromGallery() async {
     try {
-      final List<XFile>? images = await _picker.pickMultiImage();
-      if (images != null && images.isNotEmpty) {
-        selectedImages.addAll(images.map((e) => File(e.path)));
+      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        selectedImage.value = File(image.path);
       }
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Failed to pick images',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: CustomColors.rejected,
-        colorText: CustomColors.whiteColor,
-      );
+      CustomSnackBar.error('Failed to pick image');
     }
   }
 
-  // Pick image from camera
   Future<void> pickImageFromCamera() async {
     try {
       final XFile? image = await _picker.pickImage(source: ImageSource.camera);
       if (image != null) {
-        selectedImages.add(File(image.path));
+        selectedImage.value = File(image.path);
       }
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Failed to capture image',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: CustomColors.rejected,
-        colorText: CustomColors.whiteColor,
-      );
+      CustomSnackBar.error('Failed to capture image');
     }
   }
 
-  // Remove image from list
-  void removeImage(int index) {
-    selectedImages.removeAt(index);
+  void removeImage() {
+    selectedImage.value = null;
   }
 
-  // Show image source bottom sheet
+  Future<BasicSuccessModel> acceptApprove({required String id}) async {
+    return await ApiRequest.patch(
+      fromJson: BasicSuccessModel.fromJson,
+      endPoint: 'service-requests/update-status',
+      isLoading: isLoadingAccept,
+      showSuccessSnackBar: true,
+      body: {
+        'requestId': id,
+        'status': 'APPROVED',
+      },
+      onSuccess: (result) {
+        Get.close(1);
+      },
+    );
+  }
+
   void showImageSourceOptions(BuildContext context) {
     Get.bottomSheet(
       Container(
@@ -79,7 +78,7 @@ class SummaryController extends GetxController {
               title: TextWidget('Gallery', fontSize: Dimensions.bodyLarge),
               onTap: () {
                 Get.back();
-                pickImagesFromGallery();
+                pickImageFromGallery();
               },
             ),
             ListTile(
@@ -96,59 +95,35 @@ class SummaryController extends GetxController {
     );
   }
 
-  // Validate and submit
-  Future<void> submitCompletion() async {
-    if (selectedImages.isEmpty) {
-      Get.snackbar(
-        'Validation Error',
-        'Please attach at least one image',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: CustomColors.rejected,
-        colorText: CustomColors.whiteColor,
-      );
+
+  Future<void> submitCompletion(SummaryModel model) async {
+    if (selectedImage.value == null) {
+      CustomSnackBar.error('Please attach an image');
       return;
     }
 
-    try {
-      isLoading.value = true;
-
-      // TODO: Your API call here
-      // Example:
-      // await apiService.markAsComplete(
-      //   images: selectedImages,
-      //   notes: noteController.text,
-      // );
-
-      // Simulate API call
-      await Future.delayed(Duration(seconds: 2));
-
-      Get.back(); // Close dialog
-      Get.snackbar(
-        'Success',
-        'Task marked as complete!',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: CustomColors.primary,
-        colorText: CustomColors.whiteColor,
-      );
-
-      // Clear data
-      clearData();
-    } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Failed to submit. Please try again.',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: CustomColors.rejected,
-        colorText: CustomColors.whiteColor,
-      );
-    } finally {
-      isLoading.value = false;
-    }
+    await ApiRequest.multiMultipartRequest(
+      reqType: 'POST',
+      fromJson: BasicSuccessModel.fromJson,
+      endPoint: 'service-requests/complete',
+      isLoading: isLoading,
+      showSuccessSnackBar: true,
+      body: {
+        'requestId': model.id ?? '',
+        'notes': noteController.text.trim(),
+      },
+      files: {
+        'completionProof': selectedImage.value!,
+      },
+      onSuccess: (result) {
+        clearData();
+        Get.close(1);
+      },
+    );
   }
 
-  // Clear all data
   void clearData() {
-    selectedImages.clear();
+    selectedImage.value = null;
     noteController.clear();
   }
 

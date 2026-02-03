@@ -245,6 +245,7 @@ class HomeVendorScreenMobile extends GetView<HomeVendorController> {
         subcategory: item.subcategory,
         description: item.description,
         attachments: item.attachments,
+        id: item.id
       ),
     );
   }

@@ -12,15 +12,12 @@ class LicenceScreenMobile extends GetView<LicenceController> {
           padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
           children: [
             Obx(() {
-              final newItems = controller.photos; // File type
-              final oldItems = controller.oldPhotos; // String image URLs
-
+              final newItems = controller.photos;
+              final oldItems = controller.oldPhotos;
               return Wrap(
                 spacing: 8,
                 runSpacing: 8,
                 children: [
-                  // ---------- OLD IMAGES (From API) ----------
-                  // ---------- OLD IMAGES ----------
                   if (oldItems.isNotEmpty) ...[
                     ...oldItems.map(
                           (imgUrl) => Stack(
@@ -55,8 +52,6 @@ class LicenceScreenMobile extends GetView<LicenceController> {
                       ),
                     ),
                   ],
-
-                  // ---------- NEW IMAGES (Picked Files) ----------
                   ...newItems.map(
                         (photo) => Stack(
                       children: [
@@ -90,7 +85,7 @@ class LicenceScreenMobile extends GetView<LicenceController> {
                     ),
                   ),
 
-                  // ---------- ADD NEW IMAGE ----------
+                  
                   GestureDetector(
                     onTap: controller.pickImage,
                     child: Container(
@@ -124,7 +119,9 @@ class LicenceScreenMobile extends GetView<LicenceController> {
                       title: isLoading ? 'Updating...' : 'Update',
                       onPressed: () {
                         if (!isLoading) {
-                          controller.updateProfile(body: {});
+                          controller.updateProfile(
+                              body: {}
+                          );
                         }
                       },
                     ),
@@ -137,6 +134,8 @@ class LicenceScreenMobile extends GetView<LicenceController> {
                       onPressed: controller.pickImage,
                     ),
                   ),*/
+
+
                 ],
               );
             }),

@@ -97,21 +97,22 @@ class HomeScreenMobile extends GetView<HomeController> {
                                         arguments: SummaryModel(
                                           isUser: true,
                                           requestId: item.requestId,
-                                          categoryIcon:
-                                          item.serviceCategory?.icon,
-                                          categoryName:
-                                          item.serviceCategory?.name,
+                                          categoryIcon: item.serviceCategory?.icon,
+                                          categoryName: item.serviceCategory?.name,
                                           customerPhone: item.customerPhone,
-                                          customerName:
-                                          item.customerId?.name,
+                                          customerName: item.customerId?.name,
                                           priority: item.priority,
                                           address: item.address,
                                           subcategory: item.subcategory,
                                           description: item.description,
                                           attachments: item.attachments,
+                                          completionProof: item.completionProof,
+                                          providerNotes: item.providerNotes,
+                                          id: item.id
                                         ),
                                       );
                                     },
+
                                   );
                                 },
 

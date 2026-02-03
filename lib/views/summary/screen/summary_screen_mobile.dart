@@ -1,6 +1,5 @@
 part of 'summary_screen.dart';
 
-
 class SummaryScreenMobile extends GetView<SummaryController> {
   const SummaryScreenMobile({super.key});
 
@@ -14,9 +13,7 @@ class SummaryScreenMobile extends GetView<SummaryController> {
           padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
           children: [
             Space.height.v10,
-            ImageHeaderWidget(
-              image: model.attachments?.firstOrNull,
-            ),
+            ImageHeaderWidget(image: model.attachments?.firstOrNull),
             Space.height.v10,
 
             RequestInfoCard(
@@ -28,7 +25,7 @@ class SummaryScreenMobile extends GetView<SummaryController> {
               address: model.address ?? "",
             ),
 
-            if(model.isUser)
+            if (model.isUser)
               TextWidget(
                 padding: EdgeInsetsGeometry.symmetric(
                   vertical: Dimensions.verticalSize * 0.25,
@@ -43,26 +40,163 @@ class SummaryScreenMobile extends GetView<SummaryController> {
             ),
             Space.height.v20,
 
-            AppStorage.isUser ?           SizedBox.shrink()  :PrimaryButtonWidget(
+            AppStorage.isUser
+                ? SizedBox.shrink()
+                : PrimaryButtonWidget(
               title: 'Mark as complete',
               onPressed: () {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return CompleteTaskDialog();
+                    return CompleteTaskDialog(model: model);
                   },
-                   );
+                );
               },
-            )
+            ),
 
-            // AddPhotoGrid(title: 'Attachments'),
-
-           // if(AppStorage.isVendor == false)...[
-           //   ButtonsSectionWidget()
-           // ]
+            if (model.completionProof != null &&
+                model.completionProof!.isNotEmpty) ...[
+              Space.height.v20,
+              TextWidget(
+                'Completion Proof',
+                fontWeight: FontWeight.bold,
+                fontSize: Dimensions.titleMedium,
+              ),
+              Space.height.v10,
+              if (AppStorage.isUser)
+                Obx(
+                      () => CompletionProofGrid(
+                    proofs: model.completionProof!,
+                    providerNotes: model.providerNotes,
+                    onAccept: () =>
+                        controller.acceptApprove(id: model.requestId ?? ''),
+                    isLoading: controller.isLoadingAccept.value,
+                  ),
+                )
+              else
+                CompletionProofGrid(
+                  proofs: model.completionProof!,
+                  providerNotes: model.providerNotes,
+                ),
+            ],
+            Space.height.v20,
           ],
         ),
       ),
+    );
+  }
+}
+
+class CompletionProofGrid extends StatelessWidget {
+  final List<CompletionProof> proofs;
+  final String? providerNotes;
+  final VoidCallback? onAccept;
+  final bool isLoading;
+
+  const CompletionProofGrid({
+    super.key,
+    required this.proofs,
+    this.providerNotes,
+    this.onAccept,
+    this.isLoading = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: crossStart,
+      children: [
+        GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: proofs.length,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            mainAxisSpacing: Dimensions.widthSize * 0.8,
+            crossAxisSpacing: Dimensions.widthSize * 0.8,
+          ),
+          itemBuilder: (context, index) {
+            final item = proofs[index];
+
+            return ClipRRect(
+              borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),
+              child: GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (_) => GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: Container(
+                        color: CustomColors.blackColor.withOpacity(0.9),
+                        alignment: Alignment.center,
+                        child: Hero(
+                          tag: item.url ?? index.toString(),
+                          child: CachedNetworkImage(
+                            imageUrl: item.url ?? '',
+                            fit: BoxFit.contain,
+                            errorWidget: (_, __, ___) => Icon(
+                              Icons.image_not_supported,
+                              color: CustomColors.whiteColor,
+                              size: Dimensions.iconSizeLarge * 2,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                child: Hero(
+                  tag: item.url ?? index.toString(),
+                  child: Container(
+                    color: Colors.grey.shade200,
+                    child: CachedNetworkImage(
+                      imageUrl: item.url ?? '',
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Container(
+                        alignment: Alignment.center,
+                        child: CircularProgressIndicator(
+                          color: CustomColors.primary,
+                          strokeWidth: 2.w,
+                        ),
+                      ),
+                      errorWidget: (_, __, ___) => Icon(
+                        Icons.image_not_supported,
+                        color: Colors.grey.shade600,
+                        size: Dimensions.iconSizeLarge,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+        if (providerNotes != null && providerNotes!.isNotEmpty) ...[
+          Space.height.v15,
+          TextWidget(
+            "Provider Notes:",
+            fontSize: Dimensions.titleMedium,
+            fontWeight: FontWeight.w600,
+            color: CustomColors.blackColor,
+          ),
+          Space.height.v5,
+          TextWidget(
+            providerNotes!,
+            fontSize: Dimensions.bodyMedium,
+            fontWeight: FontWeight.w400,
+            color: CustomColors.grayShade,
+            maxLines: 10,
+          ),
+        ],
+        if (onAccept != null) ...[
+          Space.height.v20,
+          PrimaryButtonWidget(
+            title: "Accept Completion",
+            onPressed: onAccept!,
+            isLoading: isLoading,
+          ),
+        ],
+      ],
     );
   }
 }

@@ -2,13 +2,21 @@ import 'package:doda_work/views/summary/controller/summary_controller.dart';
 
 import '../../../core/utils/basic_import.dart';
 
-class CompleteTaskDialog extends GetView<SummaryController> {
-  CompleteTaskDialog({super.key});
+import 'package:doda_work/views/summary/controller/summary_controller.dart';
+import 'package:doda_work/views/summary/model/summary_model.dart';
 
+import '../../../core/utils/basic_import.dart';
+
+class CompleteTaskDialog extends GetView<SummaryController> {
+  final SummaryModel model;
+
+  const CompleteTaskDialog({
+    super.key,
+    required this.model,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(SummaryController());
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(Dimensions.radius * 1.6),
@@ -45,7 +53,7 @@ class CompleteTaskDialog extends GetView<SummaryController> {
 
             // Image attachment section
             TextWidget(
-              'Attach Images *',
+              'Attach Image *',
               fontSize: Dimensions.titleMedium,
               fontWeight: FontWeight.w600,
             ),
@@ -64,13 +72,14 @@ class CompleteTaskDialog extends GetView<SummaryController> {
                 child: Row(
                   mainAxisAlignment: mainCenter,
                   children: [
-                    Icon(Icons.add_photo_alternate,
+                    Icon(
+                      Icons.add_photo_alternate,
                       color: CustomColors.primary,
                       size: Dimensions.iconSizeLarge,
                     ),
                     Space.width.v10,
                     TextWidget(
-                      'Add Images',
+                      'Add Image',
                       color: CustomColors.primary,
                       fontSize: Dimensions.bodyLarge,
                       fontWeight: FontWeight.w500,
@@ -81,62 +90,52 @@ class CompleteTaskDialog extends GetView<SummaryController> {
             ),
             Space.height.v15,
 
-            // Selected images preview
+            // Selected image preview
             Obx(() {
-              if (controller.selectedImages.isEmpty) {
+              if (controller.selectedImage.value == null) {
                 return SizedBox.shrink();
               }
 
               return Container(
                 height: 120.h,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: controller.selectedImages.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      margin: EdgeInsets.only(right: Dimensions.widthSize),
-                      child: Stack(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(Dimensions.radius),
-                            child: Image.file(
-                              controller.selectedImages[index],
-                              width: 100.w,
-                              height: 100.h,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          Positioned(
-                            top: 5,
-                            right: 5,
-                            child: GestureDetector(
-                              onTap: () => controller.removeImage(index),
-                              child: Container(
-                                padding: EdgeInsets.all(4),
-                                decoration: BoxDecoration(
-                                  color: CustomColors.rejected,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Icon(
-                                  Icons.close,
-                                  size: Dimensions.iconSizeDefault,
-                                  color: CustomColors.whiteColor,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                child: Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(Dimensions.radius),
+                      child: Image.file(
+                        controller.selectedImage.value!,
+                        width: 100.w,
+                        height: 100.h,
+                        fit: BoxFit.cover,
                       ),
-                    );
-                  },
+                    ),
+                    Positioned(
+                      top: 5,
+                      right: 5,
+                      child: GestureDetector(
+                        onTap: () => controller.removeImage(),
+                        child: Container(
+                          padding: EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: CustomColors.rejected,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Icons.close,
+                            size: Dimensions.iconSizeDefault,
+                            color: CustomColors.whiteColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               );
             }),
 
-            Obx(() => controller.selectedImages.isNotEmpty
+            Obx(() => controller.selectedImage.value != null
                 ? Space.height.v20
-                : SizedBox.shrink()
-            ),
+                : SizedBox.shrink()),
 
             // Notes section
             TextWidget(
@@ -183,7 +182,7 @@ class CompleteTaskDialog extends GetView<SummaryController> {
                   },
                   child: TextWidget(
                     'Cancel',
-                    color: CustomColors.secondaryDarkText,
+                    color: CustomColors.grayShade,
                     fontSize: Dimensions.bodyLarge,
                   ),
                 ),
@@ -191,7 +190,7 @@ class CompleteTaskDialog extends GetView<SummaryController> {
                 ElevatedButton(
                   onPressed: controller.isLoading.value
                       ? null
-                      : controller.submitCompletion,
+                      : () => controller.submitCompletion(model),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: CustomColors.primary,
                     padding: EdgeInsets.symmetric(
@@ -199,7 +198,8 @@ class CompleteTaskDialog extends GetView<SummaryController> {
                       vertical: Dimensions.heightSize * 1.5,
                     ),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(Dimensions.radius),
+                      borderRadius:
+                      BorderRadius.circular(Dimensions.radius),
                     ),
                   ),
                   child: controller.isLoading.value

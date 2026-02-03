@@ -1,3 +1,5 @@
+import '../../home/model/home_model.dart';
+
 class SummaryModel {
   final bool isUser;
   final String? id;
@@ -19,11 +21,12 @@ class SummaryModel {
   final String? status;
   final num? leadFee;
   final String? paymentStatus;
-  final List<dynamic>? completionProof;
+  final List<CompletionProof>? completionProof; // ✅ here
   final List<dynamic>? potentialProviders;
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final String? requestId;
+  final String? providerNotes;
 
   SummaryModel({
     required this.isUser,
@@ -50,6 +53,6 @@ class SummaryModel {
     this.potentialProviders,
     this.createdAt,
     this.updatedAt,
-    this.requestId,
+    this.requestId, this.providerNotes,
   });
 }

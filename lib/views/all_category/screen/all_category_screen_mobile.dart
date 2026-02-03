@@ -64,7 +64,7 @@ class AllCategoryScreenMobile extends GetView<AllCategoryController> {
                   ClipOval(
                     child: CachedNetworkImage(
                       imageUrl: category.icon != null
-                          ? ApiEndPoints.baseUrl + (category.icon ?? "")
+                          ?  (category.icon ?? "")
                           : "https://picsum.photos/200/300?random=$index",
                       width: screenWidth * 0.16,
                       height: screenWidth * 0.16,

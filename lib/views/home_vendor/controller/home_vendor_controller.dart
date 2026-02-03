@@ -235,6 +235,45 @@ class HomeVendorController extends GetxController {
     print('Error changing status: $e');
   }
 
+
+  Future<void> declineRequest({required String id}) async {
+    if (isLoading.value) return;
+    isLoading.value = true;
+
+    try {
+      final response = await ApiClient.patch(
+        body: {
+          "requestId": id,
+          "action": "DECLINED",
+        },
+        url: '${ApiEndPoints.baseUrl}${ApiEndPoints.providerChangeStatus()}'
+      );
+
+      if (response.statusCode == 200) {
+        for (var c in pagingControllers.values) {
+          c.refresh();
+        }
+
+        Get.snackbar(
+          "Success",
+          "Request declined successfully!",
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+      } else {
+        Get.snackbar(
+          "Error",
+          response.body?["message"] ?? "Something went wrong",
+          backgroundColor: Colors.redAccent,
+          colorText: Colors.white,
+        );
+      }
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+
   Future<void> refreshAll() async {
     for (final controller in pagingControllers.values) {
       controller.refresh();

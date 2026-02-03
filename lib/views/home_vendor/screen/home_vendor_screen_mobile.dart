@@ -164,7 +164,13 @@ class HomeVendorScreenMobile extends GetView<HomeVendorController> {
       status: status,
       isUser: false,
       onTapAccept: () => _handleStatusChange(item, "ACCEPT"),
-      onTapDecline: () => _handleStatusChange(item, "DECLINE"),
+      onTapDecline: () {
+        if (item.id == null) {
+          _showErrorSnackbar("Invalid request ID");
+          return;
+        }
+        controller.declineRequest(id: item.id!);
+      },
       onTapComplete: () => _handleStatusChange(item, "COMPLETED"),
       onTap: () => status == "PENDING"
           ? _showErrorSnackbar("Request not yet accepted")
@@ -181,7 +187,7 @@ class HomeVendorScreenMobile extends GetView<HomeVendorController> {
     if (newStatus == "ACCEPT") {
       Get.dialog(
         WillPopScope(
-          onWillPop: () async => false, // Back button disable
+          onWillPop: () async => false,
           child: Material(
             color: Colors.black54,
             child: Center(

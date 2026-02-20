@@ -17,6 +17,8 @@ class UpdateController extends GetxController {
   final nameController = TextEditingController();
   final nameFocus = FocusNode();
 
+  final updatedDate = "".obs;
+
   final emailController = TextEditingController();
   final emailFocus = FocusNode();
   final isEmailValid = false.obs;
@@ -38,8 +40,8 @@ class UpdateController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    nameController.text =
-        Get.find<ProfileController>().userProfileModel?.data?.name ?? "";
+    nameController.text = Get.find<ProfileController>().userProfileModel?.data?.name ?? "";
+    numberController.text = Get.find<ProfileController>().userProfileModel?.data?.phoneNumber ?? "";
     emailController.addListener(() {
       final email = emailController.text.trim();
       isEmailValid.value = GetUtils.isEmail(email);
@@ -66,6 +68,8 @@ class UpdateController extends GetxController {
     final Map<String, String> body = {
       '_method': 'PATCH',
       'name': nameController.text.trim(),
+      'phoneNumber': numberController.text.trim(),
+      'dateOfBirth': updatedDate.value,
       if (selectedLatLng.value != null)
         'latitude': selectedLatLng.value!.latitude.toString(),
       if (selectedLatLng.value != null)

@@ -12,7 +12,6 @@ class UpdateScreenMobile extends GetView<UpdateController> {
           padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
           children: [
             Space.height.betweenInputBox,
-
             Center(
               child: Stack(
                 children: [
@@ -41,7 +40,6 @@ class UpdateScreenMobile extends GetView<UpdateController> {
                       ),
                     ),
                   ),
-
                   Positioned(
                     bottom: 4,
                     right: 0,
@@ -79,6 +77,25 @@ class UpdateScreenMobile extends GetView<UpdateController> {
               hintText: "Enter your name",
             ),
             Space.height.betweenInputBox,
+
+            PrimaryInputFieldWidget(
+              label: "phone",
+              controller: controller.numberController,
+              focusNode: controller.numberFocus,
+              hintText: "Enter your phone",
+            ),
+
+            Space.height.betweenInputBox,
+
+            CustomDatePick(
+              hint: "Select Date of Birth",
+              onDateSelected: (value) {
+                controller.updatedDate.value = value.toIso8601String();
+              },
+            ),
+
+            Space.height.betweenInputBox,
+
             TextWidget(
               padding: EdgeInsetsGeometry.only(
                 bottom: Dimensions.spaceBetweenInputTitleAndBox * 0.6,

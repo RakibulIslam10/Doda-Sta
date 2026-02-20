@@ -11,13 +11,16 @@ class ProviderStatusResponseModel {
     required this.data,
   });
 
-  factory ProviderStatusResponseModel.fromJson(Map<String, dynamic> json) =>
-      ProviderStatusResponseModel(
-        statusCode: json["statusCode"],
-        success: json["success"],
-        message: json["message"],
-        data: ResponseData.fromJson(json["data"]),
-      );
+  factory ProviderStatusResponseModel.fromJson(Map<String, dynamic> json) {
+    return ProviderStatusResponseModel(
+      statusCode: json["statusCode"] != null
+          ? (json["statusCode"] as num).toInt()
+          : 0,
+      success: json["success"] ?? false,
+      message: json["message"] ?? "",
+      data: ResponseData.fromJson(json["data"] ?? {}),
+    );
+  }
 }
 
 class ResponseData {
@@ -35,11 +38,15 @@ class ResponseData {
     required this.sessionId,
   });
 
-  factory ResponseData.fromJson(Map<String, dynamic> json) => ResponseData(
-    message: json["message"],
-    requiresPayment: json["requiresPayment"],
-    leadFee: json["leadFee"],
-    paymentUrl: json["paymentUrl"],
-    sessionId: json["sessionId"],
-  );
+  factory ResponseData.fromJson(Map<String, dynamic> json) {
+    return ResponseData(
+      message: json["message"] ?? "",
+      requiresPayment: json["requiresPayment"] ?? false,
+      leadFee: json["leadFee"] != null
+          ? (json["leadFee"] as num).toInt()
+          : 0,
+      paymentUrl: json["paymentUrl"] ?? "",
+      sessionId: json["sessionId"] ?? "",
+    );
+  }
 }

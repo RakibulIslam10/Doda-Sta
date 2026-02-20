@@ -10,7 +10,8 @@ import '../../utils/basic_import.dart';
 
 class ApiRequest {
   /// ✅ Header Generator with skipAuth option
-  static Future<Map<String, String>> _bearerHeaderInfo([String? token, bool skipAuth = false]) async {
+  static Future<Map<String, String>> _bearerHeaderInfo(
+      [String? token, bool skipAuth = false]) async {
     final authToken = token ?? AppStorage.token;
     return {
       HttpHeaders.acceptHeader: "application/json",
@@ -25,11 +26,13 @@ class ApiRequest {
     body.forEach((key, value) {
       log("🔹 '$key': '$value'");
     });
-    log('╚════════════════════════════════════════════════════════════════════════════════════════════╚═══');
+    log(
+        '╚════════════════════════════════════════════════════════════════════════════════════════════╚═══');
   }
 
   static void printUrl(String url) {
-    log('╔════════════════════════════════════════════════════════════════════════════════════════════');
+    log(
+        '╔════════════════════════════════════════════════════════════════════════════════════════════');
     log("📍 'End Point': '$url'");
   }
 
@@ -89,14 +92,16 @@ class ApiRequest {
         body: jsonEncode(body),
       ).timeout(const Duration(seconds: 120));
 
-      log('|📬|---------[ RESPONSE STATUS: ${response.statusCode} ]---------|📬|');
+      log('|📬|---------[ RESPONSE STATUS: ${response
+          .statusCode} ]---------|📬|');
       log('|📬|---------[ RESPONSE BODY: ${response.body} ]---------|📬|');
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final Map<String, dynamic> json = jsonDecode(response.body);
         final result = fromJson(json);
 
-        final successMessage = json['message'] ?? Strings.requestCompletedSuccessfully;
+        final successMessage = json['message'] ??
+            Strings.requestCompletedSuccessfully;
         if (showSuccessSnackBar) {
           CustomSnackBar.success(
             title: Strings.success,
@@ -122,6 +127,7 @@ class ApiRequest {
       log('|✅|---------[ ✅ POST REQUEST COMPLETED ]---------|✅|');
     }
   }
+
   /// =========================================================== ✅ GET REQUEST =========================================================== ///
   static Future<R> get<R>({
     required R Function(Map<String, dynamic>) fromJson,
@@ -399,7 +405,8 @@ class ApiRequest {
   }) async {
     try {
       isLoading.value = true;
-      final headers = await _bearerHeaderInfo(token, skipAuth); // ✅ Pass skipAuth
+      final headers = await _bearerHeaderInfo(
+          token, skipAuth); // ✅ Pass skipAuth
 
       // Build URL
       String fullUrl = '${ApiEndPoints.baseUrl}$endPoint';
@@ -499,7 +506,8 @@ class ApiRequest {
         final result = fromJson(json);
 
         if (showSuccessSnackBar) {
-          final successMessage = json['message'] ?? 'Request completed successfully';
+          final successMessage = json['message'] ??
+              'Request completed successfully';
           CustomSnackBar.success(title: 'Success', message: successMessage);
         }
 

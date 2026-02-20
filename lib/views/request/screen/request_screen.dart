@@ -1,4 +1,4 @@
- import 'dart:io';
+import 'dart:io';
 
 import 'package:doda_work/core/utils/basic_import.dart';
 import 'package:doda_work/routes/routes.dart';
@@ -41,9 +41,9 @@ class _RequestScreenState extends State<RequestScreen> {
         scrolledUnderElevation: 0,
         titleSpacing: 0,
         leadingWidth: 80,
-        leading:             GestureDetector(
+        leading: GestureDetector(
           onTap: () => Get.find<NavigationController>().goToProfile(),
-          child: Image.asset(Assets.logo.aaplogo.path,height: 50,),
+          child: Image.asset(Assets.logo.aaplogo.path, height: 50),
         ),
         title: TextWidget(
           'Book a Service Appointment',
@@ -83,9 +83,7 @@ class _RequestScreenState extends State<RequestScreen> {
             ),
             Space.height.betweenInputBox,
 
-            AddPhotoGrid(
-              controller: controller,
-            ),
+            AddPhotoGrid(controller: controller),
             Space.height.betweenInputBox,
 
             Obx(() {

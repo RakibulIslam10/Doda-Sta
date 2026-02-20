@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:doda_work/core/utils/basic_import.dart';
 import 'package:doda_work/core/utils/extensions.dart';
 
@@ -26,23 +27,87 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
     selectedTime = widget.text;
   }
 
-  Future<void> _pickTime() async {
-    final TimeOfDay? picked = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
-
-    if (picked != null) {
-      String formatted = picked.format(context);
-
+  @override
+  void didUpdateWidget(covariant TimePickerWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.text != oldWidget.text) {
       setState(() {
-        selectedTime = formatted;
+        selectedTime = widget.text;
       });
-
-      if (widget.onTimeSelected != null) {
-        widget.onTimeSelected!(formatted);
-      }
     }
+  }
+
+  Future<void> _pickTime() async {
+    DateTime tempTime = DateTime.now();
+
+    await showCupertinoModalPopup(
+      context: context,
+      builder: (context) => Container(
+        height: 280.h,
+        color: Colors.white,
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () => Navigator.pop(context),
+                    child: Text(
+                      'Cancel',
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: Dimensions.titleSmall,
+                      ),
+                    ),
+                  ),
+                  CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () {
+                      final hour = tempTime.hour;
+                      final minute = tempTime.minute;
+                      final period = hour >= 12 ? 'PM' : 'AM';
+                      final displayHour = hour > 12
+                          ? hour - 12
+                          : hour == 0
+                          ? 12
+                          : hour;
+                      final formatted =
+                          '${displayHour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')} $period';
+
+                      setState(() => selectedTime = formatted);
+                      widget.onTimeSelected?.call(formatted);
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      'Done',
+                      style: TextStyle(
+                        color: CustomColors.primary,
+                        fontSize: Dimensions.titleSmall,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Divider(height: 1, color: Colors.grey.shade200),
+            Expanded(
+              child: CupertinoDatePicker(
+                mode: CupertinoDatePickerMode.time,
+                initialDateTime: DateTime.now(),
+                use24hFormat: false,
+                onDateTimeChanged: (DateTime newTime) {
+                  tempTime = newTime;
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -59,8 +124,6 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
           fontWeight: FontWeight.w500,
           color: CustomColors.blackColor.withAlpha(888),
         ),
-
-        /// Tap-able Box
         GestureDetector(
           onTap: _pickTime,
           child: Container(

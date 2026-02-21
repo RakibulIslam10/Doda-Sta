@@ -16,7 +16,10 @@ class OthersFieldWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var apiKeyMap =  Platform.isAndroid ? "AIzaSyC_qKHmzl-HHB9hr8-fWGmhETSVR2H0894" : "AIzaSyDNVuOBQjhjZlxvhBtowqjYN5_YsYfqezQ";
+
+    var apiKeyMap = Platform.isAndroid
+        ? ApiEndPoints.googleApiKeyAndroid
+        : ApiEndPoints.googleApiKeyIos;
 
     return Column(
       crossAxisAlignment: crossStart,
@@ -25,7 +28,6 @@ class OthersFieldWidget extends StatelessWidget {
           if (categoryController.isLoading.value) {
             return const Center(child: CircularProgressIndicator());
           }
-
           if (categoryController.filteredCategory.isEmpty) {
             return Center(
               child: Column(
@@ -41,7 +43,8 @@ class OthersFieldWidget extends StatelessWidget {
                     icon: const Icon(Icons.refresh),
                     label: const Text("Fetch Again"),
                     style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 12),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -66,7 +69,9 @@ class OthersFieldWidget extends StatelessWidget {
                 onChanged: (value) {
                   if (value != null) controller.onCategorySelected(value);
                 },
-                value: controller.selectedCategoryId.value.isEmpty ? null : controller
+                value: controller.selectedCategoryId.value.isEmpty
+                    ? null
+                    : controller
                     .selectedCategoryId.value,
               ),
 
@@ -125,7 +130,15 @@ class OthersFieldWidget extends StatelessWidget {
           final isPick = controller.selectedAddress.isNotEmpty;
           return GestureDetector(
             onTap: () {
-              _openPicker(context,apiKeyMap);
+
+              Get.to(() => LocationPickerWidget(
+                selectedAddress: controller.selectedAddress,
+                selectedLatLng: controller.selectedLatLng,
+                googleApiKey: apiKeyMap,
+                initialLatLng: LatLng(23.8103, 90.4125),
+
+              ));
+
             },
             child: Container(
               width: MediaQuery
@@ -161,45 +174,10 @@ class OthersFieldWidget extends StatelessWidget {
         Space.height.betweenInputBox,
         PrimaryInputFieldWidget(
           controller: phoneController,
-          hintText: 'Please Enter your contact Number',
+          hintText: '+1 123-456-7890',
           label: 'Contact Number',
         ),
       ],
-    );
-  }
-
-  void _openPicker(BuildContext context, String apiKey) async {
-    await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) =>
-            MapLocationPicker(
-              config: MapLocationPickerConfig(
-                apiKey: apiKey,
-                onNext: (result) {
-                  if (result != null && result.geometry?.location.lat != null &&
-                      result.geometry?.location.lat != null) {
-                    controller.selectedLatLng.value = LatLng(
-                      result.geometry!.location.lat,
-                      result.geometry!.location.lng,
-                    );
-
-                    controller.selectedAddress.value = result.formattedAddress ?? "";
-                    // controller.fetchPostalCode();
-                  }
-                  if (Navigator.canPop(context)) {
-                    Navigator.pop(context);
-                  }
-                },
-              ),
-              geoCodingConfig: GeoCodingConfig(
-                  apiKey: apiKey
-              ),
-              searchConfig: SearchConfig(
-                apiKey: apiKey,
-              ),
-            ),
-      ),
     );
   }
 }

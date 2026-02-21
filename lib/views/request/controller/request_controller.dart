@@ -1,23 +1,24 @@
 import 'dart:io';
 import 'package:doda_work/core/utils/basic_import.dart';
 import 'package:doda_work/routes/routes.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-
 import '../../category/controller/category_controller.dart';
-import '../../navigation/controller/navigation_controller.dart';
 
 class RequestController extends GetxController {
   final Rxn<DateTime?> startDateTime = Rxn<DateTime>(null);
   final Rxn<DateTime?> endDateTime = Rxn<DateTime>(null);
-
   final RxString selectedPriority = ''.obs;
-
   final RxString selectedCategoryId = ''.obs;
   final RxString selectedSubCategoryId = ''.obs;
   final CategoryController categoryController = Get.find<CategoryController>();
+
+  final RxString selectedAddress = "".obs;
+  final Rxn<LatLng> selectedLatLng = Rxn<LatLng>();
+
+
+
 
   void onCategorySelected(String categoryId) {
     selectedCategoryId.value = categoryId;
@@ -34,8 +35,6 @@ class RequestController extends GetxController {
     selectedSubCategoryId.value = subCategoryId;
   }
 
-  final Rxn<LatLng> selectedLatLng = Rxn<LatLng>();
-  final RxString selectedAddress = "".obs;
 
   RxList<File> photos = <File>[].obs;
   final ImagePicker _picker = ImagePicker();
@@ -133,21 +132,21 @@ class RequestController extends GetxController {
 
   final RxString postalCode = ''.obs;
 
-  Future<void> fetchPostalCode() async {
-    if (selectedLatLng.value == null) return;
-
-    final lat = selectedLatLng.value!.latitude;
-    final lng = selectedLatLng.value!.longitude;
-
-    try {
-      final placemarks = await placemarkFromCoordinates(lat, lng);
-
-      if (placemarks.isNotEmpty) {
-        postalCode.value = placemarks.first.postalCode ?? '';
-      }
-    } catch (e) {
-      postalCode.value = '';
-      debugPrint('Error fetching postal code: $e');
-    }
-  }
+  // Future<void> fetchPostalCode() async {
+  //   if (selectedLatLng.value == null) return;
+  //
+  //   final lat = selectedLatLng.value!.latitude;
+  //   final lng = selectedLatLng.value!.longitude;
+  //
+  //   try {
+  //     final placemarks = await placemarkFromCoordinates(lat, lng);
+  //
+  //     if (placemarks.isNotEmpty) {
+  //       postalCode.value = placemarks.first.postalCode ?? '';
+  //     }
+  //   } catch (e) {
+  //     postalCode.value = '';
+  //     debugPrint('Error fetching postal code: $e');
+  //   }
+  // }
 }

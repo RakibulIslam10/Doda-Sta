@@ -28,7 +28,7 @@
 
     <!-- Google Maps API Key -->
     <key>IOGoogleMapsAPIKey</key>
-    <string>AIzaSyC_qKHmzl-HHB9hr8-fWGmhETSVR2H0894</string>
+    <string>AIzaSyDYPmgAQzgkwqbGcag5GCY2V_5PqyzmaPU</string>
 
     <!-- App Transport Security -->
     <key>NSAppTransportSecurity</key>
@@ -103,9 +103,6 @@
 
   <key>NSAppleMusicUsageDescription</key>
   <string>Sign in with Apple permission</string>
-
-
-
 
 
 

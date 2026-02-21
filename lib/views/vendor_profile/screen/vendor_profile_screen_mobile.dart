@@ -1,10 +1,8 @@
-import 'package:map_location_picker/map_location_picker.dart';
 
 import '../../../core/utils/basic_import.dart';
 import '../../../core/utils/extensions.dart';
 import '../../../widgets/auth_app_bar.dart';
 import '../../../widgets/loading_widget.dart';
-import '../../profile/controller/profile_controller.dart';
 import '../../request/widget/category_widget.dart';
 import '../controller/vendor_profile_controller.dart';
 
@@ -122,7 +120,7 @@ class VendorProfileScreenMobile extends GetView<VendorProfileController> {
                       final isPick = controller.selectedAddress.isNotEmpty;
                       return GestureDetector(
                         onTap: () {
-                          _openPicker(context);
+                          // _openPicker(context);
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width,
@@ -211,39 +209,39 @@ class VendorProfileScreenMobile extends GetView<VendorProfileController> {
       ),
     );
   }
-  void _openPicker(BuildContext context) async {
-    await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MapLocationPicker(
-          config: MapLocationPickerConfig(
-            apiKey: "AIzaSyC_qKHmzl-HHB9hr8-fWGmhETSVR2H0894",
-            onNext: (result) {
-              if (result != null &&
-                  result.geometry?.location.lat != null &&
-                  result.geometry?.location.lat != null) {
-                controller.selectedLatLng.value = LatLng(
-                  result.geometry!.location.lat,
-                  result.geometry!.location.lng,
-                );
-
-                controller.selectedAddress.value =
-                    result.formattedAddress ?? "";
-              }
-              if (Navigator.canPop(context)) {
-                Navigator.pop(context);
-              }
-            },
-          ),
-          geoCodingConfig: GeoCodingConfig(
-            apiKey: "AIzaSyC_qKHmzl-HHB9hr8-fWGmhETSVR2H0894",
-          ),
-          searchConfig: SearchConfig(
-            apiKey: "AIzaSyC_qKHmzl-HHB9hr8-fWGmhETSVR2H0894",
-          ),
-        ),
-      ),
-    );
-  }
+  // void _openPicker(BuildContext context) async {
+  //   await Navigator.push(
+  //     context,
+  //     MaterialPageRoute(
+  //       builder: (context) => MapLocationPicker(
+  //         config: MapLocationPickerConfig(
+  //           apiKey: "AIzaSyC_qKHmzl-HHB9hr8-fWGmhETSVR2H0894",
+  //           onNext: (result) {
+  //             if (result != null &&
+  //                 result.geometry?.location.lat != null &&
+  //                 result.geometry?.location.lat != null) {
+  //               controller.selectedLatLng.value = LatLng(
+  //                 result.geometry!.location.lat,
+  //                 result.geometry!.location.lng,
+  //               );
+  //
+  //               controller.selectedAddress.value =
+  //                   result.formattedAddress ?? "";
+  //             }
+  //             if (Navigator.canPop(context)) {
+  //               Navigator.pop(context);
+  //             }
+  //           },
+  //         ),
+  //         geoCodingConfig: GeoCodingConfig(
+  //           apiKey: "AIzaSyC_qKHmzl-HHB9hr8-fWGmhETSVR2H0894",
+  //         ),
+  //         searchConfig: SearchConfig(
+  //           apiKey: "AIzaSyC_qKHmzl-HHB9hr8-fWGmhETSVR2H0894",
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
 }

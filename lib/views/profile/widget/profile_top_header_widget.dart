@@ -19,9 +19,7 @@ class ProfileTopHeaderWidgetView extends GetView<ProfileController> {
       final userData = controller.userProfileModel?.data;
 
       // Profile image URL
-      final profileImageUrl = userData?.profileImage?.isNotEmpty == true
-          ? "${ApiEndPoints.baseUrl}${userData!.profileImage}"
-          : 'https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png';
+
 
       return Container(
         height: cardHeight,
@@ -119,7 +117,7 @@ class ProfileTopHeaderWidgetView extends GetView<ProfileController> {
                           SizedBox(width: 4),
                           Expanded(
                             child: TextWidget(
-                              userData!.phoneNumber!,
+                              "+1 123-456-7890",
                               fontSize: Dimensions.titleSmall * 0.8,
                               fontWeight: FontWeight.w500,
                               color: Colors.grey.shade600,

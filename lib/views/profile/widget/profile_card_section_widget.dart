@@ -15,7 +15,6 @@ class ProfileCardSectionWidgetView extends GetView<ProfileController> {
           'Account Settings ',
           () => Get.toNamed(Routes.settingScreen),
         ),
-
         // _buildSectionCard(
         //   Icons.reviews_outlined,
         //   'Reviews & Ratings',
@@ -31,20 +30,20 @@ class ProfileCardSectionWidgetView extends GetView<ProfileController> {
         ),
         _buildSectionCard(
           Icons.favorite_border,
-          'Favorite',
+          'Favorites',
           isVisible: AppStorage.isVendor == false,
           () => Get.toNamed(Routes.favoriteScreen),
         ),
         _buildSectionCard(
           Icons.help_outline_sharp,
-          'FAQ',
+          'FAQs',
           isVisible: AppStorage.isVendor == false,
 
           () => Get.toNamed(Routes.faqScreen),
         ),
         _buildSectionCard(
           Icons.notification_add_outlined,
-          'Notification',
+          'Notifications',
           () => Get.toNamed(Routes.notificationScreen),
         ),
 

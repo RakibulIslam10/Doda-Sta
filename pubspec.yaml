@@ -34,7 +34,6 @@ dependencies:
   infinite_scroll_pagination: ^4.1.0
   flutter_datetime_picker_plus: ^2.2.0
   google_maps_flutter: ^2.13.1
-  map_location_picker: ^3.1.0
   flutter_html: ^3.0.0
   dio: ^5.4.0
   firebase_core: ^4.0.0
@@ -45,7 +44,7 @@ dependencies:
   flutter_image_compress :
   webview_flutter: ^4.13.0
   google_fonts: ^6.1.0
-  geocoding: ^3.0.0
+  my_location_picker: ^1.0.0
 
 
 dev_dependencies:

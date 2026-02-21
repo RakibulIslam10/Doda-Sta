@@ -1,15 +1,16 @@
 import 'dart:io';
-
 import 'package:doda_work/core/utils/basic_import.dart';
 import 'package:doda_work/routes/routes.dart';
 import 'package:doda_work/widgets/custom_drop_down_widget.dart';
 import 'package:doda_work/widgets/date_picker_widget.dart';
-import 'package:map_location_picker/map_location_picker.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../../../widgets/location_picker_widget.dart';
 import '../../../widgets/time_picker_widget.dart';
 import '../../category/controller/category_controller.dart';
 import '../../navigation/controller/navigation_controller.dart';
 import '../controller/request_controller.dart';
 import 'package:intl/intl.dart';
+
 
 part '../widget/time_and_date_section_widget.dart';
 

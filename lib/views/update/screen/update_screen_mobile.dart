@@ -26,8 +26,7 @@ class UpdateScreenMobile extends GetView<UpdateController> {
                                 fit: BoxFit.cover,
                               )
                             : CachedNetworkImage(
-                                imageUrl:
-                                    '${ApiEndPoints.baseUrl}/${Get.find<ProfileController>().userProfileModel?.data?.profileImage ?? ""}',
+                                imageUrl: Get.find<ProfileController>().userProfileModel?.data?.profileImage ?? "",
                                 fit: BoxFit.cover,
                                 placeholder: (context, url) =>
                                     Container(color: Colors.grey.shade300),
@@ -112,7 +111,7 @@ class UpdateScreenMobile extends GetView<UpdateController> {
               final isPick = controller.selectedAddress.isNotEmpty;
               return GestureDetector(
                 onTap: () {
-                  _openPicker(context);
+
                 },
                 child: Container(
                   width: MediaQuery.of(context).size.width,
@@ -161,38 +160,4 @@ class UpdateScreenMobile extends GetView<UpdateController> {
     );
   }
 
-  void _openPicker(BuildContext context) async {
-    await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MapLocationPicker(
-          config: MapLocationPickerConfig(
-            apiKey: "AIzaSyC_qKHmzl-HHB9hr8-fWGmhETSVR2H0894",
-            onNext: (result) {
-              if (result != null &&
-                  result.geometry?.location.lat != null &&
-                  result.geometry?.location.lat != null) {
-                controller.selectedLatLng.value = LatLng(
-                  result.geometry!.location.lat,
-                  result.geometry!.location.lng,
-                );
-
-                controller.selectedAddress.value =
-                    result.formattedAddress ?? "";
-              }
-              if (Navigator.canPop(context)) {
-                Navigator.pop(context);
-              }
-            },
-          ),
-          geoCodingConfig: GeoCodingConfig(
-            apiKey: "AIzaSyC_qKHmzl-HHB9hr8-fWGmhETSVR2H0894",
-          ),
-          searchConfig: SearchConfig(
-            apiKey: "AIzaSyC_qKHmzl-HHB9hr8-fWGmhETSVR2H0894",
-          ),
-        ),
-      ),
-    );
-  }
 }

@@ -207,7 +207,7 @@ class AditionalScreenMobile extends GetView<AditionalController> {
                       final isPick = controller.selectedAddress.isNotEmpty;
                       return GestureDetector(
                         onTap: () {
-                          _openPicker(context,apiKeyMap);
+                          // _openPicker(context,apiKeyMap);
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width,
@@ -322,40 +322,40 @@ class AditionalScreenMobile extends GetView<AditionalController> {
     );
   }
 
-  void _openPicker(BuildContext context, String apiKey) async {
-
-
-    await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MapLocationPicker(
-          config: MapLocationPickerConfig(
-            apiKey: apiKey,
-            onNext: (result) {
-              if (result != null &&
-                  result.geometry?.location.lat != null &&
-                  result.geometry?.location.lat != null) {
-                controller.selectedLatLng.value = LatLng(
-                  result.geometry!.location.lat,
-                  result.geometry!.location.lng,
-                );
-
-                controller.selectedAddress.value =
-                    result.formattedAddress ?? "";
-              }
-              if (Navigator.canPop(context)) {
-                Navigator.pop(context);
-              }
-            },
-          ),
-          geoCodingConfig: GeoCodingConfig(
-            apiKey: apiKey,
-          ),
-          searchConfig: SearchConfig(
-            apiKey: apiKey,
-          ),
-        ),
-      ),
-    );
-  }
+  // void _openPicker(BuildContext context, String apiKey) async {
+  //
+  //
+  //   await Navigator.push(
+  //     context,
+  //     MaterialPageRoute(
+  //       builder: (context) => MapLocationPicker(
+  //         config: MapLocationPickerConfig(
+  //           apiKey: apiKey,
+  //           onNext: (result) {
+  //             if (result != null &&
+  //                 result.geometry?.location.lat != null &&
+  //                 result.geometry?.location.lat != null) {
+  //               controller.selectedLatLng.value = LatLng(
+  //                 result.geometry!.location.lat,
+  //                 result.geometry!.location.lng,
+  //               );
+  //
+  //               controller.selectedAddress.value =
+  //                   result.formattedAddress ?? "";
+  //             }
+  //             if (Navigator.canPop(context)) {
+  //               Navigator.pop(context);
+  //             }
+  //           },
+  //         ),
+  //         geoCodingConfig: GeoCodingConfig(
+  //           apiKey: apiKey,
+  //         ),
+  //         searchConfig: SearchConfig(
+  //           apiKey: apiKey,
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 }

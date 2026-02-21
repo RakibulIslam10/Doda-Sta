@@ -31,6 +31,39 @@ class VendorProfileController extends GetxController {
   final RxString selectedAddress = "".obs;
   final RxList selectedServiceList = [].obs;
 
+
+
+
+
+
+  @override
+  void onInit() {
+
+    super.onInit();
+
+    getServiceCategory();
+
+    // Debug: Print current storage state
+    print('🔐 Storage State:');
+    print('   Token: ${AppStorage.token.isNotEmpty ? "Present" : "Empty"}');
+    print('   Is Vendor: ${AppStorage.isVendor}');
+    print('   Is Logged In: ${AppStorage.isLoggedIn}');
+
+
+
+    nameController.text = Get.find<ProfileController>().providerProfileModel?.data.companyName ?? "";
+    contactPersonController.text = Get.find<ProfileController>().providerProfileModel?.data.contactPerson ?? "";
+    coveredRadius.text = Get.find<ProfileController>().providerProfileModel?.data.coveredRadius.toString() ?? "";
+    websiteController.text = Get.find<ProfileController>().providerProfileModel?.data.website.toString() ?? "";
+    selectedAddress.value = Get.find<ProfileController>().providerProfileModel?.data.serviceLocation ?? "";
+    emailController.addListener(() {
+      final email = emailController.text.trim();
+      isEmailValid.value = GetUtils.isEmail(email);
+    });
+  }
+
+
+
   // Other variables
   final _imagePicker = ImagePicker();
   bool isPickingImage = false;
@@ -214,18 +247,5 @@ class VendorProfileController extends GetxController {
         contactPersonController.text.isNotEmpty &&
         selectedLatLng.value != null &&
         selectedServiceList.isNotEmpty;
-  }
-
-  @override
-  void onInit() {
-    super.onInit();
-
-    getServiceCategory();
-
-    // Debug: Print current storage state
-    print('🔐 Storage State:');
-    print('   Token: ${AppStorage.token.isNotEmpty ? "Present" : "Empty"}');
-    print('   Is Vendor: ${AppStorage.isVendor}');
-    print('   Is Logged In: ${AppStorage.isLoggedIn}');
   }
 }

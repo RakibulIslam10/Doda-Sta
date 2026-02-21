@@ -5,8 +5,9 @@ class AditionalScreenMobile extends GetView<AditionalController> {
 
   @override
   Widget build(BuildContext context) {
-    var apiKeyMap =  Platform.isAndroid ? "AIzaSyC_qKHmzl-HHB9hr8-fWGmhETSVR2H0894" : "AIzaSyDNVuOBQjhjZlxvhBtowqjYN5_YsYfqezQ";
-
+    var apiKeyMap = Platform.isAndroid
+        ? ApiEndPoints.googleApiKeyAndroid
+        : ApiEndPoints.googleApiKeyIos;
     return Scaffold(
       appBar: CommonAppBar(title: 'Service Provider registration'),
       body: Obx(
@@ -203,61 +204,87 @@ class AditionalScreenMobile extends GetView<AditionalController> {
                     }),
 
                     // ADDRESS PICK
+                    Row(
+                      children: [
+                        TextWidget(
+                          "What is the service address",
+                          maxLines: 1,
+                          textOverflow: TextOverflow.ellipsis,
+                          fontSize: Dimensions.titleSmall,
+                          fontWeight: FontWeight.w500,
+                          color: CustomColors.blackColor.withAlpha(888),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: Dimensions.spaceBetweenInputTitleAndBox * 0.6),
                     Obx(() {
                       final isPick = controller.selectedAddress.isNotEmpty;
                       return GestureDetector(
                         onTap: () {
-                          // _openPicker(context,apiKeyMap);
+
+                          Get.to(() => LocationPickerWidget(
+                            selectedAddress: controller.selectedAddress,
+                            selectedLatLng: controller.selectedLatLng,
+                            googleApiKey: apiKeyMap,
+                            initialLatLng: LatLng(23.8103, 90.4125),
+
+                          ));
+
                         },
                         child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 12.w,
-                            vertical: 12.h,
-                          ),
+                          width: MediaQuery
+                              .of(context)
+                              .size
+                              .width,
+                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                           decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.surface,
-                            borderRadius: BorderRadius.circular(
-                              Dimensions.radius,
-                            ),
-                            border: Border.all(
-                              color: isPick
-                                  ? CustomColors.primary
-                                  : CustomColors.disableColor,
-                              width: 1.4,
-                            ),
+                            color: Theme
+                                .of(context)
+                                .colorScheme
+                                .surface,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: isPick? CustomColors.primary :CustomColors.disableColor, width: 1.4),
                           ),
-                          child: Text(
-                            isPick
-                                ? controller.selectedAddress.value
-                                : "Pick Service Address",
+                          child: Text( isPick ? controller.selectedAddress.value : "Pick Service Address",
                             style: TextStyle(
                               fontSize: Dimensions.titleSmall,
                               fontWeight: FontWeight.w500,
-                              color: isPick
-                                  ? CustomColors.blackColor
-                                  : CustomColors.blackColor.withAlpha(888),
+                              color: isPick ? CustomColors.blackColor :CustomColors.blackColor.withAlpha(888),
                             ),
                           ),
                         ),
                       );
                     }),
-
                     Space.height.betweenInputBox,
 
                     // CONTACT PERSON
+                    // PrimaryInputFieldWidget(
+                    //   controller: controller.contactPersonController,
+                    //   hintText: 'Enter Name of contact person',
+                    //   label: 'Contact Person',
+                    // ),
                     PrimaryInputFieldWidget(
                       controller: controller.contactPersonController,
-                      hintText: 'Enter Name of contact person',
-                      label: 'Contact Person',
+                      hintText: '+1 (XXX) XXX-XXXX',
+                      label: 'Contact Number',
+                      keyBoardType: TextInputType.phone,
+                      onChanged: (value) {
+                        final formatted = Helpers.formatCanadianPhone(value);
+                        if (formatted != value) {
+                          controller.contactPersonController.value = TextEditingValue(
+                            text: formatted,
+                            selection: TextSelection.collapsed(offset: formatted.length),
+                          );
+                        }
+                      },
                     ),
-
                     Space.height.betweenInputBox,
 
                     TextWidget(
                       'License & certificate',
                       fontWeight: FontWeight.w500,
                       fontSize: Dimensions.titleMedium,
+                      padding: EdgeInsetsGeometry.only(bottom: 8),
                     ),
 
                     Obx(() {
@@ -315,47 +342,12 @@ class AditionalScreenMobile extends GetView<AditionalController> {
                         onPressed: controller.providerRegisterProcess,
                       ),
                     ),
+                    Space.height.betweenInputBox,
+
                   ],
                 ),
               ),
       ),
     );
   }
-
-  // void _openPicker(BuildContext context, String apiKey) async {
-  //
-  //
-  //   await Navigator.push(
-  //     context,
-  //     MaterialPageRoute(
-  //       builder: (context) => MapLocationPicker(
-  //         config: MapLocationPickerConfig(
-  //           apiKey: apiKey,
-  //           onNext: (result) {
-  //             if (result != null &&
-  //                 result.geometry?.location.lat != null &&
-  //                 result.geometry?.location.lat != null) {
-  //               controller.selectedLatLng.value = LatLng(
-  //                 result.geometry!.location.lat,
-  //                 result.geometry!.location.lng,
-  //               );
-  //
-  //               controller.selectedAddress.value =
-  //                   result.formattedAddress ?? "";
-  //             }
-  //             if (Navigator.canPop(context)) {
-  //               Navigator.pop(context);
-  //             }
-  //           },
-  //         ),
-  //         geoCodingConfig: GeoCodingConfig(
-  //           apiKey: apiKey,
-  //         ),
-  //         searchConfig: SearchConfig(
-  //           apiKey: apiKey,
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 }

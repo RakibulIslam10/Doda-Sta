@@ -186,6 +186,8 @@ class ProfileTopWidgetView extends GetView<ProfileController> {
     final double cardHeight = MediaQuery.of(context).size.height * 0.12;
 
     return Obx(() {
+      final providerData = controller.providerProfileModel?.data;
+
       return Container(
         height: cardHeight,
         decoration: BoxDecoration(
@@ -244,18 +246,12 @@ class ProfileTopWidgetView extends GetView<ProfileController> {
                     color: CustomColors.primary,
                   ),
                   Space.height.v5,
-                  // if (!isVendor)
-                  //   TextWidget(
-                  //     controller.userProfileModel?.data?.phoneNumber ?? "",
-                  //     fontSize: Dimensions.titleSmall * 0.8,
-                  //     fontWeight: FontWeight.w500,
-                  //   ),
-                  // if (isVendor &&
-                  //     controller.providerProfileModel?.rating != null)
-                  //   TextWidget(
-                  //     "Rating: ${controller.providerProfileModel!.rating} (${controller.providerProfileModel!.totalReviews} reviews)",
-                  //     fontSize: Dimensions.titleSmall * 0.8,
-                  //   ),
+                  TextWidget(
+                    controller.providerProfileModel?.data.website ?? '',
+                    fontSize: Dimensions.titleSmall,
+                    fontWeight: FontWeight.w500,
+                    color: CustomColors.primary,
+                  ),
                 ],
               ),
             ),

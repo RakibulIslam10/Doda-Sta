@@ -6,6 +6,8 @@ import 'package:doda_work/views/auth/register/controller/register_controller.dar
 import 'package:doda_work/widgets/auth_app_bar.dart';
 import 'package:doda_work/core/utils/extensions.dart';
 import 'package:doda_work/widgets/loading_widget.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../../../core/helpers/helpers.dart';
 import '../../../widgets/location_picker_widget.dart';
 import '../../../widgets/time_picker_widget.dart';
 import '../../request/widget/category_widget.dart';

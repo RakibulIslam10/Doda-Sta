@@ -34,19 +34,17 @@ class LoginController extends GetxController {
   void onInit() {
     super.onInit();
 
-    // logo change in appbar
-    // profile image and product  a dd image not showing
 
-    // // //   USER
-    // emailController.text = 'dsf26@yopmail.com';
-    // passwordController.text = '111111';
+
+    // // //   USER CREDENTIALS (FOR TESTING PURPOSE ONLY)
+    // //
+    // emailController.text = 'zyanx45@yopmail.com';
+    // passwordController.text = '123456';
+
     //
-    emailController.text = 'zyanx45@yopmail.com';
+    emailController.text = 'crakib@yopmail.com';
     passwordController.text = '123456';
   }
-
-  /// ❌ REMOVE dispose()7
-  /// GetX নিজেই lifecycle handle করবে
 
   /// =======================================
   /// 🔥 LOGIN USING EMAIL + PASSWORD (API)

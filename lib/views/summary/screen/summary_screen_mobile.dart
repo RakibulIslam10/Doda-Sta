@@ -72,11 +72,13 @@ class SummaryScreenMobile extends GetView<SummaryController> {
               Space.height.v10,
               if (AppStorage.isUser)
                 Obx(
-                  () => CompletionProofGrid(
+                      () => CompletionProofGrid(
                     proofs: model.completionProof!,
                     providerNotes: model.providerNotes,
-                    onAccept: () =>
-                        controller.acceptApprove(id: model.id ?? ''),
+                    onAccept: () => controller.showReviewBottomSheet(
+                      id: model.id ?? '',
+                      providerId: model.completedById ?? '',
+                    ),
                     isLoading: controller.isLoadingAccept.value,
                   ),
                 )

@@ -158,7 +158,7 @@ class HomeVendorScreenMobile extends GetView<HomeVendorController> {
       category: item.serviceCategory?.name ?? "No Category",
 
       subCategory: item.subcategory ?? "No Subcategory",
-      address: item.address ?? "No Address",
+      address: 'Postal Code : ${item.postalCode ?? ""}',
       image: (item.attachments.isNotEmpty) ? item.attachments.first : '',
       leadPrice: item.leadPrice,
       status: status,

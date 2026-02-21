@@ -800,7 +800,7 @@ class InboxScreenMobile extends GetView<InboxController> {
     final cleanPath = imagePath
         .replaceAll('\\', '/')
         .replaceFirst(RegExp(r'^/+'), '');
-    final fullImageUrl = '${ApiEndPoints.mainDomain}/$cleanPath';
+    final fullImageUrl = cleanPath;
 
     final imageWidget = Image.network(
       fullImageUrl,
@@ -833,10 +833,7 @@ class InboxScreenMobile extends GetView<InboxController> {
                 color: Colors.grey[400],
               ),
               const SizedBox(height: 8),
-              Text(
-                'Failed to load',
-                style: TextStyle(color: Colors.grey[500], fontSize: 12),
-              ),
+
             ],
           ),
         );

@@ -102,6 +102,7 @@ class HomeScreenMobile extends GetView<HomeController> {
                                           providerNotes: item.providerNotes,
                                           id: item.id,
                                           status: item.status,
+                                          completedById: item.completedById
                                         ),
                                       );
                                     },

@@ -12,6 +12,7 @@ class HomeServiceItem {
   final String? endTime;
   final String? address;
   final String? postalCode;
+  final String? completedById;
   final num? latitude;
   final num? longitude;
   final String? description;
@@ -52,6 +53,8 @@ class HomeServiceItem {
     this.updatedAt,
     this.requestId,
     this.providerNotes, this.postalCode,
+    this.completedById,
+
   });
 
   factory HomeServiceItem.fromJson(Map<String, dynamic> json) =>
@@ -103,6 +106,7 @@ class HomeServiceItem {
             : null,
         requestId: json["requestId"],
         providerNotes: json["providerNotes"],
+        completedById: json["completedBy"] != null ? json["completedBy"]["_id"] : null,
       );
 }
 

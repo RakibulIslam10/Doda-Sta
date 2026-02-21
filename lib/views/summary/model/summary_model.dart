@@ -27,6 +27,7 @@ class SummaryModel {
   final DateTime? updatedAt;
   final String? requestId;
   final String? providerNotes;
+  final String? completedById;
 
   SummaryModel({
     required this.isUser,
@@ -54,5 +55,6 @@ class SummaryModel {
     this.createdAt,
     this.updatedAt,
     this.requestId, this.providerNotes,
+    this.completedById,
   });
 }

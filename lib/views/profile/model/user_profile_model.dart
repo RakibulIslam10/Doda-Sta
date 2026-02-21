@@ -19,15 +19,6 @@ class UserProfileModel {
       data: json['data'] != null ? UserData.fromJson(json['data']) : null,
     );
   }
-
-  Map<String, dynamic> toJson() {
-    return {
-      "statusCode": statusCode,
-      "success": success,
-      "message": message,
-      "data": data?.toJson(),
-    };
-  }
 }
 
 class UserData {
@@ -42,6 +33,8 @@ class UserData {
   final String? updatedAt;
   final String? latitude;
   final String? longitude;
+  final String? address;
+  final String? dateOfBirth;
 
   UserData({
     this.id,
@@ -54,7 +47,7 @@ class UserData {
     this.createdAt,
     this.updatedAt,
     this.latitude,
-    this.longitude,
+    this.longitude, this.address, this.dateOfBirth,
   });
 
   factory UserData.fromJson(Map<String, dynamic> json) {
@@ -70,24 +63,11 @@ class UserData {
       updatedAt: json['updatedAt'],
       latitude: json['latitude'],
       longitude: json['longitude'],
+      address: json['address'],
+      dateOfBirth: json['dateOfBirth'],
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      "_id": id,
-      "authId": authId?.toJson(),
-      "name": name,
-      "email": email,
-      "profile_image": profileImage,
-      "phoneNumber": phoneNumber,
-      "favorites": favorites?.toJson(),
-      "createdAt": createdAt,
-      "updatedAt": updatedAt,
-      "latitude": latitude,
-      "longitude": longitude,
-    };
-  }
 }
 
 class AuthId {
@@ -136,22 +116,6 @@ class AuthId {
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      "_id": id,
-      "name": name,
-      "email": email,
-      "password": password,
-      "provider": provider,
-      "role": role,
-      "isBlocked": isBlocked,
-      "isActive": isActive,
-      "phoneNumber": phoneNumber,
-      "isPhoneVerified": isPhoneVerified,
-      "createdAt": createdAt,
-      "updatedAt": updatedAt,
-    };
-  }
 }
 
 class Favorites {
@@ -169,11 +133,6 @@ class Favorites {
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      "categories": categories?.map((x) => x.toJson()).toList(),
-    };
-  }
 }
 
 class FavoriteCategory {
@@ -187,12 +146,5 @@ class FavoriteCategory {
       categoryId: json['categoryId'],
       id: json['_id'],
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      "categoryId": categoryId,
-      "_id": id,
-    };
   }
 }

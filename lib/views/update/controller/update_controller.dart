@@ -42,6 +42,7 @@ class UpdateController extends GetxController {
     super.onInit();
     nameController.text = Get.find<ProfileController>().userProfileModel?.data?.name ?? "";
     numberController.text = Get.find<ProfileController>().userProfileModel?.data?.phoneNumber ?? "";
+    selectedAddress.value = Get.find<ProfileController>().userProfileModel?.data?.address ?? "";
     emailController.addListener(() {
       final email = emailController.text.trim();
       isEmailValid.value = GetUtils.isEmail(email);

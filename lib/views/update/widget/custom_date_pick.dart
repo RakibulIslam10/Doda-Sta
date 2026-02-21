@@ -115,7 +115,7 @@ class _CustomDatePickState extends State<CustomDatePick> {
                         ? widget.hint
                         : _formatter.format(_selectedDate!),
                     fontSize: Dimensions.titleSmall,
-                    color: Colors.black.withOpacity(0.4),
+                    color: Colors.black.withOpacity(0.8),
                     fontWeight: FontWeight.w500,
                   ),
                 ),

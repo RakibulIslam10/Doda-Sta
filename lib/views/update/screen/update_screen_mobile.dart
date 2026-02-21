@@ -85,9 +85,11 @@ class UpdateScreenMobile extends GetView<UpdateController> {
             ),
 
             Space.height.betweenInputBox,
-
             CustomDatePick(
               hint: "Select Date of Birth",
+              initialDate: DateTime.tryParse(
+                Get.find<ProfileController>().userProfileModel?.data?.dateOfBirth ?? '',
+              ),
               onDateSelected: (value) {
                 controller.updatedDate.value = value.toIso8601String();
               },

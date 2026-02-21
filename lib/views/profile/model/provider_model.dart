@@ -38,6 +38,7 @@ class Data {
   final int coveredRadius;
   final String serviceLocation;
   final String contactPerson;
+  final String? profileImage;
   final bool isActive;
   final bool isRejected;
   final bool isVerified;
@@ -48,6 +49,7 @@ class Data {
     required this.id,
     required this.authId,
     required this.companyName,
+     this.profileImage,
     required this.website,
     required this.serviceCategories,
     required this.latitude,
@@ -74,6 +76,7 @@ class Data {
     longitude: json["longitude"]?.toDouble(),
     coveredRadius: json["coveredRadius"],
     serviceLocation: json["serviceLocation"],
+    profileImage: json["profile_image"] ?? '',
     contactPerson: json["contactPerson"],
     isActive: json["isActive"],
     isRejected: json["isRejected"],

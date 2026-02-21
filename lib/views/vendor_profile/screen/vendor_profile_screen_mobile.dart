@@ -1,8 +1,13 @@
+import 'dart:io';
+
+import 'package:doda_work/views/profile/controller/profile_controller.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../core/utils/basic_import.dart';
 import '../../../core/utils/extensions.dart';
 import '../../../widgets/auth_app_bar.dart';
 import '../../../widgets/loading_widget.dart';
+import '../../../widgets/location_picker_widget.dart';
 import '../../request/widget/category_widget.dart';
 import '../controller/vendor_profile_controller.dart';
 
@@ -11,7 +16,9 @@ class VendorProfileScreenMobile extends GetView<VendorProfileController> {
 
   @override
   Widget build(BuildContext context) {
-
+    var apiKeyMap = Platform.isAndroid
+        ? ApiEndPoints.googleApiKeyAndroid
+        : ApiEndPoints.googleApiKeyIos;
     return Scaffold(
       appBar: CommonAppBar(title: 'Edit Profile'),
       body: SafeArea(
@@ -36,7 +43,11 @@ class VendorProfileScreenMobile extends GetView<VendorProfileController> {
                                     )
                                   : CachedNetworkImage(
                                       imageUrl:
-                                          '',
+                                          Get.find<ProfileController>()
+                                              .providerProfileModel
+                                              ?.data
+                                              .profileImage ??
+                                          "",
                                       height: 120,
                                       width: 120,
                                       fit: BoxFit.cover,
@@ -116,11 +127,33 @@ class VendorProfileScreenMobile extends GetView<VendorProfileController> {
                     ),
                     Space.height.betweenInputBox,
 
+                    Row(
+                      children: [
+                        TextWidget(
+                          "What is the service address",
+                          maxLines: 1,
+                          textOverflow: TextOverflow.ellipsis,
+                          fontSize: Dimensions.titleSmall,
+                          fontWeight: FontWeight.w500,
+                          color: CustomColors.blackColor.withAlpha(888),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: Dimensions.spaceBetweenInputTitleAndBox * 0.6,
+                    ),
                     Obx(() {
                       final isPick = controller.selectedAddress.isNotEmpty;
                       return GestureDetector(
                         onTap: () {
-                          // _openPicker(context);
+                          Get.to(
+                            () => LocationPickerWidget(
+                              selectedAddress: controller.selectedAddress,
+                              selectedLatLng: controller.selectedLatLng,
+                              googleApiKey: apiKeyMap,
+                              initialLatLng: LatLng(23.8103, 90.4125),
+                            ),
+                          );
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width,
@@ -153,6 +186,7 @@ class VendorProfileScreenMobile extends GetView<VendorProfileController> {
                         ),
                       );
                     }),
+
                     Space.height.betweenInputBox,
 
                     // CustomDropDownWidget(
@@ -209,6 +243,7 @@ class VendorProfileScreenMobile extends GetView<VendorProfileController> {
       ),
     );
   }
+
   // void _openPicker(BuildContext context) async {
   //   await Navigator.push(
   //     context,
@@ -243,5 +278,4 @@ class VendorProfileScreenMobile extends GetView<VendorProfileController> {
   //     ),
   //   );
   // }
-
 }

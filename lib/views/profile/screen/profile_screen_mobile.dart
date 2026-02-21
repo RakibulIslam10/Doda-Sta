@@ -19,7 +19,7 @@ class ProfileScreenMobile extends GetView<ProfileController> {
               children: [
                 GestureDetector(
                   onTap: () => Get.find<NavigationController>().goToProfile(),
-                  child: Image.asset(Assets.logo.aaplogo.path,height: 55,),
+                  child: Image.asset(Assets.logo.aaplogo.path, height: 55),
                 ),
                 TextWidget(
                   'Profile',
@@ -50,7 +50,8 @@ class ProfileScreenMobile extends GetView<ProfileController> {
               : ListView(
                   padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
                   children: [
-                    if (AppStorage.users == 'USER') ProfileTopHeaderWidgetView(),
+                    if (AppStorage.users == 'USER')
+                      ProfileTopHeaderWidgetView(),
                     if (AppStorage.users == 'PROVIDER') ProfileTopWidgetView(),
 
                     Space.height.v20,

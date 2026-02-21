@@ -50,12 +50,19 @@ class VendorProfileController extends GetxController {
     print('   Is Logged In: ${AppStorage.isLoggedIn}');
 
 
-
     nameController.text = Get.find<ProfileController>().providerProfileModel?.data.companyName ?? "";
     contactPersonController.text = Get.find<ProfileController>().providerProfileModel?.data.contactPerson ?? "";
     coveredRadius.text = Get.find<ProfileController>().providerProfileModel?.data.coveredRadius.toString() ?? "";
     websiteController.text = Get.find<ProfileController>().providerProfileModel?.data.website.toString() ?? "";
     selectedAddress.value = Get.find<ProfileController>().providerProfileModel?.data.serviceLocation ?? "";
+
+    final lat = Get.find<ProfileController>().providerProfileModel?.data.latitude;
+    final lng = Get.find<ProfileController>().providerProfileModel?.data.longitude;
+
+    if (lat != null && lng != null) {
+      selectedLatLng.value = LatLng(lat, lng);
+    }
+
     emailController.addListener(() {
       final email = emailController.text.trim();
       isEmailValid.value = GetUtils.isEmail(email);
@@ -110,11 +117,9 @@ class VendorProfileController extends GetxController {
 
   Future<void> vendorUpdateProfile() async {
     try {
-      // Get authentication token - FIXED: Using correct AppStorage method
       final token = _getAuthToken();
       if (token == null) return;
 
-      // Check if user is vendor - FIXED: Using correct AppStorage method
       if (!_isUserVendor()) {
         _showSnackBar('Vendor access required', isError: true);
         Get.offAllNamed(Routes.homeScreen);
@@ -131,10 +136,8 @@ class VendorProfileController extends GetxController {
       print('🔑 Token: ${token.substring(0, 20)}...');
       print('👤 Is Vendor: ${AppStorage.isVendor}');
 
-      // Make API call - FIXED: Using temporaryToken if needed, but prefer actual token
       final result = await ApiRequest.multiMultipartRequest(
         token: token,
-        // Use the actual token from AppStorage
         endPoint: ApiEndPoints.providerUpdateProfile,
         reqType: "PATCH",
         isLoading: isLoading,
@@ -147,7 +150,7 @@ class VendorProfileController extends GetxController {
         },
       );
 
-      print('✅ Profile update completed successfully');
+      print('✅ Profile update Request successfully');
     } catch (e) {
       _handleError(e);
     }
@@ -196,7 +199,7 @@ class VendorProfileController extends GetxController {
     print('   Data Message: ${response.data.message}');
 
     // Show success message
-    _showSnackBar(response.message, isError: false);
+    // _showSnackBar(response.message, isError: false);
     Get.close(1);
   }
 

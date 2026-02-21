@@ -53,7 +53,6 @@ class ProfileScreenMobile extends GetView<ProfileController> {
                     if (AppStorage.users == 'USER')
                       ProfileTopHeaderWidgetView(),
                     if (AppStorage.users == 'PROVIDER') ProfileTopWidgetView(),
-
                     Space.height.v20,
                     ProfileCardSectionWidgetView(),
                   ],

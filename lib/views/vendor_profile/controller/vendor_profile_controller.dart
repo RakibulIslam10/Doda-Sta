@@ -59,9 +59,16 @@ class VendorProfileController extends GetxController {
     final lat = Get.find<ProfileController>().providerProfileModel?.data.latitude;
     final lng = Get.find<ProfileController>().providerProfileModel?.data.longitude;
 
+
     if (lat != null && lng != null) {
       selectedLatLng.value = LatLng(lat, lng);
     }
+
+    selectedServiceList.addAll(
+      (Get.find<ProfileController>().providerProfileModel?.data.serviceCategories ?? [])
+          .map((e) => e.id)
+          .toList(),
+    );
 
     emailController.addListener(() {
       final email = emailController.text.trim();
@@ -198,8 +205,6 @@ class VendorProfileController extends GetxController {
     print('   Message: ${response.message}');
     print('   Data Message: ${response.data.message}');
 
-    // Show success message
-    // _showSnackBar(response.message, isError: false);
     Get.close(1);
   }
 

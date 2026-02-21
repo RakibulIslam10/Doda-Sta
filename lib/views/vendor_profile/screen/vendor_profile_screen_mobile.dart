@@ -206,26 +206,24 @@ class VendorProfileScreenMobile extends GetView<VendorProfileController> {
                           .map((e) => e.name)
                           .toList(),
                       label: "Service Category",
+                      initialValues: controller.serviceCategoryList
+                          .where((e) => controller.selectedServiceList.contains(e.id))
+                          .map((e) => e.name)
+                          .toList(),
                       onChanged: (List<String> selectedNames) {
-                        // Clear old selections
                         controller.selectedServiceList.clear();
 
-                        // Filter original list to match selected names
                         final selectedItems = controller.serviceCategoryList
                             .where((item) => selectedNames.contains(item.name))
                             .toList();
 
-                        // Add selected IDs
                         controller.selectedServiceList.addAll(
                           selectedItems.map((e) => e.id),
                         );
 
-                        print(
-                          "✅ Selected IDs: ${controller.selectedServiceList}",
-                        );
+                        print("✅ Selected IDs: ${controller.selectedServiceList}");
                       },
-                    ),
-                    Space.height.betweenInputBox,
+                    ),                    Space.height.betweenInputBox,
                     Space.height.betweenInputBox,
 
                     Obx(

@@ -70,22 +70,14 @@ class HomeScreenMobile extends GetView<HomeController> {
                               builderDelegate:
                               PagedChildBuilderDelegate<HomeServiceItem>(
                                 itemBuilder: (context, item, itemIndex) {
-                                  String extractPostalCode(String? address) {
-                                    if (address == null || address.isEmpty) {
-                                      return "No Postal Code";
-                                    }
-                                    final RegExp postalCodeRegex = RegExp(r'\b\d{6}\b');
-                                    final match = postalCodeRegex.firstMatch(address);
 
-                                    return match != null ? match.group(0)! : "No Postal Code";
-                                  }
                                   return CustomStatusCardWidget(
                                     index: itemIndex,
                                     requestId: item.requestId ?? "",
                                     category: item.subcategory ?? "",
                                     subCategory:
                                     item.serviceCategory?.name ?? "",
-                                    address: extractPostalCode(item.address),
+                                    address: 'Postal Code : ${item.postalCode ?? ""}',
                                     image: item.attachments.first,
                                     isUser: true,
                                     status: status,

@@ -5,6 +5,10 @@ class UpdateScreenMobile extends GetView<UpdateController> {
 
   @override
   Widget build(BuildContext context) {
+
+    var apiKeyMap = Platform.isAndroid
+        ? ApiEndPoints.googleApiKeyAndroid
+        : ApiEndPoints.googleApiKeyIos;
     return Scaffold(
       appBar: CommonAppBar(title: 'Update Profile'),
       body: SafeArea(
@@ -81,7 +85,17 @@ class UpdateScreenMobile extends GetView<UpdateController> {
               label: "phone",
               controller: controller.numberController,
               focusNode: controller.numberFocus,
-              hintText: "Enter your phone",
+              hintText: '+1 (XXX) XXX-XXXX',
+              keyBoardType: TextInputType.phone,
+              onChanged: (value) {
+                final formatted = Helpers.formatCanadianPhone(value);
+                if (formatted != value) {
+                  controller.numberController.value = TextEditingValue(
+                    text: formatted,
+                    selection: TextSelection.collapsed(offset: formatted.length),
+                  );
+                }
+              },
             ),
 
             Space.height.betweenInputBox,
@@ -113,7 +127,13 @@ class UpdateScreenMobile extends GetView<UpdateController> {
               final isPick = controller.selectedAddress.isNotEmpty;
               return GestureDetector(
                 onTap: () {
+                  Get.to(() => LocationPickerWidget(
+                    selectedAddress: controller.selectedAddress,
+                    selectedLatLng: controller.selectedLatLng,
+                    googleApiKey: apiKeyMap,
+                    initialLatLng: LatLng(23.8103, 90.4125),
 
+                  ));
                 },
                 child: Container(
                   width: MediaQuery.of(context).size.width,

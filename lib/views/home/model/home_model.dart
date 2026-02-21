@@ -11,6 +11,7 @@ class HomeServiceItem {
   final String? startTime;
   final String? endTime;
   final String? address;
+  final String? postalCode;
   final num? latitude;
   final num? longitude;
   final String? description;
@@ -50,7 +51,7 @@ class HomeServiceItem {
     this.createdAt,
     this.updatedAt,
     this.requestId,
-    this.providerNotes,
+    this.providerNotes, this.postalCode,
   });
 
   factory HomeServiceItem.fromJson(Map<String, dynamic> json) =>
@@ -75,6 +76,7 @@ class HomeServiceItem {
         startTime: json["startTime"],
         endTime: json["endTime"],
         address: json["address"],
+        postalCode: json["postalCode"] ?? '',
         latitude: json["latitude"]?.toDouble(),
         longitude: json["longitude"]?.toDouble(),
         description: json["description"],

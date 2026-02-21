@@ -4,8 +4,6 @@ class ReviewCardWidget extends StatelessWidget {
   final String reviewerName;
   final String reviewerImage; // new
   final double rating;
-  final String category;
-  final String subCategory;
   final String comment;
   final String date;
 
@@ -14,8 +12,6 @@ class ReviewCardWidget extends StatelessWidget {
     required this.reviewerName,
     required this.reviewerImage, // new
     required this.rating,
-    required this.category,
-    required this.subCategory,
     required this.comment, required this.date,
   });
 
@@ -76,37 +72,6 @@ class ReviewCardWidget extends StatelessWidget {
                 ),
                 Space.height.v5,
 
-                // Category
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextWidget('Category: ', color: CustomColors.primary),
-                    Expanded(
-                      child: TextWidget(
-                        category,
-                        fontSize: Dimensions.titleSmall,
-                        maxLines: 2,
-                        textOverflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
-
-                // Subcategory
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextWidget('Sub Category: ', color: CustomColors.primary),
-                    Expanded(
-                      child: TextWidget(
-                        subCategory,
-                        fontSize: Dimensions.titleSmall,
-                        maxLines: 2,
-                        textOverflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
                 Space.height.v5,
 
                 // Comment

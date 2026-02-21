@@ -35,13 +35,11 @@ class ReviewRatingScreenMobile extends GetView<ReviewRatingController> {
           return ListView(
             padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
             children: [
-              // Top section showing average rating and total reviews
               TopTextWidget(
               ),
 
               const SizedBox(height: 16),
 
-              // List of reviews dynamically
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -55,8 +53,7 @@ class ReviewRatingScreenMobile extends GetView<ReviewRatingController> {
                         : 'https://picsum.photos/200/300?random=$index',
                     reviewerName: review.user?.name ?? 'Anonymous',
                     rating: review.rating ?? 0,
-                    category:'', // Optional: populate if available
-                    subCategory: '', // Optional: populate if available
+
                     comment: review.review ?? 'hlloe',
                   );
                 },

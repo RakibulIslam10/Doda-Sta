@@ -15,12 +15,14 @@ class ProfileCardSectionWidgetView extends GetView<ProfileController> {
           'Account Settings ',
           () => Get.toNamed(Routes.settingScreen),
         ),
-        // _buildSectionCard(
-        //   Icons.reviews_outlined,
-        //   'Reviews & Ratings',
-        //   isVisible: AppStorage.isVendor,
-        //   () => Get.toNamed(Routes.reviewRatingScreen),
-        // ),
+
+        if (AppStorage.users == 'PROVIDER')  _buildSectionCard(
+          Icons.reviews_outlined,
+          'Reviews & Ratings',
+          isVisible: AppStorage.isVendor,
+              () => Get.toNamed(Routes.reviewRatingScreen),
+        ),
+
         _buildSectionCard(
           Icons.dataset_outlined,
           'Documents',

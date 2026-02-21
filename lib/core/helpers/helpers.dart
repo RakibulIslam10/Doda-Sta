@@ -6,7 +6,32 @@ class Helpers {
 
 
 
+  static String formatCanadianPhone(String input) {
+    // Remove everything except digits
+    String digits = input.replaceAll(RegExp(r'[^\d]'), '');
 
+    // Remove leading 1 if present
+    if (digits.startsWith('1')) {
+      digits = digits.substring(1);
+    }
+
+    // Limit to 10 digits
+    if (digits.length > 10) digits = digits.substring(0, 10);
+
+    String result = '+1 ';
+
+    if (digits.isEmpty) return '';
+
+    if (digits.length <= 3) {
+      result += '(${digits}';
+    } else if (digits.length <= 6) {
+      result += '(${digits.substring(0, 3)}) ${digits.substring(3)}';
+    } else {
+      result += '(${digits.substring(0, 3)}) ${digits.substring(3, 6)}-${digits.substring(6)}';
+    }
+
+    return result;
+  }
 
 
   static DateTime _toBDTime(String timestamp) {

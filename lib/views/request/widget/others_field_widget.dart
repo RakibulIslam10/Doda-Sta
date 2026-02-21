@@ -174,8 +174,18 @@ class OthersFieldWidget extends StatelessWidget {
         Space.height.betweenInputBox,
         PrimaryInputFieldWidget(
           controller: phoneController,
-          hintText: '+1 123-456-7890',
+          hintText: '+1 (XXX) XXX-XXXX',
           label: 'Contact Number',
+          keyBoardType: TextInputType.phone,
+          onChanged: (value) {
+            final formatted = Helpers.formatCanadianPhone(value);
+            if (formatted != value) {
+              phoneController.value = TextEditingValue(
+                text: formatted,
+                selection: TextSelection.collapsed(offset: formatted.length),
+              );
+            }
+          },
         ),
       ],
     );

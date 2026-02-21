@@ -19,8 +19,11 @@ class PrimaryInputFieldWidget extends StatefulWidget {
   /// Pass the password controller to confirm against (live validation)
   final TextEditingController? confirmWith;
 
-  /// ✅ New: Make field required or not
+  /// ✅ Make field required or not
   final bool requiredField;
+
+  /// ✅ Optional onChanged callback
+  final Function(String)? onChanged;
 
   const PrimaryInputFieldWidget({
     super.key,
@@ -38,7 +41,8 @@ class PrimaryInputFieldWidget extends StatefulWidget {
     this.fillColor,
     required this.hintText,
     this.confirmWith,
-    this.requiredField = true, // default true
+    this.requiredField = true,
+    this.onChanged, // ✅ added
   });
 
   @override
@@ -72,24 +76,28 @@ class _PrimaryInputFieldWidgetState extends State<PrimaryInputFieldWidget> {
   }
 
   String? _validate(String? value) {
-    // ✅ Skip validation if requiredField is false
     if (!widget.requiredField) return null;
 
     if (value == null || value.trim().isEmpty) {
       return Strings.pleaseFillOutTheField;
     }
+
     if (widget.isEmail) {
-      final emailRegex = RegExp(r'^[\w\-\.]+@([\w\-]+\.)+[\w\-]{2,4}$');
-      if (!emailRegex.hasMatch(value.trim())) return "Enter a valid email";
+      final emailRegex =
+      RegExp(r'^[\w\-\.]+@([\w\-]+\.)+[\w\-]{2,4}$');
+      if (!emailRegex.hasMatch(value.trim())) {
+        return "Enter a valid email";
+      }
     }
 
-    // Only enforce min length on password field, not confirm
     if (widget.isPassword && widget.confirmWith == null) {
-      if (value.length < 6) return "Password must be at least 6 characters";
+      if (value.length < 6) {
+        return "Password must be at least 6 characters";
+      }
     }
 
-    // ✅ Live confirm password validation
-    if (widget.confirmWith != null && value != widget.confirmWith!.text) {
+    if (widget.confirmWith != null &&
+        value != widget.confirmWith!.text) {
       return "Passwords do not match";
     }
 
@@ -119,10 +127,12 @@ class _PrimaryInputFieldWidgetState extends State<PrimaryInputFieldWidget> {
                 ),
                 if (widget.optionalText?.isNotEmpty ?? false)
                   Padding(
-                    padding: EdgeInsets.only(left: Dimensions.widthSize * 0.5),
+                    padding: EdgeInsets.only(
+                        left: Dimensions.widthSize * 0.5),
                     child: TextWidget(
                       widget.optionalText!,
-                      fontSize: Dimensions.titleMedium * 0.9,
+                      fontSize:
+                      Dimensions.titleMedium * 0.9,
                       style: CustomStyle.labelSmall.copyWith(
                         fontWeight: FontWeight.w400,
                       ),
@@ -134,69 +144,94 @@ class _PrimaryInputFieldWidgetState extends State<PrimaryInputFieldWidget> {
           ),
         TextFormField(
           controller: widget.controller,
-          focusNode: widget.focusNode,
-          obscureText: widget.isPassword ? _obscureText : false,
+          focusNode: _focusNode,
+          obscureText:
+          widget.isPassword ? _obscureText : false,
           maxLines: widget.maxLines,
           cursorColor: CustomColors.primary,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
+          autovalidateMode:
+          AutovalidateMode.onUserInteraction,
           validator: widget.validatorLogic ?? _validate,
-          textInputAction: widget.nextFocusNode != null
+          keyboardType: widget.keyBoardType,
+          textInputAction:
+          widget.nextFocusNode != null
               ? TextInputAction.next
               : TextInputAction.done,
           onFieldSubmitted: (_) {
             if (widget.nextFocusNode != null) {
-              FocusScope.of(context).requestFocus(widget.nextFocusNode);
+              FocusScope.of(context)
+                  .requestFocus(widget.nextFocusNode);
             } else {
               FocusScope.of(context).unfocus();
             }
           },
           readOnly: widget.readOnly,
+          onChanged: widget.onChanged, // ✅ optional
           decoration: InputDecoration(
             hintText: widget.hintText,
-            hintStyle: CustomStyle.bodyMedium.copyWith(
+            hintStyle:
+            CustomStyle.bodyMedium.copyWith(
               color: Colors.grey.shade500,
               fontWeight: FontWeight.w400,
-              fontSize: Dimensions.titleMedium * 0.95
+              fontSize:
+              Dimensions.titleMedium * 0.95,
             ),
             suffixIcon: widget.isPassword
                 ? IconButton(
-                    icon: Icon(
-                      _obscureText ? Icons.visibility_off : Icons.visibility,
-                      color: _focusNode.hasFocus
-                          ? CustomColors.primary
-                          : CustomColors.disableColor,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _obscureText = !_obscureText;
-                      });
-                    },
-                  )
+              icon: Icon(
+                _obscureText
+                    ? Icons.visibility_off
+                    : Icons.visibility,
+                color: _focusNode.hasFocus
+                    ? CustomColors.primary
+                    : CustomColors.disableColor,
+              ),
+              onPressed: () {
+                setState(() {
+                  _obscureText =
+                  !_obscureText;
+                });
+              },
+            )
                 : null,
             filled: widget.fillColor != null,
-            fillColor:
-                widget.fillColor ?? Theme.of(context).colorScheme.surface,
+            fillColor: widget.fillColor ??
+                Theme.of(context)
+                    .colorScheme
+                    .surface,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),
+              borderRadius: BorderRadius.circular(
+                  Dimensions.radius * 0.8),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: CustomColors.primary, width: 1.4),
-              borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),
+              borderSide: BorderSide(
+                  color: CustomColors.primary,
+                  width: 1.4),
+              borderRadius: BorderRadius.circular(
+                  Dimensions.radius * 0.8),
             ),
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 color: CustomColors.disableColor,
                 width: 1.4,
               ),
-              borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),
+              borderRadius: BorderRadius.circular(
+                  Dimensions.radius * 0.8),
             ),
             errorBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: CustomColors.rejected, width: 1.4),
-              borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),
+              borderSide: BorderSide(
+                  color: CustomColors.rejected,
+                  width: 1.4),
+              borderRadius: BorderRadius.circular(
+                  Dimensions.radius * 0.8),
             ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: CustomColors.rejected, width: 1.4),
-              borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),
+            focusedErrorBorder:
+            OutlineInputBorder(
+              borderSide: BorderSide(
+                  color: CustomColors.rejected,
+                  width: 1.4),
+              borderRadius: BorderRadius.circular(
+                  Dimensions.radius * 0.8),
             ),
           ),
         ),

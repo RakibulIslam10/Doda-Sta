@@ -35,15 +35,7 @@ class LoginController extends GetxController {
     super.onInit();
 
 
-    //
-    // // // //   USER CREDENTIALS (FOR TESTING PURPOSE ONLY)
-    // // //
-    // emailController.text = 'zyanx45@yopmail.com';
-    // passwordController.text = '123456';
-    //
-    //
-    // emailController.text = 'crakib@yopmail.com';
-    // passwordController.text = '123456';
+
   }
 
   /// =======================================

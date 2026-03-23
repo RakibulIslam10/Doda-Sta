@@ -168,7 +168,17 @@ class AditionalController extends GetxController {
       reqType: 'POST',
       token: userToken, // ✅ Pass the user token explicitly
       onSuccess: (result) {
-        Get.offAllNamed(Routes.loginScreen);
+        Get.defaultDialog(
+          title: "Application Submitted",
+          titleStyle: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold, fontSize: 18),
+          middleText: "Your application is under review, and we will inform you when complete.",
+          middleTextStyle: const TextStyle(fontSize: 14),
+          barrierDismissible: false,
+          confirm: ElevatedButton(
+            onPressed: () => Get.offAllNamed(Routes.loginScreen),
+            child: const Text("OK"),
+          ),
+        );
       },
     );
   }

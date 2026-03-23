@@ -337,7 +337,7 @@ class AditionalScreenMobile extends GetView<AditionalController> {
                     // REGISTER BUTTON
                     Obx(
                       () => PrimaryButtonWidget(
-                        title: 'Registration',
+                        title: 'Submit Application',
                         isLoading: controller.providerRegIsLoading.value,
                         onPressed: controller.providerRegisterProcess,
                       ),

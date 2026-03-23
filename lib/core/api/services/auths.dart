@@ -112,9 +112,21 @@ class AuthService {
       isLoading: isLoading,
       body: inputBody,
       onSuccess: (result) {
-        AppStorage.users == "PROVIDER"
-            ? Get.toNamed(Routes.aditionalScreen)
-            : Get.offAllNamed(Routes.loginScreen);
+        if (AppStorage.users == "PROVIDER") {
+          Get.toNamed(Routes.aditionalScreen);
+        } else {
+          Get.defaultDialog(
+            title: "Registration Successful",
+            titleStyle: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold, fontSize: 18),
+            middleText: "Your account has been created successfully. Please login to continue.",
+            middleTextStyle: const TextStyle(fontSize: 14),
+            barrierDismissible: false,
+            confirm: ElevatedButton(
+              onPressed: () => Get.offAllNamed(Routes.loginScreen),
+              child: const Text("OK"),
+            ),
+          );
+        }
 
         // AppStorage.isVendor == true
         //     ? Get.toNamed(Routes.aditionalScreen)

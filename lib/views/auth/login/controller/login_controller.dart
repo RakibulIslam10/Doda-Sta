@@ -1,10 +1,15 @@
 import 'dart:io';
+import 'package:doda_work/core/utils/app_storage.dart';
 import 'package:doda_work/core/utils/basic_import.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as fb;
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import '../../../../core/api/services/api.dart';
 import '../../../../core/api/services/auths.dart';
+import '../../../../core/utils/message_helper.dart';
+import '../../../../routes/routes.dart';
+import '../model/login_model.dart';
 
 class LoginController extends GetxController {
   /// FORM
@@ -13,30 +18,25 @@ class LoginController extends GetxController {
   /// EMAIL
   final emailController = TextEditingController();
   final emailFocus = FocusNode();
-  final isEmailValid = false.obs;
 
   /// PASSWORD
   final passwordController = TextEditingController();
   final passwordFocus = FocusNode();
-  final isPasswordValid = false.obs;
-  final isPasswordVisible = false.obs;
   final rememberMe = false.obs;
 
   /// LOADING
   final isLoading = false.obs;
 
-  /// FIREBASE AUTH
-  final firebaseUser = Rxn<User>();
+  /// FIREBASE
+  final firebaseUser = Rxn<fb.User>();
+  fb.User? get user => firebaseUser.value;
 
-  User? get user => firebaseUser.value;
+  static final fb.FirebaseAuth _auth = fb.FirebaseAuth.instance;
+  static fb.User? currentUser() => _auth.currentUser;
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
-  /// =======================================
-  /// 🔥 LOGIN USING EMAIL + PASSWORD (API)
-  /// =======================================
+  // =======================================
+  // 🔥 EMAIL + PASSWORD LOGIN
+  // =======================================
   Future<dynamic> loginProcess() async {
     return await AuthService.loginService(
       isLoading: isLoading,
@@ -45,201 +45,125 @@ class LoginController extends GetxController {
     );
   }
 
-  /// =======================================
-  /// 🔥 GOOGLE SIGN IN (Android / iOS / Web)
-  /// =======================================
-  Future<User?> signInWithGoogle(BuildContext context) async {
+  // =======================================
+  // 🔥 GOOGLE SIGN IN
+  // =======================================
+  Future<fb.User?> signInWithGoogle() async {
     try {
-      final GoogleSignIn googleSignIn = GoogleSignIn(
-        scopes: ['email', 'profile'],
-      );
-      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+      final GoogleSignInAccount? googleUser =
+      await GoogleSignIn(scopes: ['email', 'profile']).signIn();
 
       if (googleUser == null) {
-        Get.snackbar(
-          "Cancelled",
-          "Google sign-in was cancelled",
-          snackPosition: SnackPosition.BOTTOM,
-        );
+        CustomSnackBar.error("Google sign-in was cancelled");
         return null;
       }
+
       final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+      await googleUser.authentication;
 
-      if (kDebugMode) {
-        print("==========================================");
-        print("Google Auth Tokens:");
-        print("Access Token: ${googleAuth.accessToken?.substring(0, 20)}...");
-        print("ID Token: ${googleAuth.idToken?.substring(0, 20)}...");
-        print("==========================================");
-      }
-
-      // Create a new credential
-      final OAuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
+      final fb.UserCredential userCredential =
+      await _auth.signInWithCredential(
+        fb.GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        ),
       );
 
-      // Sign in to Firebase with the Google credential
-      final UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithCredential(credential);
-
-      // Update your observable/state
       firebaseUser.value = userCredential.user;
 
-      // Get Firebase ID Token (এটা backend এ পাঠাতে হবে)
-      final firebaseToken = await userCredential.user?.getIdToken();
+      final String? firebaseToken =
+      await userCredential.user?.getIdToken();
 
       if (kDebugMode) {
-        print("==========================================");
-        print("Firebase User Info:");
-        print("UID: ${userCredential.user?.uid}");
-        print("Email: ${userCredential.user?.email}");
-        print("Display Name: ${userCredential.user?.displayName}");
-        print("Firebase Token: ${firebaseToken?.substring(0, 30)}...");
-        print("Token Length: ${firebaseToken?.length}");
-        print("==========================================");
+        print("UID   : ${userCredential.user?.uid}");
+        print("Email : ${userCredential.user?.email}");
+        print("Name  : ${userCredential.user?.displayName}");
+        print("Token : ${firebaseToken?.substring(0, 30)}...");
       }
 
-      // Show success message
-      Get.snackbar(
-        "Success",
-        "Signed in as ${userCredential.user?.displayName ?? 'User'}",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.green,
-        colorText: Colors.white,
+      await ApiRequest.post(
+        fromJson: LoginModel.fromJson,
+        endPoint: '/auth/google',
+        isLoading: isLoading,
+        showSuccessSnackBar: true,
+        body: {"id_token": firebaseToken},
+        onSuccess: (result) {
+
+          final role = result.data.user.authId.role.toUpperCase();
+          final id = result.data.user.id;
+
+          print("User Role: $role");
+
+          AppStorage.save(uId: id);
+          print('-------------------------------');
+          print('U ID = ${AppStorage.uId}');
+
+          AppStorage.save(token: result.data.accessToken, isLoggedIn: true);
+
+          AppStorage.saveRole(role);
+          AppStorage.isVendor = role == "PROVIDER";
+
+          // Navigate based on role
+          if (role == "PROVIDER") {
+            Get.offAllNamed(Routes.navigationScreen);
+          } else if (role == "USER") {
+            Get.offAllNamed(Routes.navigationScreen);
+          } else {
+            MessageHelper.showError("Please Select Your Role.\nThank you");
+          }
+
+        },
       );
 
       return userCredential.user;
-    } on FirebaseAuthException catch (e) {
-      debugPrint("Firebase Auth Error: ${e.code} - ${e.message}");
 
-      String errorMessage;
-      switch (e.code) {
-        case 'account-exists-with-different-credential':
-          errorMessage =
-              "An account already exists with a different sign-in method";
-          break;
-        case 'invalid-credential':
-          errorMessage = "Invalid credentials. Please try again";
-          break;
-        case 'operation-not-allowed':
-          errorMessage = "Google sign-in is not enabled";
-          break;
-        case 'user-disabled':
-          errorMessage = "This user account has been disabled";
-          break;
-        case 'user-not-found':
-          errorMessage = "No user found with this account";
-          break;
-        default:
-          errorMessage = "Authentication failed: ${e.message}";
-      }
-
-      Get.snackbar(
-        "Authentication Error",
-        errorMessage,
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-        duration: const Duration(seconds: 4),
-      );
-
+    } on fb.FirebaseAuthException catch (e) {
       firebaseUser.value = null;
+      CustomSnackBar.error(_firebaseError(e.code, e.message));
       return null;
+
     } on PlatformException catch (e) {
-      debugPrint("Platform Error: ${e.code} - ${e.message}");
-
-      String errorMessage;
-      if (e.code == 'sign_in_failed') {
-        errorMessage = "Sign-in failed. Please check SHA-1 configuration";
-      } else if (e.code == 'network_error') {
-        errorMessage = "Network error. Check your internet connection";
-      } else {
-        errorMessage = "Sign-in failed: ${e.message ?? 'Unknown error'}";
-      }
-
-      Get.snackbar(
-        "Sign-In Error",
-        errorMessage,
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-        duration: const Duration(seconds: 4),
-      );
-
-      await FirebaseAuth.instance.signOut();
+      await _auth.signOut();
       firebaseUser.value = null;
+      final Map<String, String> errors = {
+        'sign_in_failed': "Sign-in failed. Please check SHA-1 configuration",
+        'network_error': "Network error. Check your internet connection",
+      };
+      CustomSnackBar.error(
+          errors[e.code] ?? "Sign-in failed: ${e.message ?? 'Unknown error'}");
       return null;
+
     } catch (e) {
-      debugPrint("Unexpected Error: $e");
-
-      Get.snackbar(
-        "Error",
-        "An unexpected error occurred: ${e.toString()}",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-        duration: const Duration(seconds: 4),
-      );
-
-      await FirebaseAuth.instance.signOut();
+      await _auth.signOut();
       firebaseUser.value = null;
+      CustomSnackBar.error("An unexpected error occurred: ${e.toString()}");
       return null;
     }
   }
 
-  /// =======================================
-  /// 🔥 SIGN OUT (Google + Firebase)
-  /// =======================================
-  Future<void> signOut() async {
+  // =======================================
+  // 🔥 GOOGLE SIGN OUT
+  // =======================================
+  Future<void> signOutGoogle() async {
     try {
       await GoogleSignIn().signOut();
-      await FirebaseAuth.instance.signOut();
-
+      await _auth.signOut();
       firebaseUser.value = null;
-
-      Get.snackbar("Success", "Signed out successfully");
     } catch (e) {
-      debugPrint("Sign-Out Error: $e");
-      Get.snackbar("Error", "Unable to sign out");
+      CustomSnackBar.error("Unable to sign out");
     }
   }
 
-  /// APPLE AUTH INSTANCE
-  static final FirebaseAuth _auth = FirebaseAuth.instance;
-
-  /// =======================================
-  /// 🔥 APPLE SIGN IN (iOS / macOS Only)
-  /// =======================================
-  static Future<UserCredential?> signInWithApple() async {
+  // =======================================
+  // 🔥 APPLE SIGN IN (iOS / macOS Only)
+  // =======================================
+  Future<fb.UserCredential?> signInWithApple() async {
     try {
-      // Platform check
-      if (kIsWeb) {
-        debugPrint("❌ Apple Sign-In not supported on Web");
-        Get.snackbar(
-          "Not Supported",
-          "Apple Sign-In is not available on web",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.orange,
-          colorText: Colors.white,
-        );
+      if (kIsWeb || (!Platform.isIOS && !Platform.isMacOS)) {
+        CustomSnackBar.error("Apple Sign-In is only available on iOS/macOS");
         return null;
       }
 
-      if (!Platform.isIOS && !Platform.isMacOS) {
-        debugPrint("❌ Apple Sign-In only supports iOS/macOS");
-        Get.snackbar(
-          "Not Supported",
-          "Apple Sign-In is only available on iOS/macOS devices",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.orange,
-          colorText: Colors.white,
-        );
-        return null;
-      }
-
-      // Request Apple ID credential
       final appleCredential = await SignInWithApple.getAppleIDCredential(
         scopes: [
           AppleIDAuthorizationScopes.email,
@@ -247,161 +171,126 @@ class LoginController extends GetxController {
         ],
       );
 
-      // Check if we got the credential
       if (appleCredential.identityToken == null) {
-        debugPrint("❌ Apple Sign-In: No identity token received");
-        Get.snackbar(
-          "Error",
-          "Failed to get Apple credentials",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
+        CustomSnackBar.error("Failed to get Apple credentials");
         return null;
       }
 
-      // Create OAuth credential for Firebase
-      final oauthCredential = OAuthProvider("apple.com").credential(
-        idToken: appleCredential.identityToken,
-        accessToken: appleCredential.authorizationCode,
+      final fb.UserCredential userCredential =
+      await _auth.signInWithCredential(
+        fb.OAuthProvider("apple.com").credential(
+          idToken: appleCredential.identityToken,
+          accessToken: appleCredential.authorizationCode,
+        ),
       );
 
-      // Sign in to Firebase
-      final userCredential = await _auth.signInWithCredential(oauthCredential);
+      firebaseUser.value = userCredential.user;
 
-      // Debug info
-      if (kDebugMode) {
-        print("========== APPLE SIGN-IN SUCCESS ==========");
-        print("✅ User ID: ${userCredential.user?.uid}");
-        print("✅ Email: ${userCredential.user?.email}");
-        print("✅ Display Name: ${userCredential.user?.displayName}");
-
-        // Apple provides name only on first sign-in
-        if (appleCredential.givenName != null ||
-            appleCredential.familyName != null) {
-          print("✅ Given Name: ${appleCredential.givenName}");
-          print("✅ Family Name: ${appleCredential.familyName}");
-        }
-        print("==========================================");
-      }
-
-      // Update display name if available (only first time)
-      if (userCredential.user != null &&
-          userCredential.user!.displayName == null &&
+      // প্রথমবার login এ name update
+      if (userCredential.user?.displayName == null &&
           appleCredential.givenName != null) {
-        final displayName =
-            '${appleCredential.givenName ?? ''} ${appleCredential.familyName ?? ''}'
-                .trim();
-
+        final String displayName =
+        '${appleCredential.givenName ?? ''} ${appleCredential.familyName ?? ''}'
+            .trim();
         if (displayName.isNotEmpty) {
           await userCredential.user!.updateDisplayName(displayName);
           await userCredential.user!.reload();
         }
       }
 
-      Get.snackbar(
-        "Success",
-        "Signed in with Apple successfully",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.green,
-        colorText: Colors.white,
+      final String? firebaseToken =
+      await userCredential.user?.getIdToken();
+
+      if (kDebugMode) {
+        print("UID   : ${userCredential.user?.uid}");
+        print("Email : ${userCredential.user?.email}");
+        print("Name  : ${userCredential.user?.displayName}");
+        print("Token : ${firebaseToken?.substring(0, 30)}...");
+      }
+
+      await ApiRequest.post(
+        fromJson: LoginModel.fromJson,
+        endPoint: '/auth/apple',
+        isLoading: isLoading,
+        showSuccessSnackBar: true,
+        body: {"identity_token": firebaseToken},
+        onSuccess: (result) {
+
+          final role = result.data.user.authId.role.toUpperCase();
+          final id = result.data.user.id;
+
+          print("User Role: $role");
+
+          AppStorage.save(uId: id);
+          print('-------------------------------');
+          print('U ID = ${AppStorage.uId}');
+
+          AppStorage.save(token: result.data.accessToken, isLoggedIn: true);
+
+          AppStorage.saveRole(role);
+          AppStorage.isVendor = role == "PROVIDER";
+
+          // Navigate based on role
+          if (role == "PROVIDER") {
+            Get.offAllNamed(Routes.navigationScreen);
+          } else if (role == "USER") {
+            Get.offAllNamed(Routes.navigationScreen);
+          } else {
+            MessageHelper.showError("Please Select Your Role.\nThank you");
+          }
+
+        },
       );
 
       return userCredential;
+
     } on SignInWithAppleAuthorizationException catch (e) {
-      debugPrint("Apple Authorization Error: ${e.code} - ${e.message}");
-
-      String errorMessage;
-      switch (e.code) {
-        case AuthorizationErrorCode.canceled:
-          errorMessage = "Apple Sign-In was cancelled";
-          break;
-        case AuthorizationErrorCode.failed:
-          errorMessage = "Apple Sign-In failed";
-          break;
-        case AuthorizationErrorCode.invalidResponse:
-          errorMessage = "Invalid response from Apple";
-          break;
-        case AuthorizationErrorCode.notHandled:
-          errorMessage = "Apple Sign-In not handled";
-          break;
-        case AuthorizationErrorCode.unknown:
-          errorMessage = "Unknown error occurred";
-          break;
-        default:
-          errorMessage = "Apple Sign-In error: ${e.message}";
-      }
-
-      Get.snackbar(
-        "Sign-In Error",
-        errorMessage,
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-
+      final Map<AuthorizationErrorCode, String> errors = {
+        AuthorizationErrorCode.canceled: "Apple Sign-In was cancelled",
+        AuthorizationErrorCode.failed: "Apple Sign-In failed",
+        AuthorizationErrorCode.invalidResponse: "Invalid response from Apple",
+        AuthorizationErrorCode.notHandled: "Apple Sign-In not handled",
+        AuthorizationErrorCode.unknown: "Unknown error occurred",
+      };
+      CustomSnackBar.error(
+          errors[e.code] ?? "Apple Sign-In error: ${e.message}");
       return null;
-    } on FirebaseAuthException catch (e) {
-      debugPrint("Firebase Auth Error: ${e.code} - ${e.message}");
 
-      String errorMessage;
-      switch (e.code) {
-        case 'account-exists-with-different-credential':
-          errorMessage =
-              "An account already exists with a different sign-in method";
-          break;
-        case 'invalid-credential':
-          errorMessage = "Invalid Apple credentials";
-          break;
-        case 'operation-not-allowed':
-          errorMessage = "Apple Sign-In is not enabled";
-          break;
-        case 'user-disabled':
-          errorMessage = "This user account has been disabled";
-          break;
-        default:
-          errorMessage = "Authentication failed: ${e.message}";
-      }
-
-      Get.snackbar(
-        "Authentication Error",
-        errorMessage,
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-        duration: const Duration(seconds: 4),
-      );
-
+    } on fb.FirebaseAuthException catch (e) {
+      firebaseUser.value = null;
+      CustomSnackBar.error(_firebaseError(e.code, e.message));
       return null;
+
     } catch (e) {
-      debugPrint("Unexpected Apple Sign-In Error: $e");
-
-      Get.snackbar(
-        "Error",
-        "An unexpected error occurred: ${e.toString()}",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-        duration: const Duration(seconds: 4),
-      );
-
+      CustomSnackBar.error("An unexpected error occurred: ${e.toString()}");
       return null;
     }
   }
 
-  /// =======================================
-  /// 🔥 CURRENT USER
-  /// =======================================
-  static User? currentUser() => _auth.currentUser;
-
-  /// =======================================
-  /// 🔥 SIGN OUT (Apple + Firebase)
-  /// =======================================
-  static Future<void> signOutApple() async {
+  // =======================================
+  // 🔥 APPLE SIGN OUT
+  // =======================================
+  Future<void> signOutApple() async {
     try {
       await _auth.signOut();
+      firebaseUser.value = null;
     } catch (e) {
-      debugPrint("Apple Sign-Out Error: $e");
+      CustomSnackBar.error("Unable to sign out");
     }
+  }
+
+  // =======================================
+  // 🔥 FIREBASE ERROR HELPER
+  // =======================================
+  String _firebaseError(String code, String? message) {
+    const Map<String, String> errors = {
+      'account-exists-with-different-credential':
+      "An account already exists with a different sign-in method",
+      'invalid-credential': "Invalid credentials. Please try again",
+      'operation-not-allowed': "This sign-in method is not enabled",
+      'user-disabled': "This user account has been disabled",
+      'user-not-found': "No user found with this account",
+    };
+    return errors[code] ?? "Authentication failed: $message";
   }
 }

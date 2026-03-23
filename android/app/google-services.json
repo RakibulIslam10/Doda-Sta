@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "621538781171-5lriu6j0om3qj83e8abd1t8tnm15j3ep.apps.googleusercontent.com",
+          "client_id": "621538781171-43p85d6qep1ss6fpmn42emqq1dk68apb.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.mazlmario.dodawork",
-            "certificate_hash": "f28c0efc80ddd6b65f419c7487b786c378e36e34"
+            "certificate_hash": "e9f8a08994e427d5ab4e1eeabc25365c00c7f919"
           }
         },
         {

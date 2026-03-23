@@ -9,6 +9,7 @@ import 'package:doda_work/views/auth/register/controller/register_controller.dar
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../routes/routes.dart';
+import 'package:doda_work/widgets/success_dialog.dart';
 
 class AditionalController extends GetxController {
   // ------------------------ DAY LIST ------------------------
@@ -168,16 +169,10 @@ class AditionalController extends GetxController {
       reqType: 'POST',
       token: userToken, // ✅ Pass the user token explicitly
       onSuccess: (result) {
-        Get.defaultDialog(
+        SuccessDialog.show(
           title: "Application Submitted",
-          titleStyle: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold, fontSize: 18),
-          middleText: "Your application is under review, and we will inform you when complete.",
-          middleTextStyle: const TextStyle(fontSize: 14),
-          barrierDismissible: false,
-          confirm: ElevatedButton(
-            onPressed: () => Get.offAllNamed(Routes.loginScreen),
-            child: const Text("OK"),
-          ),
+          subtitle: "Your application is under review, and we will inform you when complete.",
+          onTap: () => Get.offAllNamed(Routes.loginScreen),
         );
       },
     );

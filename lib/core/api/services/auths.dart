@@ -7,6 +7,7 @@ import '../../../views/vendor_profile/screen/vendor_profile_screen_mobile.dart';
 import '../../utils/app_storage.dart';
 import '../../utils/basic_import.dart';
 import 'api.dart';
+import 'package:doda_work/widgets/success_dialog.dart';
 
 class AuthService {
   /// =============================================== ✅ Login  ================================================== ///
@@ -115,16 +116,10 @@ class AuthService {
         if (AppStorage.users == "PROVIDER") {
           Get.toNamed(Routes.aditionalScreen);
         } else {
-          Get.defaultDialog(
+          SuccessDialog.show(
             title: "Registration Successful",
-            titleStyle: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold, fontSize: 18),
-            middleText: "Your account has been created successfully. Please login to continue.",
-            middleTextStyle: const TextStyle(fontSize: 14),
-            barrierDismissible: false,
-            confirm: ElevatedButton(
-              onPressed: () => Get.offAllNamed(Routes.loginScreen),
-              child: const Text("OK"),
-            ),
+            subtitle: "Your account has been created successfully. Please login to continue.",
+            onTap: () => Get.offAllNamed(Routes.loginScreen),
           );
         }
 

@@ -16,9 +16,7 @@ class LoginScreenMobile extends GetView<LoginController> {
         statusBarBrightness: Brightness.light,
       ),
       child: Scaffold(
-
         body: SafeArea(
-
           child: ListView(
             padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
             children: [

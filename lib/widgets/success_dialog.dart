@@ -60,7 +60,7 @@ class SuccessDialog {
                 title,
                 fontSize: Dimensions.titleLarge,
                 fontWeight: FontWeight.w800,
-                color: CustomColors.primaryText,
+                color: CustomColors.blackColor,
                 textAlign: TextAlign.center,
               ),
               Space.height.v10,
@@ -69,7 +69,7 @@ class SuccessDialog {
               TextWidget(
                 subtitle,
                 fontSize: Dimensions.titleSmall,
-                color: CustomColors.secondaryDarkText ?? Colors.grey.shade600,
+                color: CustomColors.secondaryDarkText,
                 textAlign: TextAlign.center,
                 maxLines: 4,
               ),

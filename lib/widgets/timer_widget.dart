@@ -23,7 +23,7 @@ class _TimerWidgetState extends State<TimerWidget> {
   @override
   void initState() {
     super.initState();
-    totalTimeInSeconds = _parseTime('00:60');
+    totalTimeInSeconds = _parseTime('00:180');
     startTimer();
   }
 

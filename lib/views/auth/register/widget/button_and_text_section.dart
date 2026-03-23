@@ -43,7 +43,7 @@ class ButtonAndTextSectionView extends GetView<RegisterController> {
                   controller.registerProcess();
                 } else {
                   controller.isError.value = true;
-                  CustomSnackBar.error('Check the term and conditions');
+                  CustomSnackBar.error('Please review the Privacy Policy and accept the Terms and Conditions to proceed');
                 }
               }
             },

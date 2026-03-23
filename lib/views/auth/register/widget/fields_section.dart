@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../../core/helpers/helpers.dart';
 import '../../../../core/utils/space.dart';
 import '../../../../widgets/primary_input_widget.dart';
 import '../controller/register_controller.dart';
@@ -34,11 +35,23 @@ class FieldsSectionView extends GetView<RegisterController> {
           PrimaryInputFieldWidget(
             label: "Phone Number",
             // isEmail: true,
+            hintText: '+1 (XXX) XXX-XXXX',
             controller: controller.phoneController,
             focusNode: controller.phoneFocus,
             nextFocusNode: controller.passwordFocus,
-            hintText: "Enter your phone number",
+            keyBoardType: TextInputType.number,
+            onChanged: (value) {
+              final formatted = Helpers.formatCanadianPhone(value);
+              if (formatted != value) {
+                controller.phoneController.value = TextEditingValue(
+                  text: formatted,
+                  selection: TextSelection.collapsed(offset: formatted.length),
+                );
+              }
+            },
           ),
+
+
           Space.height.betweenInputBox,
           PrimaryInputFieldWidget(
             hintText: "Enter your password",

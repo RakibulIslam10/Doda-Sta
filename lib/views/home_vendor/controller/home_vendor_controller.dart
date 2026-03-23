@@ -75,7 +75,7 @@ class HomeVendorController extends GetxController {
             Get.to(() => WebPaymentScreen());
           });
         } else {
-          Get.back(); // Close loading dialog
+          Get.back();
 
           CustomSnackBar.success(
             title: "Success",

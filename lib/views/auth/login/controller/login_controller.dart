@@ -34,7 +34,6 @@ class LoginController extends GetxController {
   void onInit() {
     super.onInit();
   }
-
   /// =======================================
   /// 🔥 LOGIN USING EMAIL + PASSWORD (API)
   /// =======================================
@@ -51,11 +50,9 @@ class LoginController extends GetxController {
   /// =======================================
   Future<User?> signInWithGoogle(BuildContext context) async {
     try {
-      // Initialize GoogleSignIn
       final GoogleSignIn googleSignIn = GoogleSignIn(
         scopes: ['email', 'profile'],
       );
-
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
       if (googleUser == null) {
@@ -66,12 +63,9 @@ class LoginController extends GetxController {
         );
         return null;
       }
-
-      // Obtain the auth details from the request
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
 
-      // Debug: Check if we have tokens
       if (kDebugMode) {
         print("==========================================");
         print("Google Auth Tokens:");

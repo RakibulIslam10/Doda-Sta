@@ -22,30 +22,34 @@ class AuthService {
       endPoint: ApiEndPoints.login,
       isLoading: isLoading,
       body: inputBody,
-      onSuccess: (result) {
-        final role = result.data.user.authId.role.toUpperCase();
-        final id = result.data.user.id;
+        onSuccess: (result) {
+          final role = result.data.user.authId.role.toUpperCase();
+          final id = result.data.user.id;
 
-        print("User Role: $role");
+          // ✅ Selected role এর সাথে actual role মিলাও
+          final selectedRole = AppStorage.users?.toUpperCase(); // 'USER' or 'PROVIDER'
 
-        AppStorage.save(uId: id);
-        print('-------------------------------');
-        print('U ID = ${AppStorage.uId}');
+          if (selectedRole != null && role != selectedRole) {
+            MessageHelper.showError(
+              "This account is registered as a ${role == 'PROVIDER' ? 'Service Provider' : 'Client'}.\nPlease use the correct login option.",
+            );
+            return; // ❌ Navigate করবে না
+          }
 
-        AppStorage.save(token: result.data.accessToken, isLoggedIn: true);
+          AppStorage.save(uId: id);
+          AppStorage.save(token: result.data.accessToken, isLoggedIn: true);
+          AppStorage.saveRole(role);
+          AppStorage.isVendor = role == "PROVIDER";
 
-        AppStorage.saveRole(role);
-        AppStorage.isVendor = role == "PROVIDER";
+          if (role == "PROVIDER") {
+            Get.offAllNamed(Routes.navigationScreen);
+          } else if (role == "USER") {
+            Get.offAllNamed(Routes.navigationScreen);
+          } else {
+            MessageHelper.showError("Please Select Your Role.\nThank you");
+          }
+        },
 
-        // Navigate based on role
-        if (role == "PROVIDER") {
-          Get.offAllNamed(Routes.navigationScreen);
-        } else if (role == "USER") {
-          Get.offAllNamed(Routes.navigationScreen);
-        } else {
-          MessageHelper.showError("Please Select Your Role.\nThank you");
-        }
-      },
     );
   }
 

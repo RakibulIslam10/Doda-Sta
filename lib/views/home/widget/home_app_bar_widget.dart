@@ -10,57 +10,76 @@ class HomeAppBarWidgetView extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Padding(
-        padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
-        child: Row(
-          children: [
-            GestureDetector(
-              onTap: () => Get.find<NavigationController>().goToProfile(),
-              child: Image.asset(Assets.logo.aaplogo.path, height: 60.h),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          /// LOGO
+          GestureDetector(
+            onTap: () => Get.find<NavigationController>().goToProfile(),
+            child: Image.asset(
+              Assets.logo.aaplogo.path,
+              height: 55.h,
+              width: 55.h,
+              fit: BoxFit.contain,
             ),
-            Space.width.v10,
+          ),
 
-            /// USER GREETING
-            Expanded(
-              child: Obx(() {
-                final isVendor = AppStorage.isProvider;
+          Space.width.v10,
+          /// DIVIDER
+          Container(
+            height: 36.h,
+            width: 1.5.w,
+            color: CustomColors.disableColor.withAlpha(120),
+          ),
 
-                final userName = isVendor
-                    ? controller.providerProfileModel.value?.data.companyName ?? 'Provider'
-                    : controller.userProfileModel.value?.data?.name ?? 'User';
+          Space.width.v15,
 
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        TextWidget(
-                          "Hello ",
-                          color: CustomColors.primary,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        TextWidget(
+          /// USER GREETING
+          Expanded(
+            child: Obx(() {
+              final isVendor = AppStorage.isProvider;
+
+              final userName = isVendor
+                  ? controller.providerProfileModel.value?.data.companyName ?? 'Provider'
+                  : controller.userProfileModel.value?.data?.name ?? 'User';
+
+              return Column(
+                crossAxisAlignment: crossStart,
+                mainAxisAlignment: mainCenter,
+                mainAxisSize: mainMin,
+                children: [
+                  Row(
+                    children: [
+                      TextWidget(
+                        "Hello, ",
+                        fontSize: Dimensions.bodyMedium,
+                        color: CustomColors.secondaryDarkText,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      Flexible(
+                        child: TextWidget(
                           userName,
-                          fontSize: Dimensions.titleSmall,
-                          fontWeight: FontWeight.w600,
+                          fontSize: Dimensions.bodyMedium,
+                          fontWeight: FontWeight.w700,
                           color: CustomColors.blackColor,
+                          maxLines: 1,
+                          textOverflow: TextOverflow.ellipsis,
                         ),
-                      ],
-                    ),
-                    TextWidget(
-                      'Welcome Back',
-                      fontSize: Dimensions.titleSmall,
-                      fontWeight: FontWeight.w400,
-                      color: CustomColors.primary,
-                    ),
-                  ],
-                );
-              }),
-            ),
-          ],
-        ),
+                      ),
+                    ],
+                  ),
+                  Space.height.v5,
+                  TextWidget(
+                    'Welcome Back 👋',
+                    fontSize: Dimensions.labelMedium,
+                    fontWeight: FontWeight.w400,
+                    color: CustomColors.primary,
+                  ),
+                ],
+              );
+            }),
+          ),
+        ],
       ),
     );
   }

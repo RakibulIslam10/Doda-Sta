@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:doda_work/views/profile/controller/profile_controller.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 import '../../../core/api/end_point/api_end_points.dart';
@@ -40,13 +41,46 @@ class UpdateController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    nameController.text = Get.find<ProfileController>().userProfileModel?.data?.name ?? "";
-    numberController.text = Get.find<ProfileController>().userProfileModel?.data?.phoneNumber ?? "";
-    selectedAddress.value = Get.find<ProfileController>().userProfileModel?.data?.address ?? "";
+    nameController.text = Get.find<ProfileController>().userProfileModel.value?.data?.name ?? "";
+    numberController.text = Get.find<ProfileController>().userProfileModel.value?.data?.phoneNumber ?? "";
+    updatedDate.value = Get.find<ProfileController>().userProfileModel.value?.data?.dateOfBirth ?? "";
+
+    final lat = Get.find<ProfileController>().userProfileModel.value?.data?.latitude;
+    final lng = Get.find<ProfileController>().userProfileModel.value?.data?.longitude;
+
+    if (lat != null && lng != null) {
+      selectedLatLng.value = LatLng(double.parse(lat), double.parse(lng));
+      _getAddressFromLatLng(double.parse(lat), double.parse(lng)); // ✅ real address fetch
+    }
+
     emailController.addListener(() {
       final email = emailController.text.trim();
       isEmailValid.value = GetUtils.isEmail(email);
     });
+  }
+
+  /// Reverse geocoding
+  Future<void> _getAddressFromLatLng(double lat, double lng) async {
+    try {
+      final apiKey = Platform.isAndroid
+          ? ApiEndPoints.googleApiKeyAndroid
+          : ApiEndPoints.googleApiKeyIos;
+
+      final url = Uri.parse(
+        'https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$lng&key=$apiKey',
+      );
+
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['status'] == 'OK' && data['results'].isNotEmpty) {
+          selectedAddress.value = data['results'][0]['formatted_address'];
+        }
+      }
+    } catch (e) {
+      print("Reverse geocode error: $e");
+    }
   }
 
   /// Pick image from gallery

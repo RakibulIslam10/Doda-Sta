@@ -63,7 +63,7 @@ class UserData {
       updatedAt: json['updatedAt'],
       latitude: json['latitude'],
       longitude: json['longitude'],
-      address: json['address'],
+      address: null, // ⚠️ API response এ address আসছে না
       dateOfBirth: json['dateOfBirth'],
     );
   }

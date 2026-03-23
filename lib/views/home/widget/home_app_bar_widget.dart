@@ -9,21 +9,6 @@ class HomeAppBarWidgetView extends GetView<ProfileController> {
 
   @override
   Widget build(BuildContext context) {
-    final isVendor = AppStorage.isProvider; // role-based check
-
-    // Get name dynamically based on role
-    final userName = isVendor
-        ? controller.providerProfileModel?.data.companyName ?? 'Provider'
-        : controller.userProfileModel?.data?.name ?? 'User';
-
-    // Get email dynamically based on role
-    final userEmail = isVendor
-        ? controller.providerProfileModel?.data.authId.email ?? 'Email'
-        : controller.userProfileModel?.data?.email ?? 'Email';
-
-    // Role label
-    final roleLabel = isVendor ? 'Vendor' : 'User';
-
     return SafeArea(
       child: Padding(
         padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
@@ -31,41 +16,48 @@ class HomeAppBarWidgetView extends GetView<ProfileController> {
           children: [
             GestureDetector(
               onTap: () => Get.find<NavigationController>().goToProfile(),
-              child: Image.asset(Assets.logo.aaplogo.path,height: 50,),
+              child: Image.asset(Assets.logo.aaplogo.path, height: 60.h),
             ),
             Space.width.v10,
 
             /// USER GREETING
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      TextWidget(
-                        "Hello ",
-                        color: CustomColors.primary,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      TextWidget(
-                        userName,
-                        fontSize: Dimensions.titleSmall,
-                        fontWeight: FontWeight.w600,
-                        color: CustomColors.blackColor,
-                      ),
-                    ],
-                  ),
-                  TextWidget(
-                    'Welcome Back',
-                    fontSize: Dimensions.titleSmall,
-                    fontWeight: FontWeight.w400,
-                    color: CustomColors.primary,
-                  ),
+              child: Obx(() {
+                final isVendor = AppStorage.isProvider;
 
-                ],
-              ),
+                final userName = isVendor
+                    ? controller.providerProfileModel.value?.data.companyName ?? 'Provider'
+                    : controller.userProfileModel.value?.data?.name ?? 'User';
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        TextWidget(
+                          "Hello ",
+                          color: CustomColors.primary,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        TextWidget(
+                          userName,
+                          fontSize: Dimensions.titleSmall,
+                          fontWeight: FontWeight.w600,
+                          color: CustomColors.blackColor,
+                        ),
+                      ],
+                    ),
+                    TextWidget(
+                      'Welcome Back',
+                      fontSize: Dimensions.titleSmall,
+                      fontWeight: FontWeight.w400,
+                      color: CustomColors.primary,
+                    ),
+                  ],
+                );
+              }),
             ),
           ],
         ),

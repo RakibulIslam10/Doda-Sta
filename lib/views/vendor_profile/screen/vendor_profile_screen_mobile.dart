@@ -44,7 +44,7 @@ class VendorProfileScreenMobile extends GetView<VendorProfileController> {
                                   : CachedNetworkImage(
                                       imageUrl:
                                           Get.find<ProfileController>()
-                                              .providerProfileModel
+                                              .providerProfileModel.value
                                               ?.data
                                               .profileImage ??
                                           "",

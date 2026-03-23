@@ -50,14 +50,14 @@ class VendorProfileController extends GetxController {
     print('   Is Logged In: ${AppStorage.isLoggedIn}');
 
 
-    nameController.text = Get.find<ProfileController>().providerProfileModel?.data.companyName ?? "";
-    contactPersonController.text = Get.find<ProfileController>().providerProfileModel?.data.contactPerson ?? "";
-    coveredRadius.text = Get.find<ProfileController>().providerProfileModel?.data.coveredRadius.toString() ?? "";
-    websiteController.text = Get.find<ProfileController>().providerProfileModel?.data.website.toString() ?? "";
-    selectedAddress.value = Get.find<ProfileController>().providerProfileModel?.data.serviceLocation ?? "";
+    nameController.text = Get.find<ProfileController>().providerProfileModel.value?.data.companyName ?? "";
+    contactPersonController.text = Get.find<ProfileController>().providerProfileModel.value?.data.contactPerson ?? "";
+    coveredRadius.text = Get.find<ProfileController>().providerProfileModel.value?.data.coveredRadius.toString() ?? "";
+    websiteController.text = Get.find<ProfileController>().providerProfileModel.value?.data.website.toString() ?? "";
+    selectedAddress.value = Get.find<ProfileController>().providerProfileModel.value?.data.serviceLocation ?? "";
 
-    final lat = Get.find<ProfileController>().providerProfileModel?.data.latitude;
-    final lng = Get.find<ProfileController>().providerProfileModel?.data.longitude;
+    final lat = Get.find<ProfileController>().providerProfileModel.value?.data.latitude;
+    final lng = Get.find<ProfileController>().providerProfileModel.value?.data.longitude;
 
 
     if (lat != null && lng != null) {
@@ -65,7 +65,7 @@ class VendorProfileController extends GetxController {
     }
 
     selectedServiceList.addAll(
-      (Get.find<ProfileController>().providerProfileModel?.data.serviceCategories ?? [])
+      (Get.find<ProfileController>().providerProfileModel.value?.data.serviceCategories ?? [])
           .map((e) => e.id)
           .toList(),
     );

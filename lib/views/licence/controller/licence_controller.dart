@@ -14,7 +14,7 @@ class LicenceController extends GetxController {
   void onInit() {
     super.onInit();
     oldPhotos.addAll(
-      Get.find<ProfileController>().providerProfileModel?.data.attachments ?? [],
+      Get.find<ProfileController>().providerProfileModel.value?.data.attachments ?? [],
     );
   }
 

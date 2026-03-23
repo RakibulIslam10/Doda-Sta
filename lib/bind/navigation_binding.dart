@@ -15,5 +15,7 @@ class NavigationBinding extends Bindings {
     Get.lazyPut<HomeVendorController>(() => HomeVendorController());
     Get.lazyPut<ProfileController>(() => ProfileController());
     Get.put(CategoryController(), permanent: true);
+
   }
 }
+

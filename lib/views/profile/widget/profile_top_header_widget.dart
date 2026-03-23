@@ -16,7 +16,7 @@ class ProfileTopHeaderWidgetView extends GetView<ProfileController> {
 
     return Obx(() {
       // Get user data
-      final userData = controller.userProfileModel?.data;
+      final userData = controller.userProfileModel.value?.data;
 
       // Profile image URL
 
@@ -117,7 +117,7 @@ class ProfileTopHeaderWidgetView extends GetView<ProfileController> {
                           SizedBox(width: 4),
                           Expanded(
                             child: TextWidget(
-                              "+1 123-456-7890",
+                              userData?.phoneNumber ?? '',
                               fontSize: Dimensions.titleSmall * 0.8,
                               fontWeight: FontWeight.w500,
                               color: Colors.grey.shade600,
@@ -186,7 +186,7 @@ class ProfileTopWidgetView extends GetView<ProfileController> {
     final double cardHeight = MediaQuery.of(context).size.height * 0.12;
 
     return Obx(() {
-      final providerData = controller.providerProfileModel?.data;
+      final providerData = controller.providerProfileModel.value?.data;
 
       return Container(
         height: cardHeight,
@@ -233,21 +233,21 @@ class ProfileTopWidgetView extends GetView<ProfileController> {
                 children: [
                   Space.height.v10,
                   TextWidget(
-                    controller.providerProfileModel?.data.companyName ?? '',
+                    controller.providerProfileModel.value?.data.companyName ?? '',
                     fontSize: Dimensions.titleSmall,
                     fontWeight: FontWeight.w500,
                     color: CustomColors.primary,
                   ),
                   Space.height.v5,
                   TextWidget(
-                    controller.providerProfileModel?.data.authId.email ?? '',
+                    controller.providerProfileModel.value?.data.authId.email ?? '',
                     fontSize: Dimensions.titleSmall,
                     fontWeight: FontWeight.w500,
                     color: CustomColors.primary,
                   ),
                   Space.height.v5,
                   TextWidget(
-                    controller.providerProfileModel?.data.website ?? '',
+                    controller.providerProfileModel.value?.data.website ?? '',
                     fontSize: Dimensions.titleSmall,
                     fontWeight: FontWeight.w500,
                     color: CustomColors.primary,

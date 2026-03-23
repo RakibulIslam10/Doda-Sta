@@ -7,8 +7,8 @@ import '../model/provider_model.dart';
 class ProfileController extends GetxController {
   RxBool isLoading = false.obs;
 
-  UserProfileModel? userProfileModel;
-  ProviderProfileModels? providerProfileModel;
+  final Rxn<UserProfileModel> userProfileModel = Rxn<UserProfileModel>();
+  final Rxn<ProviderProfileModels> providerProfileModel = Rxn<ProviderProfileModels>();
 
   @override
   void onInit() {
@@ -16,20 +16,16 @@ class ProfileController extends GetxController {
     loadProfile();
   }
 
-  /// Load profile based on role
   Future<void> loadProfile() async {
     isLoading.value = true;
-
     if (AppStorage.isProvider) {
       await getProviderProfile();
     } else {
       await getUserProfile();
     }
-
     isLoading.value = false;
   }
 
-  /// GET USER PROFILE
   Future<void> getUserProfile() async {
     try {
       await ApiRequest.get<UserProfileModel>(
@@ -37,8 +33,8 @@ class ProfileController extends GetxController {
         endPoint: ApiEndPoints.userProfile,
         isLoading: isLoading,
         onSuccess: (result) {
-          userProfileModel = result;
-          print("User Name: ${userProfileModel?.data?.name}");
+          userProfileModel.value = result;
+          print("User Name: ${userProfileModel.value?.data?.name}");
         },
       );
     } catch (e) {
@@ -46,7 +42,6 @@ class ProfileController extends GetxController {
     }
   }
 
-  /// GET PROVIDER PROFILE
   Future<void> getProviderProfile() async {
     try {
       await ApiRequest.get<ProviderProfileModels>(
@@ -54,7 +49,7 @@ class ProfileController extends GetxController {
         endPoint: ApiEndPoints.providerProfile,
         isLoading: isLoading,
         onSuccess: (result) {
-          providerProfileModel = result;
+          providerProfileModel.value = result;
         },
       );
     } catch (e) {

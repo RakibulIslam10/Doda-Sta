@@ -30,7 +30,7 @@ class UpdateScreenMobile extends GetView<UpdateController> {
                                 fit: BoxFit.cover,
                               )
                             : CachedNetworkImage(
-                                imageUrl: Get.find<ProfileController>().userProfileModel?.data?.profileImage ?? "",
+                                imageUrl: Get.find<ProfileController>().userProfileModel.value?.data?.profileImage ?? "",
                                 fit: BoxFit.cover,
                                 placeholder: (context, url) =>
                                     Container(color: Colors.grey.shade300),
@@ -102,7 +102,7 @@ class UpdateScreenMobile extends GetView<UpdateController> {
             CustomDatePick(
               hint: "Select Date of Birth",
               initialDate: DateTime.tryParse(
-                Get.find<ProfileController>().userProfileModel?.data?.dateOfBirth ?? '',
+                Get.find<ProfileController>().userProfileModel.value?.data?.dateOfBirth ?? '',
               ),
               onDateSelected: (value) {
                 controller.updatedDate.value = value.toIso8601String();

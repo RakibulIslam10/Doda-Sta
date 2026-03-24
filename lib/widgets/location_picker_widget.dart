@@ -56,7 +56,7 @@ class LocationPickerWidget extends StatefulWidget {
 class _LocationPickerWidgetState extends State<LocationPickerWidget> {
   GoogleMapController? _mapController;
   final TextEditingController _searchController = TextEditingController();
-  LatLng _currentPosition = const LatLng(23.8103, 90.4125); // default
+  LatLng _currentPosition = const LatLng(57.77626523533849, -101.67807676458044); // default
   String _currentAddress = '';
   List<PlaceSuggestion> _searchResults = [];
   bool _isSearching = false;
@@ -86,7 +86,7 @@ class _LocationPickerWidgetState extends State<LocationPickerWidget> {
     }
     /// 3️⃣ else → keep default Dhaka
     else {
-      _currentPosition = const LatLng(23.8103, 90.4125);
+      _currentPosition = const LatLng(57.77626523533849, -101.67807676458044);
     }
   }
 
@@ -104,7 +104,7 @@ class _LocationPickerWidgetState extends State<LocationPickerWidget> {
 
     try {
       final url = Uri.parse(
-        'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$query&key=${widget.googleApiKey}&components=country:bd',
+        'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$query&key=${widget.googleApiKey}',
       );
 
       final response = await http.get(url);
@@ -351,7 +351,7 @@ class _LocationPickerWidgetState extends State<LocationPickerWidget> {
             onMapCreated: _onMapCreated,
             initialCameraPosition: CameraPosition(
               target: _currentPosition,
-              zoom: 15,
+              zoom: 10,
             ),
             myLocationEnabled: true,
             myLocationButtonEnabled: true,

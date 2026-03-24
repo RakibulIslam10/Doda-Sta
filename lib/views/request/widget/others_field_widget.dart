@@ -135,7 +135,7 @@ class OthersFieldWidget extends StatelessWidget {
                 selectedAddress: controller.selectedAddress,
                 selectedLatLng: controller.selectedLatLng,
                 googleApiKey: apiKeyMap,
-                initialLatLng: LatLng(23.8103, 90.4125),
+                initialLatLng: LatLng(57.77626523533849, -101.67807676458044),
 
               ));
 

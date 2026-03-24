@@ -5,6 +5,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import '../../../core/utils/basic_import.dart';
 import '../../../widgets/auth_app_bar.dart';
 import '../../../widgets/timer_widget.dart';
+import '../../auth/forgot/controller/forgot_controller.dart';
 import '../../auth/register/controller/register_controller.dart';
 import '../controller/otp_controller.dart';
 

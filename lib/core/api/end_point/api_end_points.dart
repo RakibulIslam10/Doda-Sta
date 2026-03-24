@@ -15,6 +15,13 @@ class ApiEndPoints {
   static const login = 'auth/login';
   static const register = 'auth/register';
   static const verifyEmail = 'auth/activate-account';
+
+
+  static const forgotOtpVerify = 'auth/forget-pass-otp-verify';
+
+
+
+
   static const resendOtpCode = 'auth/activation-code-resend';
   static const resetPassword = 'auth/reset-password';
   static const forgotPassword = 'auth/forgot-password';

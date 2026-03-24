@@ -25,7 +25,7 @@ class OtpScreenMobile extends GetView<OtpController> {
                 top: Dimensions.heightSize,
                 bottom: Dimensions.verticalSize,
               ),
-              "We've sent a verification code to your ${Get.find<LoginController>().emailController.text} email/phone. Please check and enter it below.",
+              "We've sent a verification code to your ${Get.find<ForgotController>().emailController.text} email/phone. Please check and enter it below.",
               color: CustomColors.secondaryDarkText,
             ),
             PinCodeTextField(
@@ -44,7 +44,7 @@ class OtpScreenMobile extends GetView<OtpController> {
                 return true;
               },
               textStyle: TextStyle(
-                color: CustomColors.primary, // ✅ Input text color
+                color: CustomColors.primary,
                 fontSize: Dimensions.titleMedium,
                 fontWeight: FontWeight.w500,
               ),
@@ -67,7 +67,7 @@ class OtpScreenMobile extends GetView<OtpController> {
 
             Row(
               mainAxisAlignment: mainCenter,
-              children: [TimerWidget(onResendCode: () {})],
+              children: [TimerWidget(onResendCode: () {controller.resendOtpProcess();})],
             ),
 
             Space.height.betweenInputBox,
@@ -75,8 +75,8 @@ class OtpScreenMobile extends GetView<OtpController> {
               () => PrimaryButtonWidget(
                 isLoading: controller.isLoading.value,
                 title: "Verify Code",
-                onPressed: () {},
-                // onPressed: () => controller.emailVerifyProcess(),
+                // onPressed: () {},
+                onPressed: () => controller.emailVerifyProcess(),
               ),
             ),
           ],

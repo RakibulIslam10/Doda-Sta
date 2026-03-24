@@ -50,7 +50,7 @@ class _TimerWidgetState extends State<TimerWidget> {
 
   void resetTimer() {
     setState(() {
-      totalTimeInSeconds = _parseTime('00:30');
+      totalTimeInSeconds = _parseTime('00:180');
       showResend = false; // Hide "Resend" and show the timer again
     });
     startTimer();

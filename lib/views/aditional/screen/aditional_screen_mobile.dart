@@ -226,7 +226,6 @@ class AditionalScreenMobile extends GetView<AditionalController> {
                             selectedAddress: controller.selectedAddress,
                             selectedLatLng: controller.selectedLatLng,
                             googleApiKey: apiKeyMap,
-                            initialLatLng: LatLng(23.8103, 90.4125),
 
                           ));
 

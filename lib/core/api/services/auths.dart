@@ -96,7 +96,7 @@ class AuthService {
       endPoint: ApiEndPoints.forgotPassword,
       isLoading: isLoading,
       body: inputBody,
-      onSuccess: (result) => Get.toNamed(Routes.verificationScreen),
+      onSuccess: (result) => Get.toNamed(Routes.otpScreen),
     );
   }
 
@@ -135,6 +135,47 @@ class AuthService {
       },
     );
   }
+
+
+
+  /// =============================================== ✅ Otp Verify  ================================================== ///
+
+  static Future<ProviderOtpVerify> otpVerifyService({
+    required RxBool isLoading,
+    required String email,
+    required String activationCode,
+  }) async {
+    Map<String, dynamic> inputBody = {
+      'code': activationCode,
+      'email': email,
+    };
+    return await ApiRequest.post(
+      fromJson: ProviderOtpVerify.fromJson,
+      endPoint: ApiEndPoints.forgotOtpVerify,
+      isLoading: isLoading,
+      body: inputBody,
+      onSuccess: (result) {
+        // if (AppStorage.users == "PROVIDER") {
+        //   Get.toNamed(Routes.aditionalScreen);
+        // } else {
+        //   SuccessDialog.show(
+        //     title: "Registration Successful",
+        //     subtitle: "Your account has been created successfully. Please login to continue.",
+        //     onTap: () => Get.offAllNamed(Routes.loginScreen),
+        //   );
+        // }
+        //
+        // // AppStorage.isVendor == true
+        // //     ? Get.toNamed(Routes.aditionalScreen)
+        // //     : Get.offAllNamed(Routes.loginScreen);
+        //
+        // AppStorage.save(token: result.data.accessToken);
+
+        Get.toNamed(Routes.resetScreen);
+      },
+    );
+  }
+
 
   /// =============================================== ✅ Resend Verification ================================================== ///
 

@@ -5,9 +5,6 @@ class LoginScreenMobile extends GetView<LoginController> {
 
   @override
   Widget build(BuildContext context) {
-    print('+++++++++++++++++++++++++++++++++++++++++++++++++++');
-    print('+++++++++++++++++++++++++++++++++++++++++++++++++++');
-    print('+++++++++++++++++++++++++++++++++++++++++++++++++++');
     print(AppStorage.users);
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(

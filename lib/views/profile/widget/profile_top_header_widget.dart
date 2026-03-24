@@ -212,7 +212,7 @@ class ProfileTopWidgetView extends GetView<ProfileController> {
                 bottomLeft: Radius.circular(Dimensions.radius * 0.8),
               ),
               child: CachedNetworkImage(
-                imageUrl: providerData?.profileImage ??    'https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png',
+                imageUrl: providerData?.profileImage ?? 'https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png',
                 width: imageWidth * 0.85,
                 height: cardHeight,
                 fit: BoxFit.cover,
@@ -248,6 +248,7 @@ class ProfileTopWidgetView extends GetView<ProfileController> {
                   Space.height.v5,
                   TextWidget(
                     controller.providerProfileModel.value?.data.website ?? '',
+                    maxLines: 1,
                     fontSize: Dimensions.titleSmall,
                     fontWeight: FontWeight.w500,
                     color: CustomColors.primary,

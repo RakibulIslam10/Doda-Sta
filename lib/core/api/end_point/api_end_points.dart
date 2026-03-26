@@ -1,14 +1,12 @@
 class ApiEndPoints {
   static final mainDomain = 'http://3.96.86.190:3001';
-    static final baseUrl = '$mainDomain/';
+  static final baseUrl = '$mainDomain/';
 
-
-    //GOOGLE MAP API KEY
-  static const String googleApiKeyAndroid = "AIzaSyAXGE6m2DSrdc-F21kQXMdwfni5KZNsCLI";
-  static const String googleApiKeyIos = "AIzaSyAXGE6m2DSrdc-F21kQXMdwfni5KZNsCLI";
-
-
-
+  //GOOGLE MAP API KEY
+  static const String googleApiKeyAndroid =
+      "AIzaSyAXGE6m2DSrdc-F21kQXMdwfni5KZNsCLI";
+  static const String googleApiKeyIos =
+      "AIzaSyAXGE6m2DSrdc-F21kQXMdwfni5KZNsCLI";
 
   /// API End Points
   // Auth
@@ -16,11 +14,7 @@ class ApiEndPoints {
   static const register = 'auth/register';
   static const verifyEmail = 'auth/activate-account';
 
-
   static const forgotOtpVerify = 'auth/forget-pass-otp-verify';
-
-
-
 
   static const resendOtpCode = 'auth/activation-code-resend';
   static const resetPassword = 'auth/reset-password';

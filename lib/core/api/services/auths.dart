@@ -22,34 +22,34 @@ class AuthService {
       endPoint: ApiEndPoints.login,
       isLoading: isLoading,
       body: inputBody,
-        onSuccess: (result) {
-          final role = result.data.user.authId.role.toUpperCase();
-          final id = result.data.user.id;
+      onSuccess: (result) {
+        final role = result.data.user.authId.role.toUpperCase();
+        final id = result.data.user.id;
 
-          // ✅ Selected role এর সাথে actual role মিলাও
-          final selectedRole = AppStorage.users?.toUpperCase(); // 'USER' or 'PROVIDER'
+        // ✅ Selected role এর সাথে actual role মিলাও
+        final selectedRole = AppStorage.users
+            ?.toUpperCase(); // 'USER' or 'PROVIDER'
 
-          if (selectedRole != null && role != selectedRole) {
-            MessageHelper.showError(
-              "This account is registered as a ${role == 'PROVIDER' ? 'Service Provider' : 'Client'}.\nPlease use the correct login option.",
-            );
-            return; // ❌ Navigate করবে না
-          }
+        if (selectedRole != null && role != selectedRole) {
+          MessageHelper.showError(
+            "This account is registered as a ${role == 'PROVIDER' ? 'Service Provider' : 'Client'}.\nPlease use the correct login option.",
+          );
+          return; // ❌ Navigate করবে না
+        }
 
-          AppStorage.save(uId: id);
-          AppStorage.save(token: result.data.accessToken, isLoggedIn: true);
-          AppStorage.saveRole(role);
-          AppStorage.isVendor = role == "PROVIDER";
+        AppStorage.save(uId: id);
+        AppStorage.save(token: result.data.accessToken, isLoggedIn: true);
+        AppStorage.saveRole(role);
+        AppStorage.isVendor = role == "PROVIDER";
 
-          if (role == "PROVIDER") {
-            Get.offAllNamed(Routes.navigationScreen);
-          } else if (role == "USER") {
-            Get.offAllNamed(Routes.navigationScreen);
-          } else {
-            MessageHelper.showError("Please Select Your Role.\nThank you");
-          }
-        },
-
+        if (role == "PROVIDER") {
+          Get.offAllNamed(Routes.navigationScreen);
+        } else if (role == "USER") {
+          Get.offAllNamed(Routes.navigationScreen);
+        } else {
+          MessageHelper.showError("Please Select Your Role.\nThank you");
+        }
+      },
     );
   }
 
@@ -122,7 +122,8 @@ class AuthService {
         } else {
           SuccessDialog.show(
             title: "Registration Successful",
-            subtitle: "Your account has been created successfully. Please login to continue.",
+            subtitle:
+                "Your account has been created successfully. Please login to continue.",
             onTap: () => Get.offAllNamed(Routes.loginScreen),
           );
         }
@@ -136,21 +137,16 @@ class AuthService {
     );
   }
 
-
-
   /// =============================================== ✅ Otp Verify  ================================================== ///
 
-  static Future<ProviderOtpVerify> otpVerifyService({
+  static Future<BasicSuccessModel> otpVerifyService({
     required RxBool isLoading,
     required String email,
     required String activationCode,
   }) async {
-    Map<String, dynamic> inputBody = {
-      'code': activationCode,
-      'email': email,
-    };
+    Map<String, dynamic> inputBody = {'code': activationCode, 'email': email};
     return await ApiRequest.post(
-      fromJson: ProviderOtpVerify.fromJson,
+      fromJson: BasicSuccessModel.fromJson,
       endPoint: ApiEndPoints.forgotOtpVerify,
       isLoading: isLoading,
       body: inputBody,
@@ -175,7 +171,6 @@ class AuthService {
       },
     );
   }
-
 
   /// =============================================== ✅ Resend Verification ================================================== ///
 
@@ -215,6 +210,32 @@ class AuthService {
       showSuccessSnackBar: true,
       onSuccess: (result) {
         MessageHelper.showSuccess("Change Password Success");
+        Get.back();
+        Get.toNamed(Routes.loginScreen);
+      },
+    );
+  }
+
+  static Future<BasicSuccessModel> resetPasswordService({
+    required RxBool isLoading,
+    required String email,
+    required String newPassword,
+    required String confirmPassword,
+  }) async {
+    Map<String, dynamic> inputBody = {
+      'email': email,
+      'newPassword': newPassword,
+      'confirmPassword': confirmPassword,
+    };
+    return await ApiRequest.post(
+      fromJson: BasicSuccessModel.fromJson,
+      endPoint: ApiEndPoints.resetPassword,
+      isLoading: isLoading,
+      body: inputBody,
+
+      showSuccessSnackBar: true,
+      onSuccess: (result) {
+        MessageHelper.showSuccess("Password reset Success");
         Get.back();
         Get.toNamed(Routes.loginScreen);
       },

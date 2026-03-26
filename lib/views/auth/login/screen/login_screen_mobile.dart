@@ -5,7 +5,7 @@ class LoginScreenMobile extends GetView<LoginController> {
 
   @override
   Widget build(BuildContext context) {
-    print(AppStorage.users);
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
         statusBarColor: Colors.white,

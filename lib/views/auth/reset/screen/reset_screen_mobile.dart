@@ -32,15 +32,18 @@ class ResetScreenMobile extends GetView<ResetController> {
               focusNode: controller.confirmPasswordFocus,
               nextFocusNode: null,
               confirmWith:
-                  controller.passwordController, // only checks matching
+                  controller.passwordController,
             ),
             Space.height.betweenInputBox,
             Space.height.betweenInputBox,
-            PrimaryButtonWidget(
-              title: "Reset Password",
-              onPressed: () {
-                Get.offAllNamed(Routes.loginScreen);
-              },
+            Obx(
+              () => PrimaryButtonWidget(
+                isLoading: controller.isLoading.value,
+                title: "Reset Password",
+                onPressed: () {
+                  controller.resetPasswordService();
+                },
+              ),
             ),
           ],
         ),

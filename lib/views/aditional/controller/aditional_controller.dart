@@ -12,6 +12,8 @@ import '../../../routes/routes.dart';
 import 'package:doda_work/widgets/success_dialog.dart';
 
 class AditionalController extends GetxController {
+  RxInt currentStep = 0.obs; // 0: Form, 1: Preview
+
   // ------------------------ DAY LIST ------------------------
   List<String> dayList = [
     'Saturday',
@@ -136,6 +138,40 @@ class AditionalController extends GetxController {
   // ------------------------ MAP Location ------------------------
   final Rxn<LatLng> selectedLatLng = Rxn<LatLng>();
   final RxString selectedAddress = "".obs;
+
+  bool isFormValid() {
+    if (selectedServiceList.isEmpty) {
+      _showSnackbar("Missing Service", "Please select at least one service category.");
+      return false;
+    }
+    if (availabilityMap.isEmpty) {
+      _showSnackbar("Missing Availability", "Please set your working hours for at least one day.");
+      return false;
+    }
+    if (selectedAddress.value.isEmpty || selectedLatLng.value == null) {
+      _showSnackbar("Missing Location", "Please pick your service address.");
+      return false;
+    }
+    if (contactPersonController.text.isEmpty) {
+      _showSnackbar("Missing Contact", "Please enter your contact number.");
+      return false;
+    }
+    if (photos.isEmpty) {
+      _showSnackbar("Missing Attachments", "Please add your license or certificate photo.");
+      return false;
+    }
+    return true;
+  }
+
+  void _showSnackbar(String title, String message) {
+    Get.snackbar(
+      title,
+      message,
+      backgroundColor: Colors.redAccent,
+      colorText: Colors.white,
+    );
+  }
+
 
   // ------------------------ Provider Register API ------------------------
   RxBool providerRegIsLoading = false.obs;

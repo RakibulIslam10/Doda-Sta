@@ -14,6 +14,8 @@ import '../../request/widget/category_widget.dart';
 import '../controller/aditional_controller.dart';
 
 part 'aditional_screen_mobile.dart';
+part 'provider_preview_widget.dart';
+
 
 class AditionalScreen extends GetView<AditionalController> {
   const AditionalScreen({super.key});

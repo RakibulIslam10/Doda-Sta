@@ -8,7 +8,7 @@ class CategoryScreenMobile extends GetView<CategoryController> {
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0,
-        toolbarHeight: Dimensions.appBarHeight * 1.6,
+        toolbarHeight: Dimensions.appBarHeight * 2.25,
         flexibleSpace: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(
@@ -19,7 +19,12 @@ class CategoryScreenMobile extends GetView<CategoryController> {
               children: [
                 GestureDetector(
                   onTap: () => Get.find<NavigationController>().goToProfile(),
-                  child: Image.asset(Assets.logo.aaplogo.path, height: 55),
+                  child: Image.asset(
+                    Assets.logo.aaplogo.path,
+                    height: 85.h,
+                    width: 85.h,
+                    fit: BoxFit.contain,
+                  ),
                 ),
                 TextWidget(
                   'My Verified Service',

@@ -78,6 +78,8 @@ class UpdateScreenMobile extends GetView<UpdateController> {
               controller: controller.nameController,
               focusNode: controller.nameFocus,
               hintText: "Enter your name",
+
+              readOnly: true,
             ),
             Space.height.betweenInputBox,
 
@@ -99,15 +101,15 @@ class UpdateScreenMobile extends GetView<UpdateController> {
             ),
 
             Space.height.betweenInputBox,
-            CustomDatePick(
-              hint: "Select Date of Birth",
-              initialDate: DateTime.tryParse(
-                Get.find<ProfileController>().userProfileModel.value?.data?.dateOfBirth ?? '',
-              ),
-              onDateSelected: (value) {
-                controller.updatedDate.value = value.toIso8601String();
-              },
-            ),
+            // CustomDatePick(
+            //   hint: "Select Date of Birth",
+            //   initialDate: DateTime.tryParse(
+            //     Get.find<ProfileController>().userProfileModel.value?.data?.dateOfBirth ?? '',
+            //   ),
+            //   onDateSelected: (value) {
+            //     controller.updatedDate.value = value.toIso8601String();
+            //   },
+            // ),
 
             Space.height.betweenInputBox,
 

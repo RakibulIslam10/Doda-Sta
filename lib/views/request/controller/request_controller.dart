@@ -12,6 +12,8 @@ class RequestController extends GetxController {
   final RxString selectedPriority = ''.obs;
   final RxString selectedCategoryId = ''.obs;
   final RxString selectedSubCategoryId = ''.obs;
+  final RxInt currentStep = 0.obs; // 0: Info, 1: Logistics/Photos, 2: Preview
+
   final CategoryController categoryController = Get.find<CategoryController>();
 
   final RxString selectedAddress = "".obs;
@@ -34,6 +36,56 @@ class RequestController extends GetxController {
   void onSubCategorySelected(String subCategoryId) {
     selectedSubCategoryId.value = subCategoryId;
   }
+
+  bool isStep1Valid({required String phone, required String description}) {
+    if (selectedCategoryId.value.isEmpty) {
+      _showSnackbar("Missing Field", "Please select a service category.");
+      return false;
+    }
+    if (selectedSubCategoryId.value.isEmpty) {
+      _showSnackbar("Missing Field", "Please select a subcategory.");
+      return false;
+    }
+    if (selectedPriority.value.isEmpty) {
+      _showSnackbar("Missing Field", "Please select a service priority.");
+      return false;
+    }
+    if (phone.isEmpty) {
+      _showSnackbar("Missing Field", "Please enter contact number.");
+      return false;
+    }
+    if (description.isEmpty) {
+      _showSnackbar("Missing Field", "Please enter issue description.");
+      return false;
+    }
+    return true;
+  }
+
+  bool isStep2Valid() {
+    if (startDateTime.value == null || endDateTime.value == null) {
+      _showSnackbar("Missing Field", "Please select both start and end dates.");
+      return false;
+    }
+    if (selectedLatLng.value == null || selectedAddress.value.isEmpty) {
+      _showSnackbar("Missing Location", "Please select your service address.");
+      return false;
+    }
+    if (photos.isEmpty) {
+      _showSnackbar("Missing Image", "Please add at least one photo.");
+      return false;
+    }
+    return true;
+  }
+
+  void _showSnackbar(String title, String message) {
+    Get.snackbar(
+      title,
+      message,
+      backgroundColor: Colors.redAccent,
+      colorText: Colors.white,
+    );
+  }
+
 
 
   RxList<File> photos = <File>[].obs;
@@ -63,7 +115,9 @@ class RequestController extends GetxController {
 
 
     photos.clear();
+    currentStep.value = 0;
   }
+
 
   final RxBool isLoading = false.obs;
 

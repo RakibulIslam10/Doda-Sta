@@ -235,7 +235,7 @@ class AuthService {
 
       showSuccessSnackBar: true,
       onSuccess: (result) {
-        MessageHelper.showSuccess("Password reset Success");
+        MessageHelper.showSuccess("Password reset was successful");
         Get.back();
         Get.toNamed(Routes.loginScreen);
       },

@@ -11,8 +11,6 @@ import '../../category/controller/category_controller.dart';
 import '../../navigation/controller/navigation_controller.dart';
 import '../controller/request_controller.dart';
 import 'package:intl/intl.dart';
-
-
 part '../widget/time_and_date_section_widget.dart';
 
 part '../widget/others_field_widget.dart';
@@ -41,134 +39,221 @@ class _RequestScreenState extends State<RequestScreen> {
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0,
-        titleSpacing: 0,
-        leadingWidth: 80,
-        leading: GestureDetector(
-          onTap: () => Get.find<NavigationController>().goToProfile(),
-          child: Image.asset(Assets.logo.aaplogo.path, height: 50),
-        ),
-        title: TextWidget(
-          'Book a Service Appointment',
-          color: CustomColors.blackColor,
-          fontSize: Dimensions.titleMedium,
-          fontWeight: FontWeight.w400,
-          maxLines: 2,
-        ),
-        actionsPadding: EdgeInsets.only(right: 8.0),
-        actions: [
-          GestureDetector(
-            onTap: () => Get.toNamed(Routes.notificationScreen),
-            child: Container(
-              padding: EdgeInsets.all(Dimensions.paddingSize * 0.40),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: CustomColors.primary),
-              ),
-              child: SvgPicture.asset(Assets.icons.group),
+        toolbarHeight: Dimensions.appBarHeight * 2.25,
+        automaticallyImplyLeading: false,
+        flexibleSpace: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: Dimensions.defaultHorizontalSize,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    if (controller.currentStep.value > 0) {
+                      controller.currentStep.value--;
+                    } else {
+                      Get.find<NavigationController>().goToProfile();
+                    }
+                  },
+                  child: Row(
+                    children: [
+                      if (controller.currentStep.value > 0)
+                        const Icon(Icons.arrow_back_ios, size: 20),
+                      Image.asset(
+                        Assets.logo.aaplogo.path,
+                        height: 85.h,
+                        width: 85.h,
+                        fit: BoxFit.contain,
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Obx(() => TextWidget(
+                      controller.currentStep.value == 2
+                          ? 'Request Preview'
+                          : 'Service Request',
+                      color: CustomColors.blackColor,
+                      fontSize: Dimensions.titleLarge,
+                      fontWeight: FontWeight.w500,
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      textOverflow: TextOverflow.ellipsis,
+                    )),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () => Get.toNamed(Routes.notificationScreen),
+                  child: Container(
+                    padding: EdgeInsets.all(Dimensions.paddingSize * 0.35),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: CustomColors.primary),
+                    ),
+                    child: SvgPicture.asset(Assets.icons.group),
+                  ),
+                ),
+              ],
             ),
           ),
-          Space.width.v10,
-        ],
-      ),
-      body: Form(
-        key: fromKey,
-        child: ListView(
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-          children: [
-            TimeAndDateSectionWidget(),
-            Space.height.betweenInputBox,
-            OthersFieldWidget(
-              controller: controller,
-              requestController: descriptionTextController,
-              phoneController: phoneTextController,
-              categoryController: categoryController,
-            ),
-            Space.height.betweenInputBox,
-
-            AddPhotoGrid(controller: controller),
-            Space.height.betweenInputBox,
-
-            Obx(() {
-              return PrimaryButtonWidget(
-                isLoading: controller.isLoading.value,
-                title: "Submit",
-                onPressed: () {
-                  if (controller.selectedCategoryId.value.isEmpty) {
-                    Get.snackbar(
-                      "Missing Field",
-                      "Please select a service category.",
-                      backgroundColor: Colors.redAccent,
-                      colorText: Colors.white,
-                    );
-                    return;
-                  }
-
-                  if (controller.selectedSubCategoryId.value.isEmpty) {
-                    Get.snackbar(
-                      "Missing Field",
-                      "Please select a subcategory.",
-                      backgroundColor: Colors.redAccent,
-                      colorText: Colors.white,
-                    );
-                    return;
-                  }
-
-                  if (controller.selectedPriority.value.isEmpty) {
-                    Get.snackbar(
-                      "Missing Field",
-                      "Please select a service priority.",
-                      backgroundColor: Colors.redAccent,
-                      colorText: Colors.white,
-                    );
-                    return;
-                  }
-
-                  if (controller.startDateTime.value == null ||
-                      controller.endDateTime.value == null) {
-                    Get.snackbar(
-                      "Missing Field",
-                      "Please select both start and end dates.",
-                      backgroundColor: Colors.redAccent,
-                      colorText: Colors.white,
-                    );
-                    return;
-                  }
-
-                  if (controller.selectedLatLng.value == null ||
-                      controller.selectedAddress.value.isEmpty) {
-                    Get.snackbar(
-                      "Missing Location",
-                      "Please select your service address.",
-                      backgroundColor: Colors.redAccent,
-                      colorText: Colors.white,
-                    );
-                    return;
-                  }
-
-                  if (controller.photos.isEmpty) {
-                    Get.snackbar(
-                      "Missing Image",
-                      "Please add at least one photo of the issue.",
-                      backgroundColor: Colors.redAccent,
-                      colorText: Colors.white,
-                    );
-                    return;
-                  }
-
-                  if (fromKey.currentState!.validate()) {
-                    controller.bookingService(
-                      customerPhone: phoneTextController.text,
-                      description: descriptionTextController.text,
-                    );
-                  }
-                },
-              );
-            }),
-
-            Space.height.betweenInputBox,
-          ],
         ),
+      ),
+      body: Obx(() {
+        switch (controller.currentStep.value) {
+          case 0:
+            return _buildStep1();
+          case 1:
+            return _buildStep2();
+          case 2:
+            return _buildStep3Preview();
+          default:
+            return _buildStep1();
+        }
+      }),
+    );
+  }
+
+  Widget _buildStep1() {
+    return Form(
+      key: fromKey,
+      child: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        children: [
+          _buildStepProgress(0),
+          Space.height.v20,
+          OthersFieldWidget(
+            controller: controller,
+            requestController: descriptionTextController,
+            phoneController: phoneTextController,
+            categoryController: categoryController,
+            showOnlyInfo: true,
+          ),
+          Space.height.v30,
+          PrimaryButtonWidget(
+            title: "Continue",
+            onPressed: () {
+              if (controller.isStep1Valid(
+                phone: phoneTextController.text,
+                description: descriptionTextController.text,
+              )) {
+                controller.currentStep.value = 1;
+              }
+            },
+          ),
+          Space.height.v20,
+        ],
       ),
     );
   }
+
+  Widget _buildStep2() {
+    return ListView(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      children: [
+        _buildStepProgress(1),
+        Space.height.v20,
+        TimeAndDateSectionWidget(),
+        Space.height.betweenInputBox,
+        OthersFieldWidget(
+          controller: controller,
+          requestController: descriptionTextController,
+          phoneController: phoneTextController,
+          categoryController: categoryController,
+          showOnlyLocation: true,
+        ),
+        Space.height.betweenInputBox,
+        TextWidget(
+          "Add Photos",
+          fontSize: Dimensions.titleSmall,
+          fontWeight: FontWeight.w500,
+          color: CustomColors.blackColor.withAlpha(888),
+        ),
+        Space.height.v5,
+        AddPhotoGrid(controller: controller),
+        Space.height.v30,
+        Row(
+          children: [
+            Expanded(
+              child: PrimaryButtonWidget(
+                title: "Back",
+                onPressed: () => controller.currentStep.value = 0,
+                buttonColor: CustomColors.disableColor,
+                buttonTextColor: CustomColors.blackColor,
+              ),
+            ),
+            Space.width.v15,
+            Expanded(
+              child: PrimaryButtonWidget(
+                title: "Preview",
+                onPressed: () {
+                  if (controller.isStep2Valid()) {
+                    controller.currentStep.value = 2;
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
+        Space.height.v20,
+      ],
+    );
+  }
+
+  Widget _buildStep3Preview() {
+    return ListView(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      children: [
+        _buildStepProgress(2),
+        Space.height.v20,
+        RequestPreviewWidget(
+          controller: controller,
+          description: descriptionTextController.text,
+          phone: phoneTextController.text,
+        ),
+        Space.height.v30,
+        Obx(() => PrimaryButtonWidget(
+          isLoading: controller.isLoading.value,
+          title: "Submit Request",
+          onPressed: () {
+            controller.bookingService(
+              customerPhone: phoneTextController.text,
+              description: descriptionTextController.text,
+            );
+          },
+        )),
+        Space.height.v10,
+        TextButton(
+          onPressed: () => controller.currentStep.value = 1,
+          child: TextWidget(
+            "Back to Edit",
+            color: CustomColors.grayShade,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        Space.height.v20,
+      ],
+    );
+  }
+
+  Widget _buildStepProgress(int step) {
+    return Row(
+      children: List.generate(3, (index) {
+        return Expanded(
+          child: Container(
+            height: 6,
+            margin: EdgeInsets.symmetric(horizontal: 4),
+            decoration: BoxDecoration(
+              color: index <= step ? CustomColors.primary : CustomColors.disableColor,
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        );
+      }),
+    );
+  }
 }
+

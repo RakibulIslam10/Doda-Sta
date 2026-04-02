@@ -33,7 +33,6 @@ class ApiEndPoints {
   static const singlePost = 'home/book';
 
   //user_category
-
   static const getAllCategory = 'category/active-categories';
   static const getFavoritesCategory = 'category/favorites';
   static const patchToggleToFavorites = 'category/toggle-to-favorites';

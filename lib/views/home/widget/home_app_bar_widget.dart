@@ -14,12 +14,13 @@ class HomeAppBarWidgetView extends GetView<ProfileController> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           /// LOGO
+          Space.width.v5,
           GestureDetector(
             onTap: () => Get.find<NavigationController>().goToProfile(),
             child: Image.asset(
               Assets.logo.aaplogo.path,
-              height: 55.h,
-              width: 55.h,
+              height: 85.h,
+              width: 85.h,
               fit: BoxFit.contain,
             ),
           ),

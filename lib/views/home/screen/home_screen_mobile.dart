@@ -22,7 +22,7 @@ class HomeScreenMobile extends GetView<HomeController> {
       length: statusText.length,
       child: Scaffold(
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(Dimensions.appBarHeight * 1.25),
+          preferredSize: Size.fromHeight(Dimensions.appBarHeight * 2.25),
           child: AppBar(
             scrolledUnderElevation: 0,
             automaticallyImplyLeading: false,

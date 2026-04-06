@@ -26,15 +26,13 @@ class AuthService {
         final role = result.data.user.authId.role.toUpperCase();
         final id = result.data.user.id;
 
-        // ✅ Selected role এর সাথে actual role মিলাও
-        final selectedRole = AppStorage.users
-            ?.toUpperCase(); // 'USER' or 'PROVIDER'
+        final selectedRole = AppStorage.users.toUpperCase();
 
-        if (selectedRole != null && role != selectedRole) {
+        if (role != selectedRole) {
           MessageHelper.showError(
             "This account is registered as a ${role == 'PROVIDER' ? 'Service Provider' : 'Client'}.\nPlease use the correct login option.",
           );
-          return; // ❌ Navigate করবে না
+          return;
         }
 
         AppStorage.save(uId: id);

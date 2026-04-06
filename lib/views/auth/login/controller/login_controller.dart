@@ -71,47 +71,38 @@ class LoginController extends GetxController {
 
       firebaseUser.value = userCredential.user;
 
-      final String? firebaseToken =
-      await userCredential.user?.getIdToken();
 
       if (kDebugMode) {
         print("UID   : ${userCredential.user?.uid}");
         print("Email : ${userCredential.user?.email}");
         print("Name  : ${userCredential.user?.displayName}");
-        print("Token : ${firebaseToken?.substring(0, 30)}...");
+        print("Token : ${googleAuth.idToken?.substring(0, 30)}...");
       }
 
       await ApiRequest.post(
         fromJson: LoginModel.fromJson,
-        endPoint: '/auth/google',
+        endPoint: '/auth/google-login',
         isLoading: isLoading,
         showSuccessSnackBar: true,
-        body: {"id_token": firebaseToken},
+        body: {
+          "provider": "google",
+          "idToken": googleAuth.idToken,
+          "role": AppStorage.role.toString(),
+        },
         onSuccess: (result) {
-
           final role = result.data.user.authId.role.toUpperCase();
           final id = result.data.user.id;
 
-          print("User Role: $role");
-
           AppStorage.save(uId: id);
-          print('-------------------------------');
-          print('U ID = ${AppStorage.uId}');
-
           AppStorage.save(token: result.data.accessToken, isLoggedIn: true);
-
           AppStorage.saveRole(role);
           AppStorage.isVendor = role == "PROVIDER";
 
-          // Navigate based on role
-          if (role == "PROVIDER") {
-            Get.offAllNamed(Routes.navigationScreen);
-          } else if (role == "USER") {
+          if (role == "PROVIDER" || role == "USER") {
             Get.offAllNamed(Routes.navigationScreen);
           } else {
             MessageHelper.showError("Please Select Your Role.\nThank you");
           }
-
         },
       );
 
@@ -198,14 +189,11 @@ class LoginController extends GetxController {
         }
       }
 
-      final String? firebaseToken =
-      await userCredential.user?.getIdToken();
-
       if (kDebugMode) {
         print("UID   : ${userCredential.user?.uid}");
         print("Email : ${userCredential.user?.email}");
         print("Name  : ${userCredential.user?.displayName}");
-        print("Token : ${firebaseToken?.substring(0, 30)}...");
+        print("Token : ${appleCredential.identityToken?.substring(0, 30)}...");
       }
 
       await ApiRequest.post(
@@ -213,7 +201,7 @@ class LoginController extends GetxController {
         endPoint: '/auth/apple',
         isLoading: isLoading,
         showSuccessSnackBar: true,
-        body: {"identity_token": firebaseToken},
+        body: {"identity_token": appleCredential.identityToken},
         onSuccess: (result) {
 
           final role = result.data.user.authId.role.toUpperCase();

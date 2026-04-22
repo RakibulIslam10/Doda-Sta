@@ -228,32 +228,42 @@ class ProfileTopWidgetView extends GetView<ProfileController> {
             Space.width.v10,
 
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Space.height.v10,
-                  TextWidget(
-                    controller.providerProfileModel.value?.data.companyName ?? '',
-                    fontSize: Dimensions.titleSmall,
-                    fontWeight: FontWeight.w500,
-                    color: CustomColors.primary,
-                  ),
-                  Space.height.v5,
-                  TextWidget(
-                    controller.providerProfileModel.value?.data.authId.email ?? '',
-                    fontSize: Dimensions.titleSmall,
-                    fontWeight: FontWeight.w500,
-                    color: CustomColors.primary,
-                  ),
-                  Space.height.v5,
-                  TextWidget(
-                    controller.providerProfileModel.value?.data.website ?? '',
-                    maxLines: 1,
-                    fontSize: Dimensions.titleSmall,
-                    fontWeight: FontWeight.w500,
-                    color: CustomColors.primary,
-                  ),
-                ],
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: Dimensions.paddingSize * 0.2,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextWidget(
+                      controller.providerProfileModel.value?.data.companyName ?? '',
+                      fontSize: Dimensions.titleSmall,
+                      fontWeight: FontWeight.w500,
+                      color: CustomColors.primary,
+                      maxLines: 1,
+                      textOverflow: TextOverflow.ellipsis,
+                    ),
+                    Space.height.v5,
+                    TextWidget(
+                      controller.providerProfileModel.value?.data.authId.email ?? '',
+                      fontSize: Dimensions.titleSmall,
+                      fontWeight: FontWeight.w500,
+                      color: CustomColors.primary,
+                      maxLines: 1,
+                      textOverflow: TextOverflow.ellipsis,
+                    ),
+                    Space.height.v5,
+                    TextWidget(
+                      controller.providerProfileModel.value?.data.website ?? '',
+                      fontSize: Dimensions.titleSmall,
+                      fontWeight: FontWeight.w500,
+                      color: CustomColors.primary,
+                      maxLines: 1,
+                      textOverflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
               ),
             ),
 

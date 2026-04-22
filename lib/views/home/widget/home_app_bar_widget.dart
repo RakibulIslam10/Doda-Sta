@@ -25,6 +25,7 @@ class HomeAppBarWidgetView extends GetView<ProfileController> {
             color: CustomColors.disableColor.withAlpha(120),
           ),
 
+
           Space.width.v15,
 
           /// USER GREETING

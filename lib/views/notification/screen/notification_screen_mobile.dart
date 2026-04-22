@@ -40,7 +40,7 @@ class NotificationScreenMobile extends GetView<NotificationController> {
                       children: [
                         Flexible(
                           child: TextWidget(
-                            (notification.title ?? "No title")+ (notification.title ?? "No title"),
+                            (notification.title ?? "No title"),
                             color: CustomColors.primary,
                             maxLines: 3,
                             fontSize: Dimensions.titleSmall,
@@ -48,11 +48,10 @@ class NotificationScreenMobile extends GetView<NotificationController> {
                             textOverflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        TextWidget(DateFormat('MM/dd/yyyy').format(notification.createdAt ?? DateTime.now()),
-                          fontSize: Dimensions.titleSmall * 0.5,
-                          fontWeight: FontWeight.w400,
-                          color: CustomColors.grayShade,
-                        ),
+                        TextWidget(DateFormat('hh:mm a').format(notification.createdAt ?? DateTime.now()),
+                        fontSize: Dimensions.titleSmall * 0.8,
+                          fontWeight: FontWeight.w600,
+                        )
                       ],
                     ),
                     TextWidget(

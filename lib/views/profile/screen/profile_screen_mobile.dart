@@ -65,15 +65,21 @@ class ProfileScreenMobile extends GetView<ProfileController> {
         child: Obx(
           () => controller.isLoading.value
               ? LoadingWidget()
-              : ListView(
-                  padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
-                  children: [
-                    if (AppStorage.users == 'USER')
-                      ProfileTopHeaderWidgetView(),
-                    if (AppStorage.users == 'PROVIDER') ProfileTopWidgetView(),
-                    Space.height.v20,
-                    ProfileCardSectionWidgetView(),
-                  ],
+              : RefreshIndicator(
+                  onRefresh: () async {
+                    await controller.loadProfile();
+                  },
+                  color: CustomColors.primary,
+                  child: ListView(
+                    padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
+                    children: [
+                      if (AppStorage.users == 'USER')
+                        ProfileTopHeaderWidgetView(),
+                      if (AppStorage.users == 'PROVIDER') ProfileTopWidgetView(),
+                      Space.height.v20,
+                      ProfileCardSectionWidgetView(),
+                    ],
+                  ),
                 ),
         ),
       ),

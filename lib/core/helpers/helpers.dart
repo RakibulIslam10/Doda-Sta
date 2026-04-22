@@ -23,7 +23,7 @@ class Helpers {
     if (digits.isEmpty) return '';
 
     if (digits.length <= 3) {
-      result += '(${digits}';
+      result += '($digits';
     } else if (digits.length <= 6) {
       result += '(${digits.substring(0, 3)}) ${digits.substring(3)}';
     } else {

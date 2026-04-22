@@ -203,7 +203,6 @@ class LoginController extends GetxController {
         showSuccessSnackBar: true,
         body: {"identity_token": appleCredential.identityToken},
         onSuccess: (result) {
-
           final role = result.data.user.authId.role.toUpperCase();
           final id = result.data.user.id;
 

@@ -70,13 +70,12 @@ class HomeScreenMobile extends GetView<HomeController> {
                               builderDelegate:
                               PagedChildBuilderDelegate<HomeServiceItem>(
                                 itemBuilder: (context, item, itemIndex) {
-
                                   return CustomStatusCardWidget(
                                     index: itemIndex,
                                     requestId: item.requestId ?? "",
-                                    category: item.subcategory ?? "",
+                                    category: item.serviceCategory?.name ?? "",
                                     subCategory:
-                                    item.serviceCategory?.name ?? "",
+                                    item.subcategory ?? "",
                                     address: 'Postal Code : ${item.postalCode ?? ""}',
                                     image: item.attachments.first,
                                     isUser: true,

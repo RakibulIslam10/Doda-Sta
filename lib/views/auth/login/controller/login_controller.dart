@@ -18,6 +18,8 @@ class LoginController extends GetxController {
   /// EMAIL
   final emailController = TextEditingController();
   final emailFocus = FocusNode();
+  //dodawork852@yopmail.com
+  //123654789
 
   /// PASSWORD
   final passwordController = TextEditingController();

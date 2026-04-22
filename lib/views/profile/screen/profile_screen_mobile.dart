@@ -17,15 +17,7 @@ class ProfileScreenMobile extends GetView<ProfileController> {
             child: Row(
               mainAxisAlignment: mainSpaceBet,
               children: [
-                GestureDetector(
-                  onTap: () => Get.find<NavigationController>().goToProfile(),
-                  child: Image.asset(
-                    Assets.logo.aaplogo.path,
-                    height: 85.h,
-                    width: 85.h,
-                    fit: BoxFit.contain,
-                  ),
-                ),
+                AppBarLogoWidget(),
                 TextWidget(
                   'Profile',
                   color: CustomColors.blackColor,

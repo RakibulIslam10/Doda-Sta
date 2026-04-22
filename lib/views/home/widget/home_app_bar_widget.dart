@@ -15,15 +15,7 @@ class HomeAppBarWidgetView extends GetView<ProfileController> {
         children: [
           /// LOGO
           Space.width.v5,
-          GestureDetector(
-            onTap: () => Get.find<NavigationController>().goToProfile(),
-            child: Image.asset(
-              Assets.logo.aaplogo.path,
-              height: 65.h,
-              width: 65.w,
-              fit: BoxFit.contain,
-            ),
-          ),
+          AppBarLogoWidget(),
 
           Space.width.v10,
           /// DIVIDER

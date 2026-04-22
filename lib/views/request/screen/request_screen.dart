@@ -61,11 +61,14 @@ class _RequestScreenState extends State<RequestScreen> {
                     children: [
                       if (controller.currentStep.value > 0)
                         const Icon(Icons.arrow_back_ios, size: 20),
-                      Image.asset(
-                        Assets.logo.aaplogo.path,
-                        height: 85.h,
-                        width: 85.h,
-                        fit: BoxFit.contain,
+                      AppBarLogoWidget(
+                        onTap: () {
+                          if (controller.currentStep.value > 0) {
+                            controller.currentStep.value--;
+                          } else {
+                            Get.find<NavigationController>().goToProfile();
+                          }
+                        },
                       ),
                     ],
                   ),

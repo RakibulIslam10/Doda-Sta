@@ -17,15 +17,7 @@ class CategoryScreenMobile extends GetView<CategoryController> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                GestureDetector(
-                  onTap: () => Get.find<NavigationController>().goToProfile(),
-                  child: Image.asset(
-                    Assets.logo.aaplogo.path,
-                    height: 85.h,
-                    width: 85.h,
-                    fit: BoxFit.contain,
-                  ),
-                ),
+                AppBarLogoWidget(),
                 TextWidget(
                   'My Verified Service',
                   color: CustomColors.blackColor,

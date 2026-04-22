@@ -26,15 +26,7 @@ class ChatScreenMobile extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                GestureDetector(
-                  onTap: () => Get.find<NavigationController>().goToProfile(),
-                  child: Image.asset(
-                    Assets.logo.aaplogo.path,
-                    height: 85.h,
-                    width: 85.h,
-                    fit: BoxFit.contain,
-                  ),
-                ),
+                AppBarLogoWidget(),
                 TextWidget(
                   'Chat',
                   color: CustomColors.blackColor,

@@ -24,16 +24,37 @@ class ProfileScreenMobile extends GetView<ProfileController> {
                   fontSize: Dimensions.titleMedium * 1.2,
                   fontWeight: FontWeight.w600,
                 ),
-                GestureDetector(
-                  onTap: () => Get.toNamed(Routes.notificationScreen),
-                  child: Container(
-                    padding: EdgeInsets.all(Dimensions.paddingSize * 0.35),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: CustomColors.primary),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    GestureDetector(
+                      onTap: () => controller.loadProfile(),
+                      child: Container(
+                        padding: EdgeInsets.all(Dimensions.paddingSize * 0.35),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: CustomColors.primary),
+                        ),
+                        child: Icon(
+                          Icons.refresh,
+                          color: CustomColors.primary,
+                          size: Dimensions.iconSizeLarge * 0.8,
+                        ),
+                      ),
                     ),
-                    child: SvgPicture.asset(Assets.icons.group),
-                  ),
+                    Space.width.v10,
+                    GestureDetector(
+                      onTap: () => Get.toNamed(Routes.notificationScreen),
+                      child: Container(
+                        padding: EdgeInsets.all(Dimensions.paddingSize * 0.35),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: CustomColors.primary),
+                        ),
+                        child: SvgPicture.asset(Assets.icons.group),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

@@ -48,8 +48,11 @@ class NotificationScreenMobile extends GetView<NotificationController> {
                             textOverflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        TextWidget(DateFormat('hh:mm a').format(notification.createdAt ?? DateTime.now()),
-                        fontSize: Dimensions.titleSmall * 0.8,
+                        TextWidget(
+                          DateFormat('hh:mm a').format(
+                              (notification.createdAt ?? DateTime.now()).toLocal()
+                          ),
+                          fontSize: Dimensions.titleSmall * 0.8,
                           fontWeight: FontWeight.w600,
                         )
                       ],

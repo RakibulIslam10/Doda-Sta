@@ -21,28 +21,11 @@ class HomeScreenMobile extends GetView<HomeController> {
     return DefaultTabController(
       length: statusText.length,
       child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(Dimensions.appBarHeight * 2.25),
-          child: AppBar(
-            scrolledUnderElevation: 0,
-            automaticallyImplyLeading: false,
-            flexibleSpace: HomeAppBarWidgetView(),
-            actions: [
-              GestureDetector(
-                onTap: () => Get.toNamed(Routes.notificationScreen),
-                child: Container(
-                  margin: Dimensions.defaultHorizontalSize.edgeRight * 0.2,
-                  padding: EdgeInsets.all(Dimensions.paddingSize * 0.3),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: CustomColors.primary),
-                  ),
-                  child: SvgPicture.asset(Assets.icons.group),
-                ),
-              ),
-              Space.width.v10,
-            ],
-          ),
+        appBar: AppBar(
+          toolbarHeight: Dimensions.appBarHeight * 2.25,
+          scrolledUnderElevation: 0,
+          automaticallyImplyLeading: false,
+          flexibleSpace: HomeAppBarWidgetView(),
         ),
         body: RefreshIndicator(
           onRefresh: () async {

@@ -92,15 +92,51 @@ class HomeScreenMobile extends GetView<HomeController> {
                                   );
                                 },
 
-                                noItemsFoundIndicatorBuilder: (_) => Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(20),
-                                    child: Text(
-                                      "No ${statusText[index]} requests found",
-                                      style: TextStyle(
-                                        fontSize: Dimensions.titleSmall,
-                                        color: CustomColors.grayShade,
-                                      ),
+                                noItemsFoundIndicatorBuilder: (_) => SingleChildScrollView(
+                                  physics: const AlwaysScrollableScrollPhysics(),
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.height * 0.45,
+                                    alignment: Alignment.center,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          padding: const EdgeInsets.all(24),
+                                          decoration: BoxDecoration(
+                                            color: CustomColors.primary.withOpacity(0.08),
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: Icon(
+                                            Icons.assignment_outlined,
+                                            size: 72,
+                                            color: CustomColors.primary,
+                                          ),
+                                        ),
+                                        SizedBox(height: Dimensions.verticalSize * 2.5),
+                                        Text(
+                                          "No ${statusText[index]} Requests",
+                                          style: TextStyle(
+                                            fontSize: Dimensions.titleLarge,
+                                            fontWeight: FontWeight.w700,
+                                            color: CustomColors.blackColor,
+                                          ),
+                                        ),
+                                        SizedBox(height: Dimensions.verticalSize * 0.8),
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: Dimensions.widthSize * 4),
+                                          child: Text(
+                                            "You don't have any ${statusText[index].toLowerCase()} requests at the moment. Explore services to book now!",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontSize: Dimensions.bodyMedium,
+                                              fontWeight: FontWeight.w400,
+                                              color: CustomColors.grayShade,
+                                              height: 1.4,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),

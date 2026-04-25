@@ -263,39 +263,43 @@ class HomeVendorScreenMobile extends GetView<HomeVendorController> {
   Widget _buildEmptyState(String status) {
     return SingleChildScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
-      child: SizedBox(
-        height: Get.height * 0.6,
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.inbox_outlined,
-                  size: 80,
-                  color: Colors.grey.shade400,
-                ),
-                Space.height.v20,
-                TextWidget(
-                  "No ${status.toLowerCase()} requests",
-                  fontWeight: FontWeight.w600,
-                  fontSize: Dimensions.bodyLarge,
-                  color: Colors.grey.shade700,
-                ),
-                Space.height.v5,
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                  child: TextWidget(
-                    "When you have ${status.toLowerCase()} requests, they'll appear here",
-                    fontWeight: FontWeight.w400,
-                    fontSize: Dimensions.bodySmall,
-                    color: Colors.grey.shade500,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ],
+      child: Container(
+        height: Get.height * 0.5,
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: CustomColors.primary.withOpacity(0.08),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.assignment_outlined,
+                size: 72,
+                color: CustomColors.primary,
+              ),
             ),
-          ),
+            Space.height.v25,
+            TextWidget(
+              "No ${status.toLowerCase()} requests",
+              fontWeight: FontWeight.w700,
+              fontSize: Dimensions.titleLarge,
+              color: CustomColors.blackColor,
+            ),
+            Space.height.v10,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: Dimensions.widthSize * 4),
+              child: TextWidget(
+                "When you have ${status.toLowerCase()} requests, they'll appear here",
+                fontWeight: FontWeight.w400,
+                fontSize: Dimensions.bodyMedium,
+                color: CustomColors.grayShade,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
         ),
       ),
     );

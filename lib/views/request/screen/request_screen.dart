@@ -168,13 +168,6 @@ class _RequestScreenState extends State<RequestScreen> {
           categoryController: categoryController,
           showOnlyLocation: true,
         ),
-        Space.height.betweenInputBox,
-        TextWidget(
-          "Add Photos",
-          fontSize: Dimensions.titleSmall,
-          fontWeight: FontWeight.w500,
-          color: CustomColors.blackColor.withAlpha(888),
-        ),
         Space.height.v5,
         AddPhotoGrid(controller: controller),
         Space.height.v30,

@@ -1,4 +1,3 @@
-// controllers/splash_controller.dart
 import 'package:get/get.dart';
 import '../../../core/utils/app_storage.dart';
 import '../../../routes/routes.dart';

@@ -18,10 +18,6 @@ class LoginController extends GetxController {
   /// EMAIL
   final emailController = TextEditingController();
   final emailFocus = FocusNode();
-  //dodawork852@yopmail.com
-  //123654789
-
-  //pdodawork8@yopmail.com
 
   /// PASSWORD
   final passwordController = TextEditingController();
@@ -41,7 +37,8 @@ class LoginController extends GetxController {
   // =======================================
   // 🔥 EMAIL + PASSWORD LOGIN
   // =======================================
-  Future<dynamic> loginProcess() async {
+
+    Future<dynamic> loginProcess() async {
     return await AuthService.loginService(
       isLoading: isLoading,
       email: emailController.text.trim(),
@@ -87,7 +84,7 @@ class LoginController extends GetxController {
         fromJson: LoginModel.fromJson,
         endPoint: '/auth/google-login',
         isLoading: isLoading,
-        showSuccessSnackBar: true,
+        // showSuccessSnackBar: true,
         body: {
           "provider": "google",
           "idToken": googleAuth.idToken,

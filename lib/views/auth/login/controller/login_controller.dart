@@ -12,6 +12,16 @@ import '../../../../routes/routes.dart';
 import '../model/login_model.dart';
 
 class LoginController extends GetxController {
+
+  // user
+  //dodauser45@yopmail.com
+  //123654
+
+
+
+
+
+
   /// FORM
   final formKey = GlobalKey<FormState>();
 

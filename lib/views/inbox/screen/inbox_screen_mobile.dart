@@ -157,21 +157,46 @@ class InboxScreenMobile extends GetView<InboxController> {
                 }
 
                 if (controller.messagesList.isEmpty) {
-                  return Center(
+                  return Container(
+                    alignment: Alignment.center,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
-                          Icons.chat_bubble_outline,
-                          size: 64,
-                          color: Colors.grey[300],
+                        Container(
+                          padding: const EdgeInsets.all(24),
+                          decoration: BoxDecoration(
+                            color: CustomColors.primary.withOpacity(0.08),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Icons.forum_outlined,
+                            size: 64,
+                            color: CustomColors.primary,
+                          ),
                         ),
-                        const SizedBox(height: 16),
+                        SizedBox(height: Dimensions.verticalSize * 2),
                         Text(
-                          "No messages yet",
+                          "No Messages Yet",
                           style: TextStyle(
-                            color: Colors.grey[600],
-                            fontSize: 16,
+                            fontSize: Dimensions.titleLarge,
+                            fontWeight: FontWeight.w700,
+                            color: CustomColors.blackColor,
+                          ),
+                        ),
+                        SizedBox(height: Dimensions.verticalSize * 0.5),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: Dimensions.widthSize * 4,
+                          ),
+                          child: Text(
+                            "Say hello! Your conversation with this provider starts here. Send a message to get things moving.",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: Dimensions.bodyMedium,
+                              fontWeight: FontWeight.w400,
+                              color: CustomColors.grayShade,
+                              height: 1.4,
+                            ),
                           ),
                         ),
                       ],

@@ -42,7 +42,9 @@ class CustomStatusCardWidget extends StatelessWidget {
     final url = "$image";
     final fixedUrl = url.replaceAll(r'\', '/');
 
-    String formattedLeadPrice = leadPrice != null ? '\$${(leadPrice! / 100).toStringAsFixed(2)}' : 'N/A';
+    String formattedLeadPrice = leadPrice != null
+        ? '\$${(leadPrice! / 100).toStringAsFixed(2)}'
+        : 'N/A';
 
     return GestureDetector(
       onTap: onTap,

@@ -67,7 +67,55 @@ class ChatScreenMobile extends StatelessWidget {
           }).toList();
 
           if (filteredChats.isEmpty) {
-            return const Center(child: Text("No participants yet"));
+            return SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.6,
+                alignment: Alignment.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        color: CustomColors.primary.withOpacity(0.08),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.chat_bubble_outline_rounded,
+                        size: 72,
+                        color: CustomColors.primary,
+                      ),
+                    ),
+                    SizedBox(height: Dimensions.verticalSize * 2.5),
+                    Text(
+                      "No Conversations Yet",
+                      style: TextStyle(
+                        fontSize: Dimensions.titleLarge,
+                        fontWeight: FontWeight.w700,
+                        color: CustomColors.blackColor,
+                      ),
+                    ),
+                    SizedBox(height: Dimensions.verticalSize * 0.8),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Dimensions.widthSize * 4,
+                      ),
+                      child: Text(
+                        "Your messages and conversations with service providers will appear here. Start a chat to get things moving!",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: Dimensions.bodyMedium,
+                          fontWeight: FontWeight.w400,
+                          color: CustomColors.grayShade,
+                          height: 1.4,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
           }
 
           return ListView.builder(

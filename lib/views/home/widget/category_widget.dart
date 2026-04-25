@@ -49,7 +49,10 @@ class CategoryWidgetView extends GetView<HomeController> {
                   children: [
                     const Text(
                       "No categories found.",
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                     const SizedBox(height: 12),
                     ElevatedButton.icon(
@@ -57,7 +60,10 @@ class CategoryWidgetView extends GetView<HomeController> {
                       icon: const Icon(Icons.refresh),
                       label: const Text("Fetch Again"),
                       style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 12,
+                        ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -91,8 +97,13 @@ class CategoryWidgetView extends GetView<HomeController> {
                             fit: BoxFit.cover,
                             placeholder: (context, url) =>
                                 Container(color: Colors.grey.shade300),
-                            errorWidget: (context, url, error) =>
-                                Container(color: Colors.grey.shade300, child: Icon(Icons.image_not_supported_rounded, color: Colors.grey)),
+                            errorWidget: (context, url, error) => Container(
+                              color: Colors.grey.shade300,
+                              child: Icon(
+                                Icons.image_not_supported_rounded,
+                                color: Colors.grey,
+                              ),
+                            ),
                           ),
                         ),
                         const SizedBox(height: 5),

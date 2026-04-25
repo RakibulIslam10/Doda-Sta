@@ -18,10 +18,6 @@ class LoginController extends GetxController {
   //123654
 
 
-
-
-
-
   /// FORM
   final formKey = GlobalKey<FormState>();
 

@@ -1,10 +1,5 @@
 import 'package:doda_work/core/utils/basic_import.dart';
-import 'package:doda_work/core/utils/extensions.dart';
 import 'package:doda_work/routes/routes.dart';
-import 'package:doda_work/views/category/controller/category_controller.dart';
-import 'package:doda_work/views/navigation/controller/navigation_controller.dart';
-import 'package:doda_work/views/profile/controller/profile_controller.dart';
-import '../../../core/utils/app_storage.dart';
 import '../controller/home_controller.dart';
 import '../model/home_model.dart';
 import 'home_screen_mobile.dart';

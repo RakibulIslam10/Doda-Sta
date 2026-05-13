@@ -37,7 +37,7 @@ class VendorStatusCardWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(Dimensions.radius * 0.8),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05), // shadow color
+              color: Colors.black.withValues(alpha: 0.05), // shadow color
               spreadRadius: 1, // how wide the shadow spreads
               blurRadius: 6, // softness of the shadow
               offset: const Offset(0, 3), // position of shadow (x, y)

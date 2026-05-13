@@ -1,8 +1,6 @@
 import '../../../core/utils/app_storage.dart';
 import '../../../core/utils/basic_import.dart';
-import '../../../core/utils/extensions.dart';
 import '../../../routes/routes.dart';
-import '../../navigation/controller/navigation_controller.dart';
 import '../../profile/controller/profile_controller.dart';
 
 class HomeAppBarWidgetView extends GetView<ProfileController> {

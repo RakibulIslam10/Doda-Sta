@@ -224,7 +224,7 @@ class VendorProfileScreenMobile extends GetView<VendorProfileController> {
                           selectedItems.map((e) => e.id),
                         );
 
-                        print(
+                        debugPrint(
                           "✅ Selected IDs: ${controller.selectedServiceList}",
                         );
                       },

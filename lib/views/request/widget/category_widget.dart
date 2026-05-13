@@ -1,5 +1,4 @@
 import '../../../core/utils/basic_import.dart';
-import 'package:doda_work/core/utils/extensions.dart';
 
 class MultiSelectDropDownWidget extends StatefulWidget {
   final String hint;

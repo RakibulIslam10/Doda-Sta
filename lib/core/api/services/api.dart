@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
-import 'package:doda_work/core/utils/message_helper.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
@@ -24,28 +22,28 @@ class ApiRequest {
 
   static void printBody(Map<String, dynamic> body) {
     body.forEach((key, value) {
-      log("🔹 '$key': '$value'");
+      debugPrint("🔹 '$key': '$value'");
     });
-    log(
+    debugPrint(
         '╚════════════════════════════════════════════════════════════════════════════════════════════╚═══');
   }
 
   static void printUrl(String url) {
-    log(
+    debugPrint(
         '╔════════════════════════════════════════════════════════════════════════════════════════════');
-    log("📍 'End Point': '$url'");
+    debugPrint("📍 'End Point': '$url'");
   }
 
   static void printBodyLineByLine(Map<String, dynamic> body) {
     body.forEach((key, value) {
-      log("🔹 '$key': '$value'");
-      log('╚════════════════════════════════════════════════════════════════');
+      debugPrint("🔹 '$key': '$value'");
+      debugPrint('╚════════════════════════════════════════════════════════════════');
     });
   }
 
   static void printEndPointLog(String url) {
-    log('╔════════════════════════════════════════════════════════════════');
-    log("📍 'End Point': '$url'");
+    debugPrint('╔════════════════════════════════════════════════════════════════');
+    debugPrint("📍 'End Point': '$url'");
   }
 
   /// =========================================================== ✅ POST REQUEST =========================================================== ///
@@ -62,7 +60,7 @@ class ApiRequest {
   }) async {
     try {
       isLoading.value = true;
-      log('|📤|---------[ 📦 POST REQUEST STARTED ]---------|📤|');
+      debugPrint('|📤|---------[ 📦 POST REQUEST STARTED ]---------|📤|');
 
       // ✅ Fix: Properly handle slashes
       String finalEndPoint = endPoint;
@@ -92,9 +90,9 @@ class ApiRequest {
         body: jsonEncode(body),
       ).timeout(const Duration(seconds: 120));
 
-      log('|📬|---------[ RESPONSE STATUS: ${response
+      debugPrint('|📬|---------[ RESPONSE STATUS: ${response
           .statusCode} ]---------|📬|');
-      log('|📬|---------[ RESPONSE BODY: ${response.body} ]---------|📬|');
+      debugPrint('|📬|---------[ RESPONSE BODY: ${response.body} ]---------|📬|');
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final Map<String, dynamic> json = jsonDecode(response.body);
@@ -114,17 +112,17 @@ class ApiRequest {
       } else {
         final error = jsonDecode(response.body);
         final errorMessage = error['message'] ?? 'Something went wrong!';
-        log('❌ Error: $errorMessage');
+        debugPrint('❌ Error: $errorMessage');
         CustomSnackBar.error(errorMessage);
         throw Exception(errorMessage);
       }
     } catch (e) {
-      log('🐞🐞🐞 UNHANDLED ERROR: ${e.toString()}');
+      debugPrint('🐞🐞🐞 UNHANDLED ERROR: ${e.toString()}');
       CustomSnackBar.error(e.toString());
       throw Exception(e.toString());
     } finally {
       isLoading.value = false;
-      log('|✅|---------[ ✅ POST REQUEST COMPLETED ]---------|✅|');
+      debugPrint('|✅|---------[ ✅ POST REQUEST COMPLETED ]---------|✅|');
     }
   }
 
@@ -141,7 +139,7 @@ class ApiRequest {
   }) async {
     try {
       isLoading.value = true;
-      log('|📥|---------[ 🌐 GET REQUEST STARTED ]---------|📥|');
+      debugPrint('|📥|---------[ 🌐 GET REQUEST STARTED ]---------|📥|');
 
       String fullUrl = '${ApiEndPoints.baseUrl}$endPoint';
       if (id != null && id.isNotEmpty) {
@@ -164,14 +162,14 @@ class ApiRequest {
           final prettyJson = const JsonEncoder.withIndent(
             '  ',
           ).convert(jsonDecode(response.body));
-          log('|📤|---------[ RESPONSE BODY ]---------|📤|');
-          log(prettyJson);
-          log('|📤|---------------------------------|📤|');
+          debugPrint('|📤|---------[ RESPONSE BODY ]---------|📤|');
+          debugPrint(prettyJson);
+          debugPrint('|📤|---------------------------------|📤|');
         } catch (_) {
-          log('|📤| RESPONSE (raw) |📤|: ${response.body}');
+          debugPrint('|📤| RESPONSE (raw) |📤|: ${response.body}');
         }
       }
-      log('|✅|---------[ ✅ GET REQUEST COMPLETED ]---------|✅|');
+      debugPrint('|✅|---------[ ✅ GET REQUEST COMPLETED ]---------|✅|');
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> json = jsonDecode(response.body);
@@ -191,12 +189,12 @@ class ApiRequest {
       } else {
         final error = jsonDecode(response.body);
         final errorMessage = error['message'] ?? 'Something went wrong!';
-        log('❌ Error: $errorMessage');
+        debugPrint('❌ Error: $errorMessage');
         CustomSnackBar.error(errorMessage);
         throw Exception(errorMessage);
       }
     } catch (e) {
-      log('🐞🐞🐞 UNHANDLED ERROR: ${e.toString()}');
+      debugPrint('🐞🐞🐞 UNHANDLED ERROR: ${e.toString()}');
       throw Exception(e.toString());
     } finally {
       isLoading.value = false;
@@ -215,7 +213,7 @@ class ApiRequest {
   }) async {
     try {
       isLoading.value = true;
-      log('|📤|---------[ 📦 PATCH REQUEST STARTED ]---------|📤|');
+      debugPrint('|📤|---------[ 📦 PATCH REQUEST STARTED ]---------|📤|');
 
       final uri = Uri.parse(
         '${ApiEndPoints.baseUrl}$endPoint',
@@ -232,7 +230,7 @@ class ApiRequest {
       )
           .timeout(const Duration(seconds: 120));
 
-      log('|✅|---------[ ✅ PATCH REQUEST COMPLETED ]---------|✅|');
+      debugPrint('|✅|---------[ ✅ PATCH REQUEST COMPLETED ]---------|✅|');
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final Map<String, dynamic> json = jsonDecode(response.body);
@@ -252,12 +250,12 @@ class ApiRequest {
       } else {
         final error = jsonDecode(response.body);
         final errorMessage = error['message'] ?? 'Something went wrong!';
-        log('❌ Error: $errorMessage');
+        debugPrint('❌ Error: $errorMessage');
         CustomSnackBar.error(errorMessage);
         throw Exception(errorMessage);
       }
     } catch (e) {
-      log('🐞🐞🐞 UNHANDLED ERROR: ${e.toString()}');
+      debugPrint('🐞🐞🐞 UNHANDLED ERROR: ${e.toString()}');
       throw Exception(e.toString());
     } finally {
       isLoading.value = false;
@@ -276,7 +274,7 @@ class ApiRequest {
   }) async {
     try {
       isLoading.value = true;
-      log('|📤|---------[ 📦 PUT REQUEST STARTED ]---------|📤|');
+      debugPrint('|📤|---------[ 📦 PUT REQUEST STARTED ]---------|📤|');
 
       final uri = Uri.parse(
         '${ApiEndPoints.baseUrl}$endPoint',
@@ -289,7 +287,7 @@ class ApiRequest {
           .put(uri, headers: await _bearerHeaderInfo(), body: jsonEncode(body))
           .timeout(const Duration(seconds: 120));
 
-      log('|✅|---------[ ✅ PUT REQUEST COMPLETED ]---------|✅|');
+      debugPrint('|✅|---------[ ✅ PUT REQUEST COMPLETED ]---------|✅|');
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final Map<String, dynamic> json = jsonDecode(response.body);
@@ -309,12 +307,12 @@ class ApiRequest {
       } else {
         final error = jsonDecode(response.body);
         final errorMessage = error['message'] ?? 'Something went wrong!';
-        log('❌ Error: $errorMessage');
+        debugPrint('❌ Error: $errorMessage');
         CustomSnackBar.error(errorMessage);
         throw Exception(errorMessage);
       }
     } catch (e) {
-      log('🐞🐞🐞 UNHANDLED ERROR: ${e.toString()}');
+      debugPrint('🐞🐞🐞 UNHANDLED ERROR: ${e.toString()}');
       throw Exception(e.toString());
     } finally {
       isLoading.value = false;
@@ -333,7 +331,7 @@ class ApiRequest {
   }) async {
     try {
       isLoading.value = true;
-      log('|📤|---------[ 📦 DELETE REQUEST STARTED ]---------|📤|');
+      debugPrint('|📤|---------[ 📦 DELETE REQUEST STARTED ]---------|📤|');
 
       final uri = Uri.parse(
         '${ApiEndPoints.baseUrl}$endPoint',
@@ -350,7 +348,7 @@ class ApiRequest {
       )
           .timeout(const Duration(seconds: 120));
 
-      log('|✅|---------[ ✅ DELETE REQUEST COMPLETED ]---------|✅|');
+      debugPrint('|✅|---------[ ✅ DELETE REQUEST COMPLETED ]---------|✅|');
 
       if (response.statusCode == 200 ||
           response.statusCode == 201 ||
@@ -374,12 +372,12 @@ class ApiRequest {
       } else {
         final error = jsonDecode(response.body);
         final errorMessage = error['message'] ?? 'Something went wrong!';
-        log('❌ Error: $errorMessage');
+        debugPrint('❌ Error: $errorMessage');
         CustomSnackBar.error(errorMessage);
         throw Exception(errorMessage);
       }
     } catch (e) {
-      log('🐞🐞🐞 UNHANDLED ERROR: ${e.toString()}');
+      debugPrint('🐞🐞🐞 UNHANDLED ERROR: ${e.toString()}');
       throw Exception(e.toString());
     } finally {
       isLoading.value = false;
@@ -415,9 +413,9 @@ class ApiRequest {
         fullUrl += singleQueryParam;
       }
       final uri = Uri.parse(fullUrl);
-      log('📤 MULTIPART REQUEST STARTED');
-      log('🔗 Method  : $reqType');
-      log('🔐 Skip Auth: $skipAuth'); // ✅ Log auth status
+      debugPrint('📤 MULTIPART REQUEST STARTED');
+      debugPrint('🔗 Method  : $reqType');
+      debugPrint('🔐 Skip Auth: $skipAuth'); // ✅ Log auth status
       printBody(body);
       printUrl(uri.toString());
 
@@ -435,7 +433,7 @@ class ApiRequest {
 
       if (sizes != null && sizes.isNotEmpty) {
         request.fields['sizes'] = jsonEncode(sizes);
-        log('📏 SIZES: $sizes');
+        debugPrint('📏 SIZES: $sizes');
       }
 
       // Add single files safely
@@ -445,7 +443,7 @@ class ApiRequest {
 
         final mimeType =
             lookupMimeType(file.path) ?? 'application/octet-stream';
-        log('🧪 MIME TYPE for ${entry.key}: $mimeType');
+        debugPrint('🧪 MIME TYPE for ${entry.key}: $mimeType');
 
         request.files.add(
           await http.MultipartFile.fromPath(
@@ -465,7 +463,7 @@ class ApiRequest {
           for (var file in fileList) {
             final mimeType =
                 lookupMimeType(file.path) ?? 'application/octet-stream';
-            log('📁 Adding file: ${file.path} | MIME: $mimeType');
+            debugPrint('📁 Adding file: ${file.path} | MIME: $mimeType');
 
             request.files.add(
               await http.MultipartFile.fromPath(
@@ -482,7 +480,7 @@ class ApiRequest {
         for (var file in selectedImages) {
           final mimeType =
               lookupMimeType(file.path) ?? 'application/octet-stream';
-          log('🖼️ Adding image: ${file.path} | MIME: $mimeType');
+          debugPrint('🖼️ Adding image: ${file.path} | MIME: $mimeType');
 
           request.files.add(
             await http.MultipartFile.fromPath(
@@ -499,7 +497,7 @@ class ApiRequest {
       );
       final response = await http.Response.fromStream(streamedResponse);
 
-      log('📬 RESPONSE STATUS: ${response.statusCode}');
+      debugPrint('📬 RESPONSE STATUS: ${response.statusCode}');
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final json = jsonDecode(response.body);
@@ -516,12 +514,12 @@ class ApiRequest {
       } else {
         final error = jsonDecode(response.body);
         final errorMessage = error['message'] ?? 'Something went wrong!';
-        log('❌ MULTIPART ERROR: $errorMessage');
+        debugPrint('❌ MULTIPART ERROR: $errorMessage');
         CustomSnackBar.error(errorMessage);
         throw Exception(errorMessage);
       }
     } catch (e) {
-      log('🐞 MULTIPART UNHANDLED ERROR: $e');
+      debugPrint('🐞 MULTIPART UNHANDLED ERROR: $e');
       throw Exception(e.toString());
     } finally {
       isLoading.value = false;

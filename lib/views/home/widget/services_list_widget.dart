@@ -5,8 +5,6 @@ class ServicesListWidgetView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text('ServicesListWidgetView'),
-    );
+    return const Text('ServicesListWidgetView');
   }
 }

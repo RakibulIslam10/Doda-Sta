@@ -28,7 +28,7 @@ class NavigationScreenMobile extends GetView<NavigationController> {
             borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.08),
+                color: Colors.black.withValues(alpha: 0.08),
                 offset: const Offset(0, -3),
                 blurRadius: 6,
               ),
@@ -50,9 +50,9 @@ class NavigationScreenMobile extends GetView<NavigationController> {
 
   _buildNavItem(int index) {
     bool isSelected = controller.selectedIndex.value == index;
-    print('******************************************************************************************',);
+    debugPrint('******************************************************************************************',);
 
-    print('Is Vendor---- ${AppStorage.isVendor}');
+    debugPrint('Is Vendor---- ${AppStorage.isVendor}');
     return GestureDetector(
       onTap: () => controller.changeIndex(index),
       child: Column(
@@ -72,7 +72,10 @@ class NavigationScreenMobile extends GetView<NavigationController> {
               width: isSelected ? 20.w : 22.w,
               child: SvgPicture.asset(
                 controller.navigationList[index].iconPath,
-                color: isSelected ? Colors.white : Colors.grey,
+                colorFilter: ColorFilter.mode(
+                  isSelected ? Colors.white : Colors.grey,
+                  BlendMode.srcIn,
+                ),
                 fit: BoxFit.contain,
               ),
             ),

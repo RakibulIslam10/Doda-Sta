@@ -32,7 +32,9 @@ class CustomImageWidget extends StatelessWidget {
               path,
               height: height,
               width: width,
-              color: color,
+              colorFilter: color != null
+                  ? ColorFilter.mode(color!, BlendMode.srcIn)
+                  : null,
               fit: fit,
             )
           : Image.asset(

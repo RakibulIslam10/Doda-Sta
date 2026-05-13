@@ -1,9 +1,8 @@
-import 'dart:convert';
 import 'package:doda_work/core/utils/app_storage.dart';
 import 'package:doda_work/views/home/model/home_model.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../../core/utils/basic_import.dart';
-import '../model/requestModel.dart';
+import '../model/request_model.dart';
 import 'package:http/http.dart' as http;
 
 class HomeController extends GetxController {
@@ -98,7 +97,7 @@ class HomeController extends GetxController {
   // =============================
   Future<void> fetchRequestList(int pageKey, String statusR) async {
     try {
-      final token = await AppStorage.token;
+      final token = AppStorage.token;
       final url = Uri.parse(
         ApiEndPoints.myService(page: pageKey, status: statusR),
       );

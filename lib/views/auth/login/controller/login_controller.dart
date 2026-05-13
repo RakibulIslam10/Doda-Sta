@@ -80,10 +80,10 @@ class LoginController extends GetxController {
 
 
       if (kDebugMode) {
-        print("UID   : ${userCredential.user?.uid}");
-        print("Email : ${userCredential.user?.email}");
-        print("Name  : ${userCredential.user?.displayName}");
-        print("Token : ${googleAuth.idToken?.substring(0, 30)}...");
+        debugPrint("UID   : ${userCredential.user?.uid}");
+        debugPrint("Email : ${userCredential.user?.email}");
+        debugPrint("Name  : ${userCredential.user?.displayName}");
+        debugPrint("Token : ${googleAuth.idToken?.substring(0, 30)}...");
       }
 
       await ApiRequest.post(
@@ -197,10 +197,10 @@ class LoginController extends GetxController {
       }
 
       if (kDebugMode) {
-        print("UID   : ${userCredential.user?.uid}");
-        print("Email : ${userCredential.user?.email}");
-        print("Name  : ${userCredential.user?.displayName}");
-        print("Token : ${appleCredential.identityToken?.substring(0, 30)}...");
+        debugPrint("UID   : ${userCredential.user?.uid}");
+        debugPrint("Email : ${userCredential.user?.email}");
+        debugPrint("Name  : ${userCredential.user?.displayName}");
+        debugPrint("Token : ${appleCredential.identityToken?.substring(0, 30)}...");
       }
 
       await ApiRequest.post(
@@ -213,11 +213,11 @@ class LoginController extends GetxController {
           final role = result.data.user.authId.role.toUpperCase();
           final id = result.data.user.id;
 
-          print("User Role: $role");
+          debugPrint("User Role: $role");
 
           AppStorage.save(uId: id);
-          print('-------------------------------');
-          print('U ID = ${AppStorage.uId}');
+          debugPrint('-------------------------------');
+          debugPrint('U ID = ${AppStorage.uId}');
 
           AppStorage.save(token: result.data.accessToken, isLoggedIn: true);
 

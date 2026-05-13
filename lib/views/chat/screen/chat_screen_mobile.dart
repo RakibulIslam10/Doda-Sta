@@ -1,8 +1,6 @@
 import '../../../core/utils/app_storage.dart';
 import '../../../core/utils/basic_import.dart';
-import '../../../core/utils/extensions.dart';
 import '../../../routes/routes.dart';
-import '../../navigation/controller/navigation_controller.dart';
 import '../controller/chat_controller.dart';
 
 class ChatScreenMobile extends StatelessWidget {
@@ -78,7 +76,7 @@ class ChatScreenMobile extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
-                        color: CustomColors.primary.withOpacity(0.08),
+                        color: CustomColors.primary.withValues(alpha: 0.08),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(

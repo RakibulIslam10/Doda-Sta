@@ -20,7 +20,7 @@ Future<Map<String, String>> bearerHeaderInfo() async {
   // final String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoSWQiOiI2OGZmNDRjYTYzMmU3ZTQ2MTc5ZjA5MzQiLCJ1c2VySWQiOiI2OGZmNDRjYjYzMmU3ZTQ2MTc5ZjA5MzYiLCJlbWFpbCI6ImRhZGFAeW9wbWFpbC5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc2MTU1OTc5MSwiZXhwIjoxNzkzMDk1NzkxfQ.5sVWOscrmE--r12nHynDBSnnIAqAexrFqFXzYcLddb4";
  // final String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoSWQiOiI2OTAxYjk2ZTgxYjU2Y2FkYzEyNjc5ZTEiLCJ1c2VySWQiOiI2OTAxYjk2ZTgxYjU2Y2FkYzEyNjc5ZTMiLCJlbWFpbCI6InJham9uZG9kYUB5b3BtYWlsLmNvbSIsInJvbGUiOiJQUk9WSURFUiIsImlhdCI6MTc2MTczMDk1NSwiZXhwIjoxNzkzMjY2OTU1fQ.ppS5tAhVWsoj-SwNCHwS-4PWRiBU9t9A5I9dbDq6ePQ";
  final String token = AppStorage.token;
-  print(token);
+  debugPrint(token);
 
   return {
     HttpHeaders.acceptHeader: "application/json",
@@ -34,7 +34,7 @@ Future<Map<String, String>> bearerHeaderInfoForDelete() async {
   final String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoSWQiOiI2OTAxYjk2ZTgxYjU2Y2FkYzEyNjc5ZTEiLCJ1c2VySWQiOiI2OTAxYjk2ZTgxYjU2Y2FkYzEyNjc5ZTMiLCJlbWFpbCI6InJham9uZG9kYUB5b3BtYWlsLmNvbSIsInJvbGUiOiJQUk9WSURFUiIsImlhdCI6MTc2MTczMDk1NSwiZXhwIjoxNzkzMjY2OTU1fQ.ppS5tAhVWsoj-SwNCHwS-4PWRiBU9t9A5I9dbDq6ePQ";
 
   // final String token = AppStorage.token;
-  print(token);
+  debugPrint(token);
 
   return {
     HttpHeaders.authorizationHeader: token,
@@ -228,10 +228,10 @@ class ApiClient {
       final totalBytes = streamedResponse.contentLength;
       int bytesUploaded = 0;
 
-      print('Total bytes to upload: $totalBytes');
+      debugPrint('Total bytes to upload: $totalBytes');
 
       if (totalBytes == null || totalBytes <= 0) {
-        print('Content length is invalid. Cannot track progress.');
+        debugPrint('Content length is invalid. Cannot track progress.');
       }
 
       final responseStream = streamedResponse.stream.transform<List<int>>(
@@ -241,16 +241,16 @@ class ApiClient {
             if (onProgress != null && totalBytes != null && totalBytes > 0) {
               double progress = bytesUploaded / totalBytes;
               onProgress(progress);
-              print('Progress: ${(progress * 100).toStringAsFixed(2)}%');
+              debugPrint('Progress: ${(progress * 100).toStringAsFixed(2)}%');
             }
             sink.add(data);
           },
           handleError: (error, stackTrace, sink) {
-            print('Stream error: $error');
+            debugPrint('Stream error: $error');
             sink.addError(error, stackTrace);
           },
           handleDone: (sink) {
-            print('Stream completed');
+            debugPrint('Stream completed');
             sink.close();
           },
         ),

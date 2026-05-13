@@ -180,7 +180,7 @@ class HomeVendorController extends GetxController {
 
   void _handleException(String status, Object e) {
     pagingControllers[status]!.error = e.toString();
-    print('Error fetching $status requests: $e');
+    debugPrint('Error fetching $status requests: $e');
   }
 
   Future<void> changeStatus({
@@ -232,7 +232,7 @@ class HomeVendorController extends GetxController {
       colorText: Colors.white,
     );
 
-    print('Error changing status: $e');
+    debugPrint('Error changing status: $e');
   }
 
 

@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:doda_work/core/api/services/api.dart';
 import 'package:doda_work/core/utils/app_storage.dart';
@@ -180,7 +179,7 @@ class AditionalController extends GetxController {
     // ✅ Check if token exists from user registration
     final userToken =  AppStorage.token;
 
-    log('🔐 Using Token: ${userToken.isEmpty ? "NO TOKEN" : "TOKEN EXISTS"}');
+    debugPrint('🔐 Using Token: ${userToken.isEmpty ? "NO TOKEN" : "TOKEN EXISTS"}');
 
     return await ApiRequest.multiMultipartRequest(
       fromJson: ProviderRegisterModel.fromJson,

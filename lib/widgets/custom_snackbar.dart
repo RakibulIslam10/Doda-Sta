@@ -27,7 +27,7 @@ class CustomSnackBar {
           BoxShadow(
             blurRadius: 20,
             spreadRadius: 7,
-            color: CustomColors.blackColor.withOpacity(0.05),
+            color: CustomColors.blackColor.withValues(alpha: 0.05),
           ),
         ],
         isDismissible: true,
@@ -56,7 +56,7 @@ class CustomSnackBar {
           BoxShadow(
             blurRadius: 20,
             spreadRadius: 7,
-            color: CustomColors.blackColor.withOpacity(0.05),
+            color: CustomColors.blackColor.withValues(alpha: 0.05),
           ),
         ],
         isDismissible: true,

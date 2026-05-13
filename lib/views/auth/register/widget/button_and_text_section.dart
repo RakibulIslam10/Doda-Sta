@@ -18,14 +18,14 @@ class ButtonAndTextSectionView extends GetView<RegisterController> {
           termsTap: () {
             Get.to(() => const WebViewScreen(
               url: 'https://flutter.dev/',
-              title: 'Terms & Conditions',
+              title: 'https://dodawork.com/terms-conditions',
             ),
             );
           },
           policyTap: () {
             Get.to(
                   () => const WebViewScreen(
-                url: 'https://flutter.dev/',
+                url: 'https://dodawork.com/privacy-policy',
                 title: 'Privacy Policy',
               ),
             );

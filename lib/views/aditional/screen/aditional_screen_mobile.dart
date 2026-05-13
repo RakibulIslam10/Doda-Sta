@@ -104,8 +104,8 @@ class AditionalScreenMobile extends GetView<AditionalController> {
                     color: isEditing
                         ? CustomColors.primary
                         : hasTime
-                        ? CustomColors.primary.withOpacity(0.5)
-                        : CustomColors.primary.withOpacity(0.2),
+                        ? CustomColors.primary.withValues(alpha: 0.5)
+                        : CustomColors.primary.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(
                       Dimensions.radius * 0.6,
                     ),

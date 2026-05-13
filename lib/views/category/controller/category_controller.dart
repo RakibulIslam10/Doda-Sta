@@ -1,5 +1,6 @@
 import 'package:doda_work/core/api/end_point/api_end_points.dart';
 import 'package:doda_work/core/api/services/api_request.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 import '../model/all_category_model.dart';
@@ -8,12 +9,12 @@ class CategoryController extends GetxController {
   final RxString expandedCategoryId = ''.obs;
 
   void toggleExpand(String categoryId) {
-    print(categoryId);
+    debugPrint(categoryId);
     if (expandedCategoryId.value == categoryId) {
       expandedCategoryId.value = '';
-      print("Empty");
+      debugPrint("Empty");
     } else {
-      print("Assign"
+      debugPrint("Assign"
       );
       expandedCategoryId.value = categoryId;
     }

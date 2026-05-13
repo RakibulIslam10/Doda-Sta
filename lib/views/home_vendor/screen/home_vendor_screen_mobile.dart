@@ -186,8 +186,8 @@ class HomeVendorScreenMobile extends GetView<HomeVendorController> {
 
     if (newStatus == "ACCEPT") {
       Get.dialog(
-        WillPopScope(
-          onWillPop: () async => false,
+        PopScope(
+          canPop: false,
           child: Material(
             color: Colors.black54,
             child: Center(
@@ -272,7 +272,7 @@ class HomeVendorScreenMobile extends GetView<HomeVendorController> {
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: CustomColors.primary.withOpacity(0.08),
+                color: CustomColors.primary.withValues(alpha: 0.08),
                 shape: BoxShape.circle,
               ),
               child: Icon(

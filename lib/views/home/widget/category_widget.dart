@@ -1,4 +1,3 @@
-import 'package:get/get_state_manager/src/simple/get_view.dart';
 
 import '../../../core/utils/basic_import.dart';
 import '../../../core/utils/extensions.dart';

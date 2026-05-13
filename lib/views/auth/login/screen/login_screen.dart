@@ -1,14 +1,5 @@
-import 'package:doda_work/core/themes/token.dart';
 import 'package:doda_work/core/utils/basic_import.dart';
 import 'package:doda_work/core/utils/extensions.dart';
-import 'package:doda_work/widgets/text_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
-import '../../../../core/utils/app_storage.dart';
-import '../../../../core/utils/dimensions.dart';
-import '../../../../core/utils/layout.dart';
-import '../../../../gen/assets.gen.dart';
 import '../controller/login_controller.dart';
 import '../widget/button_section_widget.dart';
 import '../widget/field_section_widget.dart';

@@ -14,16 +14,16 @@ class UserAllCategoryModel {
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(Data.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['statusCode'] = this.statusCode;
-    data['success'] = this.success;
-    data['message'] = this.message;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['statusCode'] = statusCode;
+    data['success'] = success;
+    data['message'] = message;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
@@ -64,7 +64,7 @@ class Data {
     if (json['subcategories'] != null) {
       subcategories = <Subcategories>[];
       json['subcategories'].forEach((v) {
-        subcategories!.add(new Subcategories.fromJson(v));
+        subcategories!.add(Subcategories.fromJson(v));
       });
     }
     createdAt = json['createdAt'];
@@ -74,20 +74,20 @@ class Data {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
-    data['name'] = this.name;
-    data['icon'] = this.icon;
-    data['isActive'] = this.isActive;
-    data['createdBy'] = this.createdBy;
-    if (this.subcategories != null) {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = sId;
+    data['name'] = name;
+    data['icon'] = icon;
+    data['isActive'] = isActive;
+    data['createdBy'] = createdBy;
+    if (subcategories != null) {
       data['subcategories'] =
-          this.subcategories!.map((v) => v.toJson()).toList();
+          subcategories!.map((v) => v.toJson()).toList();
     }
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
-    data['__v'] = this.iV;
-    data['updatedBy'] = this.updatedBy;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['__v'] = iV;
+    data['updatedBy'] = updatedBy;
     return data;
   }
 }
@@ -118,13 +118,13 @@ class Subcategories {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['isActive'] = this.isActive;
-    data['createdBy'] = this.createdBy;
-    data['_id'] = this.sId;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['name'] = name;
+    data['isActive'] = isActive;
+    data['createdBy'] = createdBy;
+    data['_id'] = sId;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
     return data;
   }
 }

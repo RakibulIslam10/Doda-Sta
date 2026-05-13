@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import '../../../core/api/end_point/api_end_points.dart';
 import '../../../core/api/services/api.dart';
-import '../../../core/api/services/api_request.dart';
 import '../model/faq_model.dart';
 
 class FaqController extends GetxController {

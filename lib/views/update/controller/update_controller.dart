@@ -1,16 +1,13 @@
 import 'dart:io';
 import 'package:doda_work/views/profile/controller/profile_controller.dart';
-import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
-import '../../../core/api/end_point/api_end_points.dart';
 import '../../../core/api/services/api.dart';
 import '../../../core/utils/app_storage.dart';
 import '../../../core/utils/basic_import.dart';
 import '../../../routes/routes.dart';
-import '../../../widgets/custom_snackbar.dart';
 import '../model/user_update_profile_model.dart';
 
 class UpdateController extends GetxController {
@@ -79,7 +76,7 @@ class UpdateController extends GetxController {
         }
       }
     } catch (e) {
-      print("Reverse geocode error: $e");
+      debugPrint("Reverse geocode error: $e");
     }
   }
 

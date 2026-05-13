@@ -28,11 +28,11 @@ class OtpInputField extends StatelessWidget {
       enableActiveFill: true,
       controller: controller,
       onCompleted: (v) {
-        print("Completed");
+        debugPrint("Completed");
       },
 
       beforeTextPaste: (text) {
-        print("Allowing to paste $text");
+        debugPrint("Allowing to paste $text");
         return true;
       },
       appContext: context,

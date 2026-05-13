@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:doda_work/views/inbox/controller/s.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +5,7 @@ import 'package:get/get.dart' hide FormData, MultipartFile;
 import 'package:http/http.dart' hide MultipartFile;
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:socket_io_client/socket_io_client.dart' as io;
 import '../../../core/api/end_point/api_end_points.dart';
 import '../../../core/api/services/api.dart';
 import '../../../core/helpers/helpers.dart';
@@ -32,15 +31,15 @@ class InboxController extends GetxController {
     if (receiverId?.isNotEmpty ?? false) getOldMessages();
   }
 
-  late IO.Socket socket;
+   late io.Socket socket;
   final String myId = AppStorage.uId;
   RxList<Map<String, dynamic>> messagesList = <Map<String, dynamic>>[].obs;
 
   void _initSocket() {
-    socket = IO.io(
+    socket = io.io(
       "http://10.10.20.52:6002"
       "?id=$myId&role=${AppStorage.users}",
-      IO.OptionBuilder()
+      io.OptionBuilder()
           .setTransports(['websocket'])
           .enableAutoConnect()
           .setReconnectionAttempts(10)
@@ -48,16 +47,16 @@ class InboxController extends GetxController {
     );
 
     socket.onConnect((_) {
-      log("✅ Socket connected: $myId");
+      debugPrint("✅ Socket connected: $myId");
     });
 
     socket.onDisconnect((_) {
-      log("❌ Socket disconnected");
+      debugPrint("❌ Socket disconnected");
     });
 
     // New message listener - FIXED for instant image display
     socket.on("message_new/$receiverId", (data) {
-      log("📩 New Message: $data");
+      debugPrint("📩 New Message: $data");
       if (data["sender"]["id"] == myId) return;
 
       // ✅ Parse images array properly
@@ -88,7 +87,7 @@ class InboxController extends GetxController {
 
     // Conversation update listener
     socket.on("conversation_update/$myId", (data) {
-      log("🔄 Conversation updated: $data");
+      debugPrint("🔄 Conversation updated: $data");
     });
   }
 
@@ -118,17 +117,17 @@ class InboxController extends GetxController {
       onSuccess: (result) {
         isBlock.value = result.blockStatus.isBlocked;
         isBlockedByMe.value = result.blockStatus.isBlockedByYou;
-        print(
+        debugPrint(
           '-----------------------------------------------------------------------',
         );
-        print(
+        debugPrint(
           '-----------------------------------------------------------------------',
         );
-        print(
+        debugPrint(
           '-----------------------------------------------------------------------',
         );
-        print(result.blockStatus.isBlockedByYou);
-        print(result.blockStatus.isBlocked);
+        debugPrint(result.blockStatus.isBlockedByYou.toString());
+        debugPrint(result.blockStatus.isBlocked.toString());
 
         final newMsg = <Map<String, dynamic>>[];
 
@@ -283,13 +282,13 @@ class InboxController extends GetxController {
         "videoCover": "",
       });
 
-      log('✅ Message sent with ${uploadedImagePaths.length} images');
+      debugPrint('✅ Message sent with ${uploadedImagePaths.length} images');
 
       // Clear input
       textController.clear();
       selectedImages.clear();
     } catch (e) {
-      log('❌ Error sending images: $e');
+      debugPrint('❌ Error sending images: $e');
       CustomSnackBar.error('Failed to send images');
     }
   }
@@ -323,7 +322,7 @@ class InboxController extends GetxController {
           ),
         });
 
-        log('📤 Uploading image ${i + 1}/${images.length}: ${image.name}');
+        debugPrint('📤 Uploading image ${i + 1}/${images.length}: ${image.name}');
 
         final response = await dio.post(
           'http://10.10.20.52:6002/chat/chat-images-video',
@@ -337,12 +336,12 @@ class InboxController extends GetxController {
           ),
           onSendProgress: (sent, total) {
             final progress = (sent / total * 100).toStringAsFixed(0);
-            log('📊 Upload progress: $progress%');
+            debugPrint('📊 Upload progress: $progress%');
           },
         );
 
-        log('📥 Response status: ${response.statusCode}');
-        log('📥 Response data: ${response.data}');
+        debugPrint('📥 Response status: ${response.statusCode}');
+        debugPrint('📥 Response data: ${response.data}');
 
         if (response.statusCode == 200 || response.statusCode == 201) {
           // ✅ Backend response থেকে images array extract
@@ -357,30 +356,30 @@ class InboxController extends GetxController {
             for (var imagePath in imagesList) {
               if (imagePath != null && imagePath.toString().isNotEmpty) {
                 uploadedPaths.add(imagePath.toString());
-                log('✅ Image path added: $imagePath');
+                debugPrint('✅ Image path added: $imagePath');
               }
             }
           } else {
-            log('❌ Invalid response structure: ${response.data}');
+            debugPrint('❌ Invalid response structure: ${response.data}');
             CustomSnackBar.error(
               'Image ${i + 1} upload failed: Invalid response',
             );
           }
         } else {
-          log('❌ Upload failed with status ${response.statusCode}');
+          debugPrint('❌ Upload failed with status ${response.statusCode}');
           CustomSnackBar.error('Image ${i + 1} upload failed');
         }
       }
 
-      log('✅ Total uploaded paths: ${uploadedPaths.length}');
+      debugPrint('✅ Total uploaded paths: ${uploadedPaths.length}');
       return uploadedPaths;
     } catch (e) {
-      log('❌ Error uploading images: $e');
+      debugPrint('❌ Error uploading images: $e');
       if (e is DioException) {
-        log('❌ DioException type: ${e.type}');
-        log('❌ DioException Response: ${e.response?.data}');
-        log('❌ DioException Message: ${e.message}');
-        log('❌ DioException StatusCode: ${e.response?.statusCode}');
+        debugPrint('❌ DioException type: ${e.type}');
+        debugPrint('❌ DioException Response: ${e.response?.data}');
+        debugPrint('❌ DioException Message: ${e.message}');
+        debugPrint('❌ DioException StatusCode: ${e.response?.statusCode}');
       }
       CustomSnackBar.error('Network error during upload');
       return [];
@@ -391,14 +390,14 @@ class InboxController extends GetxController {
 
   // Block user method
   Future<void> blockUser() async {
-    log('🔴 Block User Started');
-    log('🔴 Receiver ID: $receiverId');
-    log('🔴 Token: ${AppStorage.token}');
+    debugPrint('🔴 Block User Started');
+    debugPrint('🔴 Receiver ID: $receiverId');
+    debugPrint('🔴 Token: ${AppStorage.token}');
 
     try {
-      final result = await ApiRequest.post<BlockUnblockResponse>(
+      await ApiRequest.post<BlockUnblockResponse>(
         fromJson: (json) {
-          log('🔴 Response JSON: $json');
+          debugPrint('🔴 Response JSON: $json');
           return BlockUnblockResponse.fromJson(json);
         },
         endPoint: ApiEndPoints.blockUser,
@@ -407,8 +406,8 @@ class InboxController extends GetxController {
         body: {},
         showSuccessSnackBar: false,
         onSuccess: (result) {
-          log('🔴 Success Callback: ${result.success}');
-          log('🔴 Message: ${result.message}');
+          debugPrint('🔴 Success Callback: ${result.success}');
+          debugPrint('🔴 Message: ${result.message}');
           if (result.success == true) {
             isBlock.value = true;
             Get.close(1);
@@ -416,19 +415,19 @@ class InboxController extends GetxController {
         },
       );
     } catch (e) {
-      log('🔴 Block Error: $e');
+      debugPrint('🔴 Block Error: $e');
     }
   }
 
   Future<void> unBlockUser() async {
-    log('🔴 un Block User Started');
-    log('🔴 Receiver ID: $receiverId');
-    log('🔴 Token: ${AppStorage.token}');
+    debugPrint('🔴 un Block User Started');
+    debugPrint('🔴 Receiver ID: $receiverId');
+    debugPrint('🔴 Token: ${AppStorage.token}');
 
     try {
-      final result = await ApiRequest.post<BlockUnblockResponse>(
+      await ApiRequest.post<BlockUnblockResponse>(
         fromJson: (json) {
-          log('🔴 Response JSON: $json');
+          debugPrint('🔴 Response JSON: $json');
           return BlockUnblockResponse.fromJson(json);
         },
         endPoint: ApiEndPoints.unBlockUser,
@@ -437,8 +436,8 @@ class InboxController extends GetxController {
         body: {},
         showSuccessSnackBar: false,
         onSuccess: (result) {
-          log('🔴 Success Callback: ${result.success}');
-          log('🔴 Message: ${result.message}');
+          debugPrint('🔴 Success Callback: ${result.success}');
+          debugPrint('🔴 Message: ${result.message}');
           if (result.success == true) {
             isBlock.value = true;
             Get.close(1);
@@ -446,7 +445,7 @@ class InboxController extends GetxController {
         },
       );
     } catch (e) {
-      log('🔴 Block Error: $e');
+      debugPrint('🔴 Block Error: $e');
     }
   }
 
@@ -470,9 +469,9 @@ class InboxController extends GetxController {
       }
 
       selectedImages.addAll(images);
-      log('✅ ${images.length} images selected from gallery');
+      debugPrint('✅ ${images.length} images selected from gallery');
     } catch (e) {
-      log('❌ Error picking images: $e');
+      debugPrint('❌ Error picking images: $e');
       CustomSnackBar.error('Failed to pick images');
     }
   }
@@ -493,10 +492,10 @@ class InboxController extends GetxController {
 
       if (image != null) {
         selectedImages.add(image);
-        log('✅ Image captured from camera');
+        debugPrint('✅ Image captured from camera');
       }
     } catch (e) {
-      log('❌ Error capturing image: $e');
+      debugPrint('❌ Error capturing image: $e');
       CustomSnackBar.error('Failed to capture image');
     }
   }
@@ -560,13 +559,13 @@ class InboxController extends GetxController {
   void removeImage(int index) {
     if (index >= 0 && index < selectedImages.length) {
       selectedImages.removeAt(index);
-      log('✅ Image removed at index $index');
+      debugPrint('✅ Image removed at index $index');
     }
   }
 
   void clearAllImages() {
     selectedImages.clear();
-    log('✅ All images cleared');
+    debugPrint('✅ All images cleared');
   }
 
   @override

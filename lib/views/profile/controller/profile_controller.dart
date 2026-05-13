@@ -34,11 +34,11 @@ class ProfileController extends GetxController {
         isLoading: isLoading,
         onSuccess: (result) {
           userProfileModel.value = result;
-          print("User Name: ${userProfileModel.value?.data?.name}");
+          debugPrint("User Name: ${userProfileModel.value?.data?.name}");
         },
       );
     } catch (e) {
-      print("Error fetching user profile: $e");
+      debugPrint("Error fetching user profile: $e");
     }
   }
 
@@ -53,7 +53,7 @@ class ProfileController extends GetxController {
         },
       );
     } catch (e) {
-      print("Error fetching provider profile: $e");
+      debugPrint("Error fetching provider profile: $e");
     }
   }
 }

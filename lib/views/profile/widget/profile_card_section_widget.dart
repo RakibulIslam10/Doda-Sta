@@ -3,7 +3,7 @@ part of '../screen/profile_screen.dart';
 class ProfileCardSectionWidgetView extends GetView<ProfileController> {
    ProfileCardSectionWidgetView({super.key});
 
-   LoginController logoutController = Get.put(LoginController());
+   final LoginController logoutController = Get.put(LoginController());
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +141,7 @@ class ProfileCardSectionWidgetView extends GetView<ProfileController> {
               border: Border.all(color: Colors.grey.withAlpha(555)),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.02),
+                  color: Colors.black.withValues(alpha: 0.02),
                   spreadRadius: 1,
                   blurRadius: 6,
                   offset: const Offset(0, 3),

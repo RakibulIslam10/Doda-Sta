@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:country_picker/country_picker.dart';
 import '../core/utils/basic_import.dart';
 
@@ -25,7 +24,7 @@ class CustomCountryPicker extends StatelessWidget {
           ),
           onSelect: (Country country) {
             selectedCountry.value = country.name;
-            log(selectedCountry.value);          },
+            debugPrint(selectedCountry.value);          },
         );
       },
       child: Container(

@@ -5,10 +5,10 @@ class WelcomeScreenMobile extends GetView<WelcomeController> {
 
   @override
   Widget build(BuildContext context) {
-    print('+++++++++++++++++++++++++++++++++++++++++++++++++++');
-    print('+++++++++++++++++++++++++++++++++++++++++++++++++++');
-    print('+++++++++++++++++++++++++++++++++++++++++++++++++++');
-    print(AppStorage.users);
+    debugPrint('+++++++++++++++++++++++++++++++++++++++++++++++++++');
+    debugPrint('+++++++++++++++++++++++++++++++++++++++++++++++++++');
+    debugPrint('+++++++++++++++++++++++++++++++++++++++++++++++++++');
+    debugPrint(AppStorage.users);
     return Scaffold(
       bottomNavigationBar: SafeArea(
         child: SizedBox(
@@ -33,8 +33,8 @@ class WelcomeScreenMobile extends GetView<WelcomeController> {
                     onSelect: (Country country) {
                       controller.selectedCountry.value = country.name;
                       controller.selectedCountryFlag.value = country.flagEmoji;
-                      log(controller.selectedCountry.value);
-                      log(controller.selectedCountryFlag.value);
+                      debugPrint(controller.selectedCountry.value);
+                      debugPrint(controller.selectedCountryFlag.value);
                     },
                   );
                 },
@@ -142,7 +142,7 @@ class WelcomeScreenMobile extends GetView<WelcomeController> {
                 onTap: () {
                   Get.offAllNamed(Routes.loginScreen);
                   AppStorage.save(isUsers: 'PROVIDER');
-                  print(AppStorage.users);
+                  debugPrint(AppStorage.users);
                 },
                 child: AnimatedContainer(
                   margin: EdgeInsetsGeometry.symmetric(
@@ -162,7 +162,7 @@ class WelcomeScreenMobile extends GetView<WelcomeController> {
                     children: [
                       SvgPicture.asset(
                         Assets.icons.request1,
-                        color: CustomColors.whiteColor,
+                        colorFilter: ColorFilter.mode(CustomColors.whiteColor, BlendMode.srcIn),
                       ),
                       TextWidget(
                         padding: EdgeInsetsGeometry.symmetric(

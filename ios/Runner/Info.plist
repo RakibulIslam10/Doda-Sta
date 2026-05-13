@@ -39,17 +39,17 @@
 
     <!-- Camera & Photos -->
     <key>NSCameraUsageDescription</key>
-    <string>We need access to your camera to take pictures.</string>
+    <string>We need access to your camera to take pictures for your profile and services.</string>
     <key>NSPhotoLibraryUsageDescription</key>
-    <string>We need access to your photo library to pick images.</string>
+    <string>We need access to your photo library to pick images for your profile and services.</string>
     <key>NSPhotoLibraryAddUsageDescription</key>
-    <string>We need permission to save photos.</string>
+    <string>We need permission to save photos to your library.</string>
 
     <!-- Location -->
     <key>NSLocationWhenInUseUsageDescription</key>
-    <string>This app needs your location to show nearby services.</string>
+    <string>This app needs your location to show nearby service providers and track services.</string>
     <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>This app needs your location even when running in the background.</string>
+    <string>This app needs your location even when running in the background to provide accurate service updates.</string>
 
     <!-- Launch Storyboard -->
     <key>UILaunchStoryboardName</key>
@@ -77,32 +77,24 @@
     <key>UIApplicationSupportsIndirectInputEvents</key>
     <true/>
 
-      <!-- Wi-Fi / Network access -->
-        <key>NSLocalNetworkUsageDescription</key>
-        <string>This app needs access to the local network.</string>
+    <!-- Wi-Fi / Network access -->
+    <key>NSLocalNetworkUsageDescription</key>
+    <string>This app needs access to the local network for connectivity checks.</string>
 
-        <!-- Allow arbitrary network loads (Firebase, APIs) -->
-        <key>NSAppTransportSecurity</key>
-        <dict>
-            <key>NSAllowsArbitraryLoads</key>
-            <true/>
-        </dict>
+    <key>CFBundleURLTypes</key>
+    <array>
+      <dict>
+        <key>CFBundleTypeRole</key>
+        <string>Editor</string>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>com.mazlmario.dodawork</string>
+        </array>
+      </dict>
+    </array>
 
-     <key>CFBundleURLTypes</key>
-               <array>
-                   <dict>
-                       <key>CFBundleTypeRole</key>
-                       <string>Editor</string>
-                       <key>CFBundleURLSchemes</key>
-                       <array>
-                           <!-- Replace this with your actual reversed client ID from GoogleService-Info.plist -->
-                           <string>com.mazlmario.dodawork</string>
-                       </array>
-                   </dict>
-               </array>
-
-  <key>NSAppleMusicUsageDescription</key>
-  <string>Sign in with Apple permission</string>
+    <key>NSAppleMusicUsageDescription</key>
+    <string>This permission is required for media functionality.</string>
 
 
 

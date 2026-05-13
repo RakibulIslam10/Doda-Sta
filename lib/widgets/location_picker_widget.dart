@@ -253,7 +253,7 @@ class _LocationPickerWidgetState extends State<LocationPickerWidget> {
           'Location Service Disabled',
           'Please enable location services',
           snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.orange.withOpacity(0.8),
+          backgroundColor: Colors.orange.withValues(alpha: 0.8),
           colorText: Colors.white,
         );
         return;
@@ -512,7 +512,7 @@ class _LocationPickerWidgetState extends State<LocationPickerWidget> {
                               leading: Container(
                                 padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
-                                  color: _primaryColor.withOpacity(0.1),
+                                  color: _primaryColor.withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Icon(
@@ -550,7 +550,7 @@ class _LocationPickerWidgetState extends State<LocationPickerWidget> {
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withValues(alpha: 0.1),
                       blurRadius: 10,
                       offset: const Offset(0, -5),
                     ),
@@ -601,7 +601,7 @@ class _LocationPickerWidgetState extends State<LocationPickerWidget> {
                               Container(
                                 padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
-                                  color: _primaryColor.withOpacity(0.1),
+                                  color: _primaryColor.withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Icon(

@@ -20,17 +20,17 @@ class RoutePageList {
       binding: AditionalBinding(),
     ),
     GetPage(
-      name: Routes.vendor_phoneScreen,
+      name: Routes.vendorPhoneScreen,
       page: () => const VendorPhoneScreen(),
       binding: VendorPhoneBinding(),
     ),
     GetPage(
-      name: Routes.home_vendorScreen,
+      name: Routes.homeVendorScreen,
       page: () => const HomeVendorScreen(),
       binding: HomeVendorBinding(),
     ),
     GetPage(
-      name: Routes.vendor_profileScreen,
+      name: Routes.vendorProfileScreen,
       page: () => const VendorProfileScreen(),
       binding: VendorProfileBinding(),
     ),

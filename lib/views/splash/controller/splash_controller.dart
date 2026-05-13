@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:flutter/foundation.dart';
 import '../../../core/utils/app_storage.dart';
 import '../../../routes/routes.dart';
 
@@ -15,20 +16,20 @@ class SplashController extends GetxController {
     final bool hasValidToken = AppStorage.isLoggedIn && AppStorage.token.isNotEmpty;
     final bool hasSeenOnboarding = AppStorage.seenOnboarding;
 
-    print("🔍 DEBUG - Token: ${AppStorage.token}");
-    print("🔍 DEBUG - isLoggedIn: ${AppStorage.isLoggedIn}");
-    print("🔍 DEBUG - seenOnboarding: $hasSeenOnboarding");
-    print("🔍 DEBUG - hasValidToken: $hasValidToken");
+    debugPrint("🔍 DEBUG - Token: ${AppStorage.token}");
+    debugPrint("🔍 DEBUG - isLoggedIn: ${AppStorage.isLoggedIn}");
+    debugPrint("🔍 DEBUG - seenOnboarding: $hasSeenOnboarding");
+    debugPrint("🔍 DEBUG - hasValidToken: $hasValidToken");
 
     if (hasValidToken) {
       // ✅ User is logged in → Go directly to Home
-      print("✅ USER LOGGED IN → HOME");
+      debugPrint("✅ USER LOGGED IN → HOME");
       Get.offAllNamed(Routes.navigationScreen);
     } else if (!hasSeenOnboarding) {
-      print("🚀 NEW USER → ONBOARDING");
+      debugPrint("🚀 NEW USER → ONBOARDING");
       Get.offAllNamed(Routes.onboardScreen);
     } else {
-      print("🔐 RETURNING USER → LOGIN");
+      debugPrint("🔐 RETURNING USER → LOGIN");
       Get.offAllNamed(Routes.loginScreen);
     }
   }

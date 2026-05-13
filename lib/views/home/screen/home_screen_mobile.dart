@@ -1,6 +1,5 @@
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../../core/utils/basic_import.dart';
-import '../../../core/utils/extensions.dart';
 import '../../../routes/routes.dart';
 import '../../summary/model/summary_model.dart';
 import '../controller/home_controller.dart';
@@ -103,7 +102,7 @@ class HomeScreenMobile extends GetView<HomeController> {
                                         Container(
                                           padding: const EdgeInsets.all(24),
                                           decoration: BoxDecoration(
-                                            color: CustomColors.primary.withOpacity(0.08),
+                                            color: CustomColors.primary.withValues(alpha: 0.08),
                                             shape: BoxShape.circle,
                                           ),
                                           child: Icon(
@@ -189,7 +188,7 @@ class HomeScreenMobile extends GetView<HomeController> {
       dividerColor: Colors.transparent,
       labelPadding: EdgeInsets.zero,
       enableFeedback: false,
-      overlayColor: const MaterialStatePropertyAll(Colors.transparent),
+      overlayColor: const WidgetStatePropertyAll(Colors.transparent),
       onTap: (index) => controller.selectedStatus.value = index,
       tabs: List.generate(statusText.length, (index) {
         final isSelected = controller.selectedStatus.value == index;

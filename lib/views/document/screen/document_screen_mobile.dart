@@ -42,7 +42,7 @@ _buildSectionCard(IconData icon, String title, void Function()? onTap) {
         border: Border.all(color: Colors.grey.withAlpha(555)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.02),
+            color: Colors.black.withValues(alpha: 0.02),
             spreadRadius: 1,
             blurRadius: 6,
             offset: const Offset(0, 3),

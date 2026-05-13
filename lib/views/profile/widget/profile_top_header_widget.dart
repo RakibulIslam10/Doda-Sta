@@ -1,7 +1,4 @@
-import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:shadify/shadify.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import '../../../core/utils/app_storage.dart';
 import '../../../core/utils/basic_import.dart';
 import '../../../routes/routes.dart';
 import '../controller/profile_controller.dart';
@@ -29,7 +26,7 @@ class ProfileTopHeaderWidgetView extends GetView<ProfileController> {
           border: Border.all(color: Colors.grey.withAlpha(555)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               spreadRadius: 1,
               blurRadius: 6,
               offset: const Offset(0, 3),
@@ -144,7 +141,7 @@ class ProfileTopHeaderWidgetView extends GetView<ProfileController> {
                     vertical: Dimensions.verticalSize * 0.2,
                   ),
                   decoration: BoxDecoration(
-                    color: CustomColors.primary.withOpacity(0.1),
+                    color: CustomColors.primary.withValues(alpha: 0.1),
                     border: Border.all(color: CustomColors.primary, width: 1.5),
                     borderRadius: BorderRadius.circular(
                       Dimensions.radius * 0.5,
@@ -196,7 +193,7 @@ class ProfileTopWidgetView extends GetView<ProfileController> {
           border: Border.all(color: Colors.grey.withAlpha(555)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               spreadRadius: 1,
               blurRadius: 6,
               offset: const Offset(0, 3),
@@ -270,7 +267,7 @@ class ProfileTopWidgetView extends GetView<ProfileController> {
             Align(
               alignment: Alignment.topRight,
               child: InkWell(
-                onTap: () => Get.toNamed(Routes.vendor_profileScreen),
+                onTap: () => Get.toNamed(Routes.vendorProfileScreen),
                 child: Container(
                   margin: EdgeInsets.all(Dimensions.paddingSize * 0.2),
                   padding: EdgeInsets.symmetric(

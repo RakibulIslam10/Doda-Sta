@@ -139,7 +139,7 @@ class CompletionProofGrid extends StatelessWidget {
                     builder: (_) => GestureDetector(
                       onTap: () => Navigator.pop(context),
                       child: Container(
-                        color: CustomColors.blackColor.withOpacity(0.9),
+                        color: CustomColors.blackColor.withValues(alpha: 0.9),
                         alignment: Alignment.center,
                         child: Hero(
                           tag: item.url ?? index.toString(),

@@ -36,21 +36,26 @@ class AppStorage {
     bool? isVendor,
     String? role,
   }) async {
-    if (token != null)
+    if (token != null) {
       await _storage.write(_tokenKey, token.replaceAll('"', '').trim());
-    if (temporaryToken != null)
+    }
+    if (temporaryToken != null) {
       await _storage.write(_temporaryTokenKey, temporaryToken);
+    }
     if (uId != null) await _storage.write(_uIdKey, uId);
     if (isUsers != null) await _storage.write(_isUserKey, isUsers);
     if (mobileCode != null) await _storage.write(_mobileCodeKey, mobileCode);
     if (onboardSave != null) await _storage.write(_onboardSaveKey, onboardSave);
     if (isLoggedIn != null) await _storage.write(_isLoggedInKey, isLoggedIn);
-    if (isEmailVerified != null)
+    if (isEmailVerified != null) {
       await _storage.write(_isEmailVerifiedKey, isEmailVerified);
-    if (isKycVerified != null)
+    }
+    if (isKycVerified != null) {
       await _storage.write(_isKycVerifiedKey, isKycVerified);
-    if (isSmsVerified != null)
+    }
+    if (isSmsVerified != null) {
       await _storage.write(_isSmsVerifiedKey, isSmsVerified);
+    }
     if (isKycStatus != null) await _storage.write(_kycStatusKey, isKycStatus);
     if (isVendor != null) isVendor = isVendor; // use setter
     if (role != null) await saveRole(role);

@@ -1,6 +1,4 @@
 import 'package:doda_work/core/utils/basic_import.dart';
-import 'package:doda_work/widgets/primary_button_widget.dart';
-import 'package:doda_work/widgets/text_widget.dart';
 
 class SuccessDialog {
   static void show({
@@ -37,13 +35,13 @@ class SuccessDialog {
               Container(
                 padding: EdgeInsets.all(Dimensions.paddingSize * 0.4),
                 decoration: BoxDecoration(
-                  color: CustomColors.primary.withOpacity(0.1),
+                  color: CustomColors.primary.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 child: Container(
                   padding: EdgeInsets.all(Dimensions.paddingSize * 0.4),
                   decoration: BoxDecoration(
-                    color: CustomColors.primary.withOpacity(0.2),
+                    color: CustomColors.primary.withValues(alpha: 0.2),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(

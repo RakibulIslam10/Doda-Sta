@@ -24,12 +24,8 @@ class FavoriteController extends GetxController {
 
       onSuccess: (result) {
         /// Make sure the list exists
-        if (result.data?.data != null) {
-          favoriteList.value = result.data!.data!;
-        } else {
-          favoriteList.clear();
-        }
-      },
+        favoriteList.value = result.data.data;
+            },
     );
   }
 }

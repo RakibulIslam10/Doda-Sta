@@ -44,10 +44,10 @@ class VendorProfileController extends GetxController {
     getServiceCategory();
 
     // Debug: Print current storage state
-    print('🔐 Storage State:');
-    print('   Token: ${AppStorage.token.isNotEmpty ? "Present" : "Empty"}');
-    print('   Is Vendor: ${AppStorage.isVendor}');
-    print('   Is Logged In: ${AppStorage.isLoggedIn}');
+    debugPrint('🔐 Storage State:');
+    debugPrint('   Token: ${AppStorage.token.isNotEmpty ? "Present" : "Empty"}');
+    debugPrint('   Is Vendor: ${AppStorage.isVendor}');
+    debugPrint('   Is Logged In: ${AppStorage.isLoggedIn}');
 
 
     nameController.text = Get.find<ProfileController>().providerProfileModel.value?.data.companyName ?? "";
@@ -98,12 +98,12 @@ class VendorProfileController extends GetxController {
 
       if (pickedImg != null) {
         selectedImg.value = File(pickedImg.path);
-        print('✅ Image selected: ${pickedImg.path}');
+        debugPrint('✅ Image selected: ${pickedImg.path}');
       } else {
-        print('❌ No image selected');
+        debugPrint('❌ No image selected');
       }
     } catch (e) {
-      print('❌ Error picking image: $e');
+      debugPrint('❌ Error picking image: $e');
       _showSnackBar('Failed to pick image', isError: true);
     } finally {
       isPickingImage = false;
@@ -117,7 +117,7 @@ class VendorProfileController extends GetxController {
       isLoading: isLoading,
       onSuccess: (result) {
         serviceCategoryList.addAll(result.category);
-        print('✅ Loaded ${serviceCategoryList.length} service categories');
+        debugPrint('✅ Loaded ${serviceCategoryList.length} service categories');
       },
     );
   }
@@ -137,13 +137,13 @@ class VendorProfileController extends GetxController {
       final Map<String, dynamic> body = _prepareRequestBody();
       final Map<String, File?> fileMap = _prepareFileMap();
 
-      print('🚀 Starting vendor profile update...');
-      print('📦 Body: $body');
-      print('📁 Files: ${fileMap.keys.toList()}');
-      print('🔑 Token: ${token.substring(0, 20)}...');
-      print('👤 Is Vendor: ${AppStorage.isVendor}');
+      debugPrint('🚀 Starting vendor profile update...');
+      debugPrint('📦 Body: $body');
+      debugPrint('📁 Files: ${fileMap.keys.toList()}');
+      debugPrint('🔑 Token: ${token.substring(0, 20)}...');
+      debugPrint('👤 Is Vendor: ${AppStorage.isVendor}');
 
-      final result = await ApiRequest.multiMultipartRequest(
+      await ApiRequest.multiMultipartRequest(
         token: token,
         endPoint: ApiEndPoints.providerUpdateProfile,
         reqType: "PATCH",
@@ -157,7 +157,7 @@ class VendorProfileController extends GetxController {
         },
       );
 
-      print('✅ Profile update Request successfully');
+      debugPrint('✅ Profile update Request successfully');
     } catch (e) {
       _handleError(e);
     }
@@ -199,18 +199,18 @@ class VendorProfileController extends GetxController {
   }
 
   void _handleSuccessResponse(ProviderUpdateProfileModel response) {
-    print('🎉 Success Response:');
-    print('   Status Code: ${response.statusCode}');
-    print('   Success: ${response.success}');
-    print('   Message: ${response.message}');
-    print('   Data Message: ${response.data.message}');
+    debugPrint('🎉 Success Response:');
+    debugPrint('   Status Code: ${response.statusCode}');
+    debugPrint('   Success: ${response.success}');
+    debugPrint('   Message: ${response.message}');
+    debugPrint('   Data Message: ${response.data.message}');
 
     Get.close(1);
   }
 
   void _handleError(dynamic error) {
-    print('❌ Vendor profile update error: $error');
-    print('❌ Error type: ${error.runtimeType}');
+    debugPrint('❌ Vendor profile update error: $error');
+    debugPrint('❌ Error type: ${error.runtimeType}');
 
     final errorString = error.toString();
 

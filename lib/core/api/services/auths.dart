@@ -3,7 +3,6 @@ import 'package:doda_work/core/utils/message_helper.dart';
 import '../../../routes/routes.dart';
 import '../../../views/auth/login/model/login_model.dart';
 import '../../../views/auth/register/model/provider_otp_verify_model.dart';
-import '../../../views/vendor_profile/screen/vendor_profile_screen_mobile.dart';
 import '../../utils/app_storage.dart';
 import '../../utils/basic_import.dart';
 import 'api.dart';

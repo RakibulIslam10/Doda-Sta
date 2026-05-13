@@ -88,7 +88,7 @@ class CompleteTaskDialog extends GetView<SummaryController> {
                 return SizedBox.shrink();
               }
 
-              return Container(
+              return SizedBox(
                 height: 120.h,
                 child: Stack(
                   children: [

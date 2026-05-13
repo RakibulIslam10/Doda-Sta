@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:flutter/foundation.dart';
 import '../../../core/api/end_point/api_end_points.dart';
 import '../../../core/api/services/api.dart';
 import '../../../core/utils/app_storage.dart';
@@ -32,7 +33,7 @@ class ReviewRatingController extends GetxController {
         },
       );
     } catch (e) {
-      print("Error fetching provider reviews: $e");
+      debugPrint("Error fetching provider reviews: $e");
     } finally {
       isLoading.value = false;
     }
@@ -51,11 +52,11 @@ class ReviewRatingController extends GetxController {
         isLoading: isLoading,
       );
 
-      if (result?.data?.result != null && result!.data!.result!.isNotEmpty) {
+      if (result.data?.result != null && result.data!.result!.isNotEmpty) {
         return result.data!.result!.first;
       }
     } catch (e) {
-      print("Error fetching review by ID: $e");
+      debugPrint("Error fetching review by ID: $e");
     } finally {
       isLoading.value = false;
     }

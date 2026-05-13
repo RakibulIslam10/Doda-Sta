@@ -10,7 +10,7 @@ class DividerWidget extends StatelessWidget {
     return Padding(
       padding: padding,
       child: Divider(
-        color: CustomColors.disableColor.withOpacity(.4),
+        color: CustomColors.disableColor.withValues(alpha: .4),
         thickness: 0.8,
       ),
     );

@@ -39,8 +39,6 @@ class CustomStatusCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final url = "$image";
-    final fixedUrl = url.replaceAll(r'\', '/');
 
     String formattedLeadPrice = leadPrice != null
         ? '\$${(leadPrice! / 100).toStringAsFixed(2)}'
@@ -171,10 +169,10 @@ class CustomStatusCardWidget extends StatelessWidget {
                           },
                         );
 
-                        print(
+                        debugPrint(
                           '==================================================================',
                         );
-                        print(
+                        debugPrint(
                           '============ FROM PROVIDER ======================================================',
                         );
                       },
@@ -221,7 +219,7 @@ class CustomStatusCardWidget extends StatelessWidget {
                                 confirmText: "Yes, Accept",
                                 onConfirm: () {
                                   Get.back();
-                                  print("object");
+                                  debugPrint("object");
                                   onTapAccept?.call();
                                 },
                               ),
@@ -305,7 +303,7 @@ class CustomStatusCardWidget extends StatelessWidget {
                             confirmText: "Yes, Complete",
                             onConfirm: () {
                               Get.back();
-                              print("object");
+                              debugPrint("object");
                               onTapComplete?.call();
                             },
                           ),

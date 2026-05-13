@@ -10,14 +10,14 @@ class ReactiveAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? leading;
 
   const ReactiveAppBar({
-    Key? key,
+    super.key,
     this.titleWidget,
     this.height = kToolbarHeight,
     this.backgroundColor = Colors.white,
     this.centerTitle = true,
     this.actions,
     this.leading,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

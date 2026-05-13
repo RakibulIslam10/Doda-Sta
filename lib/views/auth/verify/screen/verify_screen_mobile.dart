@@ -41,10 +41,10 @@ class VerifyScreenMobile extends GetView<VerifyController> {
               animationDuration: const Duration(milliseconds: 300),
               enableActiveFill: true,
               onCompleted: (v) {
-                print("Completed");
+                debugPrint("Completed");
               },
               beforeTextPaste: (text) {
-                print("Allowing to paste $text");
+                debugPrint("Allowing to paste $text");
                 return true;
               },
               textStyle: TextStyle(

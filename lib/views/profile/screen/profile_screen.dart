@@ -1,13 +1,10 @@
 import 'package:doda_work/core/utils/app_storage.dart';
 import 'package:doda_work/core/utils/extensions.dart';
 import 'package:doda_work/routes/routes.dart';
-import 'package:doda_work/views/update/controller/update_controller.dart';
-import 'package:doda_work/widgets/empty_data_widget.dart';
 import 'package:doda_work/widgets/loading_widget.dart';
 import 'package:shadify/shadify.dart';
 import '../../../core/utils/basic_import.dart';
 import '../../auth/login/controller/login_controller.dart';
-import '../../navigation/controller/navigation_controller.dart';
 
 import '../controller/profile_controller.dart';
 import '../widget/profile_top_header_widget.dart';
